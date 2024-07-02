@@ -26,4 +26,4 @@ urllib3 = "1.26.6"
 pipenv="2024.0.1"
 
 [requires]
-python_version = "3.9"
+python_version = "3.8"
