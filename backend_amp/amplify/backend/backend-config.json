@@ -1,0 +1,43 @@
+{
+  "api": {
+    "sukoonAPI": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "gamesProcessor"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway"
+    }
+  },
+  "function": {
+    "gamesProcessor": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "parameters": {
+    "AMPLIFY_function_gamesProcessor_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "gamesProcessor"
+        }
+      ]
+    },
+    "AMPLIFY_function_gamesProcessor_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "gamesProcessor"
+        }
+      ]
+    }
+  }
+}
