@@ -8,8 +8,9 @@ type Todo @model {
   description: String
 }
 
-type UserNotification @model{
+type UserNotification @model {
   id: ID!
   name: String!
   description: String
+  notificationType: String
 }
