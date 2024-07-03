@@ -104,6 +104,19 @@ class WhatsappWebhookEventInput:
     object: str
     entry: dict
 
+@dataclass 
+class PushNotificationInput:
+    phone_number: str
+    parameters: dict
+    template_name: str
+    user_id: Optional[str] = field(default_factory=lambda: "")
+    request_meta: str = field(default_factory=lambda: "")
+
+@dataclass 
+class UpdateFCMTokenInput:
+    user_id: str
+    fcm_token: dict
+
 @dataclass
 class Output:
     output_status: str

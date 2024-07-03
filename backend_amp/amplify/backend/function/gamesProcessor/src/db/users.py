@@ -46,6 +46,14 @@ def get_user_whatsapp_feedback_collection():
     users_whatsapp_feedback_collection = db["userwhatsappfeedback"]
     return users_whatsapp_feedback_collection
 
+def get_user_fcm_token_collection():
+    client = Database().client
+
+    db = client["test"]
+    user_fcm_token_collection = db["userfcmtokens"]
+    return user_fcm_token_collection
+
+
 
 
 
