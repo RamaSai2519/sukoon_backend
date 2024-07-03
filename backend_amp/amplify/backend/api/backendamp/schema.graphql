@@ -19,3 +19,9 @@ type UserGame @model {
   id: ID!
   name: String!
 }
+
+type UserPlay @model {
+  id: ID!
+  play: String!
+}
+
