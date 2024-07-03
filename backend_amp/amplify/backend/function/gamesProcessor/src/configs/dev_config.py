@@ -20,4 +20,10 @@ class DevConfig:
         "ACCESS_TOKEN": "EAAQFy4A7ZCfABO1UJeKTvjzWFEyqnuP42JZCBZBe7XruAD5SIQEc0ukrOB0HunFgiG0kyBaoPcnX9PLPjewwSCNOYxOZCwW2GqZBsUjZAFEtZCLKwJn9asnntcX9bWd7SbhrAzzhyVsPxbCubQJLqZC5lBGgp9TzpOUO5T12ZBRmSn1MR9BtMNVVvIS2wc2lchvt1"
     }
 
+    PUSH_NOTIFICATION_API = {
+        "URL": "https://fcm.googleapis.com/fcm/send",
+        "ACCESS_TOKEN": "AIzaSyAMJotLhCHDZQav-pI3xwh94zK9f2A62r8"
+    }
+
+
     

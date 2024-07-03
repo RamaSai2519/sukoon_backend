@@ -39,11 +39,12 @@
       "function": {
         "gamesProcessor": {
           "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
-          "s3Key": "amplify-builds/gamesProcessor-5957464b586459544c55-build.zip"
+          "s3Key": "amplify-builds/gamesProcessor-53537161396d7a775263-build.zip"
         }
       },
       "api": {
-        "sukoonAPI": {}
+        "sukoonAPI": {},
+        "backendamp": {}
       }
     }
   }
