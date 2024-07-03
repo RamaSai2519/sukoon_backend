@@ -37,3 +37,48 @@ export const onDeleteTodo = /* GraphQL */ `
     }
   }
 `;
+export const onCreateUserNotification = /* GraphQL */ `
+  subscription OnCreateUserNotification(
+    $filter: ModelSubscriptionUserNotificationFilterInput
+  ) {
+    onCreateUserNotification(filter: $filter) {
+      id
+      name
+      description
+      notificationType
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onUpdateUserNotification = /* GraphQL */ `
+  subscription OnUpdateUserNotification(
+    $filter: ModelSubscriptionUserNotificationFilterInput
+  ) {
+    onUpdateUserNotification(filter: $filter) {
+      id
+      name
+      description
+      notificationType
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onDeleteUserNotification = /* GraphQL */ `
+  subscription OnDeleteUserNotification(
+    $filter: ModelSubscriptionUserNotificationFilterInput
+  ) {
+    onDeleteUserNotification(filter: $filter) {
+      id
+      name
+      description
+      notificationType
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;

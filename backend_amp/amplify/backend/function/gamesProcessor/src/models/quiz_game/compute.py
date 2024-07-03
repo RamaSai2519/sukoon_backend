@@ -96,5 +96,5 @@ class Compute:
         return Output(
             output_details= {"quiz_questions": quiz_questions},
             output_status=OutputStatus.SUCCESS,
-            output_message="Successfully fetched game config"
+            output_message="Successfully fetched quiz questions"
         )
