@@ -16,7 +16,8 @@
         "gamesProcessor": {
           "deploymentBucketName": "amplify-backendamp-dev-caa78-deployment",
           "s3Key": "amplify-builds/gamesProcessor-53537161396d7a775263-build.zip"
-        }
+        },
+        "notificationProcessor": {}
       },
       "api": {
         "sukoonAPI": {},

@@ -19,3 +19,11 @@ amplifytools.xcconfig
 .secret-*
 **.sample
 #amplify-do-not-edit-end
+
+# cache_files_begin
+*.cache
+cache/
+.cache/
+*.pyc
+__pycache__/
+# cache_files_end

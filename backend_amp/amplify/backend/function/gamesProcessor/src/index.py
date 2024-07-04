@@ -23,7 +23,11 @@ api.add_resource(BytePlusTokenService, '/actions/byte_plus_token')
 api.add_resource(FetchShortsService, '/actions/fetch_shorts')
 api.add_resource(WhatsappMessageService, '/actions/send_whatsapp')
 api.add_resource(WhatsappWebhookService, '/actions/webhooks')
+api.add_resource(PushNotificationService, '/actions/push')
 
 def handler(event, context):
     print(event)
     return awsgi.response(app, event, context)
+
+if __name__ == '__main__':    
+    app.run(debug= True,port=8080)

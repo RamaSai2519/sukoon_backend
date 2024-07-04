@@ -1,4 +1,4 @@
-from models.interfaces import WhtasappMessageInput as Input
+from models.interfaces import PushNotificationInput as Input
 
 
 class Validator():
@@ -7,14 +7,14 @@ class Validator():
 
     def validate_input(self):
 
-        if not self.input.template_name:
-            return False, "Template Name is Required Field"
+        # if not self.input.template_name:
+        #     return False, "Template Name is Required Field"
         
-        if not self.input.phone_number:
-            return False, "Phone Number is Required Field"
+        # if not self.input.phone_number:
+        #     return False, "Phone Number is Required Field"
         
-        if len(self.input.phone_number) != 10:
-            return False, "Phone number is not correct"
+        # if len(self.input.phone_number) != 10:
+        #     return False, "Phone number is not correct"
 
 
             
