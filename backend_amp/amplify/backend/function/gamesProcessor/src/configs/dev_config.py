@@ -21,7 +21,7 @@ class DevConfig:
     }
 
     PUSH_NOTIFICATION_API = {
-        "URL": "https://fcm.googleapis.com/fcm/send",
+        "URL": "https://fcm.googleapis.com/v1/projects/sukoonlove-007/messages:send",
         "ACCESS_TOKEN": "AIzaSyAMJotLhCHDZQav-pI3xwh94zK9f2A62r8"
     }
 
