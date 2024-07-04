@@ -13,6 +13,7 @@ requests = "2.32.3"
 pytz = "2024.1"
 urllib3 = "1.26.6"
 pipenv="2024.0.1"
+google-auth="2.31.0"
 
 [packages]
 aws-wsgi = "0.2.7"
@@ -24,6 +25,8 @@ requests = "2.32.3"
 pytz = "2024.1"
 urllib3 = "1.26.6"
 pipenv="2024.0.1"
+google-auth="2.31.0"
+
 
 [requires]
 python_version = "3.8"
