@@ -139,15 +139,35 @@
                             ],
                             "Resource": {
                                 "Fn::Sub": [
-                                    "arn:aws:logs:${region}:${account}:log-group:/aws/lambda/${lambda}:log-stream:*",
+                                    "arn:aws:logs:${AWSRegion}:${AWSAccountId}:log-group:/aws/lambda/${LambdaFunctionName}:log-stream:*",
                                     {
-                                        "region": {
+                                        "AWSRegion": {
                                             "Ref": "AWS::Region"
                                         },
-                                        "account": {
+                                        "AWSAccountId": {
                                             "Ref": "AWS::AccountId"
                                         },
-                                        "lambda": {
+                                        "LambdaFunctionName": {
+                                            "Ref": "LambdaFunction"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": "lambda:InvokeFunction",
+                            "Resource": {
+                                "Fn::Sub": [
+                                    "arn:aws:lambda:${AWSRegion}:${AWSAccountId}:function:${FunctionName}",
+                                    {
+                                        "AWSRegion": {
+                                            "Ref": "AWS::Region"
+                                        },
+                                        "AWSAccountId": {
+                                            "Ref": "AWS::AccountId"
+                                        },
+                                        "FunctionName": {
                                             "Ref": "LambdaFunction"
                                         }
                                     }
@@ -157,9 +177,27 @@
                         {
                             "Effect": "Allow",
                             "Action": [
-                                "dynamodb:*"
+                                "dynamodb:GetRecords",
+                                "dynamodb:GetShardIterator",
+                                "dynamodb:DescribeStream",
+                                "dynamodb:ListStreams"
                             ],
-                            "Resource": "*"
+                            "Resource": {
+                                "Fn::Sub": [
+                                    "arn:aws:dynamodb:${AWSRegion}:${AWSAccountId}:table/UserNotification-${env}/stream/*",
+                                    {
+                                        "AWSRegion": {
+                                            "Ref": "AWS::Region"
+                                        },
+                                        "AWSAccountId": {
+                                            "Ref": "AWS::AccountId"
+                                        },
+                                        "env": {
+                                            "Ref": "env"
+                                        }
+                                    }
+                                ]
+                            }
                         }
                     ]
                 }
@@ -205,6 +243,7 @@
             }
         },
         "DynamoDBTrigger": {
+            "DependsOn": ["lambdaexecutionpolicy"],
             "Type": "AWS::Lambda::EventSourceMapping",
             "Properties": {
                 "BatchSize": 5,
@@ -250,4 +289,3 @@
         }
     }
 }
-
