@@ -1,5 +1,5 @@
 import os
-from  configs.dev_config import DevConfig
+from configs.dev_config import DevConfig
 from configs.main_config import MainConfig
 
 

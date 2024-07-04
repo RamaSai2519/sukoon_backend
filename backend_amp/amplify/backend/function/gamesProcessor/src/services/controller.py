@@ -5,4 +5,4 @@ from services.src.user_referral import UserReferralService
 from services.src.authenticate import SendOTPService,  ValidateOTPService
 from services.src.shorts import FetchShortsService
 from services.src.whatsapp import WhatsappMessageService, WhatsappWebhookService, WhatsappWebhookEvent
-from services.src.push_notification import PushNotificationService
+from services.src.push_notification import PushNotificationService, FCMTokenService

@@ -24,6 +24,7 @@ api.add_resource(FetchShortsService, '/actions/fetch_shorts')
 api.add_resource(WhatsappMessageService, '/actions/send_whatsapp')
 api.add_resource(WhatsappWebhookService, '/actions/webhooks')
 api.add_resource(PushNotificationService, '/actions/push')
+api.add_resource(FCMTokenService, '/actions/update_fcm_token')
 
 def handler(event, context):
     print(event)
