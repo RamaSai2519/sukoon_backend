@@ -4,8 +4,8 @@
     "Parameters": {
         "CloudWatchRule": {
             "Type": "String",
-            "Default" : "NONE",
-            "Description" : " Schedule Expression"
+            "Default": "NONE",
+            "Description": "Schedule Expression"
         },
         "deploymentBucketName": {
             "Type": "String"
@@ -16,8 +16,6 @@
         "s3Key": {
             "Type": "String"
         }
-        
-    
     },
     "Conditions": {
         "ShouldNotCreateEnvResources": {
@@ -31,48 +29,56 @@
     },
     "Resources": {
         "LambdaFunction": {
-          "Type": "AWS::Lambda::Function",
-          "Metadata": {
-            "aws:asset:path": "./src",
-            "aws:asset:property": "Code"
-          },
-          "Properties": {
-            "Code": {
-                "S3Bucket": {
-                    "Ref": "deploymentBucketName"
-                },
-                "S3Key": {
-                    "Ref": "s3Key"
-                }
+            "Type": "AWS::Lambda::Function",
+            "Metadata": {
+                "aws:asset:path": "./src",
+                "aws:asset:property": "Code"
             },
-            "Handler": "index.handler",
-            "FunctionName": {
-                "Fn::If": [
-                    "ShouldNotCreateEnvResources",
-                    "notificationProcessor",
-                    {
-
-                        "Fn::Join": [
-                            "",
-                            [
-                                "notificationProcessor",
-                                "-",
-                                {
-                                    "Ref": "env"
-                                }
-                            ]
-                        ]
+            "Properties": {
+                "Code": {
+                    "S3Bucket": {
+                        "Ref": "deploymentBucketName"
+                    },
+                    "S3Key": {
+                        "Ref": "s3Key"
                     }
-                ]
-            },
-            "Environment": {
-                "Variables" : {"ENV":{"Ref":"env"},"REGION":{"Ref":"AWS::Region"}}
-            },
-            "Role": { "Fn::GetAtt": ["LambdaExecutionRole", "Arn"] },
-            "Runtime": "python3.8",
-            "Layers": [],
-            "Timeout": 25
-          }
+                },
+                "Handler": "index.handler",
+                "FunctionName": {
+                    "Fn::If": [
+                        "ShouldNotCreateEnvResources",
+                        "notificationProcessor",
+                        {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    "notificationProcessor",
+                                    "-",
+                                    {
+                                        "Ref": "env"
+                                    }
+                                ]
+                            ]
+                        }
+                    ]
+                },
+                "Environment": {
+                    "Variables": {
+                        "ENV": {
+                            "Ref": "env"
+                        },
+                        "REGION": {
+                            "Ref": "AWS::Region"
+                        }
+                    }
+                },
+                "Role": {
+                    "Fn::GetAtt": ["LambdaExecutionRole", "Arn"]
+                },
+                "Runtime": "python3.8",
+                "Layers": [],
+                "Timeout": 25
+            }
         },
         "LambdaExecutionRole": {
             "Type": "AWS::IAM::Role",
@@ -82,7 +88,6 @@
                         "ShouldNotCreateEnvResources",
                         "backendampLambdaRole84bff967",
                         {
-
                             "Fn::Join": [
                                 "",
                                 [
@@ -113,29 +118,109 @@
                     ]
                 }
             }
-        }
-        ,"lambdaexecutionpolicy": {
+        },
+        "lambdaexecutionpolicy": {
             "DependsOn": ["LambdaExecutionRole"],
             "Type": "AWS::IAM::Policy",
             "Properties": {
                 "PolicyName": "lambda-execution-policy",
-                "Roles": [{ "Ref": "LambdaExecutionRole" }],
+                "Roles": [{
+                    "Ref": "LambdaExecutionRole"
+                }],
                 "PolicyDocument": {
                     "Version": "2012-10-17",
                     "Statement": [
                         {
                             "Effect": "Allow",
-                            "Action": ["logs:CreateLogGroup",
-                            "logs:CreateLogStream",
-                            "logs:PutLogEvents"],
-                            "Resource": { "Fn::Sub": [ "arn:aws:logs:${region}:${account}:log-group:/aws/lambda/${lambda}:log-stream:*", { "region": {"Ref": "AWS::Region"}, "account": {"Ref": "AWS::AccountId"}, "lambda": {"Ref": "LambdaFunction"}} ]}
+                            "Action": [
+                                "logs:CreateLogGroup",
+                                "logs:CreateLogStream",
+                                "logs:PutLogEvents"
+                            ],
+                            "Resource": {
+                                "Fn::Sub": [
+                                    "arn:aws:logs:${region}:${account}:log-group:/aws/lambda/${lambda}:log-stream:*",
+                                    {
+                                        "region": {
+                                            "Ref": "AWS::Region"
+                                        },
+                                        "account": {
+                                            "Ref": "AWS::AccountId"
+                                        },
+                                        "lambda": {
+                                            "Ref": "LambdaFunction"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "dynamodb:*"
+                            ],
+                            "Resource": "*"
                         }
                     ]
                 }
             }
+        },
+        "DynamoDBTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "Properties": {
+                "TableName": {
+                    "Fn::If": [
+                        "ShouldNotCreateEnvResources",
+                        "UserNotification",
+                        {
+                            "Fn::Join": [
+                                "",
+                                [
+                                    "UserNotification",
+                                    "-",
+                                    {
+                                        "Ref": "env"
+                                    }
+                                ]
+                            ]
+                        }
+                    ]
+                },
+                "AttributeDefinitions": [
+                    {
+                        "AttributeName": "id",
+                        "AttributeType": "S"
+                    }
+                ],
+                "KeySchema": [
+                    {
+                        "AttributeName": "id",
+                        "KeyType": "HASH"
+                    }
+                ],
+                "BillingMode": "PAY_PER_REQUEST",
+                "StreamSpecification": {
+                    "StreamViewType": "NEW_AND_OLD_IMAGES"
+                }
+            }
+        },
+        "DynamoDBTrigger": {
+            "Type": "AWS::Lambda::EventSourceMapping",
+            "Properties": {
+                "BatchSize": 5,
+                "EventSourceArn": {
+                    "Fn::GetAtt": [
+                        "DynamoDBTable",
+                        "StreamArn"
+                    ]
+                },
+                "FunctionName": {
+                    "Ref": "LambdaFunction"
+                },
+                "StartingPosition": "LATEST",
+                "Enabled": true
+            }
         }
-        
-        
     },
     "Outputs": {
         "Name": {
@@ -144,7 +229,9 @@
             }
         },
         "Arn": {
-            "Value": {"Fn::GetAtt": ["LambdaFunction", "Arn"]}
+            "Value": {
+                "Fn::GetAtt": ["LambdaFunction", "Arn"]
+            }
         },
         "Region": {
             "Value": {
@@ -155,7 +242,12 @@
             "Value": {
                 "Ref": "LambdaExecutionRole"
             }
+        },
+        "DynamoDBTableName": {
+            "Value": {
+                "Ref": "DynamoDBTable"
+            }
         }
-        
     }
 }
+
