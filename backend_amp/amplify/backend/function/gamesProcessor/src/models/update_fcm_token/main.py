@@ -4,7 +4,7 @@ from models.constants import OutputStatus
 from models.update_fcm_token.compute import Compute
 from models.update_fcm_token.validate import Validator
 
-class UpdateGamePlay:
+class UpdateUserFCMToken:
     def __init__(self, input: Input) -> None:
         self.input = input
 
