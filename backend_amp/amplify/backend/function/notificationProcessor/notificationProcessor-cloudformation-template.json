@@ -139,15 +139,15 @@
                             ],
                             "Resource": {
                                 "Fn::Sub": [
-                                    "arn:aws:logs:${region}:${account}:log-group:/aws/lambda/${lambda}:log-stream:*",
+                                    "arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/${LambdaFunction}:log-stream:*",
                                     {
-                                        "region": {
+                                        "AWS::Region": {
                                             "Ref": "AWS::Region"
                                         },
-                                        "account": {
+                                        "AWS::AccountId": {
                                             "Ref": "AWS::AccountId"
                                         },
-                                        "lambda": {
+                                        "LambdaFunction": {
                                             "Ref": "LambdaFunction"
                                         }
                                     }
@@ -162,12 +162,7 @@
                                 "dynamodb:DescribeStream",
                                 "dynamodb:ListStreams"
                             ],
-                            "Resource": {
-                                "Fn::GetAtt": [
-                                    "DynamoDBTable",
-                                    "StreamArn"
-                                ]
-                            }
+                            "Resource": "*"
                         }
                     ]
                 }
