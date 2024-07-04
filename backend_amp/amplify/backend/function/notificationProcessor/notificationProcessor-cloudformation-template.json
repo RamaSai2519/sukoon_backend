@@ -156,6 +156,26 @@
                         },
                         {
                             "Effect": "Allow",
+                            "Action": "lambda:InvokeFunction",
+                            "Resource": {
+                                "Fn::Sub": [
+                                    "arn:aws:lambda:${AWSRegion}:${AWSAccountId}:function:${FunctionName}",
+                                    {
+                                        "AWSRegion": {
+                                            "Ref": "AWS::Region"
+                                        },
+                                        "AWSAccountId": {
+                                            "Ref": "AWS::AccountId"
+                                        },
+                                        "FunctionName": {
+                                            "Ref": "LambdaFunction"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "Effect": "Allow",
                             "Action": [
                                 "dynamodb:GetRecords",
                                 "dynamodb:GetShardIterator",
