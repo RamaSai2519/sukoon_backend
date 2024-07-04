@@ -157,9 +157,17 @@
                         {
                             "Effect": "Allow",
                             "Action": [
-                                "dynamodb:*"
+                                "dynamodb:GetRecords",
+                                "dynamodb:GetShardIterator",
+                                "dynamodb:DescribeStream",
+                                "dynamodb:ListStreams"
                             ],
-                            "Resource": "*"
+                            "Resource": {
+                                "Fn::GetAtt": [
+                                    "DynamoDBTable",
+                                    "StreamArn"
+                                ]
+                            }
                         }
                     ]
                 }
@@ -250,4 +258,3 @@
         }
     }
 }
-
