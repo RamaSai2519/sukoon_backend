@@ -323,3 +323,19 @@ class WhatsappNotificationTemplates:
                 ],
             },
         }
+
+        self.STEP_UP_CHALLENGE = {
+            "template_name": "STEP_UP_CHALLENGE",
+            "template": {
+                "name": "step_up_challenge",
+                "language": {"code": "en"},
+                "components": [
+                    {       
+                        "type": "header",
+                        "parameters": [
+                            {"type": "image", "image": {"link": "{image_link}"}}
+                        ],
+                    },
+                ],
+            },
+        }
