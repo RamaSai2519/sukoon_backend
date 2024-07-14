@@ -339,3 +339,11 @@ class WhatsappNotificationTemplates:
                 ],
             },
         }
+
+        self.MARKET_REMINDER_MESSAGE = {
+            "template_name": "MARKET_REMINDER_MESSAGE",
+            "template": {
+                "name": "market_reminder_message",
+                "language": {"code": "en"},
+            },
+        }
