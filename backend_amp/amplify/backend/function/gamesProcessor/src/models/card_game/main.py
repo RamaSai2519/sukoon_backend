@@ -28,7 +28,6 @@ class CardGame:
                 output_status=OutputStatus.FAILURE,
                 output_message=f"{e}",
             )
-
             
 
         return output
