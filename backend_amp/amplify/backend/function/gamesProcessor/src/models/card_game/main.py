@@ -19,11 +19,6 @@ class CardGame:
                 output_message=f"INVALID_INPUT. {error_message}",
             )
 
-
-
-
-
-
         try:
             output = self._compute(input)
         except Exception as e:
