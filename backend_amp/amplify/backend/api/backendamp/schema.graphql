@@ -1,27 +1,45 @@
-# This "input" configures a global authorization rule to enable public access to
-# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
-input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
-
-type Todo @model {
+type User @model @auth(rules: [{ allow: public }]) {
   id: ID!
-  name: String!
-  description: String
+  firstName: String
+  lastName: String
+  gender: Gender
+  isDeleted: Boolean
+  dateOfBirth: AWSDate
+  mobileNumber: String
+  userNotifications: [UserNotification] @hasMany(indexName: "userNotificationsByUserIdx", fields: ["id"])
 }
 
-type UserNotification @model {
-  id: ID!
-  name: String!
-  description: String
-  notificationType: String
+enum Gender {
+  MALE
+  FEMALE
 }
 
-type UserGame @model {
+type UserNotification @model @auth(rules: [{ allow: public }]) 
+{
   id: ID!
-  name: String!
+  userId: ID! @index(name: "userNotificationsByUserIdx", queryField: "userNotificationsByUserId") 
+  requestMeta: AWSJSON
+  externalMessageId: String
+  status: NotificationStatus
+  notificationType: NotificationType
+  notificationJobType: NotificationJobType
 }
 
-type UserPlay @model {
-  id: ID!
-  play: String!
+enum NotificationType {
+  SMS
+  WHATSAPP
+  PUSH
+  EMAIL
 }
 
+enum NotificationJobType {
+  SMS
+  WHATSAPP
+  PUSH
+  EMAIL
+}
+
+enum NotificationStatus {
+  SUCCESS
+  FAILURE
+}

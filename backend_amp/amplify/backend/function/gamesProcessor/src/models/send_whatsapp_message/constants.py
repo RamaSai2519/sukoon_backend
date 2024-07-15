@@ -237,3 +237,113 @@ class WhatsappNotificationTemplates:
                 ],
             },
         }
+
+        self.EVENT_REGISTRATION = {
+            "template_name": "Event Registration",
+            "template": {
+                "name": "event_registration",
+                "language": {"code": "en"},
+                "components": [
+                    {       
+                        "type": "header",
+                        "parameters": [
+                            {"type": "image", "image": {"link": "{image_link}"}}
+                        ],
+                    },
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"},
+                            {"type": "text", "text": "{custom_text}"},
+                            {"type": "text", "text": "{topic_name}"},
+                            {"type": "text", "text": "{speakers_name}"},
+                            {"type": "text", "text": "{date_and_time}"},
+                            {"type": "text", "text": "{where}"},
+                            {"type": "text", "text": "{registration_link}"},
+                            {"type": "text", "text": "{phone_number}"},
+                            {"type": "text", "text": "{whatsapp_community_link}"},
+                        ],
+                    },
+                    {
+                        "type": "button",
+                        "index": "0",
+                        "sub_type": "url",
+                        "parameters": [{"type": "text", "text": "{registraion_link_slug}"}],
+                    },
+                ],
+            },
+        }
+
+        self.EVENT_REGISTRATION_CONFIRMATION = {
+            "template_name": "Event Registration Confirmation",
+            "template": {
+                "name": "event_registration_confirmation",
+                "language": {"code": "en"},
+                "components": [
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"},
+                            {"type": "text", "text": "{custom_text}"},
+                            {"type": "text", "text": "{topic_name}"},
+                            {"type": "text", "text": "{speakers_name}"},
+                            {"type": "text", "text": "{date_and_time}"},
+                            {"type": "text", "text": "{where}"},
+                            {"type": "text", "text": "{phone_number}"},
+                            {"type": "text", "text": "{whatsapp_community_link}"},
+                        ],
+                    },
+                ],
+            },
+        }
+
+        self.EVENT_REMINDER = {
+            "template_name": "Event Reminder",
+            "template": {
+                "name": "event_reminder",
+                "language": {"code": "en"},
+                "components": [
+                   {       
+                        "type": "header",
+                        "parameters": [
+                            {"type": "image", "image": {"link": "{image_link}"}}
+                        ],
+                    },
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"},
+                            {"type": "text", "text": "{topic_name}"},
+                            {"type": "text", "text": "{date_and_time}"},
+                            {"type": "text", "text": "{where}"},
+                            {"type": "text", "text": "{phone_number}"},
+                            {"type": "text", "text": "{whatsapp_community_link}"},
+                        ],
+                    },
+                ],
+            },
+        }
+
+        self.STEP_UP_CHALLENGE = {
+            "template_name": "STEP_UP_CHALLENGE",
+            "template": {
+                "name": "step_up_challenge",
+                "language": {"code": "en"},
+                "components": [
+                    {       
+                        "type": "header",
+                        "parameters": [
+                            {"type": "image", "image": {"link": "{image_link}"}}
+                        ],
+                    },
+                ],
+            },
+        }
+
+        self.MARKET_REMINDER_MESSAGE = {
+            "template_name": "MARKET_REMINDER_MESSAGE",
+            "template": {
+                "name": "market_reminder_message",
+                "language": {"code": "en"},
+            },
+        }

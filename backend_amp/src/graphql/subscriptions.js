@@ -1,36 +1,60 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const onCreateTodo = /* GraphQL */ `
-  subscription OnCreateTodo($filter: ModelSubscriptionTodoFilterInput) {
-    onCreateTodo(filter: $filter) {
+export const onCreateUser = /* GraphQL */ `
+  subscription OnCreateUser($filter: ModelSubscriptionUserFilterInput) {
+    onCreateUser(filter: $filter) {
       id
-      name
-      description
+      firstName
+      lastName
+      gender
+      isDeleted
+      dateOfBirth
+      mobileNumber
+      userNotifications {
+        nextToken
+        __typename
+      }
       createdAt
       updatedAt
       __typename
     }
   }
 `;
-export const onUpdateTodo = /* GraphQL */ `
-  subscription OnUpdateTodo($filter: ModelSubscriptionTodoFilterInput) {
-    onUpdateTodo(filter: $filter) {
+export const onUpdateUser = /* GraphQL */ `
+  subscription OnUpdateUser($filter: ModelSubscriptionUserFilterInput) {
+    onUpdateUser(filter: $filter) {
       id
-      name
-      description
+      firstName
+      lastName
+      gender
+      isDeleted
+      dateOfBirth
+      mobileNumber
+      userNotifications {
+        nextToken
+        __typename
+      }
       createdAt
       updatedAt
       __typename
     }
   }
 `;
-export const onDeleteTodo = /* GraphQL */ `
-  subscription OnDeleteTodo($filter: ModelSubscriptionTodoFilterInput) {
-    onDeleteTodo(filter: $filter) {
+export const onDeleteUser = /* GraphQL */ `
+  subscription OnDeleteUser($filter: ModelSubscriptionUserFilterInput) {
+    onDeleteUser(filter: $filter) {
       id
-      name
-      description
+      firstName
+      lastName
+      gender
+      isDeleted
+      dateOfBirth
+      mobileNumber
+      userNotifications {
+        nextToken
+        __typename
+      }
       createdAt
       updatedAt
       __typename
@@ -43,9 +67,12 @@ export const onCreateUserNotification = /* GraphQL */ `
   ) {
     onCreateUserNotification(filter: $filter) {
       id
-      name
-      description
+      userId
+      requestMeta
+      externalMessageId
+      status
       notificationType
+      notificationJobType
       createdAt
       updatedAt
       __typename
@@ -58,9 +85,12 @@ export const onUpdateUserNotification = /* GraphQL */ `
   ) {
     onUpdateUserNotification(filter: $filter) {
       id
-      name
-      description
+      userId
+      requestMeta
+      externalMessageId
+      status
       notificationType
+      notificationJobType
       createdAt
       updatedAt
       __typename
@@ -73,75 +103,12 @@ export const onDeleteUserNotification = /* GraphQL */ `
   ) {
     onDeleteUserNotification(filter: $filter) {
       id
-      name
-      description
+      userId
+      requestMeta
+      externalMessageId
+      status
       notificationType
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const onCreateUserGame = /* GraphQL */ `
-  subscription OnCreateUserGame($filter: ModelSubscriptionUserGameFilterInput) {
-    onCreateUserGame(filter: $filter) {
-      id
-      name
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const onUpdateUserGame = /* GraphQL */ `
-  subscription OnUpdateUserGame($filter: ModelSubscriptionUserGameFilterInput) {
-    onUpdateUserGame(filter: $filter) {
-      id
-      name
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const onDeleteUserGame = /* GraphQL */ `
-  subscription OnDeleteUserGame($filter: ModelSubscriptionUserGameFilterInput) {
-    onDeleteUserGame(filter: $filter) {
-      id
-      name
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const onCreateUserPlay = /* GraphQL */ `
-  subscription OnCreateUserPlay($filter: ModelSubscriptionUserPlayFilterInput) {
-    onCreateUserPlay(filter: $filter) {
-      id
-      play
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const onUpdateUserPlay = /* GraphQL */ `
-  subscription OnUpdateUserPlay($filter: ModelSubscriptionUserPlayFilterInput) {
-    onUpdateUserPlay(filter: $filter) {
-      id
-      play
-      createdAt
-      updatedAt
-      __typename
-    }
-  }
-`;
-export const onDeleteUserPlay = /* GraphQL */ `
-  subscription OnDeleteUserPlay($filter: ModelSubscriptionUserPlayFilterInput) {
-    onDeleteUserPlay(filter: $filter) {
-      id
-      play
+      notificationJobType
       createdAt
       updatedAt
       __typename

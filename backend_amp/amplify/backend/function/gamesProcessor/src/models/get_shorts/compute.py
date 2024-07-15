@@ -36,14 +36,14 @@ class Compute:
         if not self.input.fetchedTill:
             keywords = ["Daily Tips", "News of the day", "Life messages"]
             for keyword in keywords:
-                shorts = list(shorts_collection.find({"keyword": keyword}, {"_id": 0, "thumbnails": 0, "description": 0}).sort({ "createdAt": -1 }).limit(3))
+                shorts = list(shorts_collection.find({"keyword": keyword, "approved": True}, {"_id": 0, "thumbnails": 0, "description": 0}).sort({ "createdAt": -1 }).limit(3))
                 self._process_shorts(shorts)
         else:
             for item in self.input.fetchedTill:
                 keyword = item.get("keyword")
                 timestamp = item.get("fetchedTillDateTime")
                 timestamp = datetime.strptime(timestamp , '%Y-%m-%d %H:%M:%S')
-                shorts = list(shorts_collection.find({"keyword": keyword, "createdAt": { "$gt": timestamp } }, {"_id": 0, "thumbnails": 0, "description": 0}).sort({ "createdAt": -1 }).limit(3))
+                shorts = list(shorts_collection.find({"keyword": keyword, "approved": True, "createdAt": { "$gt": timestamp } }, {"_id": 0, "thumbnails": 0, "description": 0}).sort({ "createdAt": -1 }).limit(3))
                 self._process_shorts(shorts)
 
     def compute(self):

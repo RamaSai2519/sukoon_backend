@@ -15,6 +15,12 @@ class MainConfig:
     }
     
     SMS_API_URL = "https://enterprise.smsgupshup.com/GatewayAPI/rest"
+    
+    WHATSAPP_API = {
+        "URL": "https://graph.facebook.com/v19.0/332782693255519/messages",
+        "ACCESS_TOKEN": "EAAQFy4A7ZCfABO1UJeKTvjzWFEyqnuP42JZCBZBe7XruAD5SIQEc0ukrOB0HunFgiG0kyBaoPcnX9PLPjewwSCNOYxOZCwW2GqZBsUjZAFEtZCLKwJn9asnntcX9bWd7SbhrAzzhyVsPxbCubQJLqZC5lBGgp9TzpOUO5T12ZBRmSn1MR9BtMNVVvIS2wc2lchvt1"
+    }
+
 
     PUSH_NOTIFICATION_API = {
         "URL": "https://fcm.googleapis.com/v1/projects/sukoonlove-007/messages:send",
