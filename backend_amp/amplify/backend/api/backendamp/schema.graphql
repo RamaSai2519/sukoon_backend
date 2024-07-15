@@ -16,7 +16,7 @@ enum Gender {
 }
 
 type UserNotification @model @auth(rules: [{ allow: public }]) 
-@key(name: "userNotificationsByUserIdx", fields: ["userId"], queryField: "userNotificationsByUserId") {
+@index(name: "userNotificationsByUserIdx", fields: ["userId"], queryField: "userNotificationsByUserId") {
   id: ID!
   userId: ID!
   requestMeta: AWSJSON
