@@ -94,3 +94,87 @@ export const deleteUserNotification = /* GraphQL */ `
     }
   }
 `;
+export const createUserGame = /* GraphQL */ `
+  mutation CreateUserGame(
+    $input: CreateUserGameInput!
+    $condition: ModelUserGameConditionInput
+  ) {
+    createUserGame(input: $input, condition: $condition) {
+      id
+      name
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const updateUserGame = /* GraphQL */ `
+  mutation UpdateUserGame(
+    $input: UpdateUserGameInput!
+    $condition: ModelUserGameConditionInput
+  ) {
+    updateUserGame(input: $input, condition: $condition) {
+      id
+      name
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const deleteUserGame = /* GraphQL */ `
+  mutation DeleteUserGame(
+    $input: DeleteUserGameInput!
+    $condition: ModelUserGameConditionInput
+  ) {
+    deleteUserGame(input: $input, condition: $condition) {
+      id
+      name
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const createUserPlay = /* GraphQL */ `
+  mutation CreateUserPlay(
+    $input: CreateUserPlayInput!
+    $condition: ModelUserPlayConditionInput
+  ) {
+    createUserPlay(input: $input, condition: $condition) {
+      id
+      play
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const updateUserPlay = /* GraphQL */ `
+  mutation UpdateUserPlay(
+    $input: UpdateUserPlayInput!
+    $condition: ModelUserPlayConditionInput
+  ) {
+    updateUserPlay(input: $input, condition: $condition) {
+      id
+      play
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const deleteUserPlay = /* GraphQL */ `
+  mutation DeleteUserPlay(
+    $input: DeleteUserPlayInput!
+    $condition: ModelUserPlayConditionInput
+  ) {
+    deleteUserPlay(input: $input, condition: $condition) {
+      id
+      play
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;

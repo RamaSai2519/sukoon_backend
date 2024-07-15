@@ -82,3 +82,69 @@ export const onDeleteUserNotification = /* GraphQL */ `
     }
   }
 `;
+export const onCreateUserGame = /* GraphQL */ `
+  subscription OnCreateUserGame($filter: ModelSubscriptionUserGameFilterInput) {
+    onCreateUserGame(filter: $filter) {
+      id
+      name
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onUpdateUserGame = /* GraphQL */ `
+  subscription OnUpdateUserGame($filter: ModelSubscriptionUserGameFilterInput) {
+    onUpdateUserGame(filter: $filter) {
+      id
+      name
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onDeleteUserGame = /* GraphQL */ `
+  subscription OnDeleteUserGame($filter: ModelSubscriptionUserGameFilterInput) {
+    onDeleteUserGame(filter: $filter) {
+      id
+      name
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onCreateUserPlay = /* GraphQL */ `
+  subscription OnCreateUserPlay($filter: ModelSubscriptionUserPlayFilterInput) {
+    onCreateUserPlay(filter: $filter) {
+      id
+      play
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onUpdateUserPlay = /* GraphQL */ `
+  subscription OnUpdateUserPlay($filter: ModelSubscriptionUserPlayFilterInput) {
+    onUpdateUserPlay(filter: $filter) {
+      id
+      play
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;
+export const onDeleteUserPlay = /* GraphQL */ `
+  subscription OnDeleteUserPlay($filter: ModelSubscriptionUserPlayFilterInput) {
+    onDeleteUserPlay(filter: $filter) {
+      id
+      play
+      createdAt
+      updatedAt
+      __typename
+    }
+  }
+`;

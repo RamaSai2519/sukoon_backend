@@ -7,7 +7,9 @@
           "additionalAuthenticationProviders": [],
           "defaultAuthentication": {
             "apiKeyConfig": {
-              "apiKeyExpirationDays": 7
+              "apiKeyExpirationDate": "2025-07-15T12:46:57.951Z",
+              "apiKeyExpirationDays": 365,
+              "description": ""
             },
             "authenticationType": "API_KEY"
           }
@@ -57,6 +59,22 @@
         {
           "category": "function",
           "resourceName": "gamesProcessor"
+        }
+      ]
+    },
+    "AMPLIFY_function_notificationProcessor_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "notificationProcessor"
+        }
+      ]
+    },
+    "AMPLIFY_function_notificationProcessor_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "notificationProcessor"
         }
       ]
     }
