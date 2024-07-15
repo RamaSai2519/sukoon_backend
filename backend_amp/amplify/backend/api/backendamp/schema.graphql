@@ -1,9 +1,5 @@
-# This "input" configures a global authorization rule to enable public access to
-# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
-input AMPLIFY { globalAuthRule: AuthRule = { allow: public } } # FOR TESTING ONLY!
 
-
-type User @model {
+type User @model @auth(rules: [{ allow: public }]) {
   id: ID!
   firstName: String
   lastName: String
@@ -11,25 +7,23 @@ type User @model {
   isDeleted: Boolean
   dateOfBirth: AWSDate
   mobileNumber: String
-  userNotifications: [UserNotification] @connection(keyName: "userNotificationsByUserIdx", fields: ["id"])
+  userNotifications: [UserNotification] @hasMany(indexName: "userNotificationsByUserIdx", fields: ["id"])
 }
 
-enum Gender{
+enum Gender {
   MALE
   FEMALE
 }
 
-
-type UserNotification @model
+type UserNotification @model @auth(rules: [{ allow: public }]) 
 @key(name: "userNotificationsByUserIdx", fields: ["userId"], queryField: "userNotificationsByUserId") {
   id: ID!
-  userId: ID
+  userId: ID!
   requestMeta: AWSJSON
   externalMessageId: String
   status: NotificationStatus
   notificationType: NotificationType
   notificationJobType: NotificationJobType
-
 }
 
 enum NotificationType {
@@ -50,4 +44,3 @@ enum NotificationStatus {
   SUCCESS
   FAILURE
 }
-
