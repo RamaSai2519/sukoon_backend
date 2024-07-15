@@ -1,4 +1,33 @@
 {
+  "main": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-backendamp-main-3186f-authRole",
+      "UnauthRoleArn": "arn:aws:iam::533267308676:role/amplify-backendamp-main-3186f-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::533267308676:role/amplify-backendamp-main-3186f-authRole",
+      "Region": "ap-south-1",
+      "DeploymentBucketName": "amplify-backendamp-main-3186f-deployment",
+      "UnauthRoleName": "amplify-backendamp-main-3186f-unauthRole",
+      "StackName": "amplify-backendamp-main-3186f",
+      "StackId": "arn:aws:cloudformation:ap-south-1:533267308676:stack/amplify-backendamp-main-3186f/3c8f36a0-385c-11ef-a279-06851b514006",
+      "AmplifyAppId": "d227q70xwaiboi"
+    },
+    "categories": {
+      "function": {
+        "gamesProcessor": {
+          "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
+          "s3Key": "amplify-builds/gamesProcessor-53537161396d7a775263-build.zip"
+        },
+        "notificationProcessor": {
+          "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
+          "s3Key": "amplify-builds/notificationProcessor-63567848597457345a6d-build.zip"
+        }
+      },
+      "api": {
+        "sukoonAPI": {},
+        "backendamp": {}
+      }
+    }
+  },
   "dev": {
     "awscloudformation": {
       "AuthRoleName": "amplify-backendamp-dev-caa78-authRole",
@@ -18,31 +47,6 @@
           "s3Key": "amplify-builds/gamesProcessor-53537161396d7a775263-build.zip"
         },
         "notificationProcessor": {}
-      },
-      "api": {
-        "sukoonAPI": {},
-        "backendamp": {}
-      }
-    }
-  },
-  "main": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-backendamp-main-3186f-authRole",
-      "UnauthRoleArn": "arn:aws:iam::533267308676:role/amplify-backendamp-main-3186f-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::533267308676:role/amplify-backendamp-main-3186f-authRole",
-      "Region": "ap-south-1",
-      "DeploymentBucketName": "amplify-backendamp-main-3186f-deployment",
-      "UnauthRoleName": "amplify-backendamp-main-3186f-unauthRole",
-      "StackName": "amplify-backendamp-main-3186f",
-      "StackId": "arn:aws:cloudformation:ap-south-1:533267308676:stack/amplify-backendamp-main-3186f/3c8f36a0-385c-11ef-a279-06851b514006",
-      "AmplifyAppId": "d227q70xwaiboi"
-    },
-    "categories": {
-      "function": {
-        "gamesProcessor": {
-          "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
-          "s3Key": "amplify-builds/gamesProcessor-53537161396d7a775263-build.zip"
-        }
       },
       "api": {
         "sukoonAPI": {},

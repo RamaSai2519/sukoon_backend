@@ -59,6 +59,22 @@
           "resourceName": "gamesProcessor"
         }
       ]
+    },
+    "AMPLIFY_function_notificationProcessor_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "notificationProcessor"
+        }
+      ]
+    },
+    "AMPLIFY_function_notificationProcessor_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "notificationProcessor"
+        }
+      ]
     }
   }
 }
