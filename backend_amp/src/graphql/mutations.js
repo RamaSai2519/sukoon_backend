@@ -1,45 +1,69 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createTodo = /* GraphQL */ `
-  mutation CreateTodo(
-    $input: CreateTodoInput!
-    $condition: ModelTodoConditionInput
+export const createUser = /* GraphQL */ `
+  mutation CreateUser(
+    $input: CreateUserInput!
+    $condition: ModelUserConditionInput
   ) {
-    createTodo(input: $input, condition: $condition) {
+    createUser(input: $input, condition: $condition) {
       id
-      name
-      description
+      firstName
+      lastName
+      gender
+      isDeleted
+      dateOfBirth
+      mobileNumber
+      userNotifications {
+        nextToken
+        __typename
+      }
       createdAt
       updatedAt
       __typename
     }
   }
 `;
-export const updateTodo = /* GraphQL */ `
-  mutation UpdateTodo(
-    $input: UpdateTodoInput!
-    $condition: ModelTodoConditionInput
+export const updateUser = /* GraphQL */ `
+  mutation UpdateUser(
+    $input: UpdateUserInput!
+    $condition: ModelUserConditionInput
   ) {
-    updateTodo(input: $input, condition: $condition) {
+    updateUser(input: $input, condition: $condition) {
       id
-      name
-      description
+      firstName
+      lastName
+      gender
+      isDeleted
+      dateOfBirth
+      mobileNumber
+      userNotifications {
+        nextToken
+        __typename
+      }
       createdAt
       updatedAt
       __typename
     }
   }
 `;
-export const deleteTodo = /* GraphQL */ `
-  mutation DeleteTodo(
-    $input: DeleteTodoInput!
-    $condition: ModelTodoConditionInput
+export const deleteUser = /* GraphQL */ `
+  mutation DeleteUser(
+    $input: DeleteUserInput!
+    $condition: ModelUserConditionInput
   ) {
-    deleteTodo(input: $input, condition: $condition) {
+    deleteUser(input: $input, condition: $condition) {
       id
-      name
-      description
+      firstName
+      lastName
+      gender
+      isDeleted
+      dateOfBirth
+      mobileNumber
+      userNotifications {
+        nextToken
+        __typename
+      }
       createdAt
       updatedAt
       __typename
@@ -53,9 +77,12 @@ export const createUserNotification = /* GraphQL */ `
   ) {
     createUserNotification(input: $input, condition: $condition) {
       id
-      name
-      description
+      userId
+      requestMeta
+      externalMessageId
+      status
       notificationType
+      notificationJobType
       createdAt
       updatedAt
       __typename
@@ -69,9 +96,12 @@ export const updateUserNotification = /* GraphQL */ `
   ) {
     updateUserNotification(input: $input, condition: $condition) {
       id
-      name
-      description
+      userId
+      requestMeta
+      externalMessageId
+      status
       notificationType
+      notificationJobType
       createdAt
       updatedAt
       __typename
@@ -85,9 +115,12 @@ export const deleteUserNotification = /* GraphQL */ `
   ) {
     deleteUserNotification(input: $input, condition: $condition) {
       id
-      name
-      description
+      userId
+      requestMeta
+      externalMessageId
+      status
       notificationType
+      notificationJobType
       createdAt
       updatedAt
       __typename

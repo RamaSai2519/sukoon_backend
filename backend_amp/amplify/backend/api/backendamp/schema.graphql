@@ -43,19 +43,3 @@ enum NotificationStatus {
   SUCCESS
   FAILURE
 }
-
-type Todo @model {
-  id: ID!
-  name: String!
-  description: String
-}
-
-type UserGame @model {
-  id: ID!
-  name: String!
-}
-
-type UserPlay @model {
-  id: ID!
-  play: String!
-}
