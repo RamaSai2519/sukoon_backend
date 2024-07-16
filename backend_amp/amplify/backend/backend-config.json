@@ -72,6 +72,14 @@
           "resourceName": "gamesProcessor"
         }
       ]
+    },
+    "AMPLIFY_function_notificationProcessor_userNotificationTableStreamTimestamp": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "notificationProcessor"
+        }
+      ]
     }
   }
 }

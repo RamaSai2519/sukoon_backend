@@ -46,7 +46,9 @@
           "deploymentBucketName": "amplify-backendamp-dev-caa78-deployment",
           "s3Key": "amplify-builds/gamesProcessor-53537161396d7a775263-build.zip"
         },
-        "notificationProcessor": {}
+        "notificationProcessor": {
+          "userNotificationTableStreamTimestamp": "2024-07-03T10:17:21.979"
+        }
       },
       "api": {
         "sukoonAPI": {},
