@@ -44,10 +44,12 @@
       "function": {
         "gamesProcessor": {
           "deploymentBucketName": "amplify-backendamp-dev-caa78-deployment",
-          "s3Key": "amplify-builds/gamesProcessor-53537161396d7a775263-build.zip"
+          "s3Key": "amplify-builds/gamesProcessor-30684e36753275763878-build.zip"
         },
         "notificationProcessor": {
-          "userNotificationTableStreamTimestamp": "2024-07-03T10:17:21.979"
+          "userNotificationTableStreamTimestamp": "2024-07-03T10:17:21.979",
+          "deploymentBucketName": "amplify-backendamp-dev-caa78-deployment",
+          "s3Key": "amplify-builds/notificationProcessor-63567848597457345a6d-build.zip"
         }
       },
       "api": {

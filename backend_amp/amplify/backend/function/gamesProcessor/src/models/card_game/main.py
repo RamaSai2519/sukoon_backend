@@ -18,6 +18,8 @@ class CardGame:
                 output_status=OutputStatus.FAILURE,
                 output_message=f"INVALID_INPUT. {error_message}",
             )
+        
+        
 
         try:
             output = self._compute(input)
@@ -28,6 +30,7 @@ class CardGame:
                 output_status=OutputStatus.FAILURE,
                 output_message=f"{e}",
             )
+            
 
         return output
     
