@@ -364,3 +364,20 @@ class WhatsappNotificationTemplates:
                 ],
             },
         }
+
+        self.GAMES_TEMPLATE = {
+            "template_name": "GAMES_TEMPLATE",
+            "template": {
+                "name": "games_template",
+                "language": {"code": "en"},
+                "components": [
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{sarathi_name}"},
+                            {"type": "text", "text": "{game_link}"},
+                        ],
+                    },
+                ],
+            },
+        }
