@@ -27,6 +27,9 @@
     "apibackendampGraphQLAPIKeyOutput": {
       "Type": "String",
       "Default": "apibackendampGraphQLAPIKeyOutput"
+    },
+    "userNotificationTableStreamTimestamp": {
+      "Type": "String"
     }
   },
   "Conditions": {
@@ -90,6 +93,9 @@
             },
             "API_BACKENDAMP_GRAPHQLAPIKEYOUTPUT": {
               "Ref": "apibackendampGraphQLAPIKeyOutput"
+            },
+            "USER_NOTIFICATION_TABLE_STREAM_TIMESTAMP": {
+              "Ref": "userNotificationTableStreamTimestamp"
             }
           }
         },
@@ -231,7 +237,9 @@
                       "Ref": "env"
                     },
                     "/stream/",
-                    "2024-07-03T10:17:21.979"
+                    {
+                      "Ref": "userNotificationTableStreamTimestamp"
+                    }
                   ]
                 ]
               }
@@ -273,7 +281,9 @@
                 "Ref": "env"
               },
               "/stream/",
-              "2024-07-03T10:17:21.979"
+              {
+                "Ref": "userNotificationTableStreamTimestamp"
+              }
             ]
           ]
         },
