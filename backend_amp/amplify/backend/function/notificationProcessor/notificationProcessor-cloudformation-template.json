@@ -18,7 +18,7 @@
     },
     "apisukoonGraphQLAPIIdOutput": {
       "Type": "String",
-      "Default": "apisukoonGraphQLAPIIdOutput"
+      "Default": "ju26pqpij5dfhgjxg3p25jngte"
     },
     "apisukoonGraphQLAPIEndpointOutput": {
       "Type": "String",
@@ -302,7 +302,7 @@
                         {
                             "Ref": "env"
                         },
-                        ":/stream/",
+                        "/stream/",
                         "*"
                     ]
                 ]
@@ -344,7 +344,7 @@
                   {
                       "Ref": "env"
                   },
-                  ":/stream/",
+                  "/stream/",
                   "*"
               ]
           ]
