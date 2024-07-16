@@ -18,6 +18,7 @@
           "s3Key": "amplify-builds/gamesProcessor-2b3057742b3266786255-build.zip"
         },
         "notificationProcessor": {
+          "userNotificationTableStreamTimestamp": "2024-07-03T10:50:48.205",
           "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
           "s3Key": "amplify-builds/notificationProcessor-63567848597457345a6d-build.zip"
         }
@@ -44,9 +45,13 @@
       "function": {
         "gamesProcessor": {
           "deploymentBucketName": "amplify-backendamp-dev-caa78-deployment",
-          "s3Key": "amplify-builds/gamesProcessor-53537161396d7a775263-build.zip"
+          "s3Key": "amplify-builds/gamesProcessor-30684e36753275763878-build.zip"
         },
-        "notificationProcessor": {}
+        "notificationProcessor": {
+          "userNotificationTableStreamTimestamp": "2024-07-03T10:17:21.979",
+          "deploymentBucketName": "amplify-backendamp-dev-caa78-deployment",
+          "s3Key": "amplify-builds/notificationProcessor-63567848597457345a6d-build.zip"
+        }
       },
       "api": {
         "sukoonAPI": {},

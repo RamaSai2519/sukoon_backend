@@ -1,3 +1,18 @@
 {
-  "lambdaLayers": []
+  "lambdaLayers": [],
+  "permissions": {
+    "api": {
+      "backendamp": [
+        "Query",
+        "Mutation",
+        "Subscription"
+      ]
+    }
+  },
+  "environmentVariableList": [
+    {
+      "cloudFormationParameterName": "userNotificationTableStreamTimestamp",
+      "environmentVariableName": "USER_NOTIFICATION_TABLE_STREAM_TIMESTAMP"
+    }
+  ]
 }
