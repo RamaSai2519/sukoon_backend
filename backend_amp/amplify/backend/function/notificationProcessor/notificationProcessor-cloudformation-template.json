@@ -191,7 +191,7 @@
               ],
               "Resource": {
                 "Fn::Sub": [
-                  "arn:aws:dynamodb:${AWSRegion}:${AWSAccountId}:table/UserNotification-${env}/stream/*",
+                  "arn:aws:dynamodb:${AWSRegion}:${AWSAccountId}:table/UserNotification*-${env}/stream/*",
                   {
                     "AWSRegion": {
                       "Ref": "AWS::Region"
