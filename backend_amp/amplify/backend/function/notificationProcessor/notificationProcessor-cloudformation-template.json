@@ -27,18 +27,6 @@
     "apisukoonGraphQLAPIKeyOutput": {
       "Type": "String",
       "Default": "apisukoonGraphQLAPIKeyOutput"
-    },
-    "apisukoonapiApiName": {
-      "Type": "String",
-      "Default": "apisukoonapiApiName"
-    },
-    "apisukoonapiApiId": {
-      "Type": "String",
-      "Default": "apisukoonapiApiId"
-    },
-    "storagesukoonAdminBucketName": {
-      "Type": "String",
-      "Default": "storagesukoonAdminBucketName"
     }
   },
   "Conditions": {
@@ -102,15 +90,6 @@
             },
             "API_SUKOON_GRAPHQLAPIKEYOUTPUT": {
               "Ref": "apisukoonGraphQLAPIKeyOutput"
-            },
-            "API_SUKOON_API_APINAME": {
-              "Ref": "apisukoonapiApiName"
-            },
-            "API_SUKOON_API_APIID": {
-              "Ref": "apisukoonapiApiId"
-            },
-            "STORAGE_SUKOON_ADMIN_BUCKETNAME": {
-              "Ref": "storagesukoonAdminBucketName"
             }
           }
         },
@@ -274,80 +253,6 @@
                   ]
                 }
               ]
-            },
-            {
-              "Effect": "Allow",
-              "Action": [
-                "apigateway:POST",
-                "apigateway:PUT",
-                "apigateway:GET",
-                "apigateway:HEAD",
-                "apigateway:OPTIONS",
-                "apigateway:PATCH",
-                "apigateway:DELETE"
-              ],
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:apigateway:",
-                      {
-                        "Ref": "AWS::Region"
-                      },
-                      "::/restapis/",
-                      {
-                        "Ref": "apisukoonapiApiName"
-                      },
-                      "/*"
-                    ]
-                  ]
-                }
-              ]
-            },
-            {
-              "Effect": "Allow",
-              "Action": "s3:ListBucket",
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:s3:::",
-                      {
-                        "Ref": "storagesukoonAdminBucketName"
-                      }
-                    ]
-                  ]
-                }
-              ]
-            },
-            {
-              "Effect": "Allow",
-              "Action": [
-                "s3:PutObject",
-                "s3:GetObject",
-                "s3:DeleteObject"
-              ],
-              "Resource": [
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:aws:s3:::",
-                      {
-                        "Ref": "storagesukoonAdminBucketName"
-                      },
-                      "/*"
-                    ]
-                  ]
-                }
-              ]
-            },
-            {
-              "Effect": "Allow",
-              "Action": "sns:Publish",
-              "Resource": "*"
             }
           ]
         }
