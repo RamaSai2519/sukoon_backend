@@ -15,8 +15,8 @@ class Compute:
 
     def compute(self):
         
-        app_id = "66414dcd5d69250174170421"
-        app_key = "14c403c0646d48f585b5b55982db7ad7"
+        app_id="6696518f721f7801754f4629"
+        app_key="99f57abffd824c778195cc3805c5c1b6"
 
         token = AccessToken.AccessToken(app_id, app_key, self.input.room_id, self.input.user_id)
         token.add_privilege(AccessToken.PrivSubscribeStream, 0)
