@@ -347,3 +347,20 @@ class WhatsappNotificationTemplates:
                 "language": {"code": "en"},
             },
         }
+
+
+        self.AGING_MESSAGE = {
+            "template_name": "AGING_MESSAGE",
+            "template": {
+                "name": "aging_template",
+                "language": {"code": "en"},
+                "components": [
+                    {       
+                        "type": "header",
+                        "parameters": [
+                            {"type": "image", "image": {"link": "{image_link}"}}
+                        ],
+                    },
+                ],
+            },
+        }
