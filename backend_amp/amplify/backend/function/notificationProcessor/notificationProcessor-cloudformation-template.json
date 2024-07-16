@@ -282,9 +282,29 @@
                 "dynamodb:ListStreams"
               ],
               "Resource": {
-                "Fn::ImportValue": {
-                  "Fn::Sub": "${apisukoonGraphQLAPIIdOutput}:GetAtt:UserNotificationTable:StreamArn"
-                }
+                "Fn::Join": [
+                    "",
+                    [
+                        "arn:aws:dynamodb:",
+                        {
+                            "Ref": "AWS::Region"
+                        },
+                        ":",
+                        {
+                            "Ref": "AWS::AccountId"
+                        },
+                        ":table/",
+                        "UserNotification-",
+                        {
+                            "Ref": "apisukoonGraphQLAPIIdOutput"
+                        },
+                        {
+                            "Ref": "env"
+                        },
+                        ":/stream/",
+                        "*"
+                    ]
+                ]
               }
             }
           ]
@@ -303,10 +323,30 @@
         "MaximumRetryAttempts": 10,
         "Enabled": true,
         "EventSourceArn": {
-          "Fn::ImportValue": {
-            "Fn::Sub": "${apisukoonGraphQLAPIIdOutput}:GetAtt:UserNotificationTable:StreamArn"
-          }
-        },
+          "Fn::Join": [
+              "",
+              [
+                  "arn:aws:dynamodb:",
+                  {
+                      "Ref": "AWS::Region"
+                  },
+                  ":",
+                  {
+                      "Ref": "AWS::AccountId"
+                  },
+                  ":table/",
+                  "UserNotification-",
+                  {
+                      "Ref": "apisukoonGraphQLAPIIdOutput"
+                  },
+                  {
+                      "Ref": "env"
+                  },
+                  ":/stream/",
+                  "*"
+              ]
+          ]
+      },
         "FunctionName": {
           "Fn::GetAtt": [
             "LambdaFunction",
