@@ -298,6 +298,7 @@
                         {
                             "Ref": "apisukoonGraphQLAPIIdOutput"
                         },
+                        "-",
                         {
                             "Ref": "env"
                         },
@@ -339,6 +340,7 @@
                   {
                       "Ref": "apisukoonGraphQLAPIIdOutput"
                   },
+                  "-",
                   {
                       "Ref": "env"
                   },
