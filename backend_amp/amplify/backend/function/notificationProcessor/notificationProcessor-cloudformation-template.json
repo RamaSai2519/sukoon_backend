@@ -18,7 +18,7 @@
     },
     "apisukoonGraphQLAPIIdOutput": {
       "Type": "String",
-      "Default": "ju26pqpij5dfhgjxg3p25jngte"
+      "Default": "apisukoonGraphQLAPIIdOutput"
     },
     "apisukoonGraphQLAPIEndpointOutput": {
       "Type": "String",
