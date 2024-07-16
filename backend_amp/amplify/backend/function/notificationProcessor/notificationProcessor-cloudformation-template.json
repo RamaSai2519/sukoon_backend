@@ -59,12 +59,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "notificationsProcessor",
+            "notificationProcessor",
             {
               "Fn::Join": [
                 "",
                 [
-                  "notificationsProcessor",
+                  "notificationProcessor",
                   "-",
                   {
                     "Ref": "env"
