@@ -6,7 +6,14 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-src = {editable = true, path = "./src"}
+pymongo = "4.8.0"
+requests = "2.32.3"
+pytz = "2024.1"
+urllib3 = "1.26.6"
+pipenv="2024.0.1"
+google-auth="2.31.0"
+gql="3.5.0"
+requests-aws4auth="1.2.3"
 
 [requires]
 python_version = "3.8"
