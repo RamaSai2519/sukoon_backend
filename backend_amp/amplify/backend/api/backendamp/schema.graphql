@@ -18,7 +18,7 @@ type UserNotification @model @auth(rules: [{ allow: public }])
 {
   id: ID!
   userId: ID! @index(name: "userNotificationsByUserIdx", queryField: "userNotificationsByUserId") 
-  requestMeta: AWSJSON
+  requestMeta: String
   externalMessageId: String
   status: NotificationStatus
   notificationType: NotificationType
