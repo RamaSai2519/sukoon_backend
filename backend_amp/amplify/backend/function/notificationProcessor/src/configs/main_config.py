@@ -26,5 +26,6 @@ class MainConfig:
         "URL": "https://fcm.googleapis.com/v1/projects/sukoonlove-007/messages:send",
         "ACCESS_TOKEN": "AIzaSyAMJotLhCHDZQav-pI3xwh94zK9f2A62r8"
     }
-    
+
     APPSYNC_API_KEY = "da2-jesqcxttxba57itwhh5m3neijm"
+

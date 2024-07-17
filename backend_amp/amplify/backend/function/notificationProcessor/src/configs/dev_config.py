@@ -1,8 +1,7 @@
-class MainConfig:
+class DevConfig:
     DB_CONFIG = {
-        "connection_url" : "mongodb+srv://sukoon_user:Tcks8x7wblpLL9OA@cluster0.o7vywoz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
+        "connection_url" : "mongodb+srv://techcouncil:2lfNFMZIjdfZJl2R@cluster0.h3kssoa.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
     }
-
     SMS_API_CONFIG = {
         "userid": "2000241133",
         "password": "FJGtU6wH",
@@ -13,18 +12,20 @@ class MainConfig:
         "v": "1.1",
         "format": "text"
     }
-    
     SMS_API_URL = "https://enterprise.smsgupshup.com/GatewayAPI/rest"
-    
+
+
     WHATSAPP_API = {
         "URL": "https://graph.facebook.com/v19.0/332782693255519/messages",
         "ACCESS_TOKEN": "EAAQFy4A7ZCfABO1UJeKTvjzWFEyqnuP42JZCBZBe7XruAD5SIQEc0ukrOB0HunFgiG0kyBaoPcnX9PLPjewwSCNOYxOZCwW2GqZBsUjZAFEtZCLKwJn9asnntcX9bWd7SbhrAzzhyVsPxbCubQJLqZC5lBGgp9TzpOUO5T12ZBRmSn1MR9BtMNVVvIS2wc2lchvt1"
     }
-
 
     PUSH_NOTIFICATION_API = {
         "URL": "https://fcm.googleapis.com/v1/projects/sukoonlove-007/messages:send",
         "ACCESS_TOKEN": "AIzaSyAMJotLhCHDZQav-pI3xwh94zK9f2A62r8"
     }
     
-    APPSYNC_API_KEY = "da2-jesqcxttxba57itwhh5m3neijm"
+    APPSYNC_API_KEY = "da2-vkps47zevzerdkqvgklaxjryua"
+
+
+    

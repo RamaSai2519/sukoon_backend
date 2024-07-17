@@ -25,5 +25,6 @@ class DevConfig:
         "ACCESS_TOKEN": "AIzaSyAMJotLhCHDZQav-pI3xwh94zK9f2A62r8"
     }
 
+    APPSYNC_API_KEY = "da2-vkps47zevzerdkqvgklaxjryua"
 
     
