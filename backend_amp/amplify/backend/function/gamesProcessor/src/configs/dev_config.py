@@ -27,6 +27,8 @@ class DevConfig:
 
     APPSYNC_API_KEY = "da2-vkps47zevzerdkqvgklaxjryua"
     AWS_DEFAULT_REGION = "ap-south-1"
+    APPSYNC_ENDPOINT = "https://gxuleyn72fhzbjnvylyr73f7gu.appsync-api.ap-south-1.amazonaws.com/graphql"
+
 
 
     
