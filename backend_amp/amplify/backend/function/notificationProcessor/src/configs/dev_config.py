@@ -26,6 +26,7 @@ class DevConfig:
     }
     
     APPSYNC_API_KEY = "da2-vkps47zevzerdkqvgklaxjryua"
+    AWS_DEFAULT_REGION = "ap-south-1"
 
 
     
