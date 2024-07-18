@@ -381,3 +381,11 @@ class WhatsappNotificationTemplates:
                 ],
             },
         }
+
+        self.CHARGE_LIFE_TEMPLATE = {
+            "template_name": "CHARGE_LIFE_TEMPLATE",
+            "template": {
+                "name": "charge_life_template",
+                "language": {"code": "en"},
+            },
+        }
