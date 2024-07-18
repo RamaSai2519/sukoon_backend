@@ -51,7 +51,8 @@
           "userNotificationTableStreamTimestamp": "2024-07-03T10:17:21.979",
           "deploymentBucketName": "amplify-backendamp-dev-caa78-deployment",
           "s3Key": "amplify-builds/notificationProcessor-63567848597457345a6d-build.zip"
-        }
+        },
+        "scheduler": {}
       },
       "api": {
         "sukoonAPI": {},
