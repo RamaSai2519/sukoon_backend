@@ -43,3 +43,24 @@ enum NotificationStatus {
   SUCCESS
   FAILURE
 }
+
+type ScheduledJobs @model @auth(rules: [{ allow: public }]) 
+{
+  id: ID!
+  scheduledJobType: ScheduledJobType
+  scheduledJobTime: AWSDateTime
+  scheduledJobStatus: ScheduledJobStatus @index(name: "scheduledJobsByStatusAndTimeIdx", sortKeyFields: ["scheduledJobTime"]   queryField: "scheduledJobsByStatusAndTime") 
+  request_meta: String 
+}
+
+enum ScheduledJobType {
+  CALL
+  NOTIFICATION
+}
+
+enum ScheduledJobStatus {
+  PENDING 
+  PICKED
+  FAILED
+  COMPLETED
+}
