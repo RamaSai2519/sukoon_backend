@@ -28,7 +28,7 @@ def handler(event, context):
 
        while next_token or first_time:
            data = get_pending_scheduled_jobs(
-               time=time, status=status, nextToken=next_token
+               status=status, time=time, next_token=next_token
            )["scheduledJobsByStatusAndTime"]
 
            jobs = data["items"]
