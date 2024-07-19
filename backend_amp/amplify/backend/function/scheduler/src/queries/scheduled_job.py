@@ -9,7 +9,8 @@ def get_pending_scheduled_jobs(status, time, next_token):
                 scheduledJobsByStatusAndTime(scheduledJobStatus: $scheduledJobStatus, scheduledJobTime: {le: $le}) {
                     nextToken
                     items {
-                        request_meta
+                        id
+                        requestMeta
                         scheduledJobStatus
                         scheduledJobTime
                         scheduledJobType
@@ -26,7 +27,8 @@ def get_pending_scheduled_jobs(status, time, next_token):
                 scheduledJobsByStatusAndTime(scheduledJobStatus: $scheduledJobStatus, scheduledJobTime: {le: $le}, nextToken: $nextToken) {
                     nextToken
                     items {
-                        request_meta
+                        id
+                        requestMeta
                         scheduledJobStatus
                         scheduledJobTime
                         scheduledJobType
