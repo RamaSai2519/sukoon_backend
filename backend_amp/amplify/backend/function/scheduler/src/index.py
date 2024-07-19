@@ -1,6 +1,7 @@
 import json
 import controller
-from .queries.scheduled_job import get_pending_scheduled_jobs, mark_my_job_as_picked
+from src.queries.scheduled_job import get_pending_scheduled_jobs, mark_my_job_as_picked
+
 
 def construct_response(statusCode, body):
    response = {
