@@ -2,16 +2,16 @@ import json
 import dataclasses
 from flask_restful import Resource
 from flask import request
-from models.interfaces import FetchShortsInput, Output
-from models.get_shorts.main import GetShorts
+from models.interfaces import CreateScheduledJobInput, Output
+from models.create_scheduled_job.main import CreateScheduledJob
 
 
 class ScheduledJobs(Resource):
     
     def post(self) -> Output:
         input = json.loads(request.get_data())
-        input = FetchShortsInput(**input)
-        output = GetShorts(input).process()
+        input = CreateScheduledJobInput(**input)
+        output = CreateScheduledJob(input).process()
         output = dataclasses.asdict(output)
 
         return output
