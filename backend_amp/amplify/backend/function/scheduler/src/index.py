@@ -21,7 +21,7 @@ def handler(event, context):
        print(f"Context: {context}")
 
        time = event["time"]
-       status = "PUSHED"
+       status = "PENDING"
        next_token = None
        first_time = True
 
