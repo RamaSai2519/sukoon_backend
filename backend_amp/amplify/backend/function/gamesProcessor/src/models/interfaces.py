@@ -115,6 +115,12 @@ class UpdateFCMTokenInput:
     user_id: str
     fcm_token: str
 
+@dataclass 
+class CreateScheduledJobInput:
+    job_type: str
+    job_time: str
+    status: str
+    request_meta: str
 
 @dataclass
 class Output:
