@@ -1,18 +1,18 @@
 class ProcessorsFactory:
-   """ProcessorsFactory: dispatches documentProcessor based on document type"""
+   """ProcessorsFactory: dispatches notification_processor based on document type"""
 
    def __init__(self):
        self._processors_store = {}
 
 
-   def register_processor(self, documentType, processor):
-       self._processors_store[documentType] = processor
+   def register_processor(self, notification_type, processor):
+       self._processors_store[notification_type] = processor
 
 
-   def get_handler(self, documentType, record):
-       documentProcessor = self._processors_store.get(documentType)
-       if not documentProcessor:
+   def get_handler(self, notification_type, record):
+       notification_processor = self._processors_store.get(notification_type)
+       if not notification_processor:
            raise ValueError(
-               f"Handler for DocumentType '{documentType}' not found."
+               f"Handler for notification_type '{notification_type}' not found."
            )
-       return documentProcessor(record)
+       return notification_processor(record)

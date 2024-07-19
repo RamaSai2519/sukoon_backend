@@ -1,18 +1,17 @@
 class ProcessorsFactory:
-   """ProcessorsFactory: dispatches documentProcessor based on document type"""
+   """ProcessorsFactory: dispatches job_processor based on job type"""
 
    def __init__(self):
        self._processors_store = {}
 
 
-   def register_processor(self, documentType, processor):
-       self._processors_store[documentType] = processor
+   def register_processor(self, job_type, processor):
+       self._processors_store[job_type] = processor
 
-
-   def get_handler(self, documentType):
-       documentProcessor = self._processors_store.get(documentType)
-       if not documentProcessor:
+   def get_handler(self, job_type, job):
+       job_processor = self._processors_store.get(job_type)
+       if not job_processor:
            raise ValueError(
-               f"Handler for DocumentType '{documentType}' not found."
+               f"Handler for job_type '{job_type}' not found."
            )
-       return documentProcessor()
+       return job_processor(job)

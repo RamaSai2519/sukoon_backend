@@ -24,22 +24,21 @@ def process(record):
     try:
         start = time.perf_counter()
         factory = setup_factory()
+        
         if record == "TEST_ACTION":
            return {
                "statusCode": HTTPStatus.OK.value,
                "contentType": "application/json",
                "body": {"msg": "SUCCESS"},
            }
-        # notificationId = record["id"]["S"]
-        notificationType = record["notificationJobType"]["S"]
-        print("notificationType**", notificationType)
-        # getValueByKeyRecord(record, "notificationType")
-        handler = factory.get_handler(notificationType, record)
-        print("documentProcessor**", handler)
+        
+        notification_type = record["notificationJobType"]["S"]
+        print("notification_type**", notification_type)
+        handler = factory.get_handler(notification_type, record)
+        print("notification_processor**", handler)
         print(handler.__class__)
 
-
-        response = handler.process_document()
+        response = handler.process_notification()
         print(f"response: {response}")
         finish = time.perf_counter()
         total_time_taken = round(finish - start, 2) * 1000  # in millisecond
