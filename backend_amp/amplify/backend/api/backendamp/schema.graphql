@@ -50,7 +50,7 @@ type ScheduledJobs @model @auth(rules: [{ allow: public }])
   scheduledJobType: ScheduledJobType
   scheduledJobTime: AWSDateTime
   scheduledJobStatus: ScheduledJobStatus @index(name: "scheduledJobsByStatusAndTimeIdx", sortKeyFields: ["scheduledJobTime"]   queryField: "scheduledJobsByStatusAndTime") 
-  request_meta: String 
+  requestMeta: String 
 }
 
 enum ScheduledJobType {
