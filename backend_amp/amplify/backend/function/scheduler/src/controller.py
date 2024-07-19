@@ -25,10 +25,10 @@ def process(job):
         start = time.perf_counter()
         factory = setup_factory()
         job_type = job.get("scheduledJobType")
-        handler = factory.get_handler(job_type)
+        handler = factory.get_handler(job_type, job)
+        
         print("scheduled_job_processor**", handler)
         print(handler.__class__)
-
 
         response = handler.process_scheduled_job()
         print(f"response: {response}")
@@ -37,12 +37,9 @@ def process(job):
         print(f"response: {response}")
         print(f"total_time_taken: {total_time_taken}")
 
-
     except Exception as error:
        print(
            f"Unhandled exception in scheduled job processor => {error}"
        )
        response = f"{repr(error)}"
-
-
     return response

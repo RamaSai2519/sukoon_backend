@@ -51,7 +51,7 @@ class WhatsappNotification(IProcessor):
         )
         return response
 
-    def process_document(self):
+    def process_notification(self):
         mobile_number = self.request_meta.get("phone_number")
         template_name = self.request_meta.get("template_name")
         # user_id = self.get_user_id_from_number(mobile_number)

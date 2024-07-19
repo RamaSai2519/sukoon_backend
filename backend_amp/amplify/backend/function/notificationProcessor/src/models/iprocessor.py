@@ -3,5 +3,5 @@ from abc import ABC, abstractmethod
 class IProcessor(ABC):
 
     @abstractmethod
-    def process_document(self, document):
+    def process_notification(self, document):
         pass

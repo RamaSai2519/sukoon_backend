@@ -2,9 +2,9 @@ import json
 import controller
 
 
-def construct_response(statusCode, body):
+def construct_response(status_code, body):
     response = {
-        "statusCode": statusCode,
+        "statusCode": status_code,
         "headers": {
             "Content-Type": "application/json",
             "Access-Control-Allow-Origin": "*",
@@ -24,11 +24,11 @@ def handler(event, context):
     for record in records:
         print(f"Record: {record}")
         if record["eventName"] != "INSERT":
-            responseBody = {
+            response_body = {
                "message": "Processing only for newly created records."
             }
             continue
         else:
             controller.process(record["dynamodb"]["NewImage"])
 
-    return construct_response(statusCode=201, body={})
+    return construct_response(status_code=201, body={})
