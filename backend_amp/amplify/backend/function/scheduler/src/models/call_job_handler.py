@@ -17,6 +17,7 @@ class CallJobHandler(IProcessor):
         payload = json.dumps({
             "userId": self.request_meta.get("userId"),
             "expertId": self.request_meta.get("expertId"),
+            "scheduledCallId": self.request_meta.get("scheduledCallId", "") or "",
         })
 
         response = requests.request("POST", url, headers=headers, data=payload)
