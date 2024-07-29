@@ -440,3 +440,178 @@ class WhatsappNotificationTemplates:
                 ],
             },
         }
+
+
+        self.FUN_EVENT_REGISTRATION = {
+            "template_name": "FUN_EVENT_REGISTRATION",
+            "template": {
+                "name": "fun_event_registration",
+                "language": {"code": "en"},
+                "components": [
+                    {       
+                        "type": "header",
+                        "parameters": [
+                            {"type": "image", "image": {"link": "{image_link}"}}
+                        ],
+                    },
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"},
+                            {"type": "text", "text": "{custom_text_1}"},
+                            {"type": "text", "text": "{event_name}"},
+                            {"type": "text", "text": "{date}"},
+                            {"type": "text", "text": "{time}"},
+                            {"type": "text", "text": "{registration_link}"},
+                            {"type": "text", "text": "{custom_text_2}"},
+                            {"type": "text", "text": "{phone_number}"},
+                            {"type": "text", "text": "{whatsapp_community_link}"},
+                        ],
+                    },
+                    {
+                        "type": "button",
+                        "index": "0",
+                        "sub_type": "url",
+                        "parameters": [{"type": "text", "text": "{registraion_link_slug}"}],
+                    },
+                ],
+            },
+        }
+
+        self.FUN_EVENT_POST_REGISTRATION = {
+            "template_name": "FUN_EVENT_POST_REGISTRATION",
+            "template": {
+                "name": "fun_event_post_registration",
+                "language": {"code": "en"},
+                "components": [
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"},
+                            {"type": "text", "text": "{event_name}"},
+                            {"type": "text", "text": "{date}"},
+                            {"type": "text", "text": "{time}"},
+                            {"type": "text", "text": "{event_link}"},
+                            {"type": "text", "text": "{phone_number}"},
+                            {"type": "text", "text": "{whatsapp_community_link}"},
+                        ],
+                    },
+                ],
+            },
+        }
+
+        self.FUN_EVENT_REMINDER = {
+            "template_name": "FUN_EVENT_REMINDER",
+            "template": {
+                "name": "fun_event_reminder",
+                "language": {"code": "en"},
+                "components": [
+                   {       
+                        "type": "header",
+                        "parameters": [
+                            {"type": "image", "image": {"link": "{image_link}"}}
+                        ],
+                    },
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"},
+                            {"type": "text", "text": "{event_name}"},
+                            {"type": "text", "text": "{date}"},
+                            {"type": "text", "text": "{time}"},
+                            {"type": "text", "text": "{event_link}"},
+                            {"type": "text", "text": "{custom_text}"},
+                            {"type": "text", "text": "{phone_number}"},
+                            {"type": "text", "text": "{whatsapp_community_link}"},
+                        ],
+                    },
+                ],
+            },
+        }
+
+        self.SUPPORT_GROUP_REGISTRATION = {
+            "template_name": "SUPPORT_GROUP_REGISTRATION",
+            "template": {
+                "name": "support_group_registration",
+                "language": {"code": "en"},
+                "components": [
+                    {       
+                        "type": "header",
+                        "parameters": [
+                            {"type": "image", "image": {"link": "{image_link}"}}
+                        ],
+                    },
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"},
+                            {"type": "text", "text": "{custom_text_1}"},
+                            {"type": "text", "text": "{event_name}"},
+                            {"type": "text", "text": "{date}"},
+                            {"type": "text", "text": "{time}"},
+                            {"type": "text", "text": "{registration_link}"},
+                            {"type": "text", "text": "{custom_text_2}"},
+                            {"type": "text", "text": "{phone_number}"},
+                            {"type": "text", "text": "{whatsapp_community_link}"},
+                        ],
+                    },
+                    {
+                        "type": "button",
+                        "index": "0",
+                        "sub_type": "url",
+                        "parameters": [{"type": "text", "text": "{registraion_link_slug}"}],
+                    },
+                ],
+            },
+        }
+
+        self.SUPPORT_GROUP_POST_REGISTRATION = {
+            "template_name": "SUPPORT_GROUP_POST_REGISTRATION",
+            "template": {
+                "name": "support_group_post_registration",
+                "language": {"code": "en"},
+                "components": [
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"},
+                            {"type": "text", "text": "{event_name}"},
+                            {"type": "text", "text": "{date}"},
+                            {"type": "text", "text": "{time}"},
+                            {"type": "text", "text": "{event_link}"},
+                            {"type": "text", "text": "{phone_number}"},
+                            {"type": "text", "text": "{whatsapp_community_link}"},
+                        ],
+                    },
+                ],
+            },
+        }
+
+        self.SUPPORT_GROUP_REMINDER = {
+            "template_name": "SUPPORT_GROUP_REMINDER",
+            "template": {
+                "name": "support_group_reminder",
+                "language": {"code": "en"},
+                "components": [
+                   {       
+                        "type": "header",
+                        "parameters": [
+                            {"type": "image", "image": {"link": "{image_link}"}}
+                        ],
+                    },
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"},
+                            {"type": "text", "text": "{event_name}"},
+                            {"type": "text", "text": "{date}"},
+                            {"type": "text", "text": "{time}"},
+                            {"type": "text", "text": "{event_link}"},
+                            {"type": "text", "text": "{custom_text}"},
+                            {"type": "text", "text": "{phone_number}"},
+                            {"type": "text", "text": "{whatsapp_community_link}"},
+                        ],
+                    },
+                ],
+            },
+        }
