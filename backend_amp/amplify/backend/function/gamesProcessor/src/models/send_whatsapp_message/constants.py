@@ -423,3 +423,20 @@ class WhatsappNotificationTemplates:
                 ],
             },
         }
+
+
+        self.NEST_SUPPORT = {
+            "template_name": "NEST_SUPPORT",
+            "template": {
+                "name": "nest_support",
+                "language": {"code": "en"},
+                "components": [
+                    {       
+                        "type": "header",
+                        "parameters": [
+                            {"type": "image", "image": {"link": "{image_link}"}}
+                        ],
+                    },
+                ],
+            },
+        }
