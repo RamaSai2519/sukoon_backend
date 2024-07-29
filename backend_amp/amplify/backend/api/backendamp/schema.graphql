@@ -4,6 +4,7 @@ type User @model @auth(rules: [{ allow: public }]) {
   lastName: String
   gender: Gender
   isDeleted: Boolean
+  interestedInClubSukoon: Boolean
   dateOfBirth: AWSDate
   mobileNumber: String
   userNotifications: [UserNotification] @hasMany(indexName: "userNotificationsByUserIdx", fields: ["id"])
@@ -90,4 +91,46 @@ enum ConversationStatus {
 enum ConversationPlatform {
   CALL
   GAMES
+}
+
+type UserWhatsappFeedback @model @auth(rules: [{ allow: public }]) 
+{
+  id: ID!
+  userId: ID! 
+  sarathiId: ID!
+  eventId: String
+  feedback: String
+  feedbackEvent: FeedbackEvent
+}
+
+enum FeedbackEvent {
+  CALL
+  GAME
+}
+
+type UserReceivedMessages @model @auth(rules: [{ allow: public }]) 
+{
+  id: ID!
+  userId: ID! 
+  message: String
+  source: ReceivedMessageSource
+}
+
+enum ReceivedMessageSource {
+  WHATSAPP
+}
+
+type MultipleChoiceQuestions @model @auth(rules: [{ allow: public }]) 
+{
+  id: ID!
+  question: String
+  options: [String!]!
+  level: Int
+  questionNumber: Int
+  game: Game
+}
+
+enum Game {
+  QUIZ
+  CARD
 }
