@@ -389,3 +389,37 @@ class WhatsappNotificationTemplates:
                 "language": {"code": "en"},
             },
         }
+
+        self.CLUB_SUKOON_MEMBERSHIP = {
+            "template_name": "CLUB_SUKOON_MEMBERSHIP",
+            "template": {
+                "name": "club_sukoon_membership",
+                "language": {"code": "en"},
+                "components": [
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"},
+                        ],
+                    },
+
+                ],
+            },
+        }
+
+        self.PARTIAL_LEADS = {
+            "template_name": "PARTIAL_LEADS",
+            "template": {
+                "name": "partial_leads",
+                "language": {"code": "en"},
+                "components": [
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"},
+                        ],
+                    },
+
+                ],
+            },
+        }
