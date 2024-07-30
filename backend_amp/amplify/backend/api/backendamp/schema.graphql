@@ -6,7 +6,7 @@ type User @model @auth(rules: [{ allow: public }]) {
   isDeleted: Boolean
   interestedInClubSukoon: Boolean
   dateOfBirth: AWSDate
-  mobileNumber: String
+  mobileNumber: String! @index(name: "userByMobileNumberIdx", queryField: "userByMobileNumber") 
   userNotifications: [UserNotification] @hasMany(indexName: "userNotificationsByUserIdx", fields: ["id"])
   userConversationsAsUser: [UserConversations] @hasMany(indexName: "userConversationsByUserIdx", fields: ["id"])
   userConversationsAsSarathi: [UserConversations] @hasMany(indexName: "userConversationsBySarathiIdx", fields: ["id"])
