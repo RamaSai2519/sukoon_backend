@@ -3,6 +3,7 @@ type User @model @auth(rules: [{ allow: public }]) {
   firstName: String
   lastName: String
   gender: Gender
+  status: UserStatus
   isDeleted: Boolean
   interestedInClubSukoon: Boolean
   dateOfBirth: AWSDate
@@ -15,6 +16,11 @@ type User @model @auth(rules: [{ allow: public }]) {
 enum Gender {
   MALE
   FEMALE
+}
+
+enum UserStatus {
+  REGISTERED
+  NON_REGISTERED
 }
 
 type UserNotification @model @auth(rules: [{ allow: public }]) 
