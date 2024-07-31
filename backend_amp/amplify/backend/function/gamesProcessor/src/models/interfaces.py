@@ -14,6 +14,7 @@ class QuizGameInput:
     user_id: str
     question_to_show: str
     level: int
+    category: Optional[str] = field(default='culture')
 
 @dataclass 
 class CouponRewardInput:

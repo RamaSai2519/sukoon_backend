@@ -23,10 +23,10 @@ class Compute:
 
         total_questions_at_this_level = quiz_questions_collection.count_documents({"level": self.input.level})
         if last_question_shown_at_this_level + self.input.question_to_show > total_questions_at_this_level:
-            quiz_questions = list(quiz_questions_collection.find({"level": self.input.level, "questionNumber": { "$gte": 1, "$lte": self.input.question_to_show } }, {"question": 1, "options":1, "_id": 0}))
+            quiz_questions = list(quiz_questions_collection.find({"level": self.input.level, "category" : self.input.category, "questionNumber": { "$gte": 1, "$lte": self.input.question_to_show } }, {"question": 1, "options":1,"category":1, "_id": 0}))
         else:
-            quiz_questions = list(quiz_questions_collection.find({"level": self.input.level, 
-                        "questionNumber": { "$gt": last_question_shown_at_this_level, "$lte": last_question_shown_at_this_level + self.input.question_to_show } }, {"question": 1, "options":1, "_id": 0}))
+            quiz_questions = list(quiz_questions_collection.find({"level": self.input.level, "category" : self.input.category,
+                        "questionNumber": { "$gt": last_question_shown_at_this_level, "$lte": last_question_shown_at_this_level + self.input.question_to_show } }, {"question": 1,"category":1, "options":1, "_id": 0}))
 
         return quiz_questions
 
