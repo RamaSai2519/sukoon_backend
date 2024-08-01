@@ -140,3 +140,35 @@ enum Game {
   QUIZ
   CARD
 }
+
+
+type Event @model @auth(rules: [{ allow: public }]) {
+  id: ID!
+  mainTitle: String
+  subTitle: String
+  hostedBy: String
+  guestSpeaker: String
+  repeat: String
+  eventType: EventType
+  imageUrl: [String]
+  meetingLink: String
+  description: String
+  maxVisitorsAllowed: Int
+  prizeMoney: Int
+  eventEndTime: AWSDateTime
+  eventStartTime: AWSDateTime
+  registrationAllowedTillTime: AWSDateTime
+  isPremiumUserOnly: Boolean
+}
+
+enum EventRepeat {
+  DAILY
+  WEEKLY
+  MONTHLY
+}
+
+enum EventType {
+  SESSION
+  CHALLENGE
+}
+
