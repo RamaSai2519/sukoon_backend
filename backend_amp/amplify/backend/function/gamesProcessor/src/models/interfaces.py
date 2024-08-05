@@ -118,10 +118,31 @@ class UpdateFCMTokenInput:
 
 @dataclass 
 class CreateScheduledJobInput:
-    job_type: str
-    job_time: str
-    status: str
-    request_meta: str
+    job_type: str = field(default_factory=lambda: "")
+    job_time: str = field(default_factory=lambda: "")
+    status: str = field(default_factory=lambda: "")
+    request_meta: str = field(default_factory=lambda: "")
+    action: str = field(default_factory=lambda: "")
+    scheduled_job_id:str = field(default_factory=lambda: "")
+
+@dataclass 
+class GetUserInput:
+    mobile_number: str
+
+
+@dataclass 
+class CreateNonRegisteredUserInput:
+    mobile_number: str
+
+
+@dataclass 
+class UpsertRegisteredUserInput:
+    first_name: str
+    gender: str
+    last_name: str
+    date_of_birth: str
+    mobile_number: str
+
 
 @dataclass
 class Output:
