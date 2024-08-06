@@ -58,6 +58,8 @@ type ScheduledJobs @model @auth(rules: [{ allow: public }])
   id: ID!
   scheduledJobType: ScheduledJobType
   scheduledJobTime: AWSDateTime
+  status: String
+  isDeleted: Boolean
   scheduledJobStatus: ScheduledJobStatus @index(name: "scheduledJobsByStatusAndTimeIdx", sortKeyFields: ["scheduledJobTime"]   queryField: "scheduledJobsByStatusAndTime") 
   requestMeta: String 
 }
@@ -149,6 +151,8 @@ type Event @model @auth(rules: [{ allow: public }]) {
   hostedBy: String
   guestSpeaker: String
   repeat: String
+  slug: String
+  isDeleted: Boolean
   eventType: EventType
   imageUrl: [String]
   meetingLink: String
