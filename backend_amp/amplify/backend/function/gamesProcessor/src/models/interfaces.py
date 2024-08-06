@@ -143,6 +143,11 @@ class UpsertRegisteredUserInput:
     date_of_birth: str
     mobile_number: str
 
+@dataclass
+class CallInput:
+    user_id: str
+    expert_id: str
+
 
 @dataclass
 class Output:

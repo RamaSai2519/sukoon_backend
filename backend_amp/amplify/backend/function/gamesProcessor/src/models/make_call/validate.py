@@ -1,0 +1,42 @@
+from bson import ObjectId
+from db.users import get_user_collection
+from db.experts import get_experts_collections
+from models.interfaces import CallInput as Input
+
+class Validator():
+    def __init__(self, input: Input) -> None:
+        self.input = input
+        self.users_collection = get_user_collection()
+        self.experts_collection = get_experts_collections()
+
+    def validate_input(self):
+        if not self.input.user_id:
+            return False, "user_id is required"
+        
+        if not self.input.expert_id:
+            return False, "expert_id is required"
+        
+        expert = self.experts_collection.find_one({"_id": ObjectId(self.input.expert_id)})
+        if not expert:
+            return False, "Expert not found"
+        
+        user = self.users_collection.find_one({"_id": ObjectId(self.input.user_id)})
+        if not user:
+            return False, "User not found"
+        
+        if user["phoneNumber"] == expert["phoneNumber"]:
+            return False, "User and Expert phone number cannot be same"
+        
+        if expert["status"] == "offline":
+            return False, "Expert is offline"
+        
+        if expert["isBusy"]:
+            return False, "Expert is busy"
+        
+        if user["isBusy"]:
+            return False, "User is busy"
+        
+        if user["numberOfCalls"] <= 0:
+            return False, "User has reached maximum number of calls"
+        
+        return True, ""
