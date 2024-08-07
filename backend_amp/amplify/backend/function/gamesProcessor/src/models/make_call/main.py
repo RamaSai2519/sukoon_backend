@@ -5,10 +5,10 @@ from models.interfaces import CallInput as Input, Output
 
 
 class MakeCall:
-    def __init__(self, input: Input):
+    def __init__(self, input: Input) -> None:
         self.input = input
 
-    def process(self):
+    def process(self) -> Output:
         input = self.input
         valid_input, error_message = self._validate(input)
 
@@ -37,7 +37,7 @@ class MakeCall:
 
         return validation_result, error_message
 
-    def _compute(self):
+    def _compute(self, input: Input) -> Output:
         computation_obj = Compute(input)
         output = computation_obj.compute()
 

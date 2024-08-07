@@ -18,7 +18,9 @@ class Compute:
         user_id = self.input.user_id
         expert_id = self.input.expert_id
 
-        call_id = self._make_call(self.input.user_number, self.input.expert_number)
+        user_number, expert_number = self.get_phone_numbers(user_id, expert_id)
+
+        call_id = self._make_call(user_number, expert_number)
         if not call_id:
             return Output(
                 output_details={},
@@ -40,7 +42,11 @@ class Compute:
             output_message="Call initiated"
         )
 
+    def get_phone_numbers(self, user_id: str, expert_id: str):
+        user = self.users_collection.find_one({"_id": ObjectId(user_id)})
+        expert = self.experts_collection.find_one({"_id": ObjectId(expert_id)})
 
+        return user["phoneNumber"], expert["phoneNumber"]
 
     def _make_call(self, user_number: str, expert_number: str):
         knowlarity_url = "https://kpi.knowlarity.com/Basic/v1/account/call/makecall"
@@ -54,7 +60,9 @@ class Compute:
             "customer_number": "+91" + user_number,
             "caller_id": "+918035384523"
         }
-        response = requests.request("POST", knowlarity_url, headers=headers, data=payload)
+        print(payload, "payload")
+        response = requests.post(knowlarity_url, headers=headers, json=payload)
+        print(response.json())
         if response.status_code != 200:
             print("Failed to make call")
             return False

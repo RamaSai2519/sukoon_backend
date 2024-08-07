@@ -10,7 +10,7 @@ class Validator:
         self.users_collection = get_user_collection()
         self.experts_collection = get_experts_collections()
 
-    def validate_input(self) -> tuple[bool, str]:
+    def validate_input(self):
         if not self.input.user_id:
             return False, "user_id is required"
 
@@ -30,7 +30,7 @@ class Validator:
 
         return True, ""
 
-    def validate_user(self) -> tuple[bool, dict | str]:
+    def validate_user(self):
         user = self.users_collection.find_one(
             {"_id": ObjectId(self.input.user_id)})
 
@@ -41,14 +41,15 @@ class Validator:
             return False, "User is busy"
 
         if user["numberOfCalls"] <= 0:
+            print(user)
             return False, "User has reached maximum number of calls"
 
         return True, user
 
-    def validate_expert(self) -> tuple[bool, dict | str]:
+    def validate_expert(self):
         expert = self.experts_collection.find_one(
             {"_id": ObjectId(self.input.expert_id)})
-            
+
         if not expert:
             return False, "Expert not found"
 

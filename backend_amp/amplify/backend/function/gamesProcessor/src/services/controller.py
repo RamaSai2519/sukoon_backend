@@ -7,3 +7,4 @@ from services.src.shorts import FetchShortsService
 from services.src.whatsapp import WhatsappMessageService, WhatsappWebhookService, WhatsappWebhookEvent
 from services.src.push_notification import PushNotificationService, FCMTokenService
 from services.src.scheduled_jobs import ScheduledJobs
+from services.src.call import CallService
