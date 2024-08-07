@@ -39,7 +39,7 @@ class Compute:
         return Output(
             output_details={},
             output_status=OutputStatus.SUCCESS,
-            output_message="Call initiated"
+            output_message=f"Call initiated with callid: {call_id}"
         )
 
     def get_phone_numbers(self, user_id: str, expert_id: str):
@@ -60,14 +60,12 @@ class Compute:
             "customer_number": "+91" + user_number,
             "caller_id": "+918035384523"
         }
-        print(payload, "payload")
         response = requests.post(knowlarity_url, headers=headers, json=payload)
-        print(response.json())
         if response.status_code != 200:
             print("Failed to make call")
             return False
         
-        return response.json()["data"]["success"]["call_id"]
+        return response.json()["success"]["call_id"]
         
     def _update_db(self, user_id: str, expert_id: str, call_id: str) -> bool:
         user_update = self.users_collection.update_one({"_id": ObjectId(user_id)}, {"$set": {"isBusy": True}})
