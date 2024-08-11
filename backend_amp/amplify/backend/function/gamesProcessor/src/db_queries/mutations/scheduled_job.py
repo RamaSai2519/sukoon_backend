@@ -1,5 +1,6 @@
 from helpers.base import call_graphql
 
+
 def create_scheduled_job(request_meta, status, job_time, job_type) -> None:
 
     query = """
@@ -9,10 +10,12 @@ def create_scheduled_job(request_meta, status, job_time, job_type) -> None:
             }
         }
     """
-    params = {"requestMeta": request_meta, "scheduledJobStatus": status, "scheduledJobTime": job_time, "scheduledJobType": job_type}
-    return call_graphql(query=query , params=params, message="create_scheduled_job")
+    params = {"requestMeta": request_meta, "scheduledJobStatus": status,
+              "scheduledJobTime": job_time, "scheduledJobType": job_type}
+    return call_graphql(query=query, params=params, message="create_scheduled_job")
 
-def delete_scheduled_job(scheduled_job_id) -> None: 
+
+def delete_scheduled_job(scheduled_job_id) -> None:
 
     query = """
         mutation MyMutation($id: ID!) {
@@ -22,4 +25,16 @@ def delete_scheduled_job(scheduled_job_id) -> None:
         }
     """
     params = {"id": scheduled_job_id}
-    return call_graphql(query=query , params=params, message="_delete_scheduled_job")
+    return call_graphql(query=query, params=params, message="_delete_scheduled_job")
+
+
+def update_scheduled_job(variables):
+    query = """
+    mutation MyMutation($input: UpdateScheduledJobsInput!) {
+      updateScheduledJobs(input: $input) {
+        id
+        scheduledJobTime
+      }
+    }
+    """
+    return call_graphql(query=query, params=variables, message="update_scheduled_job")
