@@ -7,11 +7,10 @@ class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
 
-    def compute(self):
+    def compute(self) -> Output:
 
-        if self.input.action == "CREATE":
-            create_scheduled_job(self.input.request_meta, self.input.status,
-                                 self.input.job_time,  self.input.job_type)
+        create_scheduled_job(self.input.request_meta, self.input.status,
+                             self.input.job_time,  self.input.job_type)
 
         return Output(
             output_details="",
