@@ -149,50 +149,6 @@ class ScheduledJobInput:
 
 
 @dataclass
-class EventInput:
-    name: str
-    mainTitle: str
-    subTitle: Optional[str]
-    description: Optional[str]
-    hostedBy: Optional[str]
-    slug: str
-    isPremiumUserOnly: Optional[bool]
-    isAlways: Optional[bool] = False
-    registrationAllowedTill: Optional[str]
-    startEventDate: Optional[str]
-    validUpto: Optional[str]
-    maxVisitorsAllowed: Optional[int]
-    guestSpeaker: str
-    prizeMoney: Optional[int]
-    repeat: str
-    category: Optional[str]
-    eventType: str
-    imageUrl: str
-    meetingLink: Optional[str]
-
-    id: Optional[str] = field(default_factory=lambda: "")
-    createdAt: Optional[str] = field(default_factory=lambda: "")
-    updatedAt: Optional[str] = field(default_factory=lambda: "")
-    eventStartTime: Optional[str] = field(default_factory=lambda: "")
-    eventEndTime: Optional[str] = field(default_factory=lambda: "")
-    registrationAllowedTillTime: Optional[str] = field(default_factory=lambda: "")
-    validUptoTime: Optional[str] = field(default_factory=lambda: "")
-    description: Optional[str] = field(default_factory=lambda: "")
-    eventType: Optional[str] = field(default_factory=lambda: "")
-    guestSpeaker: Optional[str] = field(default_factory=lambda: "")
-    hostedBy: Optional[str] = field(default_factory=lambda: "")
-    imageUrl: Optional[str] = field(default_factory=lambda: "")
-    isPremiumUserOnly: Optional[bool] = field(default_factory=lambda: False)
-    maxVisitorsAllowed: Optional[int] = field(default_factory=lambda: 0)
-    mainTitle: Optional[str] = field(default_factory=lambda: "")
-    meetingLink: Optional[str] = field(default_factory=lambda: "")
-    prizeMoney: Optional[int] = field(default_factory=lambda: 0)
-    repeat: Optional[str] = field(default_factory=lambda: "")
-    slug: Optional[str] = field(default_factory=lambda: "")
-    subTitle: Optional[str] = field(default_factory=lambda: "")
-
-
-@dataclass
 class GetUserInput:
     mobile_number: str
 
