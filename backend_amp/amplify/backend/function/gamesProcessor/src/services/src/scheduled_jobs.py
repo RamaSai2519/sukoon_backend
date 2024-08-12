@@ -7,7 +7,7 @@ from models.create_scheduled_job.main import CreateScheduledJob
 from models.update_scheduled_job.main import UpdateScheduledJob
 
 
-class ScheduledJobsService(Resource):
+class CreateScheduledJobsService(Resource):
 
     def post(self) -> Output:
         input = json.loads(request.get_data())
@@ -18,7 +18,7 @@ class ScheduledJobsService(Resource):
         return output
 
 
-class UpdateScheduledJobs(Resource):
+class UpdateScheduledJobsService(Resource):
 
     def post(self) -> Output:
         input = json.loads(request.get_data())
