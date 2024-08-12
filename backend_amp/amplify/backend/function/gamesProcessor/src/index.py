@@ -27,6 +27,7 @@ api.add_resource(PushNotificationService, '/actions/push')
 api.add_resource(FCMTokenService, '/actions/update_fcm_token')
 api.add_resource(ScheduledJobsService, '/actions/create_scheduled_job')
 api.add_resource(CreatePaymentOrderService, '/actions/create_payment_order')
+api.add_resource(CashfreeWebhookService, '/actions/cashfree_webhook')
 
 def handler(event, context):
     print(event)
