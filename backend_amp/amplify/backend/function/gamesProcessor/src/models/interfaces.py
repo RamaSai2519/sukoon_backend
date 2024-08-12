@@ -148,6 +148,10 @@ class CallInput:
     user_id: str
     expert_id: str
 
+@dataclass 
+class CreatePaymentOrderInput:
+    user_id: str
+    order_amount: float
 
 @dataclass
 class Output:

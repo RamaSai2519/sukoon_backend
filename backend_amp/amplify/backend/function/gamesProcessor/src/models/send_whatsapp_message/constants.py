@@ -187,7 +187,7 @@ class WhatsappNotificationTemplates:
             "template_name": "Feedback survey",
             "template": {
                 "name": "feedback_survey",
-                "language": {"code": "en"},
+                "language": {"code": "en_us"},
                 "components": [
                     {
                         "type": "body",
