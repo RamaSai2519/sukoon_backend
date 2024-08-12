@@ -6,7 +6,7 @@ def get_pending_scheduled_jobs(status, time, next_token):
 
         query = """
             query MyQuery($scheduledJobStatus: ScheduledJobStatus!, $le: String) {
-                scheduledJobsByStatusAndTime(scheduledJobStatus: $scheduledJobStatus, scheduledJobTime: {le: $le}) {
+                scheduledJobsByStatusAndTime(scheduledJobStatus: $scheduledJobStatus, filter: {isDeleted: {ne: true}}, limit: 1000, scheduledJobTime: {le: $le}) {
                     nextToken
                     items {
                         id
@@ -24,7 +24,7 @@ def get_pending_scheduled_jobs(status, time, next_token):
 
         query = """
             query MyQuery($scheduledJobStatus: ScheduledJobStatus!, $le: String, $nextToken: String) {
-                scheduledJobsByStatusAndTime(scheduledJobStatus: $scheduledJobStatus, scheduledJobTime: {le: $le}, nextToken: $nextToken) {
+                scheduledJobsByStatusAndTime(scheduledJobStatus: $scheduledJobStatus, filter: {isDeleted: {ne: true}}, limit: 1000, scheduledJobTime: {le: $le}, nextToken: $nextToken) {
                     nextToken
                     items {
                         id
