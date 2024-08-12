@@ -15,19 +15,6 @@ def create_scheduled_job(request_meta, status, job_time, job_type) -> None:
     return call_graphql(query=query, params=params, message="create_scheduled_job")
 
 
-def delete_scheduled_job(scheduled_job_id) -> None:
-
-    query = """
-        mutation MyMutation($id: ID!) {
-            deleteScheduledJobs(input: {id: $id}) {
-                id
-            }
-        }
-    """
-    params = {"id": scheduled_job_id}
-    return call_graphql(query=query, params=params, message="_delete_scheduled_job")
-
-
 def update_scheduled_job(variables):
     query = """
     mutation MyMutation($input: UpdateScheduledJobsInput!) {

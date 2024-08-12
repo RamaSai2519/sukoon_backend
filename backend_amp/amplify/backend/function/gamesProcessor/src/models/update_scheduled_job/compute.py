@@ -1,6 +1,6 @@
 from models.constants import OutputStatus
 from models.interfaces import ScheduledJobInput as Input, Output
-from db_queries.mutations.scheduled_job import update_scheduled_job, delete_scheduled_job
+from db_queries.mutations.scheduled_job import update_scheduled_job
 
 
 class Compute:
