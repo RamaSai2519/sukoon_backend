@@ -30,6 +30,7 @@ class DevConfig:
     APPSYNC_ENDPOINT = "https://gxuleyn72fhzbjnvylyr73f7gu.appsync-api.ap-south-1.amazonaws.com/graphql"
 
     CASHFREE_API_CREDENTIALS = {
+        "API_URL": "https://sandbox.cashfree.com/pg/orders",
         "APP_ID": "TEST102789038ae976e3fbbc30921f6f30987201",
         "SECRET_KEY": "cfsk_ma_test_c05c620df7e15efa2a1aa28db78b812b_581b676c"
     }
