@@ -166,6 +166,10 @@ class UpsertRegisteredUserInput:
     date_of_birth: str
     mobile_number: str
 
+@dataclass 
+class CreatePaymentOrderInput:
+    user_id: str
+    order_amount: float
 
 @dataclass
 class Output:
