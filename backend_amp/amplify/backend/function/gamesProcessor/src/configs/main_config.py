@@ -33,6 +33,7 @@ class MainConfig:
 
     CASHFREE_API_CREDENTIALS = {
         "APP_ID": "7360545e44cee43e41b6f34584450637",
+        "API_URL": "https://api.cashfree.com/pg/orders",
         "SECRET_KEY": "cfsk_ma_prod_cca5d658c985954f7d9047be10593a06_cfa55282"
     }
 
