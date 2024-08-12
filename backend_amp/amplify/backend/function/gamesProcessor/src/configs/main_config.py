@@ -31,4 +31,9 @@ class MainConfig:
     AWS_DEFAULT_REGION = "ap-south-1"
     APPSYNC_ENDPOINT = "https://x3bch5zipbbwdlxc5efyhkas3y.appsync-api.ap-south-1.amazonaws.com/graphql"
 
+    CASHFREE_API_CREDENTIALS = {
+        "APP_ID": "7360545e44cee43e41b6f34584450637",
+        "SECRET_KEY": "cfsk_ma_prod_cca5d658c985954f7d9047be10593a06_cfa55282"
+    }
+
 

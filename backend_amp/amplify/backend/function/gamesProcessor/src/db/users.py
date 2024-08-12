@@ -53,6 +53,14 @@ def get_user_fcm_token_collection():
     user_fcm_token_collection = db["userfcmtokens"]
     return user_fcm_token_collection
 
+def get_user_payment_collection():
+    client = Database().client
+
+    db = client["test"]
+    user_payment_collection = db["userpayments"]
+    return user_payment_collection
+
+
 
 
 
