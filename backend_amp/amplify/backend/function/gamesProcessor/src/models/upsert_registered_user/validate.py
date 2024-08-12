@@ -1,4 +1,4 @@
-from models.interfaces import CreateScheduledJobInput as Input
+from models.interfaces import ScheduledJobInput as Input
 
 
 class Validator():
@@ -12,14 +12,11 @@ class Validator():
 
         if not self.input.job_type:
             return False, "Job Type is Mandatory"
-        
+
         if not self.input.status:
             return False, "Status is Mandatory"
-        
+
         if not self.input.request_meta:
             return False, "Request Meta is Mandatory"
-        
-        return True, ""
-    
 
-    
+        return True, ""

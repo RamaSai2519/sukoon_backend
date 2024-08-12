@@ -1,45 +1,57 @@
 from dataclasses import dataclass, field
 from typing import List, Optional
-@dataclass 
+
+
+@dataclass
 class GetGameConfigInput:
     game_type: str
 
-@dataclass 
+
+@dataclass
 class UpdateGameConfigInput:
     game_type: str
     game_config: dict
 
-@dataclass 
+
+@dataclass
 class QuizGameInput:
     user_id: str
     question_to_show: str
     level: int
+    category: Optional[str] = field(default='culture')
 
-@dataclass 
+
+@dataclass
 class CouponRewardInput:
     user_id: str
 
-@dataclass 
+
+@dataclass
 class UserReferralInput:
     city: str
     name: str
     referral_code: str
     phone_number: str
 
-@dataclass 
+
+@dataclass
 class SendOTPInput:
     phone_number: str
-@dataclass 
+
+
+@dataclass
 class ValidateOTPInput:
-    otp: str 
+    otp: str
     phone_number: str
 
-@dataclass 
+
+@dataclass
 class CardGameInput:
     cards_to_show: int
     level: int
 
-@dataclass 
+
+@dataclass
 class ScoreUpdaterInput:
     user_id: str
     level: int
@@ -48,13 +60,15 @@ class ScoreUpdaterInput:
     saarthi_id: str
     game_type: str
 
-@dataclass 
+
+@dataclass
 class CalculateWinnerInput:
     user_id: str
     saarthi_id: str
     game_type: str
 
-@dataclass 
+
+@dataclass
 class UpdateGamePlayInput:
     user_id: str
     user_score: int
@@ -64,26 +78,31 @@ class UpdateGamePlayInput:
     total_time: str
     reward_amount: int
 
-@dataclass 
+
+@dataclass
 class GetGamePlayInput:
     user_id: str
 
-@dataclass 
+
+@dataclass
 class BytePlusTokenInput:
     user_id: str
     room_id: str
 
-@dataclass 
+
+@dataclass
 class BytePlusTokenInput:
     user_id: str
     room_id: str
 
-@dataclass 
+
+@dataclass
 class FetchShortsInput:
     user_id: str
     fetchedTill: Optional[List[dict]] = field(default_factory=list)
 
-@dataclass 
+
+@dataclass
 class WhtasappMessageInput:
     phone_number: str
     parameters: dict
@@ -92,49 +111,54 @@ class WhtasappMessageInput:
     request_meta: str = field(default_factory=lambda: "")
 
 
-@dataclass 
+@dataclass
 class GetWhatsappWebhookInput:
     hub_mode: str
     hub_challenge: int
     hub_verify_token: str
 
 
-@dataclass 
+@dataclass
 class WhatsappWebhookEventInput:
     object: str
     entry: dict
 
-@dataclass 
+
+@dataclass
 class PushNotificationInput:
     title: str
     body: str
     user_id: str
     fcm_token: str
-@dataclass 
+
+
+@dataclass
 class UpdateFCMTokenInput:
     user_id: str
     fcm_token: str
 
-@dataclass 
-class CreateScheduledJobInput:
+
+@dataclass
+class ScheduledJobInput:
     job_type: str = field(default_factory=lambda: "")
     job_time: str = field(default_factory=lambda: "")
     status: str = field(default_factory=lambda: "")
     request_meta: str = field(default_factory=lambda: "")
     action: str = field(default_factory=lambda: "")
-    scheduled_job_id:str = field(default_factory=lambda: "")
+    scheduled_job_id: str = field(default_factory=lambda: "")
 
-@dataclass 
+
+@dataclass
 class GetUserInput:
     mobile_number: str
 
 
-@dataclass 
+@dataclass
 class CreateNonRegisteredUserInput:
     mobile_number: str
 
 
-@dataclass 
+@dataclass
 class UpsertRegisteredUserInput:
     first_name: str
     gender: str
@@ -157,4 +181,3 @@ class Output:
     output_status: str
     output_message: str
     output_details: dict
-
