@@ -35,7 +35,12 @@ class Compute:
         )
 
     def _delete_scheduled_job(self):
-        response = delete_scheduled_job(self.input.scheduled_job_id)
+        response = update_scheduled_job({
+            "input": {
+                "id": self.input.scheduled_job_id,
+                "isDeleted": True
+            }
+        })
 
         return Output(
             output_details=response,
