@@ -7,10 +7,6 @@ class Validator:
         self.input = input
 
     def validate_input(self):
-        is_valid, message = self.validate_action()
-        if not is_valid:
-            return is_valid, message
-
         is_valid, message = self.validate_mandatory_fields()
         if not is_valid:
             return is_valid, message
@@ -19,11 +15,6 @@ class Validator:
         if not is_valid:
             return is_valid, message
 
-        return True, ""
-
-    def validate_action(self):
-        if self.input.action != "CREATE":
-            return False, "Action must be 'CREATE'"
         return True, ""
 
     def validate_mandatory_fields(self):
