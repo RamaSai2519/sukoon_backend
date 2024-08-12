@@ -27,6 +27,7 @@ api.add_resource(PushNotificationService, '/actions/push')
 api.add_resource(FCMTokenService, '/actions/update_fcm_token')
 api.add_resource(ScheduledJobs, '/actions/create_scheduled_job')
 api.add_resource(UpdateScheduledJobs, '/actions/update_scheduled_job')
+api.add_resource(UpdateEventsService, '/actions/events')
 
 def handler(event, context):
     print(event)
