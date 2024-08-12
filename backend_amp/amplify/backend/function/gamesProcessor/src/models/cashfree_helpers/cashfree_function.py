@@ -1,17 +1,8 @@
-from cashfree_pg.models.create_order_request import CreateOrderRequest
-from cashfree_pg.api_client import Cashfree
-import os
-from cashfree_pg.models.customer_details import CustomerDetails
+import json
+import requests
 from configs import CONFIG as CONFIG
 
-ENV = os.environ.get("ENV")
-CASHFREE_CREDENTIALS = CONFIG.CASHFREE_API_CREDENTIALS
-
-Cashfree.XClientId = CASHFREE_CREDENTIALS.get("APP_ID")
-Cashfree.XClientSecret = CASHFREE_CREDENTIALS.get("SECRET_KEY")
-
-Cashfree.XEnvironment = Cashfree.XProduction if ENV == "main" else Cashfree.XSandbox
-x_api_version = "2023-08-01"
+CASHFREE_CONFIG = CONFIG.CASHFREE_API_CREDENTIALS
 
 def get_cashfree_payment_session_id(customer_details_dict, order_details_dict):
 
@@ -21,15 +12,32 @@ def get_cashfree_payment_session_id(customer_details_dict, order_details_dict):
     order_id = order_details_dict.get("order_id")
     order_amount = order_details_dict.get("order_amount")
 
-    customerDetails = CustomerDetails(customer_phone=phone_number, customer_name= customer_name, customer_id = customer_id)
-    createOrderRequest = CreateOrderRequest(order_id= order_id ,order_amount=order_amount, order_currency="INR", customer_details=customerDetails)
+    url = CASHFREE_CONFIG.get("API_URL")
 
-    try:
-        print(Cashfree.XClientId , Cashfree.XClientSecret, Cashfree.XEnvironment)
-        api_response = Cashfree().PGCreateOrder(x_api_version, createOrderRequest, None, None)
-        print(api_response.data, "vfvvfdshjbbhjdsvvbhjsdvhbjhbjcshbjhjc")
-        return api_response
-    
-    except Exception as e:
-        print(f"Some Error occured while creating payment order using Cashfree. The error which occured is {e}")
-        return None
+    payload = json.dumps({
+        "customer_details": {
+            "customer_id": customer_id,
+            "customer_phone": phone_number,
+            "customer_name": customer_name,
+        },
+        "order_meta": {
+            "return_url": "https://www.sukoonunlimited.com"
+        },
+        "order_id": order_id,
+        "order_currency": "INR",
+        "order_amount": order_amount
+    })
+    headers = {
+        'accept': 'application/json',
+        'content-type': 'application/json',
+        'x-api-version': '2023-08-01',
+        'x-client-id': CASHFREE_CONFIG.get("APP_ID"),
+        'x-client-secret': CASHFREE_CONFIG.get("SECRET_KEY")
+    }
+
+    print(headers , url)
+
+    response = requests.request("POST", url, headers=headers, data=payload)
+
+    print(response.text)
+    return response

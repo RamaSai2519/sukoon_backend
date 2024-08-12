@@ -171,6 +171,11 @@ class CreatePaymentOrderInput:
     user_id: str
     order_amount: float
 
+@dataclass 
+class CashfreeWebhookEventInput:
+    user_id: str
+    order_amount: float
+
 @dataclass
 class Output:
     output_status: str
