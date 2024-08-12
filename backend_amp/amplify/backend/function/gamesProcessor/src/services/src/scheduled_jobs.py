@@ -6,7 +6,7 @@ from models.interfaces import CreateScheduledJobInput, Output
 from models.create_scheduled_job.main import CreateScheduledJob
 
 
-class ScheduledJobs(Resource):
+class ScheduledJobsService(Resource):
     
     def post(self) -> Output:
         input = json.loads(request.get_data())
