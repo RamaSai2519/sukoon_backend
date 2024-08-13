@@ -182,16 +182,16 @@ class CashfreeWebhookEventInput:
 @dataclass
 class EventInput:
     action: str
-    slug: str
-    repeat: str
-    imageUrl: str
-    eventType: str
-    mainTitle: str
-    eventEndTime: str
-    guestSpeaker: str
-    isPremiumUserOnly: bool
+    slug: Optional[str] = None
+    repeat: Optional[str] = None
+    imageUrl: Optional[str] = None
+    eventType: Optional[str] = None
+    mainTitle: Optional[str] = None
+    eventEndTime: Optional[str] = None
+    guestSpeaker: Optional[str] = None
+    isPremiumUserOnly: Optional[bool] = None
 
-    id: Optional[str] = None  # Default arguments must follow non-default ones
+    id: Optional[str] = None
     hostedBy: Optional[str] = None
     subTitle: Optional[str] = None
     prizeMoney: Optional[int] = None

@@ -25,7 +25,7 @@ class Compute:
 
         if self.input.action == "DELETE":
             # Handle the DELETE action
-            update_event(
+            response = update_event(
                 {
                     "id": self.input.id,
                     "isDeleted": True
@@ -34,5 +34,5 @@ class Compute:
             return Output(
                 output_details=response,
                 output_status="SUCCESS",
-                output_message="Successfully updated event"
+                output_message="Successfully deleted event"
             )
