@@ -29,6 +29,9 @@ api.add_resource(CreateScheduledJobsService, '/actions/create_scheduled_job')
 api.add_resource(UpdateScheduledJobsService, '/actions/update_scheduled_job')
 api.add_resource(CreatePaymentOrderService, '/actions/create_payment_order')
 api.add_resource(CashfreeWebhookService, '/actions/cashfree_webhook')
+api.add_resource(CreateEventsService, '/actions/create_event')
+api.add_resource(UpdateEventService, '/actions/update_event')
+
 
 
 def handler(event, context):
