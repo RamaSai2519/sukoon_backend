@@ -14,8 +14,9 @@ class Validator:
     def validate_mandatory_fields(self):
         required_fields = {
             "id": self.input.id,
-            "slug": self.input.slug
         }
+        if self.input.action == "UPDATE":
+            required_fields["slug"] = self.input.slug
 
         for field, value in required_fields.items():
             if not value:
