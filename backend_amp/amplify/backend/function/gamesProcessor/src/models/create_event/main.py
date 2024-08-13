@@ -1,5 +1,5 @@
 import traceback
-from backend_amp.amplify.backend.function.gamesProcessor.src.models.constants import OutputStatus
+from models.constants import OutputStatus
 from models.create_event.compute import Compute
 from models.create_event.validate import Validator
 from models.interfaces import EventInput as Input, Output
