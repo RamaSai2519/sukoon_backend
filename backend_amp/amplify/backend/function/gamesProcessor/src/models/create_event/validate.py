@@ -52,7 +52,8 @@ class Validator:
         return True, ""
 
     def validate_multiselect_fields(self):
-        if self.input.eventType not in ["Online", "Offline", "Not Event", "Challenge"]:
+        print(self.input.eventType)
+        if self.input.eventType not in ["SESSION", "CHALLENGE"]:
             return False, "Invalid eventType"
 
         if self.input.repeat not in ["Daily", "Weekly", "Monthly", "Once"]:
