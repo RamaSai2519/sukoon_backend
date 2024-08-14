@@ -78,4 +78,7 @@ class Validator:
         if not is_valid:
             return is_valid, message
 
+        if len(self.input.slug) > 3:
+            return False, "slug should be less than 3 characters"
+
         return True, ""

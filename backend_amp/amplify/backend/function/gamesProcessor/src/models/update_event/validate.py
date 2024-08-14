@@ -1,6 +1,7 @@
 from datetime import datetime
 from models.interfaces import EventInput as Input
 
+
 class Validator:
     def __init__(self, input: Input) -> None:
         self.input = input
@@ -8,7 +9,7 @@ class Validator:
     def validate_action(self):
         if self.input.action not in ["UPDATE", "DELETE"]:
             return False, "Invalid action"
-        
+
         return True, ""
 
     def validate_mandatory_fields(self):
@@ -27,19 +28,22 @@ class Validator:
     def validate_time_fields(self):
         if self.input.eventEndTime:
             try:
-                datetime.strptime(self.input.eventEndTime, '%Y-%m-%dT%H:%M:%SZ')
+                datetime.strptime(self.input.eventEndTime,
+                                  '%Y-%m-%dT%H:%M:%SZ')
             except ValueError:
                 return False, "eventEndTime is not a valid AWS time string"
 
         if self.input.eventStartTime:
             try:
-                datetime.strptime(self.input.eventStartTime, '%Y-%m-%dT%H:%M:%SZ')
+                datetime.strptime(self.input.eventStartTime,
+                                  '%Y-%m-%dT%H:%M:%SZ')
             except ValueError:
                 return False, "eventStartTime is not a valid AWS time string"
 
         if self.input.registrationAllowedTillTime:
             try:
-                datetime.strptime(self.input.registrationAllowedTillTime, '%Y-%m-%dT%H:%M:%SZ')
+                datetime.strptime(
+                    self.input.registrationAllowedTillTime, '%Y-%m-%dT%H:%M:%SZ')
             except ValueError:
                 return False, "registrationAllowedTillTime is not a valid AWS time string"
 
@@ -72,5 +76,8 @@ class Validator:
         is_valid, message = self.validate_multiselect_fields()
         if not is_valid:
             return is_valid, message
+
+        if len(self.input.slug) > 3:
+            return False, "slug should be less than 3 characters"
 
         return True, ""
