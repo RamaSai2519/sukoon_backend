@@ -615,3 +615,92 @@ class WhatsappNotificationTemplates:
                 ],
             },
         }
+
+        self.FITNESS_REGISTRATION = {
+            "template_name": "FITNESS_REGISTRATION",
+            "template": {
+                "name": "fitness_announcement",
+                "language": {"code": "en_us"},
+                "components": [
+                    {       
+                        "type": "header",
+                        "parameters": [
+                            {"type": "image", "image": {"link": "{image_link}"}}
+                        ],
+                    },
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"},
+                            {"type": "text", "text": "{prize_money}"},
+                            {"type": "text", "text": "{date}"},
+                            {"type": "text", "text": "{sarathi_name}"},
+                            {"type": "text", "text": "{time}"},
+                            {"type": "text", "text": "{registration_link}"},
+                            {"type": "text", "text": "{phone_number}"},
+                            {"type": "text", "text": "{whatsapp_community_link}"},
+                        ],
+                    },
+                    {
+                        "type": "button",
+                        "index": "0",
+                        "sub_type": "url",
+                        "parameters": [{"type": "text", "text": "{registraion_link_slug}"}],
+                    },
+                ],
+            },
+        }
+
+        self.FITNESS_POST_REGISTRATION = {
+            "template_name": "FITNESS_POST_REGISTRATION",
+            "template": {
+                "name": "fitness_post_registration",
+                "language": {"code": "en_us"},
+                "components": [
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"},
+                            {"type": "text", "text": "{event_name}"},
+                            {"type": "text", "text": "{prize_money}"},
+                            {"type": "text", "text": "{date}"},
+                            {"type": "text", "text": "{time}"},
+                            {"type": "text", "text": "{sarathi_name}"},
+                            {"type": "text", "text": "{event_link}"},
+                            {"type": "text", "text": "{phone_number}"},
+                            {"type": "text", "text": "{whatsapp_community_link}"},
+                        ],
+                    },
+                ],
+            },
+        }
+
+        self.FITNESS_REMINDER = {
+            "template_name": "FITNESS_REMINDER",
+            "template": {
+                "name": "fitness_reminder",
+                "language": {"code": "en_us"},
+                "components": [
+                   {       
+                        "type": "header",
+                        "parameters": [
+                            {"type": "image", "image": {"link": "{image_link}"}}
+                        ],
+                    },
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"},
+                            {"type": "text", "text": "{event_name}"},
+                            {"type": "text", "text": "{prize_money}"},
+                            {"type": "text", "text": "{date}"},
+                            {"type": "text", "text": "{time}"},
+                            {"type": "text", "text": "{sarathi_name}"},
+                            {"type": "text", "text": "{event_link}"},
+                            {"type": "text", "text": "{phone_number}"},
+                            {"type": "text", "text": "{whatsapp_community_link}"},
+                        ],
+                    },
+                ],
+            },
+        }
