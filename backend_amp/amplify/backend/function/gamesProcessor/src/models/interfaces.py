@@ -175,8 +175,9 @@ class CreatePaymentOrderInput:
 
 @dataclass
 class CashfreeWebhookEventInput:
-    user_id: str
-    order_amount: float
+    data: dict
+    type: str
+    event_time: str
 
 
 @dataclass
