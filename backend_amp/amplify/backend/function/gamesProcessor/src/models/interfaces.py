@@ -166,15 +166,41 @@ class UpsertRegisteredUserInput:
     date_of_birth: str
     mobile_number: str
 
-@dataclass 
+
+@dataclass
 class CreatePaymentOrderInput:
     user_id: str
     order_amount: float
 
-@dataclass 
+
+@dataclass
 class CashfreeWebhookEventInput:
     user_id: str
     order_amount: float
+
+
+@dataclass
+class EventInput:
+    action: str
+    slug: Optional[str] = None
+    repeat: Optional[str] = None
+    imageUrl: Optional[str] = None
+    eventType: Optional[str] = None
+    mainTitle: Optional[str] = None
+    eventEndTime: Optional[str] = None
+    guestSpeaker: Optional[str] = None
+    isPremiumUserOnly: Optional[bool] = None
+
+    id: Optional[str] = None
+    hostedBy: Optional[str] = None
+    subTitle: Optional[str] = None
+    prizeMoney: Optional[int] = None
+    description: Optional[str] = None
+    meetingLink: Optional[str] = None
+    eventStartTime: Optional[str] = None
+    maxVisitorsAllowed: Optional[int] = None
+    registrationAllowedTillTime: Optional[str] = None
+
 
 @dataclass
 class Output:
