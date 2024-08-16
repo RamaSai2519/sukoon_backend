@@ -66,6 +66,11 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
+    "pdfGenerator": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "scheduler": {
       "build": true,
       "dependsOn": [
