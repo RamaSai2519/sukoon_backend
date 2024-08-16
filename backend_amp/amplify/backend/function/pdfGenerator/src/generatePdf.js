@@ -9,9 +9,11 @@ async function generatePDF(htmlContent) {
 
     try {
         browser = await puppeteer.launch({
-            args: chromium.args, // Only needed for AWS Lambda
-            executablePath: await chromium.executablePath(), // Replace with your Chromium path if not using Lambda
+            args: chromium.args,
+            defaultViewport: chromium.defaultViewport,
+            executablePath: await chromium.executablePath,
             headless: chromium.headless,
+            ignoreHTTPSErrors: true,
         });
 
         const page = await browser.newPage();
