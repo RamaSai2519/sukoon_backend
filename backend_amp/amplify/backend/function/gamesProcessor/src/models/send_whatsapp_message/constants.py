@@ -416,15 +416,6 @@ class WhatsappNotificationTemplates:
             "template": {
                 "name": "partial_leads",
                 "language": {"code": "en"},
-                "components": [
-                    {
-                        "type": "body",
-                        "parameters": [
-                            {"type": "text", "text": "{user_name}"},
-                        ],
-                    },
-
-                ],
             },
         }
 
