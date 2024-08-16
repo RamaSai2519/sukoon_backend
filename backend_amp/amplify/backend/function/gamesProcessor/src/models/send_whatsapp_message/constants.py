@@ -699,3 +699,11 @@ class WhatsappNotificationTemplates:
                 ],
             },
         }
+
+        self.LEADS = {
+            "template_name": "LEADS",
+            "template": {
+                "name": "leads",
+                "language": {"code": "en"},
+            },
+        }
