@@ -52,7 +52,8 @@
           "deploymentBucketName": "amplify-backendamp-dev-caa78-deployment",
           "s3Key": "amplify-builds/notificationProcessor-63567848597457345a6d-build.zip"
         },
-        "scheduler": {}
+        "scheduler": {},
+        "pdfGenerator": {}
       },
       "api": {
         "sukoonAPI": {},
