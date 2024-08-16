@@ -6,5 +6,10 @@
   "license": "Apache-2.0",
   "devDependencies": {
     "@types/aws-lambda": "^8.10.92"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1677.0",
+    "chrome-aws-lambda": "^10.1.0",
+    "puppeteer-core": "^23.1.0"
   }
 }
