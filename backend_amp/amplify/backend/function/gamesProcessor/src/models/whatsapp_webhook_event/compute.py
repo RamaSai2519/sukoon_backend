@@ -14,7 +14,7 @@ class Compute:
 
 
     def _send_whatsapp_message(self, parameters, phone_number, template_name):
-        url = "https://6x4j0qxbmk.execute-api.ap-south-1.amazonaws.com/main/actions"
+        url = "https://6x4j0qxbmk.execute-api.ap-south-1.amazonaws.com/main/actions/send_whatsapp"
 
         payload = json.dumps({
         "phone_number": phone_number,
