@@ -700,6 +700,22 @@ class WhatsappNotificationTemplates:
             },
         }
 
+        self.INVOICE_DOWNLOAD = {
+            "template_name": "INVOICE_DOWNLOAD",
+            "template": {
+                "name": "invoice_download",
+                "language": {"code": "en"},
+                "components": [
+                    {       
+                        "type": "header",
+                        "parameters": [
+                            {"type": "document", "document": { "filename": "invoice.pdf" , "link": "{document_link}"}}
+                        ],
+                    }
+                ],
+            },
+        }
+
         self.LEADS = {
             "template_name": "LEADS",
             "template": {
