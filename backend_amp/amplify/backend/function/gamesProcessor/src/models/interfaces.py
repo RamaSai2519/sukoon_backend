@@ -171,6 +171,7 @@ class UpsertRegisteredUserInput:
 class CreatePaymentOrderInput:
     user_id: str
     order_amount: float
+    event_id: str = field(default_factory=lambda: "")
 
 
 @dataclass
