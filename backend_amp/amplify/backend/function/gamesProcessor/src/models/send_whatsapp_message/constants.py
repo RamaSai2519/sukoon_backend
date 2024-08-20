@@ -723,3 +723,25 @@ class WhatsappNotificationTemplates:
                 "language": {"code": "en"},
             },
         }
+
+        self.EVENT_INVOICE = {
+            "template_name": "EVENT_INVOICE",
+            "template": {
+                "name": "event_invoice",
+                "language": {"code": "en_us"},
+                "components": [
+                    {       
+                        "type": "header",
+                        "parameters": [
+                            {"type": "document", "document": { "filename": "invoice.pdf" , "link": "{document_link}"}}
+                        ],
+                    },
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{event_name}"},
+                        ],
+                    },
+                ],
+            },
+        }

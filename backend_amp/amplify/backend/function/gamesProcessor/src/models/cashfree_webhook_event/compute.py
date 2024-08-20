@@ -3,6 +3,7 @@ from datetime import datetime
 from bson import ObjectId
 from models.interfaces import CashfreeWebhookEventInput as Input, Output
 from models.constants import OutputStatus
+from db.event import get_event_configs_collection
 from db.users import get_user_collection, get_user_payment_collection
 
 class Compute:
@@ -29,21 +30,35 @@ class Compute:
         )
         return True, ""
     
-    def send_invoice_to_the_user(self, invoice_s3_url):
+    def send_invoice_to_the_user(self, invoice_s3_url, event_id):
         customer_details = self.payment_data.get("customer_details")
         phone_number = customer_details.get("customer_phone")
 
         url = "https://6x4j0qxbmk.execute-api.ap-south-1.amazonaws.com/main/actions/send_whatsapp"
 
-        print("here")
+        if event_id:
+            event_config_collection = get_event_configs_collection()
+            event = event_config_collection.find_one({"_id": event_id})
+            event_name = event.get("mainTitle")
 
-        payload = json.dumps({
-            "phone_number": phone_number,
-            "template_name": "INVOICE_DOWNLOAD",
-            "parameters": {
-                "document_link": invoice_s3_url
-            }
-        })
+            payload = json.dumps({
+                "phone_number": phone_number,
+                "template_name": "EVENT_INVOICE",
+                "parameters": {
+                    "event_name": event_name,
+                    "document_link": invoice_s3_url
+                }
+            })
+
+        else:
+
+            payload = json.dumps({
+                "phone_number": phone_number,
+                "template_name": "INVOICE_DOWNLOAD",
+                "parameters": {
+                    "document_link": invoice_s3_url
+                }
+            })
         headers = {
             'Content-Type': 'application/json'
         }
@@ -96,14 +111,15 @@ class Compute:
         payment_status = payment_details.get("payment_status")
         invoice_number = "invoice not generated"
         invoice_s3_url = ""
+        payment_collection = get_user_payment_collection()
+        payment = payment_collection.find_one({"order_id": order_id})
+        event_id = payment.get("event_id")
 
         if payment_status == "SUCCESS":
             invoice_s3_url , invoice_number = self.get_invoice_s3_url(payment_amount)
-            self.send_invoice_to_the_user(invoice_s3_url)
+            self.send_invoice_to_the_user(invoice_s3_url, event_id)
 
 
-        payment_collection = get_user_payment_collection()
-        payment = payment_collection.find_one({"order_id": order_id})
         if not payment:
             return None , ""
         payment_id = payment.get("_id")
