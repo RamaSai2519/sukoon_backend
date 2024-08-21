@@ -18,9 +18,9 @@ class Compute:
         user = self.user_collection.find_one({"phoneNumber": phone})
         return user if user else None
 
-    def find_event_user(self, phone: str) -> dict | None:
+    def find_event_user(self, phone: str, source: str) -> dict | None:
         event_user = self.event_users_collection.find_one(
-            {"phoneNumber": phone}, {"createdAt": 0, "updatedAt": 0})
+            {"phoneNumber": phone, "source": source}, {"createdAt": 0, "updatedAt": 0})
         return event_user if event_user else None
 
     def create_user(self) -> dict:
@@ -95,7 +95,7 @@ class Compute:
         if not user:
             user = self.create_user()
 
-        event_user = self.find_event_user(self.input.phone)
+        event_user = self.find_event_user(self.input.phone, self.input.source)
         if not event_user:
             event_user = self.create_event_user(user)
         event_user = self.__format__(event_user)
