@@ -5,7 +5,7 @@ from models.get_events.validate import Validator
 from models.interfaces import ScheduledJobInput as Input, Output
 
 
-class GetUser:
+class ListEvents:
     def __init__(self, input: Input) -> None:
         self.input = input
 

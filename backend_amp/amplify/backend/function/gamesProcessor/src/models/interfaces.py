@@ -205,6 +205,13 @@ class EventInput:
 
 
 @dataclass
+class getEventsInput:
+    page: int
+    limit: int
+    fromToday: str
+    isHomePage: str
+
+@dataclass
 class Output:
     output_status: str
     output_message: str
