@@ -33,6 +33,7 @@ class Compute:
             "numberOfGames": 0,
             "isBlocked": False,
             "isPaidUser": False,
+            "wa_opt_out": False,
             "expiresOtp": current_date,
             "createdDate": current_date,
             "name": self.input.name if self.input.name else "",
