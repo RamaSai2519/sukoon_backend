@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Optional
+from datetime import datetime
 
 
 @dataclass
@@ -210,6 +211,19 @@ class getEventsInput:
     limit: int
     fromToday: str
     isHomePage: str
+
+
+@dataclass
+class EventUserInput:
+    phone: str
+    name: Optional[str] = None
+    city: Optional[str] = None
+    email: Optional[str] = None
+    source: Optional[str] = None
+    dob: Optional[datetime] = None
+    eventName: Optional[str] = None
+    advSeenOn: Optional[str] = None
+
 
 @dataclass
 class Output:

@@ -1,4 +1,5 @@
 from services.src.shorts import FetchShortsService
+from services.src.user import CreateEventUserService
 from services.src.game_config import GameConfigService
 from services.src.cashfree import CashfreeWebhookService
 from services.src.user_referral import UserReferralService
