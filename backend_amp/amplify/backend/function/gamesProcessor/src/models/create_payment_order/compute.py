@@ -39,10 +39,11 @@ class Compute:
 
         order_details_dict = {
             "user_id": self.input.user_id,
+            "event_id": self.input.event_id,
+            "created_at": datetime.now(),
             "order_id": order_details_dict.get("order_id"),
             "payment_status": "INCOMPLETED",
-            "order_amount": self.input.order_amount,
-            "created_at": datetime.now()
+            "order_amount": self.input.order_amount
         }
         user_payment_collection.insert_one(order_details_dict)
 
