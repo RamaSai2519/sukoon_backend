@@ -630,7 +630,6 @@ class WhatsappNotificationTemplates:
                             {"type": "text", "text": "{prize_money}"},
                             {"type": "text", "text": "{date}"},
                             {"type": "text", "text": "{sarathi_name}"},
-                            {"type": "text", "text": "{time}"},
                             {"type": "text", "text": "{registration_link}"},
                             {"type": "text", "text": "{phone_number}"},
                             {"type": "text", "text": "{whatsapp_community_link}"},
@@ -659,7 +658,6 @@ class WhatsappNotificationTemplates:
                             {"type": "text", "text": "{event_name}"},
                             {"type": "text", "text": "{prize_money}"},
                             {"type": "text", "text": "{date}"},
-                            {"type": "text", "text": "{time}"},
                             {"type": "text", "text": "{sarathi_name}"},
                             {"type": "text", "text": "{event_link}"},
                             {"type": "text", "text": "{phone_number}"},
@@ -689,7 +687,6 @@ class WhatsappNotificationTemplates:
                             {"type": "text", "text": "{event_name}"},
                             {"type": "text", "text": "{prize_money}"},
                             {"type": "text", "text": "{date}"},
-                            {"type": "text", "text": "{time}"},
                             {"type": "text", "text": "{sarathi_name}"},
                             {"type": "text", "text": "{event_link}"},
                             {"type": "text", "text": "{phone_number}"},
@@ -740,6 +737,22 @@ class WhatsappNotificationTemplates:
                         "type": "body",
                         "parameters": [
                             {"type": "text", "text": "{event_name}"},
+                        ],
+                    },
+                ],
+            },
+        }
+
+        self.SENIOR_CITIZEN_DAY = {
+            "template_name": "SENIOR_CITIZEN_DAY",
+            "template": {
+                "name": "senior_citizen_day",
+                "language": {"code": "en_us"},
+                "components": [
+                    {       
+                        "type": "header",
+                        "parameters": [
+                            {"type": "image", "image": {"link": "{image_link}"}}
                         ],
                     },
                 ],
