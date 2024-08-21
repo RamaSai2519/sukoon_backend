@@ -226,6 +226,13 @@ class EventUserInput:
 
 
 @dataclass
+class GetEventUsersInput:
+    page: int
+    size: int
+    slug: Optional[str] = None
+
+
+@dataclass
 class Output:
     output_status: str
     output_message: str

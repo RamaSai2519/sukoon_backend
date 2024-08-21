@@ -1,11 +1,11 @@
 import traceback
 from models.constants import OutputStatus
-from models.get_events.compute import Compute
-from models.get_events.validate import Validator
-from models.interfaces import getEventsInput as Input, Output
+from models.get_event_users.compute import Compute
+from models.get_event_users.validate import Validator
+from models.interfaces import GetEventUsersInput as Input, Output
 
 
-class ListEvents:
+class ListEventUsers:
     def __init__(self, input: Input) -> None:
         self.input = input
 

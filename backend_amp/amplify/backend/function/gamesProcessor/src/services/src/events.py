@@ -5,7 +5,8 @@ from flask_restful import Resource
 from models.get_events.main import ListEvents
 from models.create_event.main import CreateEvent
 from models.update_event.main import UpdateEvent
-from models.interfaces import EventInput, getEventsInput, Output
+from models.get_event_users.main import ListEventUsers
+from models.interfaces import EventInput, getEventsInput, GetEventUsersInput, Output
 
 
 class CreateEventsService(Resource):
@@ -29,12 +30,24 @@ class UpdateEventService(Resource):
 
         return output
 
+
 class ListEventsService(Resource):
 
     def get(self) -> Output:
         input_params = request.args
         input = getEventsInput(**input_params)
         output = ListEvents(input).process()
+        output = dataclasses.asdict(output)
+
+        return output
+
+
+class ListEventUsersService(Resource):
+
+    def get(self) -> Output:
+        input_params = request.args
+        input = GetEventUsersInput(**input_params)
+        output = ListEventUsers(input).process()
         output = dataclasses.asdict(output)
 
         return output
