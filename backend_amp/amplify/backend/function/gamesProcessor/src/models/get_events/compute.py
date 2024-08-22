@@ -32,30 +32,33 @@ class Compute:
                 events.append(dict(event[0]))
         return events
 
-    def __format__(self, events: list) -> list:
-        for event in events:
-            if "registrationAllowedTill" in event:
-                event["registrationAllowedTill"] = datetime.strftime(
-                    event["registrationAllowedTill"], "%Y-%m-%dT%H:%M:%S")
-            if "startEventDate" in event:
-                event["startEventDate"] = datetime.strftime(
-                    event["startEventDate"], "%Y-%m-%dT%H:%M:%S")
-            if "validUpto" in event:
-                event["validUpto"] = datetime.strftime(
-                    event["validUpto"], "%Y-%m-%dT%H:%M:%S")
+    def __format__(self, event: dict) -> dict:
+        if "registrationAllowedTill" in event:
+            event["registrationAllowedTill"] = datetime.strftime(
+                event["registrationAllowedTill"], "%Y-%m-%dT%H:%M:%S")
+        if "startEventDate" in event:
+            event["startEventDate"] = datetime.strftime(
+                event["startEventDate"], "%Y-%m-%dT%H:%M:%S")
+        if "validUpto" in event:
+            event["validUpto"] = datetime.strftime(
+                event["validUpto"], "%Y-%m-%dT%H:%M:%S")
 
-        return events
+        return event
 
     def compute(self) -> Output:
         events_collection = get_events_collection()
-        query = self.prepare_query()
-        if self.input.isHomePage.lower() == "true":
-            events = self.fetch_homepage_events(query)
+        if self.input.slug is not None:
+            query = {"slug": self.input.slug}
+            event = dict(events_collection.find_one(query, self.projection))
+            events = [self.__format__(event)]
         else:
-            events = list(events_collection.find(
-                query, self.projection).sort("validUpto", 1).skip(self.offset).limit(int(self.input.limit)))
-
-        events = self.__format__(events)
+            query = self.prepare_query()
+            if self.input.isHomePage.lower() == "true":
+                events = self.fetch_homepage_events(query)
+            else:
+                events = list(events_collection.find(
+                    query, self.projection).sort("validUpto", 1).skip(self.offset).limit(int(self.input.limit)))
+                events = [self.__format__(event) for event in events]
         print(len(events))
 
         return Output(

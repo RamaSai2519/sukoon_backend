@@ -3,9 +3,9 @@ import dataclasses
 from flask import request
 from flask_restful import Resource
 from models.get_events.main import ListEvents
-from models.create_event.main import CreateEvent
 from models.update_event.main import UpdateEvent
 from models.get_event_users.main import ListEventUsers
+from models.upsert_event_config.main import UpsertEvent
 from models.interfaces import EventInput, getEventsInput, GetEventUsersInput, Output
 
 
@@ -14,7 +14,7 @@ class CreateEventsService(Resource):
     def post(self) -> Output:
         input = json.loads(request.get_data())
         input = EventInput(**input)
-        output = CreateEvent(input).process()
+        output = UpsertEvent(input).process()
         output = dataclasses.asdict(output)
 
         return output

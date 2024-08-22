@@ -1,11 +1,11 @@
 import traceback
 from models.constants import OutputStatus
-from models.create_event.compute import Compute
-from models.create_event.validate import Validator
+from models.upsert_event_config.compute import Compute
+from models.upsert_event_config.validate import Validator
 from models.interfaces import EventInput as Input, Output
 
 
-class CreateEvent:
+class UpsertEvent:
     def __init__(self, input: Input) -> None:
         self.input = input
 
