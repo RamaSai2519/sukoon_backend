@@ -700,8 +700,8 @@ class WhatsappNotificationTemplates:
         self.INVOICE_DOWNLOAD = {
             "template_name": "INVOICE_DOWNLOAD",
             "template": {
-                "name": "invoice_download",
-                "language": {"code": "en"},
+                "name": "sukoon_invoice_download",
+                "language": {"code": "en_us"},
                 "components": [
                     {       
                         "type": "header",
@@ -724,7 +724,7 @@ class WhatsappNotificationTemplates:
         self.EVENT_INVOICE = {
             "template_name": "EVENT_INVOICE",
             "template": {
-                "name": "event_invoice",
+                "name": "sukoon_event_invoice",
                 "language": {"code": "en_us"},
                 "components": [
                     {       
