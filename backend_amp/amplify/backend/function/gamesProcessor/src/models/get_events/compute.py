@@ -1,6 +1,7 @@
 from models.interfaces import getEventsInput as Input, Output
 from db.events import get_events_collection
 from models.constants import OutputStatus
+from models.common import jsonify
 from datetime import datetime
 
 
@@ -32,25 +33,12 @@ class Compute:
                 events.append(dict(event[0]))
         return events
 
-    def __format__(self, event: dict) -> dict:
-        if "registrationAllowedTill" in event:
-            event["registrationAllowedTill"] = datetime.strftime(
-                event["registrationAllowedTill"], "%Y-%m-%dT%H:%M:%S")
-        if "startEventDate" in event:
-            event["startEventDate"] = datetime.strftime(
-                event["startEventDate"], "%Y-%m-%dT%H:%M:%S")
-        if "validUpto" in event:
-            event["validUpto"] = datetime.strftime(
-                event["validUpto"], "%Y-%m-%dT%H:%M:%S")
-
-        return event
-
     def compute(self) -> Output:
         events_collection = get_events_collection()
         if self.input.slug is not None:
             query = {"slug": self.input.slug}
             event = dict(events_collection.find_one(query, self.projection))
-            events = [self.__format__(event)]
+            events = [jsonify(event)]
         else:
             query = self.prepare_query()
             if self.input.isHomePage.lower() == "true":
@@ -58,8 +46,7 @@ class Compute:
             else:
                 events = list(events_collection.find(
                     query, self.projection).sort("validUpto", 1).skip(self.offset).limit(int(self.input.limit)))
-                events = [self.__format__(event) for event in events]
-        print(len(events))
+                events = [jsonify(event) for event in events]
 
         return Output(
             output_details=events,

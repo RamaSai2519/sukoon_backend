@@ -2,9 +2,9 @@ from models.interfaces import EventUserInput as Input, Output
 from db.events import get_event_users_collection
 from models.constants import OutputStatus
 from db.users import get_user_collection
+from models.common import jsonify
 from datetime import datetime
 from bson import ObjectId
-from pprint import pprint
 
 
 class Compute:
@@ -72,24 +72,6 @@ class Compute:
         event_user["_id"] = ObjectId(new_event_user_id)
         return event_user
 
-    def __format__(self, event_user: dict) -> dict:
-        event_user["_id"] = str(event_user["_id"])
-
-        if "userId" in event_user:
-            event_user["userId"] = str(event_user["userId"])
-
-        if "dob" in event_user:
-            event_user["dob"] = datetime.strftime(
-                event_user["dob"], "%Y-%m-%dT%H:%M:%S")
-
-        if "createdAt" in event_user:
-            event_user.pop("createdAt")
-
-        if "updatedAt" in event_user:
-            event_user.pop("updatedAt")
-
-        return event_user
-
     def compute(self) -> Output:
         user = self.find_user(self.input.phone)
         if not user:
@@ -98,11 +80,9 @@ class Compute:
         event_user = self.find_event_user(self.input.phone, self.input.source)
         if not event_user:
             event_user = self.create_event_user(user)
-        event_user = self.__format__(event_user)
-        pprint(event_user)
 
         return Output(
-            output_details=event_user,
+            output_details=jsonify(event_user),
             output_status=OutputStatus.SUCCESS,
             output_message="Successfully registered user to event"
         )

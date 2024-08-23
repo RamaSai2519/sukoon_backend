@@ -184,7 +184,6 @@ class CashfreeWebhookEventInput:
 
 @dataclass
 class EventInput:
-    action: str
     name: Optional[str] = None
     slug: Optional[str] = None
     repeat: Optional[str] = None

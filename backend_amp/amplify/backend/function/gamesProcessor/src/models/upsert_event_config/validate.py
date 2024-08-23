@@ -1,15 +1,9 @@
 from models.interfaces import EventInput as Input
-from datetime import datetime
 
 
 class Validator:
     def __init__(self, input: Input) -> None:
         self.input = input
-
-    def validate_action(self):
-        if self.input.action != "CREATE":
-            return False, "Invalid action"
-        return True, ""
 
     def validate_mandatory_fields(self):
         required_fields = {
@@ -22,8 +16,6 @@ class Validator:
             "guestSpeaker": self.input.guestSpeaker
         }
 
-        print(required_fields)
-
         for field, value in required_fields.items():
             if not value:
                 return False, f"{field} is required"
@@ -31,7 +23,6 @@ class Validator:
         return True, ""
 
     def validate_multiselect_fields(self):
-        print(self.input.eventType)
         if self.input.eventType not in ["online", "offline", "not_event", "challenge"]:
             return False, "Invalid eventType"
 
@@ -41,10 +32,6 @@ class Validator:
         return True, ""
 
     def validate_input(self):
-        is_valid, message = self.validate_action()
-        if not is_valid:
-            return is_valid, message
-
         is_valid, message = self.validate_mandatory_fields()
         if not is_valid:
             return is_valid, message

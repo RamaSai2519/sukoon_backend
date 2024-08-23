@@ -9,7 +9,7 @@ from models.upsert_event_config.main import UpsertEvent
 from models.interfaces import EventInput, getEventsInput, GetEventUsersInput, Output
 
 
-class CreateEventsService(Resource):
+class UpsertEventsService(Resource):
 
     def post(self) -> Output:
         input = json.loads(request.get_data())

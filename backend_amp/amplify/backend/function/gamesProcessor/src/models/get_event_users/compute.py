@@ -1,7 +1,7 @@
 from models.interfaces import GetEventUsersInput as Input, Output
 from db.events import get_event_users_collection
 from models.constants import OutputStatus
-from datetime import datetime
+from models.common import jsonify
 
 
 class Compute:
@@ -18,24 +18,12 @@ class Compute:
             query = {}
         return query
 
-    def __format__(self, format_spec: dict) -> dict:
-        if "dob" in format_spec:
-            format_spec["dob"] = datetime.strftime(
-                format_spec["dob"], "%Y-%m-%dT%H:%M:%S")
-
-        if "userId" in format_spec:
-            format_spec["userId"] = str(format_spec["userId"])
-
-        return format_spec
-
     def compute(self) -> Output:
         query = self.prepare_query()
         event_users = list(self.event_users_collection.find(
             query, self.projection).skip(self.offset).limit(int(self.input.size)))
 
-        event_users = [self.__format__(event_user)
-                       for event_user in event_users]
-        print(len(event_users))
+        event_users = [jsonify(event_user) for event_user in event_users]
 
         return Output(
             output_details=event_users,

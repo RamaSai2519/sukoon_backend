@@ -21,7 +21,7 @@ api.add_resource(WhatsappWebhookService, '/actions/webhooks')
 api.add_resource(FetchShortsService, '/actions/fetch_shorts')
 api.add_resource(UpdateEventService, '/actions/update_event')
 api.add_resource(ScoreUpdaterService, '/actions/score_update')
-api.add_resource(CreateEventsService, '/actions/create_event')
+api.add_resource(UpsertEventsService, '/actions/upsert_event')
 api.add_resource(FCMTokenService, '/actions/update_fcm_token')
 api.add_resource(CouponRewardService, '/actions/coupon_reward')
 api.add_resource(UserReferralService, '/actions/user_referral')
@@ -34,7 +34,6 @@ api.add_resource(CreateEventUserService, '/actions/create_event_user')
 api.add_resource(CreatePaymentOrderService, '/actions/create_payment_order')
 api.add_resource(CreateScheduledJobsService, '/actions/create_scheduled_job')
 api.add_resource(UpdateScheduledJobsService, '/actions/update_scheduled_job')
-
 
 
 def handler(event, context):
