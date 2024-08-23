@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from typing import List, Optional
+from datetime import datetime
 
 
 @dataclass
@@ -183,25 +184,53 @@ class CashfreeWebhookEventInput:
 
 @dataclass
 class EventInput:
-    action: str
+    name: Optional[str] = None
     slug: Optional[str] = None
     repeat: Optional[str] = None
-    imageUrl: Optional[str] = None
-    eventType: Optional[str] = None
-    mainTitle: Optional[str] = None
-    eventEndTime: Optional[str] = None
-    guestSpeaker: Optional[str] = None
-    isPremiumUserOnly: Optional[bool] = None
-
-    id: Optional[str] = None
-    hostedBy: Optional[str] = None
     subTitle: Optional[str] = None
+    hostedBy: Optional[str] = None
+    category: Optional[str] = None
+    imageUrl: Optional[str] = None
+    mainTitle: Optional[str] = None
+    eventType: Optional[str] = None
     prizeMoney: Optional[int] = None
-    description: Optional[str] = None
+    isAlways: Optional[bool] = False
     meetingLink: Optional[str] = None
-    eventStartTime: Optional[str] = None
+    description: Optional[str] = None
+    guestSpeaker: Optional[str] = None
+    validUpto: Optional[datetime] = None
+    isPremiumUserOnly: Optional[bool] = None
     maxVisitorsAllowed: Optional[int] = None
-    registrationAllowedTillTime: Optional[str] = None
+    startEventDate: Optional[datetime] = None
+    registrationAllowedTill: Optional[str] = None
+
+
+@dataclass
+class GetEventsInput:
+    page: Optional[int] = 1
+    limit: Optional[int] = 10
+    slug: Optional[str] = None
+    fromToday: Optional[str] = "false"
+    isHomePage: Optional[str] = "false"
+
+
+@dataclass
+class EventUserInput:
+    phone: str
+    name: Optional[str] = None
+    city: Optional[str] = None
+    email: Optional[str] = None
+    source: Optional[str] = None
+    dob: Optional[datetime] = None
+    eventName: Optional[str] = None
+    advSeenOn: Optional[str] = None
+
+
+@dataclass
+class GetEventUsersInput:
+    page: int
+    size: int
+    slug: Optional[str] = None
 
 
 @dataclass

@@ -1,7 +1,7 @@
 from db.base import Database
+from pymongo.collection import Collection
 
-
-def get_user_collection():
+def get_user_collection() -> Collection:
     client = Database().client
 
     db = client["test"]

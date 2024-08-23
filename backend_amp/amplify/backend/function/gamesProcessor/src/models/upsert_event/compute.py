@@ -14,7 +14,7 @@ class Compute:
             "dateOfBirth": self.input.date_of_birth,
             "firstName": self.input.first_name,
             "gender": self.input.gender,
-            "status": UserStatus.REGISTERED.name,
+            # "status": UserStatus.REGISTERED.name,
             "lastName": self.input.last_name,
             "mobileNumber": self.input.mobile_number,
         }
