@@ -1,3 +1,4 @@
+from services.src.expert import ExpertService
 from services.src.shorts import FetchShortsService
 from services.src.user import CreateEventUserService
 from services.src.game_config import GameConfigService

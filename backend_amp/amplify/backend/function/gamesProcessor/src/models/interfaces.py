@@ -4,6 +4,48 @@ from datetime import datetime
 
 
 @dataclass
+class Expert:
+    phoneNumber: str
+    _id: Optional[str] = None
+    otp: Optional[str] = None
+    name: Optional[str] = None
+    flow: Optional[int] = None
+    type: Optional[str] = None
+    video: Optional[str] = None
+    score: Optional[int] = None
+    score: Optional[int] = None
+    topics: Optional[str] = None
+    status: Optional[str] = None
+    active: Optional[bool] = None
+    profile: Optional[str] = None
+    isBusy: Optional[bool] = None
+    tonality: Optional[int] = None
+    fcmToken: Optional[str] = None
+    timeSpent: Optional[int] = None
+    languages: Optional[str] = None
+    timeSplit: Optional[int] = None
+    probability: Optional[int] = None
+    description: Optional[str] = None
+    total_score: Optional[int] = None
+    displayScore: Optional[str] = None
+    repeat_score: Optional[int] = None
+    isGamesPlay: Optional[bool] = None
+    calls_share: Optional[float] = None
+    userSentiment: Optional[int] = None
+    closingGreeting: Optional[int] = None
+    openingGreeting: Optional[int] = None
+    expiresOtp: Optional[datetime] = None
+    createdDate: Optional[datetime] = None
+    categories: Optional[List[str]] = None
+    profileCompleted: Optional[bool] = None
+
+
+@dataclass
+class GetExpertsInput:
+    phoneNumber: Optional[str] = None
+
+
+@dataclass
 class GetGameConfigInput:
     game_type: str
 
@@ -108,8 +150,8 @@ class WhtasappMessageInput:
     phone_number: str
     parameters: dict
     template_name: str
-    user_id: Optional[str] = field(default_factory=lambda: "")
     request_meta: str = field(default_factory=lambda: "")
+    user_id: Optional[str] = field(default_factory=lambda: "")
 
 
 @dataclass
@@ -141,11 +183,11 @@ class UpdateFCMTokenInput:
 
 @dataclass
 class ScheduledJobInput:
+    action: str = field(default_factory=lambda: "")
+    status: str = field(default_factory=lambda: "")
     job_type: str = field(default_factory=lambda: "")
     job_time: str = field(default_factory=lambda: "")
-    status: str = field(default_factory=lambda: "")
     request_meta: str = field(default_factory=lambda: "")
-    action: str = field(default_factory=lambda: "")
     scheduled_job_id: str = field(default_factory=lambda: "")
 
 

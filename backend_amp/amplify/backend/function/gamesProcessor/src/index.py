@@ -9,6 +9,7 @@ app = Flask(__name__)
 CORS(app)
 api = Api(app)
 
+api.add_resource(ExpertService, '/actions/expert')
 api.add_resource(SendOTPService, '/actions/send_otp')
 api.add_resource(QuizGameService, '/actions/quiz_game')
 api.add_resource(CardGameService, '/actions/card_game')
