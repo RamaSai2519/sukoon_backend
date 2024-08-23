@@ -11,7 +11,7 @@ class Compute:
         self.input = input
         self.events_collection = get_events_collection()
 
-    def prep_data(self, event_data, new_event=True):
+    def prep_data(self, event_data: dict, new_event=True):
         date_fields = ["validUpto",
                        "registrationAllowedTill", "startEventDate"]
         for date_field in date_fields:
@@ -20,7 +20,7 @@ class Compute:
         if new_event:
             event_data["createdAt"] = datetime.now()
         event_data["updatedAt"] = datetime.now()
-
+        event_data = {k: v for k, v in event_data.items() if v is not None}
         return event_data
 
     def validate_slug(self, slug: str) -> bool:

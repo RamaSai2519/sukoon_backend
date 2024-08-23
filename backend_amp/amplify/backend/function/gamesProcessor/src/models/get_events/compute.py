@@ -1,4 +1,4 @@
-from models.interfaces import getEventsInput as Input, Output
+from models.interfaces import GetEventsInput as Input, Output
 from db.events import get_events_collection
 from models.constants import OutputStatus
 from models.common import jsonify
@@ -24,27 +24,26 @@ class Compute:
 
     def fetch_homepage_events(self, query: dict) -> list:
         events = []
-        events_collection = get_events_collection()
         for category in self.event_categories:
             query["category"] = category
-            event = list(events_collection.find(
+            event = list(self.events_collection.find(
                 query, self.projection).sort("validUpto", 1).limit(1))
             if len(event) > 0:
                 events.append(dict(event[0]))
         return events
 
     def compute(self) -> Output:
-        events_collection = get_events_collection()
         if self.input.slug is not None:
             query = {"slug": self.input.slug}
-            event = dict(events_collection.find_one(query, self.projection))
+            event = dict(self.events_collection.find_one(
+                query, self.projection))
             events = [jsonify(event)]
         else:
             query = self.prepare_query()
             if self.input.isHomePage.lower() == "true":
                 events = self.fetch_homepage_events(query)
             else:
-                events = list(events_collection.find(
+                events = list(self.events_collection.find(
                     query, self.projection).sort("validUpto", 1).skip(self.offset).limit(int(self.input.limit)))
                 events = [jsonify(event) for event in events]
 

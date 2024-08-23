@@ -6,7 +6,7 @@ from models.get_events.main import ListEvents
 from models.update_event.main import UpdateEvent
 from models.get_event_users.main import ListEventUsers
 from models.upsert_event_config.main import UpsertEvent
-from models.interfaces import EventInput, getEventsInput, GetEventUsersInput, Output
+from models.interfaces import EventInput, GetEventsInput, GetEventUsersInput, Output
 
 
 class UpsertEventsService(Resource):
@@ -35,7 +35,7 @@ class ListEventsService(Resource):
 
     def get(self) -> Output:
         input_params = request.args
-        input = getEventsInput(**input_params)
+        input = GetEventsInput(**input_params)
         output = ListEvents(input).process()
         output = dataclasses.asdict(output)
 

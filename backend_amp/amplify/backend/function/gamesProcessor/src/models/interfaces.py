@@ -206,7 +206,7 @@ class EventInput:
 
 
 @dataclass
-class getEventsInput:
+class GetEventsInput:
     page: Optional[int] = 1
     limit: Optional[int] = 10
     slug: Optional[str] = None
