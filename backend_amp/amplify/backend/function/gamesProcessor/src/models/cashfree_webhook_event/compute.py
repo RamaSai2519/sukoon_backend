@@ -38,7 +38,7 @@ class Compute:
 
         if event_id:
             event_config_collection = get_event_configs_collection()
-            event = event_config_collection.find_one({"_id": event_id})
+            event = event_config_collection.find_one({"_id": ObjectId(event_id)})
             event_name = event.get("mainTitle")
 
             payload = json.dumps({
