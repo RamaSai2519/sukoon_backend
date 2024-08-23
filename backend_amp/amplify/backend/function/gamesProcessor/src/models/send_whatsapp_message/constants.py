@@ -758,3 +758,29 @@ class WhatsappNotificationTemplates:
                 ],
             },
         }
+
+        self.EVENT_PARTIAL_LEAD = {
+            "template_name": "EVENT_PARTIAL_LEAD",
+            "template": {
+                "name": "payment_scheduled_2",
+                "language": {"code": "en_us"},
+                "components": [
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"},
+                            {"type": "text", "text": "{event_name}"},
+                            {"type": "text", "text": "{date_and_time}"},
+                            {"type": "text", "text": "{registraion_link}"},
+
+                        ],
+                    },
+                    {
+                        "type": "button",
+                        "index": "0",
+                        "sub_type": "url",
+                        "parameters": [{"type": "text", "text": "{registraion_link_slug}"}],
+                    },
+                ],
+            },
+        }
