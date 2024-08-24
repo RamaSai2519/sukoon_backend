@@ -61,5 +61,5 @@ class Compute:
         return Output(
             output_details=experts,
             output_status=OutputStatus.SUCCESS,
-            output_message="Successfully fetched experts"
+            output_message="Successfully fetched expert(s)"
         )

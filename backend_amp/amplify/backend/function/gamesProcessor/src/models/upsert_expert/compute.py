@@ -1,4 +1,5 @@
 import dataclasses
+from typing import Union
 from bson import ObjectId
 from datetime import datetime
 from models.common import jsonify
@@ -27,7 +28,7 @@ class Compute:
         expert_data = {k: v for k, v in expert_data.items() if v is not None}
         return expert_data
 
-    def validate_phoneNumber(self, phoneNumber: str) -> bool | dict:
+    def validate_phoneNumber(self, phoneNumber: str) -> Union[bool, dict]:
         expert = self.experts_collection.find_one({"phoneNumber": phoneNumber})
         return expert if expert else False
 
