@@ -7,13 +7,6 @@
         "Mutation",
         "Subscription"
       ]
-    },
-    "function": {
-      "pdfGenerator": [
-        "create",
-        "read",
-        "update"
-      ]
     }
   }
 }
