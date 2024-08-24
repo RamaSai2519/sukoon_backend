@@ -1,9 +1,10 @@
+import requests, json
+from bson import ObjectId
+from datetime import datetime
 from models.interfaces import WhatsappWebhookEventInput as Input, Output
 from models.constants import OutputStatus
-from db.users import get_user_collection, get_user_webhook_messages_collection, get_user_notification_collection, get_user_whatsapp_feedback_collection
+from db.users import get_user_collection, get_user_webhook_messages_collection, get_user_notification_collection, get_user_whatsapp_feedback_collection, get_user_notification_collection
 from db.calls import get_calls_collection
-from datetime import datetime
-import requests, json
 
 COMMON_CALL_REPLY_BODY = ["Connect with Sarathis", "Connect with Experts", "I want something else", "Speak to another Sarathi"]
 FIX_CALL_BODY = ["Speak with same Sarathi"]
@@ -64,6 +65,7 @@ class Compute:
         user_whatsapp_feedback_collection.insert_one(message_data)
 
     def _get_message_body_and_phone_number_from_message(self):
+        body = from_number = None
         for entry in self.input.entry:
             for change in entry.get('changes', []):
                 value = change.get('value', {})
@@ -74,6 +76,28 @@ class Compute:
                         body = message.get('button', {}).get('text')
         return body, from_number
     
+
+    def _get_status_and_message_id_value(self):
+        message_id = status = None
+        for entry in self.input.entry:
+            for change in entry.get('changes', []):
+                value = change.get('value', {})
+                for status in value.get('statuses', []):
+                    message_id = status.get('id')
+                    status_value = status.get('status')
+                    # Process or collect the message_id and status_value as needed
+                    print(f"ID: {message_id}, Status: {status_value}")
+        return message_id, status_value
+    
+    def update_user_notification_status(self, message_id, status):
+        user_notification_collection = get_user_notification_collection()
+        notification = user_notification_collection.find_one({"messageId": message_id})
+        notification_id = notification.get("_id")
+        user_notification_collection.update_one(
+            {"_id": ObjectId(notification_id)},
+            {"$set": {"notification_status": status,}},
+        )
+
     def _get_feedback_values(self):
         context_id = None
         screen_0_recommend_0 = None
@@ -118,6 +142,11 @@ class Compute:
                     user_id = request_meta.get("userId", "")
                     call_id = request_meta.get("callId", "")
                     self._create_user_feedback_message(screen_0_recommend_0, user_id, sarathi_id, call_id)
+            else:
+                message_id, status = self._get_status_and_message_id_value()
+                if message_id and status:
+                    self.update_user_notification_status(message_id, status)
+
             
         if body:
             user_id, source = self.get_user_id_from_number(from_number)

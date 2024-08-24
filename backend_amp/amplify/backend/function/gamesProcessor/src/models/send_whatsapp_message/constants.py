@@ -700,8 +700,8 @@ class WhatsappNotificationTemplates:
         self.INVOICE_DOWNLOAD = {
             "template_name": "INVOICE_DOWNLOAD",
             "template": {
-                "name": "invoice_download",
-                "language": {"code": "en"},
+                "name": "sukoon_invoice_download",
+                "language": {"code": "en_us"},
                 "components": [
                     {       
                         "type": "header",
@@ -724,7 +724,7 @@ class WhatsappNotificationTemplates:
         self.EVENT_INVOICE = {
             "template_name": "EVENT_INVOICE",
             "template": {
-                "name": "event_invoice",
+                "name": "sukoon_event_invoice",
                 "language": {"code": "en_us"},
                 "components": [
                     {       
@@ -754,6 +754,32 @@ class WhatsappNotificationTemplates:
                         "parameters": [
                             {"type": "image", "image": {"link": "{image_link}"}}
                         ],
+                    },
+                ],
+            },
+        }
+
+        self.EVENT_PARTIAL_LEAD = {
+            "template_name": "EVENT_PARTIAL_LEAD",
+            "template": {
+                "name": "payment_scheduled_2",
+                "language": {"code": "en_us"},
+                "components": [
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"},
+                            {"type": "text", "text": "{event_name}"},
+                            {"type": "text", "text": "{date_and_time}"},
+                            {"type": "text", "text": "{registraion_link}"},
+
+                        ],
+                    },
+                    {
+                        "type": "button",
+                        "index": "0",
+                        "sub_type": "url",
+                        "parameters": [{"type": "text", "text": "{registraion_link_slug}"}],
                     },
                 ],
             },

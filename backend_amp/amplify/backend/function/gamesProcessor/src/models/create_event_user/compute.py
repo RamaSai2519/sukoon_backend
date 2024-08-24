@@ -14,11 +14,11 @@ class Compute:
         self.user_collection = get_user_collection()
         self.event_users_collection = get_event_users_collection()
 
-    def find_user(self, phone: str) -> dict | None:
+    def find_user(self, phone: str) -> dict:
         user = self.user_collection.find_one({"phoneNumber": phone})
         return user if user else None
 
-    def find_event_user(self, phone: str, source: str) -> dict | None:
+    def find_event_user(self, phone: str, source: str) -> dict:
         event_user = self.event_users_collection.find_one(
             {"phoneNumber": phone, "source": source}, {"createdAt": 0, "updatedAt": 0})
         return event_user if event_user else None
