@@ -228,8 +228,8 @@ class EventUserInput:
 
 @dataclass
 class GetEventUsersInput:
-    page: Optional[int] = None
-    size: Optional[int] = None
+    page: int
+    size: int
     slug: Optional[str] = None
 
 
