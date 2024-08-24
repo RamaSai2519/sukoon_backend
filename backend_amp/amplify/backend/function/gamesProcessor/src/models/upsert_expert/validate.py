@@ -6,7 +6,7 @@ class Validator:
         self.input = input
 
     def validate(self):
-        for func in [self.validate_field_types, self.validate_multiselect_fields, self.validate_url_fields]:
+        for func in [self.validate_mandatory_fields, self.validate_field_types, self.validate_multiselect_fields, self.validate_url_fields]:
             valid, message = func()
             if not valid:
                 return False, message
@@ -37,4 +37,9 @@ class Validator:
                 value = getattr(self.input, field)
                 if value is not None and not str(value).startswith("http"):
                     return False, f"Field {field} must be a valid URL"
+        return True, ""
+
+    def validate_mandatory_fields(self):
+        if not self.input.phoneNumber:
+            return False, f"Phone Number is mandatory"
         return True, ""
