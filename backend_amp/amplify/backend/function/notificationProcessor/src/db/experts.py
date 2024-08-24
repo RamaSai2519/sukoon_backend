@@ -5,5 +5,5 @@ def get_experts_collections():
     client = Database().client
 
     db = client["test"]
-    quiz_questions_collection = db["experts"]
-    return quiz_questions_collection
+    experts_collection = db["experts"]
+    return experts_collection
