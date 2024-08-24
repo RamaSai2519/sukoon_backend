@@ -77,7 +77,7 @@
         "Name": "gamesProcessor-dev",
         "LambdaExecutionRole": "backendampLambdaRoledcea3a31-dev"
       },
-      "lastPushTimeStamp": "2024-08-16T08:52:13.511Z",
+      "lastPushTimeStamp": "2024-08-16T05:49:55.365Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-backendamp-dev-caa78-deployment/amplify-cfn-templates/function/gamesProcessor-cloudformation-template.json",
         "logicalId": "functiongamesProcessor"
@@ -99,13 +99,6 @@
             "GraphQLAPIIdOutput",
             "GraphQLAPIEndpointOutput",
             "GraphQLAPIKeyOutput"
-          ]
-        },
-        {
-          "category": "function",
-          "resourceName": "pdfGenerator",
-          "attributes": [
-            "Name"
           ]
         }
       ]

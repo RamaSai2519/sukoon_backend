@@ -45,13 +45,6 @@
           ],
           "category": "api",
           "resourceName": "backendamp"
-        },
-        {
-          "attributes": [
-            "Name"
-          ],
-          "category": "function",
-          "resourceName": "pdfGenerator"
         }
       ],
       "providerPlugin": "awscloudformation",
