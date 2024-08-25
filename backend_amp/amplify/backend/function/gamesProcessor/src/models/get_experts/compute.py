@@ -24,18 +24,10 @@ class Compute:
     def __format__(self, expert: dict, req_cats: bool = False) -> dict:
         if req_cats:
             expert = self.populate_categories(expert)
-            expert["calls"] = self.get_calls_history(ObjectId(expert["_id"]))
+            query = {"expert": ObjectId(expert["_id"])}
+            expert["calls"] = self.common.get_calls_history(query)
         expert = self.populate_time_spent(expert)
         return Common.jsonify(expert)
-
-    def format_calls(self, calls: list) -> list:
-        for call in calls:
-            call["user"] = self.common.get_user_name(
-                user_id=ObjectId(call["user"]))
-            call["expert"] = self.common.get_expert_name(
-                ObjectId(call["expert"]))
-            call = Common.jsonify(call)
-        return calls
 
     def populate_categories(self, expert_data: dict) -> dict:
         cats = list(self.categories_collection.find(
@@ -61,18 +53,13 @@ class Compute:
         return expert_data
 
     def populate_schedules(self, expert: dict) -> dict:
-        expert[f"{self.input.schedule_status}_schedules"] = self.get_schedules(
-            expert["_id"])
-        expert["schedule_counts"] = self.get_schedules_counts(
-            expert["_id"])
+        query = {"expert": ObjectId(
+            expert["_id"]), "status": self.input.schedule_status}
+        expert[f"{self.input.schedule_status}_schedules"] = self.common.get_schedules(
+            query)
+        query = {"expert": ObjectId(expert["_id"])}
+        expert["schedule_counts"] = self.common.get_schedules_counts(query)
         return expert
-
-    def get_calls_history(self, expert_id: ObjectId) -> dict:
-        query = {"expert": expert_id}
-        calls = list(self.calls_collection.find(
-            query).sort("initiatedTime", -1))
-        calls = self.format_calls(calls)
-        return calls
 
     def get_all_experts(self) -> list:
         experts = list(self.experts_collection.find(
@@ -93,21 +80,6 @@ class Compute:
                 output_status=OutputStatus.FAILURE,
                 output_message="No expert found with the given phone number"
             )
-
-    def get_schedules(self, expert_id: str) -> list:
-        query = {"expert": ObjectId(
-            expert_id), "status": self.input.schedule_status}
-        schedules = list(self.schedules_collection.find(query))
-        schedules = self.format_calls(schedules)
-        return schedules
-
-    def get_schedules_counts(self, expert_id: str) -> dict:
-        statuses = ["pending", "completed", "missed"]
-        counts = {}
-        for status in statuses:
-            query = {"expert": ObjectId(expert_id), "status": status}
-            counts[status] = self.schedules_collection.count_documents(query)
-        return counts
 
     def compute(self) -> Output:
         if self.input.phoneNumber is not None:
