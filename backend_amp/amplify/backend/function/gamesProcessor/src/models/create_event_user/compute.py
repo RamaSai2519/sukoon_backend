@@ -1,5 +1,6 @@
 from models.interfaces import EventUserInput as Input, User, EventUser, Output
 from db.events import get_event_users_collection
+from pymongo.collection import Collection
 from models.constants import OutputStatus
 from db.users import get_user_collection
 from models.common import jsonify
@@ -49,18 +50,10 @@ class Compute:
         )
         return event_user
 
-    def insert_event_user(self, event_user: EventUser) -> EventUser:
-        event_user_dict = asdict(event_user)
+    def insert_user(self, user: Union[EventUser, User], collection: Collection) -> Union[EventUser, User]:
+        event_user_dict = asdict(user)
         event_user_dict.pop("_id")
-        inserted_id = self.event_users_collection.insert_one(
-            event_user_dict).inserted_id
-        event_user._id = ObjectId(inserted_id)
-        return
-
-    def insert_user(self, user: User) -> User:
-        user_dict = asdict(user)
-        user_dict.pop("_id")
-        inserted_id = self.user_collection.insert_one(user_dict).inserted_id
+        inserted_id = collection.insert_one(event_user_dict).inserted_id
         user._id = ObjectId(inserted_id)
         return user
 
@@ -74,7 +67,8 @@ class Compute:
         user_message = self.create_message(True)
         if not user:
             user = self.create_user()
-            user = self.insert_user(user)
+            user = self.insert_user(
+                user, self.user_collection)
             user_message = self.create_message(False)
 
         event_user = self.find_event_user(
@@ -82,7 +76,8 @@ class Compute:
         event_message = self.create_message(True, "Event ")
         if not event_user:
             event_user = self.create_event_user(user)
-            event_user = self.insert_event_user(event_user)
+            event_user = self.insert_user(
+                event_user, self.event_users_collection)
             event_message = self.create_message(False, "Event ")
 
         event_user = self.find_event_user(
