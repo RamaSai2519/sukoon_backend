@@ -1,32 +1,51 @@
-from models.interfaces import GetUserInput as Input, Output
+from db.calls import get_calls_collection, get_schedules_collection
+from models.interfaces import GetUsersInput as Input, Output
 from models.constants import OutputStatus
-from db_queries.queries.user import fetch_user_by_mobile_number
+from db.users import get_user_collection
+from models.common import Common
+from bson import ObjectId
 
 
 class Compute:
-    def __init__(self,input: Input) -> None:
+    def __init__(self, input: Input) -> None:
         self.input = input
-    
-    def _check_if_user_exist_with_this_mobile_number(self) -> None:
-        
-        query_result = fetch_user_by_mobile_number(self.input.mobile_number)
-        if not query_result:
-            return False
-        
-        user_array = query_result.get("items")
+        self.common = Common()
+        self.users_collection = get_user_collection()
+        self.calls_collection = get_calls_collection()
+        self.schedules_collection = get_schedules_collection()
 
-        if not user_array:
-            return False
-        
-        return user_array[0]
-        
-    def compute(self):
+    def prep_projection(self, single_user: bool = False):
+        projection = {"__v": 0, "lastModifiedBy": 0, "userGameStats": 0}
+        if single_user:
+            return projection
+        projection["Customer Persona"] = 0
+        return projection
 
-        user = self._check_if_user_exist_with_this_mobile_number()
-        user_exist = True if user else False
+    def __format__(self, user: dict, single_user: bool = False) -> dict:
+        if single_user:
+            query = {"user": ObjectId(user["_id"])}
+            user["calls"] = self.common.get_calls_history(query)
+        return Common.jsonify(user)
+
+    def get_user(self):
+        query = {"phoneNumber": self.input.phoneNumber}
+        user = self.users_collection.find_one(
+            query, self.prep_projection(user=True))
+        if user:
+            user = self.__format__(user, True)
+            return user
+        return Output(
+            output_details={},
+            output_status=OutputStatus.FAILURE,
+            output_message="User not found"
+        )
+
+    def compute(self) -> Output:
+        if self.input.phoneNumber:
+            user = self.get_user()
 
         return Output(
-            output_details={"user_exists": user_exist},
+            output_details="",
             output_status=OutputStatus.SUCCESS,
             output_message="Successfully fetched user"
         )

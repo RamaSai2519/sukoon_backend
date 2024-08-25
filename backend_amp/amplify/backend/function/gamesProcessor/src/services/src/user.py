@@ -3,17 +3,18 @@ import dataclasses
 from flask import request
 from flask_restful import Resource
 
-from models.interfaces import GetUserInput
+from models.interfaces import GetUsersInput
 from models.get_user.main import GetUser
 
 from models.interfaces import EventUserInput, Output
 from models.create_event_user.main import CreateEventUser
 
+
 class UserService(Resource):
-    
+
     def post(self) -> Output:
         input = json.loads(request.get_data())
-        input = GetUserInput(**input)
+        input = GetUsersInput(**input)
         output = GetUser(input).process()
         output = dataclasses.asdict(output)
 
@@ -21,14 +22,15 @@ class UserService(Resource):
 
     def get(self) -> Output:
         input_params = request.args
-        input = GetUserInput(**input_params)
+        input = GetUsersInput(**input_params)
         output = GetUser(input).process()
         output = dataclasses.asdict(output)
 
         return output
 
+
 class CreateEventUserService(Resource):
-    
+
     def post(self) -> Output:
         input = json.loads(request.get_data())
         input = EventUserInput(**input)

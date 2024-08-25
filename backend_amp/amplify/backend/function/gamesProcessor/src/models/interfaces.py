@@ -195,8 +195,9 @@ class ScheduledJobInput:
 
 
 @dataclass
-class GetUserInput:
-    mobile_number: str
+class GetUsersInput:
+    phoneNumber: Optional[str] = None
+    schedule_status: Optional[str] = None
 
 
 @dataclass
