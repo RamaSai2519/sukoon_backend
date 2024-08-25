@@ -1,4 +1,4 @@
-from models.interfaces import ScheduledJobInput as Input
+from models.interfaces import GetUsersInput as Input
 
 
 class Validator():
@@ -6,17 +6,10 @@ class Validator():
         self.input = input
 
     def validate_input(self):
+        if self.input.phoneNumber and len(self.input.phoneNumber) != 10:
+            return False, "Invalid phone number"
 
-        if not self.input.job_time:
-            return False, "Job Time is Mandatory"
-
-        if not self.input.job_type:
-            return False, "Job Type is Mandatory"
-
-        if not self.input.status:
-            return False, "Status is Mandatory"
-
-        if not self.input.request_meta:
-            return False, "Request Meta is Mandatory"
+        if self.input.schedule_status and self.input.schedule_status not in ["pending", "completed", "missed"]:
+            return False, "Invalid schedule status"
 
         return True, ""

@@ -27,25 +27,46 @@ class Compute:
             user["calls"] = self.common.get_calls_history(query)
         return Common.jsonify(user)
 
+    def populate_schedules(self, user: dict) -> dict:
+        query = {"user": ObjectId(user["_id"]),
+                 "status": self.input.schedule_status}
+        user[f"{self.input.schedule_status}_schedules"] = self.common.get_schedules(
+            query)
+        query = {"user": ObjectId(user["_id"])}
+        user["schedule_counts"] = self.common.get_schedules_counts(query)
+        return user
+
     def get_user(self):
         query = {"phoneNumber": self.input.phoneNumber}
         user = self.users_collection.find_one(
-            query, self.prep_projection(user=True))
+            query, self.prep_projection(True))
         if user:
             user = self.__format__(user, True)
             return user
-        return Output(
-            output_details={},
-            output_status=OutputStatus.FAILURE,
-            output_message="User not found"
-        )
+        return None
+
+    def get_all_users(self) -> list:
+        users = list(self.users_collection.find(
+            {}, self.prep_projection()).sort("name", 1))
+        users = [self.__format__(user) for user in users]
+        return users
 
     def compute(self) -> Output:
-        if self.input.phoneNumber:
-            user = self.get_user()
+        if self.input.phoneNumber is not None:
+            users = self.get_user()
+            if not users:
+                return Output(
+                    output_details={},
+                    output_status=OutputStatus.FAILURE,
+                    output_message="User not found"
+                )
+            if self.input.schedule_status is not None:
+                users = self.populate_schedules(users)
+        else:
+            users = self.get_all_users()
 
         return Output(
-            output_details="",
+            output_details=users,
             output_status=OutputStatus.SUCCESS,
             output_message="Successfully fetched user"
         )
