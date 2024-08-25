@@ -1,3 +1,4 @@
+from db.calls import get_calls_collection, get_schedules_collection
 from db.experts import get_experts_collections
 from db.users import get_user_collection
 from datetime import datetime, date
@@ -6,7 +7,9 @@ from bson import ObjectId
 
 class Common:
     def __init__(self):
+        self.schedules_collection = get_schedules_collection()
         self.experts_collection = get_experts_collections()
+        self.calls_collection = get_calls_collection()
         self.users_collection = get_user_collection()
         self.experts_cache = {}
         self.users_cache = {}
@@ -45,3 +48,31 @@ class Common:
                 expert["name"] if expert and "name" in expert else "Unknown"
             )
         return experts_cache[expert_id]
+
+    def format_calls(self, calls: list) -> list:
+        for call in calls:
+            call["user"] = self.get_user_name(
+                user_id=ObjectId(call["user"]))
+            call["expert"] = self.get_expert_name(
+                ObjectId(call["expert"]))
+            call = Common.jsonify(call)
+        return calls
+
+    def get_calls_history(self, query: dict):
+        calls = list(self.calls_collection.find(
+            query).sort("initiatedTime", -1))
+        calls = self.format_calls(calls)
+        return calls
+
+    def get_schedules(self, query: dict) -> list:
+        schedules = list(self.schedules_collection.find(query))
+        schedules = self.format_calls(schedules)
+        return schedules
+
+    def get_schedules_counts(self, query: dict) -> dict:
+        statuses = ["pending", "completed", "missed"]
+        counts = {}
+        for status in statuses:
+            query["status"] = status
+            counts[status] = self.schedules_collection.count_documents(query)
+        return counts
