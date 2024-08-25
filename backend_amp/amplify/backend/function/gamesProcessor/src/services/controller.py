@@ -1,10 +1,10 @@
-from services.src.expert import ExpertService
 from services.src.shorts import FetchShortsService
 from services.src.game_config import GameConfigService
 from services.src.cashfree import CashfreeWebhookService
 from services.src.user_referral import UserReferralService
 from services.src.coupon_reward import CouponRewardService
 from services.src.payment import CreatePaymentOrderService
+from services.src.expert import ExpertService, ApplicantService
 from services.src.user import CreateEventUserService, UserService
 from services.src.authenticate import SendOTPService, ValidateOTPService
 from services.src.push_notification import PushNotificationService, FCMTokenService
