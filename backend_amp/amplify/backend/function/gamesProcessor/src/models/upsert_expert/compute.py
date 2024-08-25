@@ -2,7 +2,7 @@ import dataclasses
 from typing import Union
 from bson import ObjectId
 from datetime import datetime
-from models.common import jsonify
+from models.common import Common
 from models.constants import OutputStatus
 from models.interfaces import Expert as Input, Output
 from db.experts import get_experts_collections, get_timings_collection, get_categories_collection
@@ -74,7 +74,7 @@ class Compute:
             message = "Successfully created expert"
 
         return Output(
-            output_details=jsonify(expert_data),
+            output_details=Common.jsonify(expert_data),
             output_status=OutputStatus.SUCCESS,
             output_message=message
         )

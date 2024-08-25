@@ -3,7 +3,7 @@ from db.events import get_event_users_collection
 from pymongo.collection import Collection
 from models.constants import OutputStatus
 from db.users import get_user_collection
-from models.common import jsonify
+from models.common import Common
 from dataclasses import asdict
 from datetime import datetime
 from bson import ObjectId
@@ -83,7 +83,7 @@ class Compute:
         event_user = self.find_event_user(
             self.input.phoneNumber, self.input.source)
         return Output(
-            output_details=jsonify(event_user.__dict__),
+            output_details=Common.jsonify(event_user.__dict__),
             output_status=OutputStatus.SUCCESS,
             output_message=f'{user_message}. {event_message}'
         )

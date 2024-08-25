@@ -45,6 +45,7 @@ class Expert:
 @dataclass
 class GetExpertsInput:
     phoneNumber: Optional[str] = None
+    schedule_status: Optional[str] = None
 
 
 @dataclass
