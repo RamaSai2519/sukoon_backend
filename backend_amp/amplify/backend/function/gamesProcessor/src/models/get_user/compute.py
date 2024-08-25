@@ -46,8 +46,13 @@ class Compute:
         return None
 
     def get_all_users(self) -> list:
-        users = list(self.users_collection.find(
-            {}, self.prep_projection()).sort("name", 1))
+        if self.input.size and self.input.page:
+            offset = int((int(self.input.page) - 1) * int(self.input.size))
+            users = list(self.users_collection.find(
+                {}, self.prep_projection()).skip(offset).limit(int(self.input.size)).sort("name", 1))
+        else:
+            users = list(self.users_collection.find(
+                {}, self.prep_projection()).sort("name", 1))
         users = [self.__format__(user) for user in users]
         return users
 
@@ -68,5 +73,5 @@ class Compute:
         return Output(
             output_details=users,
             output_status=OutputStatus.SUCCESS,
-            output_message="Successfully fetched user"
+            output_message="Successfully fetched user(s)"
         )

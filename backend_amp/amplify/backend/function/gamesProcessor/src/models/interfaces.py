@@ -196,6 +196,8 @@ class ScheduledJobInput:
 
 @dataclass
 class GetUsersInput:
+    size: Optional[int] = None
+    page: Optional[int] = None
     phoneNumber: Optional[str] = None
     schedule_status: Optional[str] = None
 
