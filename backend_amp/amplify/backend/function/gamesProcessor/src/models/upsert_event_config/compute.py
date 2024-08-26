@@ -10,6 +10,7 @@ class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
         self.events_collection = get_events_collection()
+        
 
     def prep_data(self, event_data: dict, new_event=True):
         date_fields = ["validUpto",
