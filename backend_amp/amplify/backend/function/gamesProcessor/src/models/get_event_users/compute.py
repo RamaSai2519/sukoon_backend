@@ -1,7 +1,7 @@
 from models.interfaces import GetEventUsersInput as Input, Output
 from db.events import get_event_users_collection
 from models.constants import OutputStatus
-from models.common import jsonify
+from models.common import Common
 
 
 class Compute:
@@ -30,7 +30,8 @@ class Compute:
         query = self.prepare_query()
         event_users = self.fetch_event_users(query)
 
-        event_users = [jsonify(event_user) for event_user in event_users]
+        event_users = [Common.jsonify(event_user)
+                       for event_user in event_users]
 
         return Output(
             output_details=event_users,

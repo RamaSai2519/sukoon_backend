@@ -1,6 +1,51 @@
-from dataclasses import dataclass, field
-from typing import List, Optional
+from bson import ObjectId
+from typing import Optional
 from datetime import datetime
+from typing import List, Optional
+from dataclasses import dataclass, field
+
+
+@dataclass
+class Expert:
+    phoneNumber: str
+    _id: Optional[str] = None
+    otp: Optional[str] = None
+    name: Optional[str] = None
+    flow: Optional[int] = None
+    type: Optional[str] = None
+    video: Optional[str] = None
+    score: Optional[int] = None
+    score: Optional[int] = None
+    topics: Optional[str] = None
+    status: Optional[str] = None
+    active: Optional[bool] = None
+    profile: Optional[str] = None
+    isBusy: Optional[bool] = None
+    tonality: Optional[int] = None
+    fcmToken: Optional[str] = None
+    timeSpent: Optional[int] = None
+    languages: Optional[str] = None
+    timeSplit: Optional[int] = None
+    probability: Optional[int] = None
+    description: Optional[str] = None
+    total_score: Optional[int] = None
+    displayScore: Optional[str] = None
+    repeat_score: Optional[int] = None
+    isGamesPlay: Optional[bool] = None
+    calls_share: Optional[float] = None
+    userSentiment: Optional[int] = None
+    closingGreeting: Optional[int] = None
+    openingGreeting: Optional[int] = None
+    expiresOtp: Optional[datetime] = None
+    createdDate: Optional[datetime] = None
+    categories: Optional[List[str]] = None
+    profileCompleted: Optional[bool] = None
+
+
+@dataclass
+class GetExpertsInput:
+    phoneNumber: Optional[str] = None
+    schedule_status: Optional[str] = None
 
 
 @dataclass
@@ -108,8 +153,8 @@ class WhtasappMessageInput:
     phone_number: str
     parameters: dict
     template_name: str
-    user_id: Optional[str] = field(default_factory=lambda: "")
     request_meta: str = field(default_factory=lambda: "")
+    user_id: Optional[str] = field(default_factory=lambda: "")
 
 
 @dataclass
@@ -141,11 +186,11 @@ class UpdateFCMTokenInput:
 
 @dataclass
 class ScheduledJobInput:
+    action: str = field(default_factory=lambda: "")
+    status: str = field(default_factory=lambda: "")
     job_type: str = field(default_factory=lambda: "")
     job_time: str = field(default_factory=lambda: "")
-    status: str = field(default_factory=lambda: "")
     request_meta: str = field(default_factory=lambda: "")
-    action: str = field(default_factory=lambda: "")
     scheduled_job_id: str = field(default_factory=lambda: "")
 
 
@@ -216,11 +261,11 @@ class GetEventsInput:
 
 @dataclass
 class EventUserInput:
-    phone: str
+    source: str
+    phoneNumber: str
     name: Optional[str] = None
     city: Optional[str] = None
     email: Optional[str] = None
-    source: Optional[str] = None
     dob: Optional[datetime] = None
     eventName: Optional[str] = None
     advSeenOn: Optional[str] = None
@@ -231,6 +276,46 @@ class GetEventUsersInput:
     page: Optional[int] = None
     size: Optional[int] = None
     slug: Optional[str] = None
+
+
+@dataclass
+class User:
+    phoneNumber: str = None
+    expiresOtp: datetime = field(default_factory=datetime.now)
+    createdDate: datetime = field(default_factory=datetime.now)
+
+    otp: Optional[str] = None
+    name: Optional[str] = None
+    city: Optional[str] = None
+    email: Optional[str] = None
+    refCode: Optional[str] = None
+    active: Optional[bool] = None
+    isBusy: Optional[bool] = None
+    _id: Optional[ObjectId] = None
+    isBlocked: Optional[bool] = None
+    isPaidUser: Optional[bool] = None
+    wa_opt_out: Optional[bool] = None
+    numberOfGames: Optional[int] = None
+    numberOfCalls: Optional[int] = None
+    birthDate: Optional[datetime] = None
+    profileCompleted: Optional[bool] = None
+
+
+@dataclass
+class EventUser:
+    phoneNumber: str = None
+    createdAt: datetime = field(default_factory=datetime.now)
+    updatedAt: datetime = field(default_factory=datetime.now)
+
+    name: Optional[str] = None
+    city: Optional[str] = None
+    email: Optional[str] = None
+    source: Optional[str] = None
+    dob: Optional[datetime] = None
+    _id: Optional[ObjectId] = None
+    eventName: Optional[str] = None
+    advSeenOn: Optional[str] = None
+    userId: Optional[ObjectId] = None
 
 
 @dataclass

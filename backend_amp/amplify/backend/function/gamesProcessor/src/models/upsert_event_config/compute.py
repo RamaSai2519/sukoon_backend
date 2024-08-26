@@ -1,9 +1,9 @@
 import dataclasses
 from datetime import datetime
+from models.common import Common
 from models.constants import OutputStatus
 from db.events import get_events_collection
 from models.interfaces import EventInput as Input, Output
-from models.common import string_to_date, jsonify
 
 
 class Compute:
@@ -15,7 +15,8 @@ class Compute:
         date_fields = ["validUpto",
                        "registrationAllowedTill", "startEventDate"]
         for date_field in date_fields:
-            event_data[date_field] = string_to_date(event_data, date_field)
+            event_data[date_field] = Common.string_to_date(
+                event_data, date_field)
 
         if new_event:
             event_data["createdAt"] = datetime.now()
@@ -44,7 +45,7 @@ class Compute:
             message = "Successfully created event"
 
         return Output(
-            output_details=jsonify(event_data),
+            output_details=Common.jsonify(event_data),
             output_status=OutputStatus.SUCCESS,
             output_message=message
         )
