@@ -1,4 +1,5 @@
 from db.calls import get_calls_collection, get_schedules_collection
+from db.events import get_event_users_collection
 from db.experts import get_experts_collections
 from db.users import get_user_collection
 from datetime import datetime, date
@@ -55,14 +56,20 @@ class Common:
                 user_id=ObjectId(call["user"]))
             call["expert"] = self.get_expert_name(
                 ObjectId(call["expert"]))
+            call["conversationScore"] = call.pop("Conversation Score", 0)
             call = Common.jsonify(call)
         return calls
 
-    def get_calls_history(self, query: dict):
+    def get_calls_history(self, query: dict) -> list:
         calls = list(self.calls_collection.find(
             query).sort("initiatedTime", -1))
         calls = self.format_calls(calls)
         return calls
+
+    def get_events_history(self, query: dict) -> list:
+        events = list(get_event_users_collection().find(query))
+        events = [Common.jsonify(event) for event in events]
+        return events
 
     def get_schedules(self, query: dict) -> list:
         schedules = list(self.schedules_collection.find(query))
