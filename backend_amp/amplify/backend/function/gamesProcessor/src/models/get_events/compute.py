@@ -1,7 +1,7 @@
 from models.interfaces import GetEventsInput as Input, Output
 from db.events import get_events_collection
 from models.constants import OutputStatus
-from models.common import jsonify
+from models.common import Common
 from datetime import datetime
 
 
@@ -37,7 +37,7 @@ class Compute:
             query = {"slug": self.input.slug}
             event = dict(self.events_collection.find_one(
                 query, self.projection))
-            events = [jsonify(event)]
+            events = [Common.jsonify(event)]
         else:
             query = self.prepare_query()
             if self.input.isHomePage.lower() == "true":
@@ -45,7 +45,7 @@ class Compute:
             else:
                 events = list(self.events_collection.find(
                     query, self.projection).sort("validUpto", 1).skip(self.offset).limit(int(self.input.limit)))
-                events = [jsonify(event) for event in events]
+                events = [Common.jsonify(event) for event in events]
 
         return Output(
             output_details=events,
