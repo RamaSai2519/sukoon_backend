@@ -1,32 +1,99 @@
-from models.interfaces import GetUserInput as Input, Output
+from models.interfaces import GetUsersInput as Input, Output
 from models.constants import OutputStatus
-from db_queries.queries.user import fetch_user_by_mobile_number
+from db.users import get_user_collection
+from models.common import Common
+from bson import ObjectId
+from typing import Union
+import re
 
 
 class Compute:
-    def __init__(self,input: Input) -> None:
+    def __init__(self, input: Input) -> None:
         self.input = input
-    
-    def _check_if_user_exist_with_this_mobile_number(self) -> None:
-        
-        query_result = fetch_user_by_mobile_number(self.input.mobile_number)
-        if not query_result:
-            return False
-        
-        user_array = query_result.get("items")
+        self.common = Common()
+        self.users_collection = get_user_collection()
 
-        if not user_array:
-            return False
-        
-        return user_array[0]
-        
-    def compute(self):
+    def prep_projection(self, single_user: bool = False):
+        projection = {"__v": 0, "lastModifiedBy": 0, "userGameStats": 0}
+        if single_user:
+            return projection
+        projection["Customer Persona"] = 0
+        return projection
 
-        user = self._check_if_user_exist_with_this_mobile_number()
-        user_exist = True if user else False
+    def __format__(self, user: dict, single_user: bool = False) -> dict:
+        if single_user:
+            query = {"user": ObjectId(user["_id"])}
+            user["calls"] = self.common.get_calls_history(query)
+            query = {"userId": ObjectId(
+                user["_id"]), "phoneNumber": user["phoneNumber"]}
+            user["events"] = self.common.get_events_history(query)
+        user["customerPersona"] = self.parse_user_persona(
+            user.pop("Customer Persona", ""))
+        return Common.jsonify(user)
+
+    def parse_user_persona(self, text: str) -> dict:
+        result = {}
+        sections = re.split(r'\n\s*####\s*[a-z]', text, flags=re.IGNORECASE)
+
+        for section in sections:
+            heading_pattern = r'^(?:\d+\.\s*)?\*\*(.*?):\*\*\s*(.*?)(?:\n\s*\*\*Confidence Score:\s*[\d.]+)?$'
+            matches: list[str] = re.findall(
+                heading_pattern, section, re.MULTILINE)
+
+            for match in matches:
+                heading = match[0].strip().lower().replace(
+                    " ", "_").replace("/", "")
+                content = match[1].replace("-", "").replace("**", "").strip()
+                if heading and content:
+                    result[heading] = {"value": content}
+
+        return result
+
+    def populate_schedules(self, user: dict) -> dict:
+        query = {"user": ObjectId(user["_id"]),
+                 "status": self.input.schedule_status}
+        user[f"{self.input.schedule_status}_schedules"] = self.common.get_schedules(
+            query)
+        query = {"user": ObjectId(user["_id"])}
+        user["schedule_counts"] = self.common.get_schedules_counts(query)
+        return user
+
+    def get_user(self) -> Union[dict, None]:
+        query = {"phoneNumber": self.input.phoneNumber}
+        user = self.users_collection.find_one(
+            query, self.prep_projection(True))
+        if user:
+            user = self.__format__(user, True)
+            return user
+        return None
+
+    def get_all_users(self) -> list:
+        if self.input.size and self.input.page:
+            offset = int((int(self.input.page) - 1) * int(self.input.size))
+            users = list(self.users_collection.find(
+                {}, self.prep_projection()).skip(offset).limit(int(self.input.size)).sort("name", 1))
+        else:
+            users = list(self.users_collection.find(
+                {}, self.prep_projection()).sort("name", 1))
+        users = [self.__format__(user) for user in users]
+        return users
+
+    def compute(self) -> Output:
+        if self.input.phoneNumber is not None:
+            users = self.get_user()
+            if not users:
+                return Output(
+                    output_details={},
+                    output_status=OutputStatus.FAILURE,
+                    output_message="User not found"
+                )
+            if self.input.schedule_status is not None:
+                users = self.populate_schedules(users)
+        else:
+            users = self.get_all_users()
 
         return Output(
-            output_details={"user_exists": user_exist},
+            output_details=users,
             output_status=OutputStatus.SUCCESS,
-            output_message="Successfully fetched user"
+            output_message="Successfully fetched user(s)"
         )
