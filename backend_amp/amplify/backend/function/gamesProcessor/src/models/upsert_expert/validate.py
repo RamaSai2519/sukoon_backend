@@ -19,6 +19,15 @@ class Validator:
                 value = getattr(self.input, field)
                 if value is not None and not isinstance(value, bool):
                     return False, f"Field {field} must be a boolean"
+
+        int_fields = ["flow", "score", "tonality", "timeSpent", "timeSplit", "probability",
+                      "total_score", "repeat_score", "userSentiment", "closingGreeting", "openingGreeting"]
+        for field in int_fields:
+            if hasattr(self.input, field):
+                value = getattr(self.input, field)
+                if value is not None and not (isinstance(value, int) or isinstance(value, float)):
+                    return False, f"Field {field} must be an integer"
+
         return True, ""
 
     def validate_multiselect_fields(self):
@@ -42,4 +51,8 @@ class Validator:
     def validate_mandatory_fields(self):
         if not self.input.phoneNumber:
             return False, f"Phone Number is mandatory"
+
+        if len(self.input.phoneNumber) != 10:
+            return False, f"Phone Number must be 10 digits"
+
         return True, ""

@@ -69,21 +69,22 @@ class Compute:
 
     def get_expert(self) -> dict:
         query = {"phoneNumber": self.input.phoneNumber}
-        expert = dict(self.experts_collection.find_one(
-            query, self.prep_projection(True)))
+        expert = self.experts_collection.find_one(
+            query, self.prep_projection(True))
         if expert:
-            experts = self.__format__(expert, True)
+            experts = self.__format__(dict(expert), True)
             return experts
-        else:
-            return Output(
-                output_details={},
-                output_status=OutputStatus.FAILURE,
-                output_message="No expert found with the given phone number"
-            )
+        return None
 
     def compute(self) -> Output:
         if self.input.phoneNumber is not None:
             experts = self.get_expert()
+            if not experts:
+                return Output(
+                    output_details={},
+                    output_status=OutputStatus.FAILURE,
+                    output_message="Expert not found"
+                )
             if self.input.schedule_status is not None:
                 experts = self.populate_schedules(experts)
         else:
