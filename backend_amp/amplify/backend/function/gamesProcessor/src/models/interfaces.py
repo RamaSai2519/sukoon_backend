@@ -284,10 +284,8 @@ class GetEventUsersInput:
 @dataclass
 class User:
     phoneNumber: str = None
-    expiresOtp: datetime = field(default_factory=datetime.now)
     createdDate: datetime = field(default_factory=datetime.now)
 
-    otp: Optional[str] = None
     name: Optional[str] = None
     city: Optional[str] = None
     email: Optional[str] = None

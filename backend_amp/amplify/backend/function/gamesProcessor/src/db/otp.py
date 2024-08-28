@@ -1,7 +1,8 @@
 from db.base import Database
+from pymongo.collection import Collection
 
 
-def get_otp_collection():
+def get_otp_collection() -> Collection:
     client = Database().client
 
     db = client["test"]
