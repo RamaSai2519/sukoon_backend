@@ -12,6 +12,7 @@ api = Api(app)
 # Users Routes
 api.add_resource(UserService, '/actions/user')
 api.add_resource(ExpertService, '/actions/expert')
+api.add_resource(ApplicantService, '/actions/applicant')
 
 # Events Routes
 api.add_resource(ListEventsService, '/actions/list_events')

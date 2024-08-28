@@ -16,3 +16,10 @@ def get_event_users_collection() -> Collection:
     db = client["test"]
     eventusers_collection = db["events"]
     return eventusers_collection
+
+def get_become_saarthis_collection() -> Collection:
+    client = Database().client
+
+    db = client["test"]
+    become_saarthis_collection = db["becomesaarthis"]
+    return become_saarthis_collection
