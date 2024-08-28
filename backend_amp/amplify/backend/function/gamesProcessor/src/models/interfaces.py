@@ -323,14 +323,14 @@ class EventUser:
 
 @dataclass
 class ApplicantInput:
-    name: str
-    email: str
-    gender: str
-    formType: str
     phoneNumber: str
-    dateOfBirth: str
+    name: str = field(default_factory=lambda: '')
+    email: str = field(default_factory=lambda: '')
     skills: str = field(default_factory=lambda: '')
+    gender: str = field(default_factory=lambda: '')
+    formType: str = field(default_factory=lambda: '')
     languages: list = field(default_factory=lambda: [])
+    dateOfBirth: str = field(default_factory=lambda: '')
     workingHours: list = field(default_factory=lambda: [])
     createdDate: datetime = field(default_factory=datetime.now)
 
