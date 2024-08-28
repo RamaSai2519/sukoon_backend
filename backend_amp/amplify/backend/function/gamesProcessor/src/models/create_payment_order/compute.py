@@ -2,6 +2,7 @@ from models.interfaces import CreatePaymentOrderInput as Input, Output
 from models.constants import OutputStatus
 from bson import ObjectId
 import uuid
+from datetime import datetime
 from http import HTTPStatus
 from models.cashfree_helpers.cashfree_function import get_cashfree_payment_session_id
 from db.users import get_user_collection, get_user_payment_collection
@@ -38,9 +39,11 @@ class Compute:
 
         order_details_dict = {
             "user_id": self.input.user_id,
+            "event_id": self.input.event_id,
+            "created_at": datetime.now(),
             "order_id": order_details_dict.get("order_id"),
             "payment_status": "INCOMPLETED",
-            "order_amount": self.input.order_amount,
+            "order_amount": self.input.order_amount
         }
         user_payment_collection.insert_one(order_details_dict)
 
@@ -65,8 +68,8 @@ class Compute:
                 output_message="Not able to create payment session id"
         )
         
-        response_json = api_response.data
-        payment_session_id = response_json.payment_session_id
+        response_json = api_response.json()
+        payment_session_id = response_json.get("payment_session_id")
         self.create_payment_object_in_db(order_details_dict)
 
         return Output(

@@ -1,14 +1,15 @@
 import traceback
-from models.interfaces import CreateScheduledJobInput as Input, Output
+from models.interfaces import ScheduledJobInput as Input, Output
 from models.constants import OutputStatus
 from models.create_scheduled_job.compute import Compute
 from models.create_scheduled_job.validate import Validator
+
 
 class CreateScheduledJob:
     def __init__(self, input: Input) -> None:
         self.input = input
 
-    def process(self):
+    def process(self) -> Output:
         input = self.input
         valid_input, error_message = self._validate(input)
 
@@ -30,7 +31,7 @@ class CreateScheduledJob:
             )
 
         return output
-    
+
     def _validate(self, input: Input):
         validation_obj = Validator(input)
         validation_result, error_message = validation_obj.validate_input()

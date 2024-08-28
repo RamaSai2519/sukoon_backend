@@ -1,0 +1,208 @@
+{
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-backendamp-dev-caa78-authRole",
+      "UnauthRoleArn": "arn:aws:iam::533267308676:role/amplify-backendamp-dev-caa78-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::533267308676:role/amplify-backendamp-dev-caa78-authRole",
+      "Region": "ap-south-1",
+      "DeploymentBucketName": "amplify-backendamp-dev-caa78-deployment",
+      "UnauthRoleName": "amplify-backendamp-dev-caa78-unauthRole",
+      "StackName": "amplify-backendamp-dev-caa78",
+      "StackId": "arn:aws:cloudformation:ap-south-1:533267308676:stack/amplify-backendamp-dev-caa78/f724cdc0-37b4-11ef-8260-02c0f83c72ff",
+      "AmplifyAppId": "d227q70xwaiboi"
+    }
+  },
+  "api": {
+    "backendamp": {
+      "dependsOn": [],
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [],
+          "defaultAuthentication": {
+            "authenticationType": "API_KEY",
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 365,
+              "apiKeyExpirationDate": "2025-07-15T12:46:57.951Z",
+              "description": ""
+            }
+          }
+        },
+        "GraphQLAPIIdOutput": "ju26pqpij5dfhgjxg3p25jngte",
+        "GraphQLAPIEndpointOutput": "https://gxuleyn72fhzbjnvylyr73f7gu.appsync-api.ap-south-1.amazonaws.com/graphql",
+        "GraphQLAPIKeyOutput": "da2-vkps47zevzerdkqvgklaxjryua"
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync",
+      "lastPushTimeStamp": "2024-07-15T13:22:06.233Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-backendamp-dev-caa78-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+        "logicalId": "apibackendamp"
+      },
+      "lastPushDirHash": "QLSXVmgT6jcyTqd/hVLlS4h3fN0="
+    },
+    "sukoonAPI": {
+      "dependsOn": [
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "gamesProcessor"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "API Gateway",
+      "output": {
+        "ApiName": "sukoonAPI",
+        "RootUrl": "https://ij8f1oonya.execute-api.ap-south-1.amazonaws.com/dev",
+        "ApiId": "ij8f1oonya"
+      },
+      "lastPushTimeStamp": "2024-07-15T13:15:34.984Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-backendamp-dev-caa78-deployment/amplify-cfn-templates/api/sukoonAPI-cloudformation-template.json",
+        "logicalId": "apisukoonAPI"
+      }
+    }
+  },
+  "function": {
+    "gamesProcessor": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "output": {
+        "LambdaExecutionRoleArn": "arn:aws:iam::533267308676:role/backendampLambdaRoledcea3a31-dev",
+        "Region": "ap-south-1",
+        "Arn": "arn:aws:lambda:ap-south-1:533267308676:function:gamesProcessor-dev",
+        "Name": "gamesProcessor-dev",
+        "LambdaExecutionRole": "backendampLambdaRoledcea3a31-dev"
+      },
+      "lastPushTimeStamp": "2024-08-16T05:49:55.365Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-backendamp-dev-caa78-deployment/amplify-cfn-templates/function/gamesProcessor-cloudformation-template.json",
+        "logicalId": "functiongamesProcessor"
+      },
+      "lastBuildTimeStamp": "2024-07-15T13:15:43.237Z",
+      "lastBuildType": "PROD",
+      "lastPackageTimeStamp": "2024-07-15T13:15:47.481Z",
+      "distZipFilename": "gamesProcessor-30684e36753275763878-build.zip",
+      "s3Bucket": {
+        "deploymentBucketName": "amplify-backendamp-dev-caa78-deployment",
+        "s3Key": "amplify-builds/gamesProcessor-30684e36753275763878-build.zip"
+      },
+      "lastPushDirHash": "0hN6u2uv8xJwdl0xSGYH4IUXTV4=",
+      "dependsOn": [
+        {
+          "category": "api",
+          "resourceName": "backendamp",
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ]
+        }
+      ]
+    },
+    "notificationProcessor": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "output": {
+        "LambdaExecutionRoleArn": "arn:aws:iam::533267308676:role/backendampLambdaRole84bff967-dev",
+        "DynamoDBTableName": "UserNotification-dev",
+        "Region": "ap-south-1",
+        "Arn": "arn:aws:lambda:ap-south-1:533267308676:function:notificationProcessor-dev",
+        "Name": "notificationProcessor-dev",
+        "LambdaExecutionRole": "backendampLambdaRole84bff967-dev"
+      },
+      "lastPushTimeStamp": "2024-07-16T12:09:49.664Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-backendamp-dev-caa78-deployment/amplify-cfn-templates/function/notificationProcessor-cloudformation-template.json",
+        "logicalId": "functionnotificationProcessor"
+      },
+      "s3Bucket": {
+        "deploymentBucketName": "amplify-backendamp-dev-caa78-deployment",
+        "s3Key": "amplify-builds/notificationProcessor-63567848597457345a6d-build.zip"
+      },
+      "lastBuildTimeStamp": "2024-07-15T12:48:09.418Z",
+      "lastBuildType": "DEV",
+      "lastPackageTimeStamp": "2024-07-15T12:48:10.583Z",
+      "distZipFilename": "notificationProcessor-63567848597457345a6d-build.zip",
+      "lastPushDirHash": "cVxHYtW4ZmhajkV03dyqablBdBM=",
+      "dependsOn": [
+        {
+          "category": "api",
+          "resourceName": "backendamp",
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ]
+        },
+        {
+          "category": "storage",
+          "resourceName": "UserNotificationju26pqpij5dfhgjxg3p25jngtedev",
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ]
+        }
+      ],
+      "lastDevBuildTimeStamp": "2024-07-17T11:38:40.143Z"
+    },
+    "scheduler": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "api",
+          "resourceName": "backendamp",
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ]
+        }
+      ],
+      "lastDevBuildTimeStamp": "2024-07-19T10:02:23.712Z",
+      "lastBuildType": "DEV"
+    },
+    "pdfGenerator": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "storage": {
+    "UserNotificationju26pqpij5dfhgjxg3p25jngtedev": {
+      "service": "DynamoDB",
+      "serviceType": "imported",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "output": {
+        "Name": "UserNotification-ju26pqpij5dfhgjxg3p25jngte-dev",
+        "Region": "ap-south-1",
+        "Arn": "arn:aws:dynamodb:ap-south-1:533267308676:table/UserNotification-ju26pqpij5dfhgjxg3p25jngte-dev",
+        "StreamArn": "arn:aws:dynamodb:ap-south-1:533267308676:table/UserNotification-ju26pqpij5dfhgjxg3p25jngte-dev/stream/2024-07-03T10:17:21.979",
+        "PartitionKeyName": "id",
+        "PartitionKeyType": "S"
+      }
+    },
+    "UserNotificationllgowbhayjdbhhowtgmd3wd6kemain": {
+      "service": "DynamoDB",
+      "serviceType": "imported",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "output": {
+        "Name": "UserNotification-llgowbhayjdbhhowtgmd3wd6ke-main",
+        "Region": "ap-south-1",
+        "Arn": "arn:aws:dynamodb:ap-south-1:533267308676:table/UserNotification-llgowbhayjdbhhowtgmd3wd6ke-main",
+        "StreamArn": "arn:aws:dynamodb:ap-south-1:533267308676:table/UserNotification-llgowbhayjdbhhowtgmd3wd6ke-main/stream/2024-07-03T10:50:48.205",
+        "PartitionKeyName": "id",
+        "PartitionKeyType": "S"
+      }
+    }
+  }
+}
