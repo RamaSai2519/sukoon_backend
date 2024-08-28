@@ -1,9 +1,10 @@
-from db.calls import get_calls_collection, get_schedules_collection
 from models.interfaces import GetUsersInput as Input, Output
 from models.constants import OutputStatus
 from db.users import get_user_collection
 from models.common import Common
 from bson import ObjectId
+from typing import Union
+import re
 
 
 class Compute:
@@ -11,8 +12,6 @@ class Compute:
         self.input = input
         self.common = Common()
         self.users_collection = get_user_collection()
-        self.calls_collection = get_calls_collection()
-        self.schedules_collection = get_schedules_collection()
 
     def prep_projection(self, single_user: bool = False):
         projection = {"__v": 0, "lastModifiedBy": 0, "userGameStats": 0}
@@ -25,7 +24,30 @@ class Compute:
         if single_user:
             query = {"user": ObjectId(user["_id"])}
             user["calls"] = self.common.get_calls_history(query)
+            query = {"userId": ObjectId(
+                user["_id"]), "phoneNumber": user["phoneNumber"]}
+            user["events"] = self.common.get_events_history(query)
+        user["customerPersona"] = self.parse_user_persona(
+            user.pop("Customer Persona", ""))
         return Common.jsonify(user)
+
+    def parse_user_persona(self, text: str) -> dict:
+        result = {}
+        sections = re.split(r'\n\s*####\s*[a-z]', text, flags=re.IGNORECASE)
+
+        for section in sections:
+            heading_pattern = r'^(?:\d+\.\s*)?\*\*(.*?):\*\*\s*(.*?)(?:\n\s*\*\*Confidence Score:\s*[\d.]+)?$'
+            matches: list[str] = re.findall(
+                heading_pattern, section, re.MULTILINE)
+
+            for match in matches:
+                heading = match[0].strip().lower().replace(
+                    " ", "_").replace("/", "")
+                content = match[1].replace("-", "").replace("**", "").strip()
+                if heading and content:
+                    result[heading] = {"value": content}
+
+        return result
 
     def populate_schedules(self, user: dict) -> dict:
         query = {"user": ObjectId(user["_id"]),
@@ -36,7 +58,7 @@ class Compute:
         user["schedule_counts"] = self.common.get_schedules_counts(query)
         return user
 
-    def get_user(self):
+    def get_user(self) -> Union[dict, None]:
         query = {"phoneNumber": self.input.phoneNumber}
         user = self.users_collection.find_one(
             query, self.prep_projection(True))

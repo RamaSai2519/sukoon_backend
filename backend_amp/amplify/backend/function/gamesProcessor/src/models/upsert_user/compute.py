@@ -13,17 +13,22 @@ class Compute:
         self.input = input
         self.users_collection = get_user_collection()
 
-    def prep_data(self, user_data: dict, new_user=True) -> dict:
+    def prep_data(self, user_data: dict, new_user=True, prev_user: dict = None) -> dict:
+        fields = ["birthDate", "city", "name"]
+        data = {}
+        for field in fields:
+            data[field] = user_data.get(field) or prev_user.get(
+                field) if prev_user else None
         if new_user:
             user_data["active"] = True
             user_data["isBusy"] = False
             user_data["isBlocked"] = False
             user_data["isPaidUser"] = False
             user_data["wa_opt_out"] = False
-            user_data["profileCompleted"] = bool(
-                self.input.name and self.input.city and self.input.birthDate)
             user_data["numberOfGames"] = 0
             user_data["numberOfCalls"] = 3
+        user_data["profileCompleted"] = bool(
+            data.get("name") and data.get("city") and data.get("birthDate"))
         user_data.pop("_id", None)
         user_data.pop("createdDate", None)
         user_data = {k: v for k, v in user_data.items() if v is not None}
@@ -36,9 +41,10 @@ class Compute:
     def compute(self) -> Output:
         user = self.input
         user_data = dataclasses.asdict(user)
+        prev_user = self.validate_phoneNumber(user_data["phoneNumber"])
 
-        if self.validate_phoneNumber(user_data["phoneNumber"]):
-            user_data = self.prep_data(user_data, new_user=False)
+        if prev_user:
+            user_data = self.prep_data(user_data, False, prev_user)
             self.users_collection.update_one(
                 {"phoneNumber": user_data["phoneNumber"]},
                 {"$set": user_data}
