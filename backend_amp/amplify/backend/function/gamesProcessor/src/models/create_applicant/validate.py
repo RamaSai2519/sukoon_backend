@@ -23,6 +23,6 @@ class Validator():
 
     def validate_required_fields(self):
         for attr, value in self.input.__dict__.items():
-            if value == '' or []:
+            if value == '' or value == []:
                 return False, f"{attr} is required"
         return True, ""
