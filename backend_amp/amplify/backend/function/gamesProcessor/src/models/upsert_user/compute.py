@@ -17,8 +17,8 @@ class Compute:
         fields = ["birthDate", "city", "name"]
         data = {}
         for field in fields:
-            data[field] = user_data.get(field) or prev_user.get(
-                field) if prev_user else None
+            data[field] = user_data.get(field) or (
+                prev_user and prev_user.get(field)) or None
         if new_user:
             user_data["active"] = True
             user_data["isBusy"] = False
@@ -27,10 +27,14 @@ class Compute:
             user_data["wa_opt_out"] = False
             user_data["numberOfGames"] = 0
             user_data["numberOfCalls"] = 3
+
+        if not new_user:
+            user_data.pop("createdDate", None)
+
+        user_data.pop("_id", None)
         user_data["profileCompleted"] = bool(
             data.get("name") and data.get("city") and data.get("birthDate"))
-        user_data.pop("_id", None)
-        user_data.pop("createdDate", None)
+
         user_data = {k: v for k, v in user_data.items() if v is not None}
         return user_data
 
