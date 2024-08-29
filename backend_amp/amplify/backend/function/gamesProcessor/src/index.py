@@ -24,6 +24,7 @@ api.add_resource(ApplicantService, '/actions/applicant')
 
 # Admin Routes
 api.add_resource(AdminAuthService, '/actions/admin_auth')
+api.add_resource(DashboardStatsService, '/actions/dashboard_stats')
 
 # Events Routes
 api.add_resource(ListEventsService, '/actions/list_events')

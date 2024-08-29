@@ -23,7 +23,7 @@ class Compute:
     def __format__(self, user: dict, single_user: bool = False) -> dict:
         if single_user:
             query = {"user": ObjectId(user["_id"])}
-            user["calls"] = self.common.get_calls_history(query)
+            user["calls"] = self.common.get_calls(query)
             query = {"userId": ObjectId(
                 user["_id"]), "phoneNumber": user["phoneNumber"]}
             user["events"] = self.common.get_events_history(query)

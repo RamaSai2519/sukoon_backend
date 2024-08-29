@@ -1,4 +1,5 @@
 from db.calls import get_calls_collection, get_schedules_collection
+from models.constants import calls_exclusion_projection
 from db.events import get_event_users_collection
 from db.experts import get_experts_collections
 from db.users import get_user_collection
@@ -30,6 +31,30 @@ class Common:
             doc[field] = datetime.strptime(doc[field], "%Y-%m-%dT%H:%M:%S.%fZ")
         return doc[field]
 
+    @staticmethod
+    def duration_str_to_seconds(duration: str) -> int:
+        duration = duration.split(":")
+        hours, minutes, seconds = map(int, duration)
+        return hours * 3600 + minutes * 60 + seconds
+
+    @staticmethod
+    def seconds_to_duration_str(seconds: int) -> str:
+        hours = seconds // 3600
+        minutes = (seconds % 3600) // 60
+        seconds = seconds % 60
+
+        formatted_duration = []
+        if hours > 0:
+            formatted_duration.append(f"{int(hours)}h")
+
+        if minutes > 0:
+            formatted_duration.append(f"{int(minutes)}m")
+
+        if seconds > 0:
+            formatted_duration.append(f"{int(seconds)}s")
+
+        return " ".join(formatted_duration) if formatted_duration else "0s"
+
     def get_user_name(self, user_id: ObjectId) -> str:
         users_cache = self.users_cache
         if user_id not in users_cache:
@@ -52,18 +77,16 @@ class Common:
 
     def format_calls(self, calls: list) -> list:
         for call in calls:
-            call["user"] = self.get_user_name(
-                user_id=ObjectId(call["user"]))
+            call["user"] = self.get_user_name(user_id=ObjectId(
+                call["user"])) if "user" in call else "Unknown"
             call["expert"] = self.get_expert_name(
-                ObjectId(call["expert"]))
+                ObjectId(call["expert"])) if "expert" in call else "Unknown"
             call["conversationScore"] = call.pop("Conversation Score", 0)
             call = Common.jsonify(call)
-        return calls
-
-    def get_calls_history(self, query: dict) -> list:
-        calls = list(self.calls_collection.find(
-            query).sort("initiatedTime", -1))
-        calls = self.format_calls(calls)
+            if "failedReason" in call and call["failedReason"] == "call missed":
+                call["status"] = "missed"
+            if "status" in call and call["status"] == "successfull":
+                call["status"] = "successful"
         return calls
 
     def get_events_history(self, query: dict) -> list:
@@ -83,3 +106,15 @@ class Common:
             query["status"] = status
             counts[status] = self.schedules_collection.count_documents(query)
         return counts
+
+    def get_calls(self, query: dict = {}, projection: dict = {}, exclude: bool = True, format: bool = True) -> list:
+        if exclude:
+            projection = {**projection, **calls_exclusion_projection}
+
+        calls = list(self.calls_collection.find(
+            query, projection).sort("initiatedTime", -1))
+
+        if format:
+            calls = self.format_calls(calls)
+
+        return calls
