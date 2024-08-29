@@ -296,6 +296,7 @@ class User:
     isBlocked: Optional[bool] = None
     isPaidUser: Optional[bool] = None
     wa_opt_out: Optional[bool] = None
+    referral_code: Optional[str] = None
     numberOfGames: Optional[int] = None
     numberOfCalls: Optional[int] = None
     birthDate: Optional[datetime] = None
