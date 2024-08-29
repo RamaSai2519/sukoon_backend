@@ -81,6 +81,24 @@ class UserReferralInput:
 
 
 @dataclass
+class AdminAuthInput:
+    action: str
+    name: Optional[str] = None
+    password: Optional[str] = None
+    phoneNumber: Optional[str] = None
+
+
+@dataclass
+class Admin:
+    password: str
+    phoneNumber: str
+    createdDate: datetime = field(default_factory=datetime.now)
+
+    _id: Optional[str] = None
+    name: Optional[str] = None
+
+
+@dataclass
 class SendOTPInput:
     phone_number: str
 

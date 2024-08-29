@@ -6,8 +6,8 @@ from services.src.coupon_reward import CouponRewardService
 from services.src.payment import CreatePaymentOrderService
 from services.src.expert import ExpertService, ApplicantService
 from services.src.user import CreateEventUserService, UserService
-from services.src.authenticate import SendOTPService, ValidateOTPService
 from services.src.push_notification import PushNotificationService, FCMTokenService
+from services.src.authenticate import SendOTPService, ValidateOTPService, AdminAuthService
 from services.src.scheduled_jobs import CreateScheduledJobsService, UpdateScheduledJobsService
 from services.src.whatsapp import WhatsappMessageService, WhatsappWebhookService, WhatsappWebhookEvent
 from services.src.events import UpsertEventsService, UpdateEventService, ListEventsService, ListEventUsersService
