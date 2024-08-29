@@ -66,6 +66,14 @@ class Compute:
         user = self.users_collection.find_one({"phoneNumber": phoneNumber})
         return user if user else False
 
+    def insert_referral(self, referred_user_id: str, user_id: str) -> None:
+        referral = {
+            "userId": user_id,
+            "referredUserId": referred_user_id,
+            "createdAt": datetime.now()
+        }
+        self.referrals_collection.insert_one(referral)
+
     def compute(self) -> Output:
         user = self.input
         user_data = dataclasses.asdict(user)
@@ -84,14 +92,7 @@ class Compute:
                 referrer = self.validate_referral_code(
                     user_data["referralCode"])
                 if referrer:
-                    user_data["referredBy"] = referrer["referralCode"]
-                    self.referrals_collection.insert_one(
-                        {
-                            "userId": referrer["_id"],
-                            "referredUserId": user_data["_id"],
-                            "createdAt": datetime.now(),
-                        }
-                    )
+                    self.insert_referral(user_data["_id"], referrer["_id"])
             user_data["_id"] = self.users_collection.insert_one(user_data)
 
             message = "Successfully created user"
