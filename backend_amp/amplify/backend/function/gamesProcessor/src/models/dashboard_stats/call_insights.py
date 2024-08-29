@@ -144,7 +144,7 @@ class CallInsights:
 
         return average_durations
 
-    def get_insights(self):
+    def get_insights(self) -> dict:
         with ThreadPoolExecutor() as executor:
             futures = {
                 executor.submit(self._classify_durations): 'durations',
