@@ -33,15 +33,15 @@ class Compute:
                 prev_user and prev_user.get(field)) or None
 
         user_data.pop("_id", None)
-        user_data.pop("referral_code", None)
+        user_data.pop("refCode", None)
         user_data["profileCompleted"] = bool(
             data.get("name") and data.get("city") and data.get("birthDate"))
 
         if new_user:
             user_data = self.defaults(user_data)
-            if user_data.get("profileCompleted") == True:
-                user_data["referralCode"] = self.generate_referral_code(
-                    data["name"], user_data["phoneNumber"])
+        if user_data.get("profileCompleted") == True and prev_user.get("refCode", None) is None:
+            user_data["refCode"] = self.generate_referral_code(
+                data["name"], user_data["phoneNumber"])
         else:
             user_data.pop("createdDate", None)
 
@@ -59,7 +59,7 @@ class Compute:
         return code if not valid_code else self.generate_referral_code(name, phone_number)
 
     def validate_referral_code(self, referral_code: str) -> Union[bool, dict]:
-        user = self.users_collection.find_one({"referralCode": referral_code})
+        user = self.users_collection.find_one({"refCode": referral_code})
         return user if user else False
 
     def validate_phoneNumber(self, phoneNumber: str) -> Union[bool, dict]:
