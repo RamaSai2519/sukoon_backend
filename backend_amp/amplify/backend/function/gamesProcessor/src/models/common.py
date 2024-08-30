@@ -1,5 +1,6 @@
 from db.calls import get_calls_collection, get_schedules_collection
 from models.constants import calls_exclusion_projection
+from db.referral import get_user_referral_collection
 from db.events import get_event_users_collection
 from db.experts import get_experts_collections
 from db.users import get_user_collection
@@ -9,6 +10,7 @@ from bson import ObjectId
 
 class Common:
     def __init__(self):
+        self.referrals_collection = get_user_referral_collection()
         self.schedules_collection = get_schedules_collection()
         self.experts_collection = get_experts_collections()
         self.calls_collection = get_calls_collection()
@@ -93,6 +95,11 @@ class Common:
         events = list(get_event_users_collection().find(query))
         events = [Common.jsonify(event) for event in events]
         return events
+
+    def get_referrals(self, query: dict) -> list:
+        referrals = list(self.referrals_collection.find(query))
+        referrals = [Common.jsonify(referral) for referral in referrals]
+        return referrals
 
     def get_schedules(self, query: dict) -> list:
         schedules = list(self.schedules_collection.find(query))

@@ -19,11 +19,17 @@ class UsersHelper:
 
     def __format__(self, user: dict, single_user: bool = False) -> dict:
         if single_user:
+            # Get calls, events and referrals
             query = {"user": ObjectId(user["_id"])}
             user["calls"] = self.common.get_calls(query)
+
             query = {"userId": ObjectId(
                 user["_id"]), "phoneNumber": user["phoneNumber"]}
             user["events"] = self.common.get_events_history(query)
+
+            query = {"userId": user["_id"]}
+            user["referrals"] = self.common.get_referrals(query)
+
         user["customerPersona"] = self.parse_user_persona(
             user.pop("Customer Persona", ""))
         return Common.jsonify(user)
