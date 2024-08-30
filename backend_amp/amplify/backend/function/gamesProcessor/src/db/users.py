@@ -8,6 +8,13 @@ def get_user_collection() -> Collection:
     users_collection = db["users"]
     return users_collection
 
+def get_admins_collection() -> Collection:
+    client = Database().client
+
+    db = client["test"]
+    admins_collection = db["admins"]
+    return admins_collection
+
 
 def get_user_stats_collection():
     client = Database().client
