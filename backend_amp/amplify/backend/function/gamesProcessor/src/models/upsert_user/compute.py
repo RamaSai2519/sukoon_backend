@@ -38,14 +38,14 @@ class Compute:
             user_data.pop("createdDate", None)
         else:
             user_data = self.defaults(user_data)
-            user_data.pop("refCode", None)
+        user_data.pop("refCode", None)
 
         # Check if profile is completed
         user_data["profileCompleted"] = bool(
             user_data.get("name") and user_data.get("city") and user_data.get("birthDate"))
 
         # Generate referral code if profile is completed and refCode is not present
-        if user_data.get("profileCompleted") == True and user_data.get("refCode", None) is None:
+        if user_data.get("profileCompleted") == True and prev_user.get("refCode", None) is None:
             user_data["refCode"] = self.generate_referral_code(
                 user_data["name"], user_data["phoneNumber"])
 
@@ -100,7 +100,6 @@ class Compute:
                 user_data).inserted_id
             message = "Successfully created user"
 
-        print(user_data)
         if self.input.refCode:
             referrer = self.validate_referral_code(self.input.refCode)
             if referrer:
