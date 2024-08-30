@@ -88,6 +88,7 @@ class SendOTPInput:
 @dataclass
 class ValidateOTPInput:
     otp: str
+    user_type: str
     phone_number: str
 
 

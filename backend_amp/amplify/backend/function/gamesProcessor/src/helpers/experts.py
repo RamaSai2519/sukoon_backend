@@ -3,7 +3,7 @@ from models.common import Common
 from bson import ObjectId
 
 
-class ExpertsHelper():
+class ExpertsHelper:
     def __init__(self) -> None:
         self.common = Common()
         self.experts_collection = get_experts_collections()

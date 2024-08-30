@@ -1,53 +1,15 @@
 from models.interfaces import GetUsersInput as Input, Output
 from models.constants import OutputStatus
-from db.users import get_user_collection
+from helpers.users import UsersHelper
 from models.common import Common
 from bson import ObjectId
-from typing import Union
-import re
 
 
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
         self.common = Common()
-        self.users_collection = get_user_collection()
-
-    def prep_projection(self, single_user: bool = False):
-        projection = {"__v": 0, "lastModifiedBy": 0, "userGameStats": 0}
-        if single_user:
-            return projection
-        projection["Customer Persona"] = 0
-        return projection
-
-    def __format__(self, user: dict, single_user: bool = False) -> dict:
-        if single_user:
-            query = {"user": ObjectId(user["_id"])}
-            user["calls"] = self.common.get_calls(query)
-            query = {"userId": ObjectId(
-                user["_id"]), "phoneNumber": user["phoneNumber"]}
-            user["events"] = self.common.get_events_history(query)
-        user["customerPersona"] = self.parse_user_persona(
-            user.pop("Customer Persona", ""))
-        return Common.jsonify(user)
-
-    def parse_user_persona(self, text: str) -> dict:
-        result = {}
-        sections = re.split(r'\n\s*####\s*[a-z]', text, flags=re.IGNORECASE)
-
-        for section in sections:
-            heading_pattern = r'^(?:\d+\.\s*)?\*\*(.*?):\*\*\s*(.*?)(?:\n\s*\*\*Confidence Score:\s*[\d.]+)?$'
-            matches: list[str] = re.findall(
-                heading_pattern, section, re.MULTILINE)
-
-            for match in matches:
-                heading = match[0].strip().lower().replace(
-                    " ", "_").replace("/", "")
-                content = match[1].replace("-", "").replace("**", "").strip()
-                if heading and content:
-                    result[heading] = {"value": content}
-
-        return result
+        self.helper = UsersHelper()
 
     def populate_schedules(self, user: dict) -> dict:
         query = {"user": ObjectId(user["_id"]),
@@ -58,29 +20,9 @@ class Compute:
         user["schedule_counts"] = self.common.get_schedules_counts(query)
         return user
 
-    def get_user(self) -> Union[dict, None]:
-        query = {"phoneNumber": self.input.phoneNumber}
-        user = self.users_collection.find_one(
-            query, self.prep_projection(True))
-        if user:
-            user = self.__format__(user, True)
-            return user
-        return None
-
-    def get_all_users(self) -> list:
-        if self.input.size and self.input.page:
-            offset = int((int(self.input.page) - 1) * int(self.input.size))
-            users = list(self.users_collection.find(
-                {}, self.prep_projection()).skip(offset).limit(int(self.input.size)).sort("name", 1))
-        else:
-            users = list(self.users_collection.find(
-                {}, self.prep_projection()).sort("name", 1))
-        users = [self.__format__(user) for user in users]
-        return users
-
     def compute(self) -> Output:
         if self.input.phoneNumber is not None:
-            users = self.get_user()
+            users = self.helper.get_user(self.input.phoneNumber)
             if not users:
                 return Output(
                     output_details={},
@@ -90,7 +32,8 @@ class Compute:
             if self.input.schedule_status is not None:
                 users = self.populate_schedules(users)
         else:
-            users = self.get_all_users()
+            users = self.helper.get_users(
+                int(self.input.size), int(self.input.page))
 
         return Output(
             output_details=users,
