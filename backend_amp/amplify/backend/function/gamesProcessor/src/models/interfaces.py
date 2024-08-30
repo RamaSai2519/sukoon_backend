@@ -79,6 +79,9 @@ class UserReferralInput:
     referral_code: str
     phone_number: str
 
+@dataclass
+class SaveFCMTokenInput:
+    token: str
 
 @dataclass
 class SendOTPInput:
