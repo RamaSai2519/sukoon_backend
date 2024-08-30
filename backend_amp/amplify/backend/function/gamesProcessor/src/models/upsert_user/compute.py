@@ -27,7 +27,7 @@ class Compute:
 
     def merge_old_data(self, user_data: dict, prev_user: dict) -> dict:
         for key, value in prev_user.items():
-            if key not in user_data:
+            if key not in user_data or user_data[key] is None or key not in ["refCode", "phoneNumber"]:
                 user_data[key] = value
         return user_data
 
@@ -38,6 +38,7 @@ class Compute:
             user_data.pop("createdDate", None)
         else:
             user_data = self.defaults(user_data)
+            user_data.pop("refCode", None)
 
         # Check if profile is completed
         user_data["profileCompleted"] = bool(
@@ -88,7 +89,6 @@ class Compute:
 
         if prev_user:
             user_data = self.prep_data(user_data, prev_user)
-            print(user_data)
             self.users_collection.update_one(
                 {"phoneNumber": user_data["phoneNumber"]},
                 {"$set": user_data}
@@ -100,6 +100,7 @@ class Compute:
                 user_data).inserted_id
             message = "Successfully created user"
 
+        print(user_data)
         if self.input.refCode:
             referrer = self.validate_referral_code(self.input.refCode)
             if referrer:
