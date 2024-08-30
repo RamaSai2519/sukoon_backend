@@ -7,11 +7,9 @@ class Validator():
         self.input = input
 
     def validate_input(self):
-        phone_number = self.input.phone_number
-
-        if len(phone_number) != 10:
+        if len(self.input.phone_number) != 10:
             return False, "INVALID PHONE NUMBER"
-        return True, ""
-    
 
-    
+        if self.input.user_type not in ["user", "expert"]:
+            return False, "INVALID USER TYPE"
+        return True, ""
