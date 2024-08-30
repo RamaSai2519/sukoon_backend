@@ -25,29 +25,35 @@ class Compute:
         user_data["numberOfCalls"] = 3
         return user_data
 
-    def prep_data(self, user_data: dict, new_user=True, prev_user: dict = None) -> dict:
-        fields = ["birthDate", "city", "name"]
-        data = {}
-        for field in fields:
-            data[field] = user_data.get(field) or (
-                prev_user and prev_user.get(field)) or None
+    def merge_old_data(self, user_data: dict, prev_user: dict) -> dict:
+        for key, value in prev_user.items():
+            if key not in user_data:
+                user_data[key] = value
+        return user_data
 
-        user_data.pop("_id", None)
-        user_data.pop("refCode", None)
-        user_data["profileCompleted"] = bool(
-            data.get("name") and data.get("city") and data.get("birthDate"))
-
-        if new_user:
-            user_data = self.defaults(user_data)
-        if user_data.get("profileCompleted") == True and prev_user.get("refCode", None) is None:
-            user_data["refCode"] = self.generate_referral_code(
-                data["name"], user_data["phoneNumber"])
-        else:
+    def prep_data(self, user_data: dict, prev_user: dict = None) -> dict:
+        # Merge old data if user already exists or set defaults
+        if prev_user:
+            user_data = self.merge_old_data(user_data, prev_user)
             user_data.pop("createdDate", None)
+        else:
+            user_data = self.defaults(user_data)
 
-        if isinstance(data["birthDate"], str):
-            user_data["birthDate"] = Common.string_to_date(data, "birthDate")
+        # Check if profile is completed
+        user_data["profileCompleted"] = bool(
+            user_data.get("name") and user_data.get("city") and user_data.get("birthDate"))
 
+        # Generate referral code if profile is completed and refCode is not present
+        if user_data.get("profileCompleted") == True and user_data.get("refCode", None) is None:
+            user_data["refCode"] = self.generate_referral_code(
+                user_data["name"], user_data["phoneNumber"])
+
+        # Convert birthDate to datetime object
+        if isinstance(user_data["birthDate"], str):
+            user_data["birthDate"] = Common.string_to_date(
+                user_data, "birthDate")
+
+        # Remove None values
         user_data = {k: v for k, v in user_data.items() if v is not None}
         return user_data
 
@@ -70,9 +76,10 @@ class Compute:
         referral = {
             "userId": user_id,
             "referredUserId": referred_user_id,
-            "createdAt": datetime.now()
         }
-        self.referrals_collection.insert_one(referral)
+        if not self.referrals_collection.find_one(referral):
+            referral["createdAt"] = datetime.now()
+            self.referrals_collection.insert_one(referral)
 
     def compute(self) -> Output:
         user = self.input
@@ -80,7 +87,8 @@ class Compute:
         prev_user = self.validate_phoneNumber(user_data["phoneNumber"])
 
         if prev_user:
-            user_data = self.prep_data(user_data, False, prev_user)
+            user_data = self.prep_data(user_data, prev_user)
+            print(user_data)
             self.users_collection.update_one(
                 {"phoneNumber": user_data["phoneNumber"]},
                 {"$set": user_data}
@@ -88,14 +96,14 @@ class Compute:
             message = "Successfully updated user"
         else:
             user_data = self.prep_data(user_data)
-            if self.input.referral_code:
-                referrer = self.validate_referral_code(
-                    user_data["referralCode"])
-                if referrer:
-                    self.insert_referral(user_data["_id"], referrer["_id"])
-            user_data["_id"] = self.users_collection.insert_one(user_data)
-
+            user_data["_id"] = self.users_collection.insert_one(
+                user_data).inserted_id
             message = "Successfully created user"
+
+        if self.input.refCode:
+            referrer = self.validate_referral_code(self.input.refCode)
+            if referrer:
+                self.insert_referral(user_data["_id"], referrer["_id"])
 
         return Output(
             output_details=Common.jsonify(user_data),
