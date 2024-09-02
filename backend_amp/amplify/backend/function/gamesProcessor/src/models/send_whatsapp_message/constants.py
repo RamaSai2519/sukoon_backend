@@ -784,3 +784,25 @@ class WhatsappNotificationTemplates:
                 ],
             },
         }
+
+        self.SIGN_IN_OTP = {
+            "template_name": "SIGN_IN_OTP",
+            "template": {
+                "name": "sign_in_otp",
+                "language": {"code": "en"},
+                "components": [
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text","text": "{otp}"}
+                        ]
+                    },
+                    {
+                        "type": "button",
+                        "sub_type": "url",
+                        "index": "0",
+                        "parameters": [{"type": "text","text": "{otp}"}]
+                    }
+                ]
+            },
+        }
