@@ -1,3 +1,5 @@
+import string
+import random
 import hashlib
 import dataclasses
 from typing import Union
@@ -59,7 +61,8 @@ class Compute:
         return user_data
 
     def generate_referral_code(self, name: str, phone_number: str) -> str:
-        raw_data = name + phone_number
+        salt = ''.join(random.choices(string.ascii_letters, k=6))
+        raw_data = name + phone_number + salt
         hash_object = hashlib.sha256(raw_data.encode())
         code = hash_object.hexdigest()[:8].upper()
         valid_code = self.validate_referral_code(code)
