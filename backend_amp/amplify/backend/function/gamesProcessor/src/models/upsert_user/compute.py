@@ -107,7 +107,7 @@ class Compute:
     def handle_referral(self, user_data: dict, prev_user: dict) -> str:
         if self.input.refCode:
             referrer = self.validate_referral_code(self.input.refCode)
-            if referrer and not referrer.get("refSource"):
+            if referrer and not user_data.get("refSource"):
                 self.insert_referral(user_data["_id"], referrer["_id"])
             else:
                 if not self.validate_referral(user_data["_id"]):
