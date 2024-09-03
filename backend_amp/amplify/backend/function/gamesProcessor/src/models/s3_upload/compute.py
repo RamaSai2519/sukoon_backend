@@ -17,7 +17,6 @@ class Compute:
         )
 
     def compute(self) -> Output:
-        print(self.input, 'file uploaded')
         story_id = str(uuid.uuid4())
         file_name = secure_filename(self.input.filename).replace(" ", "+")
         unique_filename = f"{int(os.times()[-1])}_{story_id}_{file_name}"
