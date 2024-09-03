@@ -18,7 +18,7 @@ class Compute:
         self.referrals_collection = get_user_referral_collection()
 
     def defaults(self, user_data: dict) -> dict:
-        user_data["active"] = False
+        user_data["active"] = True
         user_data["isBusy"] = False
         user_data["isBlocked"] = False
         user_data["isPaidUser"] = False
@@ -52,7 +52,7 @@ class Compute:
                 user_data["name"], user_data["phoneNumber"])
 
         # Convert birthDate to datetime object
-        if isinstance(user_data["birthDate"], str):
+        if isinstance(user_data.get("birthDate"), str):
             user_data["birthDate"] = Common.string_to_date(
                 user_data, "birthDate")
 
@@ -102,7 +102,7 @@ class Compute:
         user_data = self.prep_data(user_data)
         user_data["_id"] = self.users_collection.insert_one(
             user_data).inserted_id
-        return "Successfully created user"
+        return "Successfully created user", user_data
 
     def handle_referral(self, user_data: dict, prev_user: dict) -> str:
         if self.input.refCode:
@@ -112,7 +112,7 @@ class Compute:
             else:
                 if not self.validate_referral(user_data["_id"]):
                     user_data["refSource"] = self.input.refCode
-        return self.update_user(user_data, prev_user)
+        self.update_user(user_data, prev_user)
 
     def compute(self) -> Output:
         user = self.input
@@ -120,9 +120,12 @@ class Compute:
         prev_user = self.validate_phoneNumber(user_data["phoneNumber"])
 
         user_data = self.prep_data(user_data, prev_user)
-        message = self.update_user(
-            user_data, prev_user) if prev_user else self.insert_user(user_data)
-        user_data = self.handle_referral(user_data)
+        if prev_user:
+            message = self.update_user(
+                user_data, prev_user)
+        else:
+            message, user_data = self.insert_user(user_data)
+        self.handle_referral(user_data, prev_user)
 
         return Output(
             output_details=Common.jsonify(user_data),
