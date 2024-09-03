@@ -22,10 +22,6 @@ api.add_resource(UserService, '/actions/user')
 api.add_resource(ExpertService, '/actions/expert')
 api.add_resource(ApplicantService, '/actions/applicant')
 
-# Admin Routes
-api.add_resource(AdminAuthService, '/actions/admin_auth')
-api.add_resource(DashboardStatsService, '/actions/dashboard_stats')
-
 # Events Routes
 api.add_resource(ListEventsService, '/actions/list_events')
 api.add_resource(UpsertEventsService, '/actions/upsert_event')
@@ -56,6 +52,14 @@ api.add_resource(PushNotificationService, '/actions/push')
 api.add_resource(QuizGameService, '/actions/quiz_game')
 api.add_resource(CardGameService, '/actions/card_game')
 api.add_resource(SendOTPService, '/actions/send_otp')
+
+# Admin Routes
+# - Auth
+api.add_resource(AdminAuthService, '/actions/admin_auth')
+# - Services
+api.add_resource(AdminFCMService, '/actions/save_fcm_token')
+# - Stats
+api.add_resource(DashboardStatsService, '/actions/dashboard_stats')
 
 
 def handler(event, context):

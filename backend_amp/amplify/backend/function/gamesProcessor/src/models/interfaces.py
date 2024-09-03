@@ -54,6 +54,11 @@ class GetGameConfigInput:
 
 
 @dataclass
+class SaveFCMTokenInput:
+    token: str
+
+
+@dataclass
 class UpdateGameConfigInput:
     game_type: str
     game_config: dict

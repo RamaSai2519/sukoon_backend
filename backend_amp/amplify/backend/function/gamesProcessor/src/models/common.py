@@ -2,6 +2,7 @@ from db.calls import get_calls_collection, get_schedules_collection
 from models.constants import calls_exclusion_projection
 from db.referral import get_user_referral_collection
 from db.events import get_event_users_collection
+from flask_jwt_extended import get_jwt_identity
 from db.experts import get_experts_collections
 from db.users import get_user_collection
 from datetime import datetime, date
@@ -17,6 +18,10 @@ class Common:
         self.users_collection = get_user_collection()
         self.experts_cache = {}
         self.users_cache = {}
+
+    @staticmethod
+    def get_identity() -> str:
+        return get_jwt_identity()
 
     @staticmethod
     def jsonify(doc: dict) -> dict:
