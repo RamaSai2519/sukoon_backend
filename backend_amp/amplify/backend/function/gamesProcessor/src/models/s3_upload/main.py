@@ -10,7 +10,7 @@ class S3Upload:
     def __init__(self, input: FileStorage) -> None:
         self.input = input
 
-    def process(self):
+    def process(self) -> Output:
         input = self.input
         valid_input, error_message = self._validate(input)
 
