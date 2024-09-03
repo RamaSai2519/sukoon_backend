@@ -63,7 +63,7 @@ class UsersHelper:
 
     def get_users(self, size: int, page: int) -> list:
         if size and page:
-            offset = int(int(page - 1) * size)
+            offset = int(int(int(page) - 1) * int(size))
             users = list(self.users_collection.find(
                 {}, self.prep_projection()).skip(offset).limit(int(size)).sort("name", 1))
         else:
