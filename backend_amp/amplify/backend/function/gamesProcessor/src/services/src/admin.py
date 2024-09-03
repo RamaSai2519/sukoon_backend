@@ -22,7 +22,7 @@ class AdminFCMService(Resource):
 
 class UploadService(Resource):
 
-     def post(self) -> Output:
+    def post(self) -> Output:
         input = request.files
         output = S3Upload(input).process()
         output = dataclasses.asdict(output)

@@ -15,8 +15,7 @@ app.config['JWT_REFRESH_TOKEN_EXPIRES'] = Config.JWT_REFRESH_TOKEN_EXPIRES
 
 api = Api(app)
 JWTManager(app)
-CORS(app, supports_credentials=True, origins="*",
-     allow_headers="*", expose_headers="*", methods="*")
+CORS(app, supports_credentials=True)
 
 # Users Routes
 api.add_resource(UserService, '/actions/user')
