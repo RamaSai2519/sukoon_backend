@@ -76,37 +76,53 @@ class Compute:
         user = self.users_collection.find_one({"phoneNumber": phoneNumber})
         return user if user else False
 
+    def validate_referral(self, referred_user_id: str) -> bool:
+        filter = {"referredUserId": referred_user_id}
+        referral = self.referrals_collection.find_one(filter)
+        return True if referral else False
+
     def insert_referral(self, referred_user_id: str, user_id: str) -> None:
         referral = {
-            "userId": user_id,
-            "referredUserId": referred_user_id,
+            "referredUserId": referred_user_id,  # Referred User
+            "userId": user_id,  # Referrer
         }
-        if not self.referrals_collection.find_one(referral):
+        if not self.validate_referral(referred_user_id):
             referral["createdAt"] = datetime.now()
             self.referrals_collection.insert_one(referral)
+
+    def update_user(self, user_data: dict, prev_user: dict) -> str:
+        user_data = self.prep_data(user_data, prev_user)
+        self.users_collection.update_one(
+            {"phoneNumber": user_data["phoneNumber"]},
+            {"$set": user_data}
+        )
+        return "Successfully updated user"
+
+    def insert_user(self, user_data: dict) -> str:
+        user_data = self.prep_data(user_data)
+        user_data["_id"] = self.users_collection.insert_one(
+            user_data).inserted_id
+        return "Successfully created user"
+
+    def handle_referral(self, user_data: dict) -> str:
+        if self.input.refCode:
+            referrer = self.validate_referral_code(self.input.refCode)
+            if referrer and not referrer.get("refSource"):
+                self.insert_referral(user_data["_id"], referrer["_id"])
+            else:
+                if not self.validate_referral(user_data["_id"]):
+                    user_data["refSource"] = self.input.refCode
+        return user_data
 
     def compute(self) -> Output:
         user = self.input
         user_data = dataclasses.asdict(user)
         prev_user = self.validate_phoneNumber(user_data["phoneNumber"])
 
-        if prev_user:
-            user_data = self.prep_data(user_data, prev_user)
-            self.users_collection.update_one(
-                {"phoneNumber": user_data["phoneNumber"]},
-                {"$set": user_data}
-            )
-            message = "Successfully updated user"
-        else:
-            user_data = self.prep_data(user_data)
-            user_data["_id"] = self.users_collection.insert_one(
-                user_data).inserted_id
-            message = "Successfully created user"
-
-        if self.input.refCode:
-            referrer = self.validate_referral_code(self.input.refCode)
-            if referrer:
-                self.insert_referral(user_data["_id"], referrer["_id"])
+        user_data = self.prep_data(user_data, prev_user)
+        user_data = self.handle_referral(user_data)
+        message = self.update_user(
+            user_data, prev_user) if prev_user else self.insert_user(user_data)
 
         return Output(
             output_details=Common.jsonify(user_data),
