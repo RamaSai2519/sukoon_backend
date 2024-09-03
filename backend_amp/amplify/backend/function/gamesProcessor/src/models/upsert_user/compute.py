@@ -104,7 +104,7 @@ class Compute:
             user_data).inserted_id
         return "Successfully created user"
 
-    def handle_referral(self, user_data: dict) -> str:
+    def handle_referral(self, user_data: dict, prev_user: dict) -> str:
         if self.input.refCode:
             referrer = self.validate_referral_code(self.input.refCode)
             if referrer and not referrer.get("refSource"):
@@ -112,7 +112,7 @@ class Compute:
             else:
                 if not self.validate_referral(user_data["_id"]):
                     user_data["refSource"] = self.input.refCode
-        return user_data
+        return self.update_user(user_data, prev_user)
 
     def compute(self) -> Output:
         user = self.input
@@ -120,9 +120,9 @@ class Compute:
         prev_user = self.validate_phoneNumber(user_data["phoneNumber"])
 
         user_data = self.prep_data(user_data, prev_user)
-        user_data = self.handle_referral(user_data)
         message = self.update_user(
             user_data, prev_user) if prev_user else self.insert_user(user_data)
+        user_data = self.handle_referral(user_data)
 
         return Output(
             output_details=Common.jsonify(user_data),
