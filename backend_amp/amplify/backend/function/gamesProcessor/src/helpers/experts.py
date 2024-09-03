@@ -48,7 +48,7 @@ class ExpertsHelper:
         return expert_data
 
     def populate_time_spent(self, expert_data: dict) -> dict:
-        query = {"expertId": expert_data["_id"], "duration": {"$exists": True}}
+        query = {"expert": expert_data["_id"], "duration": {"$exists": True}}
         total_time = list(
             self.expertlogs_collection.find(query, {"duration": 1}))
         total_time = sum(
