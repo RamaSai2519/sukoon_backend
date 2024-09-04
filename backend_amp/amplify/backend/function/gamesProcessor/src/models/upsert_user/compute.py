@@ -29,7 +29,7 @@ class Compute:
 
     def merge_old_data(self, user_data: dict, prev_user: dict) -> dict:
         for key, value in prev_user.items():
-            if key not in user_data or user_data[key] is None or key not in ["refCode", "phoneNumber"] or user_data[key] == "":
+            if (key not in user_data or user_data[key] is None or user_data[key] == "") and key not in ["_id", "phoneNumber", "refCode"]:
                 user_data[key] = value
         return user_data
 
@@ -46,8 +46,8 @@ class Compute:
         user_data["profileCompleted"] = bool(
             user_data.get("name") and user_data.get("city") and user_data.get("birthDate"))
 
-        # Generate referral code if profile is completed and refCode is not present
-        if user_data.get("profileCompleted") and not prev_user.get("refCode"):
+        # Generate referral code if profile is completed and If there is no prev_user, or if there is one but without a refCode
+        if user_data.get("profileCompleted") and (not prev_user or not prev_user.get("refCode")):
             user_data["refCode"] = self.generate_referral_code(
                 user_data["name"], user_data["phoneNumber"])
 
@@ -72,9 +72,9 @@ class Compute:
         user = self.users_collection.find_one({"refCode": referral_code})
         return user if user else False
 
-    def validate_phoneNumber(self, phoneNumber: str) -> Union[bool, dict]:
+    def validate_phoneNumber(self, phoneNumber: str) -> Union[dict, None]:
         user = self.users_collection.find_one({"phoneNumber": phoneNumber})
-        return user if user else False
+        return user if user else None
 
     def validate_referral(self, referred_user_id: str) -> bool:
         filter = {"referredUserId": referred_user_id}
