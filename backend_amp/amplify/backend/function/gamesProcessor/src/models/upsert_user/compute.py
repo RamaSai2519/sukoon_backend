@@ -47,7 +47,7 @@ class Compute:
             user_data.get("name") and user_data.get("city") and user_data.get("birthDate"))
 
         # Generate referral code if profile is completed and refCode is not present
-        if prev_user and user_data.get("profileCompleted") == True and prev_user.get("refCode", None) is None:
+        if user_data.get("profileCompleted") and not prev_user.get("refCode"):
             user_data["refCode"] = self.generate_referral_code(
                 user_data["name"], user_data["phoneNumber"])
 
