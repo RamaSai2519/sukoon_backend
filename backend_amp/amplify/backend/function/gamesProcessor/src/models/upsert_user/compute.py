@@ -29,15 +29,21 @@ class Compute:
 
     def merge_old_data(self, user_data: dict, prev_user: dict) -> dict:
         for key, value in prev_user.items():
-            if (key not in user_data or user_data[key] is None or user_data[key] == "") and key not in ["_id", "phoneNumber", "refCode"]:
+            if (key not in user_data or user_data[key] is None or user_data[key] == ""):
                 user_data[key] = value
+        return user_data
+
+    def pop_immutable_fields(self, user_data: dict) -> dict:
+        user_data.pop("_id", None)
+        user_data.pop("createdDate", None)
+        user_data.pop("refCode", None)
         return user_data
 
     def prep_data(self, user_data: dict, prev_user: dict = None) -> dict:
         # Merge old data if user already exists or set defaults
         if prev_user:
             user_data = self.merge_old_data(user_data, prev_user)
-            user_data.pop("createdDate", None)
+            user_data = self.pop_immutable_fields(user_data)
         else:
             user_data = self.defaults(user_data)
         user_data.pop("refCode", None)
