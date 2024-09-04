@@ -29,7 +29,7 @@ class Compute:
 
     def merge_old_data(self, user_data: dict, prev_user: dict) -> dict:
         for key, value in prev_user.items():
-            if key not in user_data or user_data[key] is None or key not in ["refCode", "phoneNumber"]:
+            if key not in user_data or user_data[key] is None or key not in ["refCode", "phoneNumber"] or user_data[key] == "":
                 user_data[key] = value
         return user_data
 
