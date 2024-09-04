@@ -25,6 +25,7 @@ class Compute:
         user_data["wa_opt_out"] = False
         user_data["numberOfGames"] = 0
         user_data["numberOfCalls"] = 3
+        user_data.pop("_id", None)
         return user_data
 
     def merge_old_data(self, user_data: dict, prev_user: dict) -> dict:
@@ -97,7 +98,6 @@ class Compute:
             self.referrals_collection.insert_one(referral)
 
     def update_user(self, user_data: dict, prev_user: dict) -> str:
-        user_data = self.prep_data(user_data, prev_user)
         self.users_collection.update_one(
             {"phoneNumber": user_data["phoneNumber"]},
             {"$set": user_data}
@@ -105,7 +105,6 @@ class Compute:
         return "Successfully updated user"
 
     def insert_user(self, user_data: dict) -> str:
-        user_data = self.prep_data(user_data)
         user_data["_id"] = self.users_collection.insert_one(
             user_data).inserted_id
         return "Successfully created user", user_data
@@ -125,6 +124,7 @@ class Compute:
         user_data = dataclasses.asdict(user)
         prev_user = self.validate_phoneNumber(user_data["phoneNumber"])
 
+        user_data = self.prep_data(user_data, prev_user)
         if prev_user:
             message = self.update_user(user_data, prev_user)
         else:
