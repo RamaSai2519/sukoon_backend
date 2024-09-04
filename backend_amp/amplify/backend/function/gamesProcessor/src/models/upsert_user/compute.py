@@ -29,21 +29,21 @@ class Compute:
 
     def merge_old_data(self, user_data: dict, prev_user: dict) -> dict:
         for key, value in prev_user.items():
-            if (key not in user_data or user_data[key] is None or user_data[key] == ""):
+            if key not in user_data or user_data[key] is None or user_data[key] == "":
                 user_data[key] = value
         return user_data
 
     def pop_immutable_fields(self, user_data: dict) -> dict:
-        user_data.pop("_id", None)
-        user_data.pop("createdDate", None)
-        user_data.pop("refCode", None)
+        fields = ["_id", "phoneNumber", "refCode", "createdDate"]
+        for field in fields:
+            user_data.pop(field, None)
         return user_data
 
     def prep_data(self, user_data: dict, prev_user: dict = None) -> dict:
         # Merge old data if user already exists or set defaults
         if prev_user:
-            user_data = self.merge_old_data(user_data, prev_user)
             user_data = self.pop_immutable_fields(user_data)
+            user_data = self.merge_old_data(user_data, prev_user)
         else:
             user_data = self.defaults(user_data)
         user_data.pop("refCode", None)
@@ -125,10 +125,8 @@ class Compute:
         user_data = dataclasses.asdict(user)
         prev_user = self.validate_phoneNumber(user_data["phoneNumber"])
 
-        user_data = self.prep_data(user_data, prev_user)
         if prev_user:
-            message = self.update_user(
-                user_data, prev_user)
+            message = self.update_user(user_data, prev_user)
         else:
             message, user_data = self.insert_user(user_data)
         self.handle_referral(user_data, prev_user)
