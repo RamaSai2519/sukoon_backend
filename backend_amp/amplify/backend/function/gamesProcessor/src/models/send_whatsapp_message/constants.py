@@ -828,3 +828,19 @@ class WhatsappNotificationTemplates:
                 ],
             },
         }
+
+        self.REFERRAL = {
+            "template_name": "REFERRAL",
+            "template": {
+                "name": "referral_message",
+                "language": {"code": "en_us"},
+                "components": [
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"},
+                        ],
+                    },
+                ],
+            },
+        }
