@@ -25,19 +25,26 @@ class Compute:
         user_data["wa_opt_out"] = False
         user_data["numberOfGames"] = 0
         user_data["numberOfCalls"] = 3
+        user_data.pop("_id", None)
         return user_data
 
     def merge_old_data(self, user_data: dict, prev_user: dict) -> dict:
         for key, value in prev_user.items():
-            if key not in user_data or user_data[key] is None or key not in ["refCode", "phoneNumber"] or user_data[key] == "":
+            if key not in user_data or user_data[key] is None or user_data[key] == "":
                 user_data[key] = value
+        return user_data
+
+    def pop_immutable_fields(self, user_data: dict) -> dict:
+        fields = ["_id", "phoneNumber", "refCode", "createdDate"]
+        for field in fields:
+            user_data.pop(field, None)
         return user_data
 
     def prep_data(self, user_data: dict, prev_user: dict = None) -> dict:
         # Merge old data if user already exists or set defaults
         if prev_user:
+            user_data = self.pop_immutable_fields(user_data)
             user_data = self.merge_old_data(user_data, prev_user)
-            user_data.pop("createdDate", None)
         else:
             user_data = self.defaults(user_data)
         user_data.pop("refCode", None)
@@ -46,8 +53,8 @@ class Compute:
         user_data["profileCompleted"] = bool(
             user_data.get("name") and user_data.get("city") and user_data.get("birthDate"))
 
-        # Generate referral code if profile is completed and refCode is not present
-        if user_data.get("profileCompleted") and not prev_user.get("refCode"):
+        # Generate referral code if profile is completed and If there is no prev_user, or if there is one but without a refCode
+        if user_data.get("profileCompleted") and (not prev_user or not prev_user.get("refCode")):
             user_data["refCode"] = self.generate_referral_code(
                 user_data["name"], user_data["phoneNumber"])
 
@@ -72,9 +79,9 @@ class Compute:
         user = self.users_collection.find_one({"refCode": referral_code})
         return user if user else False
 
-    def validate_phoneNumber(self, phoneNumber: str) -> Union[bool, dict]:
+    def validate_phoneNumber(self, phoneNumber: str) -> Union[dict, None]:
         user = self.users_collection.find_one({"phoneNumber": phoneNumber})
-        return user if user else False
+        return user if user else None
 
     def validate_referral(self, referred_user_id: str) -> bool:
         filter = {"referredUserId": referred_user_id}
@@ -91,7 +98,6 @@ class Compute:
             self.referrals_collection.insert_one(referral)
 
     def update_user(self, user_data: dict, prev_user: dict) -> str:
-        user_data = self.prep_data(user_data, prev_user)
         self.users_collection.update_one(
             {"phoneNumber": user_data["phoneNumber"]},
             {"$set": user_data}
@@ -99,7 +105,6 @@ class Compute:
         return "Successfully updated user"
 
     def insert_user(self, user_data: dict) -> str:
-        user_data = self.prep_data(user_data)
         user_data["_id"] = self.users_collection.insert_one(
             user_data).inserted_id
         return "Successfully created user", user_data
@@ -121,8 +126,7 @@ class Compute:
 
         user_data = self.prep_data(user_data, prev_user)
         if prev_user:
-            message = self.update_user(
-                user_data, prev_user)
+            message = self.update_user(user_data, prev_user)
         else:
             message, user_data = self.insert_user(user_data)
         self.handle_referral(user_data, prev_user)
