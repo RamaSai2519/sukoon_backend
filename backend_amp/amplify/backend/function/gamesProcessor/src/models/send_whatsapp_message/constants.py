@@ -806,3 +806,25 @@ class WhatsappNotificationTemplates:
                 ]
             },
         }
+
+        self.REFERRAL_CONFIRMATION = {
+            "template_name": "REFERRAL_CONFIRMATION",
+            "template": {
+                "name": "referral_confirmation_for_referree",
+                "language": {"code": "en"},
+                "components": [
+                   {       
+                        "type": "header",
+                        "parameters": [
+                            {"type": "image", "image": {"link": "{image_link}"}}
+                        ],
+                    },
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"},
+                        ],
+                    },
+                ],
+            },
+        }
