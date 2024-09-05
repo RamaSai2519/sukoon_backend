@@ -115,7 +115,7 @@ class Compute:
             if referrer and not user_data.get("refSource"):
                 self.insert_referral(user_data["_id"], referrer["_id"])
             else:
-                if not self.validate_referral(user_data["_id"]):
+                if not self.validate_referral(user_data["_id"]) and (not prev_user or not prev_user.get("refSource")):
                     user_data["refSource"] = self.input.refCode
         self.update_user(user_data, prev_user)
 
