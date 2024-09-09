@@ -81,6 +81,14 @@ class WhatsappNotificationTemplates:
             },
         }
 
+        self.LEARNING_WEEK_MARKETING_CREATIVE = {
+            "template_name": "Learing Week Marketing Creatinve",
+            "template": {
+                "name": "learning_week_marketing_creative",
+                "language": {"code": "en"},
+            },
+        }
+
         self.REGISTERED_USER_ONLY_EVENT_ACTIVE = {
             "template_name": "Registered User Only Event Active",
             "template": {
