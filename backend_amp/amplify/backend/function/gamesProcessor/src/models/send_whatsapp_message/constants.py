@@ -86,6 +86,14 @@ class WhatsappNotificationTemplates:
             "template": {
                 "name": "learning_week_marketing_creative",
                 "language": {"code": "en"},
+                "components": [
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "image", "image": {"link": "{image_link}"}}
+                        ],
+                    },
+                ],
             },
         }
 
