@@ -88,7 +88,7 @@ class WhatsappNotificationTemplates:
                 "language": {"code": "en"},
                 "components": [
                     {
-                        "type": "body",
+                        "type": "header",
                         "parameters": [
                             {"type": "image", "image": {"link": "{image_link}"}}
                         ],
