@@ -42,6 +42,14 @@ class WhatsappNotificationTemplates:
             },
         }
 
+        self.SUPPORT_GROUP_WABA_MESSAGES = {
+            "template_name": "Support Group Waba Messages",
+            "template": {
+                "name": "support_group_waba_messages",
+                "language": {"code": "en"},
+            },
+        }
+
         self.GAMES_GALA_2 = {
             "template_name": "Games Gala",
             "template": {
