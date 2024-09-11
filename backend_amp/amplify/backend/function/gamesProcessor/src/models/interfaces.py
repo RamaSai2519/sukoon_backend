@@ -43,6 +43,13 @@ class Expert:
 
 
 @dataclass
+class GetSlotsInput:
+    duration: int
+    expert: str
+    datetime: str
+
+
+@dataclass
 class GetExpertsInput:
     phoneNumber: Optional[str] = None
     schedule_status: Optional[str] = None
