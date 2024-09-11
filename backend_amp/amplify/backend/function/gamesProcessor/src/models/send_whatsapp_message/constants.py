@@ -844,3 +844,25 @@ class WhatsappNotificationTemplates:
                 ],
             },
         }
+
+        self.REFERRAL_VIDEO = {
+            "template_name": "REFERRAL_VIDEO",
+            "template": {
+                "name": "referral_video",
+                "language": {"code": "en_us"},
+                "components": [
+                    {       
+                        "type": "header",
+                        "parameters": [
+                            {"type": "video", "video": {"link": "{video_link}"}}
+                        ],
+                    },
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{referral_link}"},
+                        ],
+                    },
+                ],
+            },
+        }
