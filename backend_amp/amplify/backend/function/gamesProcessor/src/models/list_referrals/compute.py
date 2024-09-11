@@ -1,37 +1,57 @@
+from pprint import pprint
 from models.common import Common
 from models.interfaces import Output
+from db.users import get_user_collection
 from models.constants import OutputStatus
 from db.referral import get_user_referral_collection
+from pymongo.command_cursor import CommandCursor
 
 
 class Compute:
     def __init__(self) -> None:
         self.common = Common()
+        self.users_collection = get_user_collection()
         self.referrals_collection = get_user_referral_collection()
 
-    def get_distinct_users(self) -> list:
-        return list(self.referrals_collection.distinct("userId"))
+    def get_community_referrals(self) -> CommandCursor:
+        user_referrals = self.users_collection.aggregate([
+            {
+                "$match": {
+                    "refSource": {"$ne": None}
+                }
+            },
+            {
+                "$group": {
+                    "_id": "$refSource",
+                    "count": {"$sum": 1}
+                }
+            }
+        ])
 
-    def get_referrals(self, user_id: str) -> list:
-        filter = {"userId": user_id}
-        return list(self.referrals_collection.distinct("referredUserId", filter))
+        return user_referrals
+
+    def get_user_referrals(self) -> CommandCursor:
+        community_referrals = self.referrals_collection.aggregate([
+            {
+                "$group": {
+                    "_id": "$userId",
+                    "count": {"$sum": 1}
+                }
+            }
+        ])
+
+        return community_referrals
 
     def compute(self) -> Output:
-        user_ids = self.get_distinct_users()
-        users = []
-        for user_id in user_ids:
-            user_referrals = self.get_referrals(user_id)
-            user = {
-                "user": self.common.get_user_name(user_id),
-                "referrals": [self.common.get_user_name(referral) for referral in user_referrals],
-                "referral_count": len(user_referrals)
-            }
-            users.append(Common.jsonify(user))
-
-        users.sort(key=lambda x: x["referral_count"], reverse=True)
+        user_referrals = self.get_user_referrals()
+        community_referrals = self.get_community_referrals()
+        referrals = {
+            "userReferrals": [self.common.jsonify(ref) for ref in user_referrals],
+            "communityReferrals": list(community_referrals)
+        }
 
         return Output(
-            output_details=users,
+            output_details=referrals,
             output_status=OutputStatus.SUCCESS,
             output_message="Successfully fetched user(s)"
         )
