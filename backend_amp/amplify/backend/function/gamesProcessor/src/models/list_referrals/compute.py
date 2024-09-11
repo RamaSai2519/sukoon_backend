@@ -1,10 +1,9 @@
-from pprint import pprint
 from models.common import Common
 from models.interfaces import Output
 from db.users import get_user_collection
 from models.constants import OutputStatus
-from db.referral import get_user_referral_collection
 from pymongo.command_cursor import CommandCursor
+from db.referral import get_user_referral_collection
 
 
 class Compute:
@@ -53,5 +52,5 @@ class Compute:
         return Output(
             output_details=referrals,
             output_status=OutputStatus.SUCCESS,
-            output_message="Successfully fetched user(s)"
+            output_message="Successfully fetched referral(s)"
         )
