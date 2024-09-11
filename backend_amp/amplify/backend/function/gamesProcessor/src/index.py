@@ -59,6 +59,7 @@ api.add_resource(SendOTPService, '/actions/send_otp')
 api.add_resource(AdminAuthService, '/actions/admin_auth')
 # - Services
 api.add_resource(AdminFCMService, '/actions/save_fcm_token')
+api.add_resource(UploadService, '/actions/upload')
 # - Stats
 api.add_resource(DashboardStatsService, '/actions/dashboard_stats')
 

@@ -93,6 +93,11 @@ class UserReferralInput:
 
 
 @dataclass
+class SaveFCMTokenInput:
+    token: str
+
+
+@dataclass
 class SendOTPInput:
     phone_number: str
 

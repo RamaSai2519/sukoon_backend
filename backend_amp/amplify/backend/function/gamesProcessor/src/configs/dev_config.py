@@ -41,3 +41,18 @@ class DevConfig:
     JWT_SECRET_KEY = "AdminSecret-59737e2029b4aa10f3008f2a5cb372e537ba8d8a4bd05a87efb081d6634df175fec60167bf48cbfe399e5c98d7c8ea27137d44993ab28b71cfe2ae786f5d1952"
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=1)
+
+    EXPERT_JWT = "saltDemaze"
+
+    REGION = "ap-south-1"
+    ACCESS_KEY = "AKIAXYKJVMCCBZESPREV"
+    SECRET_ACCESS_KEY = "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"
+
+    GRAPH_API_KEY = "da2-jesqcxttxba57itwhh5m3neijm"
+    GRAPH_API_URL = "https://x3bch5zipbbwdlxc5efyhkas3y.appsync-api.ap-south-1.amazonaws.com/graphql"
+
+    MAIN_BE_URL = "https://prod-backend.sukoonunlimited.com/api"
+
+    SLACK_BOT_TOKEN = "xoxb-7127288803060-7529287532416-8SI5ACYFBDK9TjK1MPiw9xwU"
+
+    FB_SERVER_KEY = "AAAAM5jkbNg:APA91bG80zQ8CzD1AeQmV45YT4yWuwSgJ5VwvyLrNynAJBk4AcyCb6vbCSGlIQeQFPAndS0TbXrgEL8HFYQq4DMXmSoJ4ek7nFcCwOEDq3Oi5Or_SibSpywYFrnolM4LSxpRkVeiYGDv"

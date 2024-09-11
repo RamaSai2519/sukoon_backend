@@ -42,6 +42,14 @@ class WhatsappNotificationTemplates:
             },
         }
 
+        self.SUPPORT_GROUP_WABA_MESSAGES = {
+            "template_name": "Support Group Waba Messages",
+            "template": {
+                "name": "support_group_waba_messages",
+                "language": {"code": "en"},
+            },
+        }
+
         self.GAMES_GALA_2 = {
             "template_name": "Games Gala",
             "template": {
@@ -78,6 +86,22 @@ class WhatsappNotificationTemplates:
             "template": {
                 "name": "registered_user_query",
                 "language": {"code": "en"},
+            },
+        }
+
+        self.LEARNING_WEEK_MARKETING_CREATIVE = {
+            "template_name": "Learing Week Marketing Creatinve",
+            "template": {
+                "name": "learning_week_marketing_creative",
+                "language": {"code": "en"},
+                "components": [
+                    {
+                        "type": "header",
+                        "parameters": [
+                            {"type": "image", "image": {"link": "{image_link}"}}
+                        ],
+                    },
+                ],
             },
         }
 
