@@ -50,6 +50,14 @@ class WhatsappNotificationTemplates:
             },
         }
 
+        self.MESSAGE_JOGGING_TEMPLATE = {
+            "template_name": "Message Jogging Template",
+            "template": {
+                "name": "message_jogging_template",
+                "language": {"code": "en"},
+            },
+        }
+
         self.GAMES_GALA_2 = {
             "template_name": "Games Gala",
             "template": {

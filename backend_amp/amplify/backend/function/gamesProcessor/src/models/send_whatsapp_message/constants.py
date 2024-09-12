@@ -89,6 +89,14 @@ class WhatsappNotificationTemplates:
             },
         }
 
+        self.MESSAGE_JOGGING_TEMPLATE = {
+            "template_name": "Message Jogging Template",
+            "template": {
+                "name": "message_jogging_template",
+                "language": {"code": "en"},
+            },
+        }
+
         self.LEARNING_WEEK_MARKETING_CREATIVE = {
             "template_name": "Learing Week Marketing Creatinve",
             "template": {
