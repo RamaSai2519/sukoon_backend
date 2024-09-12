@@ -4,7 +4,7 @@ from models.constants import OutputStatus
 from models.list_referrals.compute import Compute
 
 
-class UserReferrals:
+class ListUserReferrals:
     def __init__(self) -> None:
         pass
 

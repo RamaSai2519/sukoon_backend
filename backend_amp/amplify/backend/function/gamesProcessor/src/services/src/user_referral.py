@@ -1,15 +1,24 @@
 import json
 import dataclasses
-from flask_restful import Resource
 from flask import request
-from models.interfaces import Output
-from models.list_referrals.main import UserReferrals
+from flask_restful import Resource
+from models.get_referrals.main import GetUserReferrals
+from models.interfaces import Output, GetReferralsInput
+from models.list_referrals.main import ListUserReferrals
 
 
 class UserReferralService(Resource):
 
     def get(self) -> Output:
-        output = UserReferrals().process()
+        output = ListUserReferrals().process()
+        output = dataclasses.asdict(output)
+
+        return output
+
+    def post(self) -> Output:
+        input = json.loads(request.get_data())
+        input = GetReferralsInput(**input)
+        output = GetUserReferrals(input).process()
         output = dataclasses.asdict(output)
 
         return output
