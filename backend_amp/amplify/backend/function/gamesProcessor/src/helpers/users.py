@@ -61,13 +61,13 @@ class UsersHelper:
             return user
         return None
 
-    def get_users(self, size: int, page: int) -> list:
+    def get_users(self, size: int = None, page: int = None, query: dict = {}) -> list:
         if size and page:
             offset = int(int(int(page) - 1) * int(size))
             users = list(self.users_collection.find(
                 {}, self.prep_projection()).skip(offset).limit(int(size)).sort("name", 1))
         else:
             users = list(self.users_collection.find(
-                {}, self.prep_projection()).sort("name", 1))
+                query, self.prep_projection()).sort("name", 1))
         users = [self.__format__(user) for user in users]
         return users

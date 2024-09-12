@@ -41,11 +41,16 @@ class Compute:
 
         return community_referrals
 
+    def __format__(self, format_spec: dict) -> dict:
+        format_spec["user_name"] = self.common.get_user_name(
+            format_spec["_id"])
+        return self.common.jsonify(format_spec)
+
     def compute(self) -> Output:
         user_referrals = self.get_user_referrals()
         community_referrals = self.get_community_referrals()
         referrals = {
-            "userReferrals": [self.common.jsonify(ref) for ref in user_referrals],
+            "userReferrals": [self.__format__(ref) for ref in user_referrals],
             "communityReferrals": list(community_referrals)
         }
 

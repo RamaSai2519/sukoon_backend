@@ -109,6 +109,10 @@ class UserReferralInput:
     referral_code: str
     phone_number: str
 
+@dataclass
+class GetReferralsInput:
+    userId: Optional[str] = None
+    refCode: Optional[str] = None
 
 @dataclass
 class GetReferralsInput:
