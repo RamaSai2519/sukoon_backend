@@ -66,6 +66,10 @@ class GetGameConfigInput:
 
 
 @dataclass
+class ChatInput:
+    prompt: str
+
+
 class TimingsRow:
     key: str
     value: str

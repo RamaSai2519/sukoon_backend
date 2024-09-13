@@ -1,3 +1,4 @@
+from services.src.chat import ChatService
 from services.src.shorts import FetchShortsService
 from services.src.game_config import GameConfigService
 from services.src.cashfree import CashfreeWebhookService

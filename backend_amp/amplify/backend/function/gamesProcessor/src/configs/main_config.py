@@ -42,6 +42,9 @@ class MainConfig:
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=1)
 
+    AZURE_ENDPOINT = "https://sukoon-chat-2.openai.azure.com/"
+    AZURE_KEY = "fef59650b89c417997e122739f41b5ca"
+    AZURE_API_VERSION = "2024-02-01"
     EXPERT_JWT = "saltDemaze"
 
     REGION = "ap-south-1"
