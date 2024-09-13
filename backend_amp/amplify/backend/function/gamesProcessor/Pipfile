@@ -22,6 +22,7 @@ google-auth="2.31.0"
 gql="3.5.0"
 requests-aws4auth="1.2.3"
 requests-toolbelt="1.0.0"
+openai = "*"
 
 [requires]
 python_version = "3.8"

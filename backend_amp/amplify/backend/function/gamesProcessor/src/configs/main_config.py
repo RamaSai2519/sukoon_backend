@@ -41,3 +41,7 @@ class MainConfig:
     JWT_SECRET_KEY = "AdminSecret-59737e2029b4aa10f3008f2a5cb372e537ba8d8a4bd05a87efb081d6634df175fec60167bf48cbfe399e5c98d7c8ea27137d44993ab28b71cfe2ae786f5d1952"
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=1)
+
+    AZURE_ENDPOINT = "https://sukoon-chat-2.openai.azure.com/"
+    AZURE_KEY = "fef59650b89c417997e122739f41b5ca"
+    AZURE_API_VERSION = "2024-02-01"
