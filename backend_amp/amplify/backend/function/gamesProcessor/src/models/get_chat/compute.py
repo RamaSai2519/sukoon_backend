@@ -27,7 +27,8 @@ class Compute:
             You will provide relevant information to the user based on the context of the conversation.
             The reponse you will give should be in this format:
             {{"repsonse": "Your response here",
-                "topic": "The topic of the response in one word"}}
+                "category": "The category of the response here",
+                "tags": ["tags", "related", "to", "the", "response"]}}
             """
         return system_message
 
