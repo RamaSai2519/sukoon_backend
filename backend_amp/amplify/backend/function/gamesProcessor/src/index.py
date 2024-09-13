@@ -60,6 +60,7 @@ api.add_resource(AdminAuthService, '/actions/admin_auth')
 # - Services
 api.add_resource(TimingsService, '/actions/timings')
 api.add_resource(AdminFCMService, '/actions/save_fcm_token')
+api.add_resource(ChatService, '/actions/chat')
 # - Stats
 api.add_resource(DashboardStatsService, '/actions/dashboard_stats')
 
