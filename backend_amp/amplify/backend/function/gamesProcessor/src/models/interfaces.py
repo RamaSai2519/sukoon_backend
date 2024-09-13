@@ -50,6 +50,11 @@ class GetSlotsInput:
 
 
 @dataclass
+class GetTimingsInput:
+    expert: str
+
+
+@dataclass
 class GetExpertsInput:
     phoneNumber: Optional[str] = None
     schedule_status: Optional[str] = None
@@ -58,6 +63,19 @@ class GetExpertsInput:
 @dataclass
 class GetGameConfigInput:
     game_type: str
+
+
+@dataclass
+class TimingsRow:
+    key: str
+    value: str
+    field: str
+
+
+@dataclass
+class UpdateTimingsInput:
+    expertId: str
+    row: TimingsRow
 
 
 @dataclass
@@ -95,6 +113,12 @@ class UserReferralInput:
 class GetReferralsInput:
     userId: Optional[str] = None
     refCode: Optional[str] = None
+
+@dataclass
+class GetReferralsInput:
+    userId: Optional[str] = None
+    refCode: Optional[str] = None
+
 
 @dataclass
 class SendOTPInput:
