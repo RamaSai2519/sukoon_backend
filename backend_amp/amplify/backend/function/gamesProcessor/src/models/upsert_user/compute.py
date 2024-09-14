@@ -1,6 +1,8 @@
+import json
 import string
 import random
 import hashlib
+import requests
 import dataclasses
 from typing import Union
 from datetime import datetime
@@ -67,6 +69,23 @@ class Compute:
         user_data = {k: v for k, v in user_data.items() if v is not None}
         return user_data
 
+    def send_welcome_message(self, user_data: dict) -> None:
+        url = "https://6x4j0qxbmk.execute-api.ap-south-1.amazonaws.com/main/actions/send_whatsapp"
+        # url = "http://localhost:8080/actions/send_whatsapp"
+        headers = {
+            'Content-Type': 'application/json'
+        }
+        payload = {"template_name": "WELCOME_REGISTRATION",
+                   "phone_number": user_data.get("phoneNumber", ""),
+                   "parameters": {
+                       "user_name": user_data.get("name", "")
+                   }}
+        response = requests.request("POST", url, headers=headers, data=json.dumps(payload))
+
+        if response.status_code != 200:
+            print(response.text)
+        return True if response.status_code == 200 else False
+
     def generate_referral_code(self, name: str, phone_number: str) -> str:
         salt = ''.join(random.choices(string.ascii_letters, k=6))
         raw_data = name + phone_number + salt
@@ -129,6 +148,11 @@ class Compute:
             message = self.update_user(user_data, prev_user)
         else:
             message, user_data = self.insert_user(user_data)
+            response = self.send_welcome_message(user_data)
+            if response:
+                message = "Successfully created user and sent welcome message"
+            else:
+                message = "Successfully created user but failed to send welcome message"
         self.handle_referral(user_data, prev_user)
 
         return Output(
