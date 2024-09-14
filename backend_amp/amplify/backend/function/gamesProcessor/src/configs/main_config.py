@@ -53,9 +53,11 @@ class MainConfig:
 
     GRAPH_API_KEY = "da2-jesqcxttxba57itwhh5m3neijm"
     GRAPH_API_URL = "https://x3bch5zipbbwdlxc5efyhkas3y.appsync-api.ap-south-1.amazonaws.com/graphql"
-    
+
     MAIN_BE_URL = "https://prod-backend.sukoonunlimited.com/api"
-    
+
     SLACK_BOT_TOKEN = "xoxb-7127288803060-7529287532416-8SI5ACYFBDK9TjK1MPiw9xwU"
-    
+
     FB_SERVER_KEY = "AAAAM5jkbNg:APA91bG80zQ8CzD1AeQmV45YT4yWuwSgJ5VwvyLrNynAJBk4AcyCb6vbCSGlIQeQFPAndS0TbXrgEL8HFYQq4DMXmSoJ4ek7nFcCwOEDq3Oi5Or_SibSpywYFrnolM4LSxpRkVeiYGDv"
+
+    UNSPLASH_API_KEY = "I7e7Sy0qOspZ6whpNAp1gpCe4MXGIxWlMdSLBCfFpYI"
