@@ -50,6 +50,18 @@ class GetSlotsInput:
 
 
 @dataclass
+class GetTimingsInput:
+    expert: str
+
+
+@dataclass
+class PhotosInput:
+    page: int
+    query: str
+    per_page: int
+
+
+@dataclass
 class GetExpertsInput:
     phoneNumber: Optional[str] = None
     schedule_status: Optional[str] = None
