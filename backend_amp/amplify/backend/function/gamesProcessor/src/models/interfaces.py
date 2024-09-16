@@ -43,6 +43,25 @@ class Expert:
 
 
 @dataclass
+class GetSlotsInput:
+    duration: int
+    expert: str
+    datetime: str
+
+
+@dataclass
+class GetTimingsInput:
+    expert: str
+
+
+@dataclass
+class PhotosInput:
+    page: int
+    query: str
+    per_page: int
+
+
+@dataclass
 class GetExpertsInput:
     phoneNumber: Optional[str] = None
     schedule_status: Optional[str] = None
@@ -51,6 +70,28 @@ class GetExpertsInput:
 @dataclass
 class GetGameConfigInput:
     game_type: str
+
+
+@dataclass
+class ChatInput:
+    prompt: str
+
+
+class TimingsRow:
+    key: str
+    value: str
+    field: str
+
+
+@dataclass
+class UpdateTimingsInput:
+    expertId: str
+    row: TimingsRow
+
+
+@dataclass
+class SaveFCMTokenInput:
+    token: str
 
 
 @dataclass
@@ -81,6 +122,18 @@ class UserReferralInput:
 
 
 @dataclass
+class GetReferralsInput:
+    userId: Optional[str] = None
+    refCode: Optional[str] = None
+
+
+@dataclass
+class GetReferralsInput:
+    userId: Optional[str] = None
+    refCode: Optional[str] = None
+
+
+@dataclass
 class SendOTPInput:
     phone_number: str
 
@@ -88,6 +141,7 @@ class SendOTPInput:
 @dataclass
 class ValidateOTPInput:
     otp: str
+    user_type: str
     phone_number: str
 
 
@@ -340,3 +394,27 @@ class Output:
     output_status: str
     output_message: str
     output_details: dict
+
+
+# Admin Interfaces
+@dataclass
+class AdminAuthInput:
+    action: str
+    name: Optional[str] = None
+    password: Optional[str] = None
+    phoneNumber: Optional[str] = None
+
+
+@dataclass
+class Admin:
+    password: str
+    phoneNumber: str
+    createdDate: datetime = field(default_factory=datetime.now)
+
+    _id: Optional[str] = None
+    name: Optional[str] = None
+
+
+@dataclass
+class DashboardStatsInput:
+    item: str

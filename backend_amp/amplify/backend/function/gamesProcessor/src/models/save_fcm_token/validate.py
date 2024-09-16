@@ -1,4 +1,4 @@
-from models.interfaces import UserReferralInput as Input
+from models.interfaces import SaveFCMTokenInput as Input
 
 
 class Validator():
@@ -7,6 +7,3 @@ class Validator():
 
     def validate_input(self):
         return True, ""
-    
-
-    
