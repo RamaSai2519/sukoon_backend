@@ -17,6 +17,11 @@ api = Api(app)
 JWTManager(app)
 CORS(app, supports_credentials=True)
 
+
+# Call Routes
+api.add_resource(CallService, '/actions/call')
+api.add_resource(CallWebhookService, '/actions/call_webhook')
+
 # Users Routes
 api.add_resource(UserService, '/actions/user')
 api.add_resource(SlotsService, '/actions/slots')
@@ -53,7 +58,6 @@ api.add_resource(PushNotificationService, '/actions/push')
 api.add_resource(QuizGameService, '/actions/quiz_game')
 api.add_resource(CardGameService, '/actions/card_game')
 api.add_resource(SendOTPService, '/actions/send_otp')
-api.add_resource(CallWebhookService, '/actions/call_webhook')
 
 # Admin Routes
 # - Auth

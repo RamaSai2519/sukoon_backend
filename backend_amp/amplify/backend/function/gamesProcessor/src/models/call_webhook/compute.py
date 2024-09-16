@@ -19,7 +19,7 @@ class Compute:
         self.experts_collection = get_experts_collections()
 
     def prep_call(self, call: dict) -> Call:
-        call.get("conversationScore", None) = call.pop("Conversation Score", None)
+        call["conversationScore"] = call.pop("Conversation Score", None)
         return Call(**call)
 
     def find_call(self, callId: str) -> Union[Call, None]:
@@ -72,17 +72,19 @@ class Compute:
     def send_feedback_message(self, call: Call):
         user = self.find_user(call)
         expert = self.find_expert(call)
+        if not user or not expert:
+            return "Feedback message not sent"
         payload = {
             "template_name": "FEEDBACK_SURVEY",
             "phone_number": user.phoneNumber,
             "request_meta": json.dumps({
-                "sarathiId": expert._id,
+                "sarathiId": str(expert._id),
                 "callId": call.callId,
-                "userId": user._id
+                "userId": str(user._id)
             }),
             "parameters": {
                 "user_name": user.name,
-                "expert_name": expert.name,
+                "sarathi_name": expert.name,
             }
         }
         headers = {
@@ -93,6 +95,7 @@ class Compute:
         )
         print(response.text)
         message = "Feedback message sent" if response.status_code == 200 else "Feedback message not sent"
+        return message
 
     def compute(self) -> Output:
         callId = self.input.call_uuid.replace("_0", "")
