@@ -76,13 +76,15 @@ class GetGameConfigInput:
 class ChatInput:
     prompt: str
 
+
 @dataclass
 class WebhookInput:
     call_uuid: str
+    call_status: str
     call_duration: str
-    call_transfer_duration: str
     callrecordingurl: str
-
+    call_transfer_status: str
+    call_transfer_duration: str
 
 
 class TimingsRow:
@@ -426,3 +428,9 @@ class Admin:
 @dataclass
 class DashboardStatsInput:
     item: str
+
+
+@dataclass
+class CallInput:
+    user_id: str
+    expert_id: str
