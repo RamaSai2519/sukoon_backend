@@ -53,6 +53,7 @@ api.add_resource(PushNotificationService, '/actions/push')
 api.add_resource(QuizGameService, '/actions/quiz_game')
 api.add_resource(CardGameService, '/actions/card_game')
 api.add_resource(SendOTPService, '/actions/send_otp')
+api.add_resource(CallWebhookService, '/actions/call_webhook')
 
 # Admin Routes
 # - Auth
