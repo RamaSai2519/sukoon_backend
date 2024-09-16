@@ -76,6 +76,14 @@ class GetGameConfigInput:
 class ChatInput:
     prompt: str
 
+@dataclass
+class WebhookInput:
+    call_uuid: str
+    call_duration: str
+    call_transfer_duration: str
+    callrecordingurl: str
+
+
 
 class TimingsRow:
     key: str
