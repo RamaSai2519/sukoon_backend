@@ -49,17 +49,22 @@ class Compute:
         message = "Expert updated, " if response.modified_count > 0 else "Expert not updated, "
         return message
 
+    def determine_failed_reason(self):
+        call_transfer_status = self.input.call_transfer_status.lower()
+        if call_transfer_status == "missed":
+            return "call missed"
+        elif call_transfer_status == "not connected" or call_transfer_status == "none":
+            return "call not picked"
+        elif call_transfer_status == "did not process":
+            return "call not processed"
+        return ""
+
     def update_call(self, call: Call):
         filter = {"callId": call.callId}
         update = {
             "$set": {
                 "status": ("successfull" if self.input.call_status == "Connected" else "failed"),
-                "failedReason": (
-                    "call missed" if self.input.call_transfer_status.lower() == "missed"
-                    else "call not picked" if self.input.call_transfer_status.lower() == "not connected"
-                    else "call not processed" if self.input.call_transfer_status.lower() == "did not process"
-                    else ""
-                ),
+                "failedReason": self.determine_failed_reason(),
                 "duration": self.input.call_duration,
                 "recording_url": self.input.callrecordingurl,
                 "transferDuration": self.input.call_transfer_duration
