@@ -78,6 +78,22 @@ class ChatInput:
 
 
 @dataclass
+class Call:
+    callId: Optional[str] = None
+    status: Optional[str] = None
+    _id: Optional[ObjectId] = None
+    duration: Optional[str] = None
+    user: Optional[ObjectId] = None
+    expert: Optional[ObjectId] = None
+    scheduledId: Optional[str] = None
+    failedReason: Optional[str] = None
+    recording_url: Optional[str] = None
+    transferDuration: Optional[str] = None
+    conversationScore: Optional[int] = None
+    initiatedTime: Optional[datetime] = None
+
+
+@dataclass
 class WebhookInput:
     call_uuid: str
     call_status: str
