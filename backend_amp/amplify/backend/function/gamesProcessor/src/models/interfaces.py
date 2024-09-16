@@ -77,6 +77,38 @@ class ChatInput:
     prompt: str
 
 
+@dataclass
+class Call:
+    callId: Optional[str] = None
+    status: Optional[str] = None
+    _id: Optional[ObjectId] = None
+    duration: Optional[str] = None
+    user: Optional[ObjectId] = None
+    expert: Optional[ObjectId] = None
+    scheduledId: Optional[str] = None
+    failedReason: Optional[str] = None
+    recording_url: Optional[str] = None
+    transferDuration: Optional[str] = None
+    conversationScore: Optional[int] = None
+    initiatedTime: Optional[datetime] = None
+
+
+@dataclass
+class WebhookInput:
+    call_uuid: str
+    call_time: str
+    call_date: str
+    call_status: str
+    agent_number: str
+    call_duration: str
+    called_number: str
+    call_direction: str
+    customer_number: str
+    callrecordingurl: str
+    call_transfer_status: str
+    call_transfer_duration: str
+
+
 class TimingsRow:
     key: str
     value: str
@@ -418,3 +450,9 @@ class Admin:
 @dataclass
 class DashboardStatsInput:
     item: str
+
+
+@dataclass
+class CallInput:
+    user_id: str
+    expert_id: str
