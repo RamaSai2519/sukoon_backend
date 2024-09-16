@@ -22,7 +22,7 @@ class CallWebhookService(Resource):
 
     def post(self) -> dict:
         input = json.loads(request.get_data())
-        print(input)
+        print(input, "input")
         input = WebhookInput(**input)
         output = CallWebhook(input).process()
         output = dataclasses.asdict(output)
