@@ -43,9 +43,9 @@ class MainConfig:
     JWT_ACCESS_TOKEN_EXPIRES = timedelta(hours=1)
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=1)
 
-    AZURE_ENDPOINT = "https://sukoon-chat.openai.azure.com/"
+    AZURE_ENDPOINT = "https://sukoon-chat.openai.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2023-03-15-preview"
     AZURE_KEY = "13c72289e9704b4ca63f683df19a7afe"
-    AZURE_API_VERSION = "2024-05-13"
+    AZURE_API_VERSION = "2023-03-15-preview"
 
     REGION = "ap-south-1"
     ACCESS_KEY = "AKIAXYKJVMCCBZESPREV"
