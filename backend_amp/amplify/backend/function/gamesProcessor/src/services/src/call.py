@@ -1,9 +1,30 @@
+import json
+import dataclasses
 from flask import request
 from flask_restful import Resource
+from models.make_call.main import MakeCall
+from models.call_webhook.main import CallWebhook
+from models.interfaces import CallInput, WebhookInput
+
+
+class CallService(Resource):
+
+    def post(self) -> dict:
+        input = json.loads(request.get_data())
+        input = CallInput(**input)
+        output = MakeCall(input).process()
+        output = dataclasses.asdict(output)
+
+        return output
 
 
 class CallWebhookService(Resource):
-    def post(self):
-        data = request.json
-        print(data)
-        return data
+
+    def post(self) -> dict:
+        input = json.loads(request.get_data())
+        print(input, "input")
+        input = WebhookInput(**input)
+        output = CallWebhook(input).process()
+        output = dataclasses.asdict(output)
+
+        return output
