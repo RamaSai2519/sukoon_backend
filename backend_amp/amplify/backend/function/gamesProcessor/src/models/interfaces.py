@@ -96,8 +96,14 @@ class Call:
 @dataclass
 class WebhookInput:
     call_uuid: str
+    call_time: str
+    call_date: str
     call_status: str
+    agent_number: str
     call_duration: str
+    called_number: str
+    call_direction: str
+    customer_number: str
     callrecordingurl: str
     call_transfer_status: str
     call_transfer_duration: str
