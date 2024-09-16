@@ -4,7 +4,7 @@ from models.call_webhook.validate import Validator
 from models.interfaces import WebhookInput as Input, Output
 
 
-class MakeCall:
+class CallWebhook:
     def __init__(self, input: Input) -> None:
         self.input = input
 
