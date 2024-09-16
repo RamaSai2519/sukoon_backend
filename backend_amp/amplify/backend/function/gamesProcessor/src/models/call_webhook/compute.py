@@ -93,7 +93,7 @@ class Compute:
         response = requests.request(
             "POST", self.url, headers=headers, data=json.dumps(payload)
         )
-        print(response.text)
+        print(response.text, "feedback")
         message = "Feedback message sent" if response.status_code == 200 else "Feedback message not sent"
         return message
 
@@ -118,6 +118,7 @@ class Compute:
             feedback_message = self.send_feedback_message(call)
 
         final_message = call_message + user_message + expert_message + feedback_message
+        print(final_message, "final")
 
         return Output(
             output_details={},
