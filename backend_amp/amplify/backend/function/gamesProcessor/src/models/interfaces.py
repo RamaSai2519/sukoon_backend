@@ -78,6 +78,26 @@ class ChatInput:
 
 
 @dataclass
+class ContentPhoto:
+    url: Optional[str] = None
+    slug: Optional[str] = None
+    description: Optional[str] = None
+
+
+@dataclass
+class Content:
+    response: Optional[str] = None
+    category: Optional[str] = None
+    tags: Optional[List[str]] = None
+
+
+@dataclass
+class SaveContentInput:
+    content: Content
+    photo: ContentPhoto
+
+
+@dataclass
 class Call:
     callId: Optional[str] = None
     status: Optional[str] = None
