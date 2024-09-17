@@ -1,7 +1,6 @@
 from services.src.chat import ChatService
 from services.src.shorts import FetchShortsService
 from services.src.game_config import GameConfigService
-from services.src.chat import ChatService, PhotosService
 from services.src.cashfree import CashfreeWebhookService
 from services.src.dashboard import DashboardStatsService
 from services.src.user_referral import UserReferralService
@@ -10,6 +9,7 @@ from services.src.payment import CreatePaymentOrderService
 from services.src.call import CallWebhookService, CallService
 from services.src.admin import AdminFCMService, UploadService
 from services.src.user import CreateEventUserService, UserService
+from services.src.content import ChatService, PhotosService, ContentService
 from services.src.push_notification import PushNotificationService, FCMTokenService
 from services.src.authenticate import SendOTPService, ValidateOTPService, AdminAuthService
 from services.src.expert import ExpertService, ApplicantService, SlotsService, TimingsService
