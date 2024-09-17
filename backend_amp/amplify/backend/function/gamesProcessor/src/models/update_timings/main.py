@@ -1,14 +1,15 @@
 import traceback
-from models.interfaces import UserReferralInput as Input, Output
 from models.constants import OutputStatus
-from models.user_referral.compute import Compute
-from models.user_referral.validate import Validator
+from models.update_timings.compute import Compute
+from models.update_timings.validate import Validator
+from models.interfaces import UpdateTimingsInput as Input, Output
 
-class UserReferral:
+
+class UpdateTimings:
     def __init__(self, input: Input) -> None:
         self.input = input
 
-    def process(self):
+    def process(self) -> Output:
         input = self.input
         valid_input, error_message = self._validate(input)
 
@@ -30,7 +31,7 @@ class UserReferral:
             )
 
         return output
-    
+
     def _validate(self, input: Input):
         validation_obj = Validator(input)
         validation_result, error_message = validation_obj.validate_input()

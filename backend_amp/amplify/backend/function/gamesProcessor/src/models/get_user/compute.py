@@ -32,8 +32,7 @@ class Compute:
             if self.input.schedule_status is not None:
                 users = self.populate_schedules(users)
         else:
-            users = self.helper.get_users(
-                int(self.input.size), int(self.input.page))
+            users = self.helper.get_users(self.input.size, self.input.page)
 
         return Output(
             output_details=users,

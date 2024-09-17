@@ -806,3 +806,63 @@ class WhatsappNotificationTemplates:
                 ]
             },
         }
+
+        self.REFERRAL_CONFIRMATION = {
+            "template_name": "REFERRAL_CONFIRMATION",
+            "template": {
+                "name": "referral_confirmation_for_referree",
+                "language": {"code": "en"},
+                "components": [
+                   {       
+                        "type": "header",
+                        "parameters": [
+                            {"type": "image", "image": {"link": "{image_link}"}}
+                        ],
+                    },
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"},
+                        ],
+                    },
+                ],
+            },
+        }
+
+        self.REFERRAL = {
+            "template_name": "REFERRAL",
+            "template": {
+                "name": "referral_message",
+                "language": {"code": "en_us"},
+                "components": [
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"},
+                        ],
+                    },
+                ],
+            },
+        }
+
+        self.REFERRAL_VIDEO = {
+            "template_name": "REFERRAL_VIDEO",
+            "template": {
+                "name": "referral_video",
+                "language": {"code": "en_us"},
+                "components": [
+                    {       
+                        "type": "header",
+                        "parameters": [
+                            {"type": "video", "video": {"link": "{video_link}"}}
+                        ],
+                    },
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{referral_link}"},
+                        ],
+                    },
+                ],
+            },
+        }

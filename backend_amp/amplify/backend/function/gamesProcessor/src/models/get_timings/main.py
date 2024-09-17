@@ -1,14 +1,15 @@
 import traceback
 from models.constants import OutputStatus
-from models.save_fcm_token.compute import Compute
-from models.save_fcm_token.validate import Validator
-from models.interfaces import SaveFCMTokenInput as Input, Output
+from models.get_timings.compute import Compute
+from models.get_timings.validate import Validator   
+from models.interfaces import GetTimingsInput as Input, Output
 
-class SaveAdminFCMToken:
+
+class GetTimings:
     def __init__(self, input: Input) -> None:
         self.input = input
 
-    def process(self):
+    def process(self) -> Output:
         input = self.input
         valid_input, error_message = self._validate(input)
 
@@ -30,7 +31,7 @@ class SaveAdminFCMToken:
             )
 
         return output
-    
+
     def _validate(self, input: Input):
         validation_obj = Validator(input)
         validation_result, error_message = validation_obj.validate_input()

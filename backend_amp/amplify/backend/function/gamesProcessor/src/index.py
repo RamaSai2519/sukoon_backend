@@ -17,10 +17,17 @@ api = Api(app)
 JWTManager(app)
 CORS(app, supports_credentials=True)
 
+
+# Call Routes
+api.add_resource(CallService, '/actions/call')
+api.add_resource(CallWebhookService, '/actions/call_webhook')
+
 # Users Routes
 api.add_resource(UserService, '/actions/user')
+api.add_resource(SlotsService, '/actions/slots')
 api.add_resource(ExpertService, '/actions/expert')
 api.add_resource(ApplicantService, '/actions/applicant')
+api.add_resource(UserReferralService, '/actions/user_referrals')
 
 # Events Routes
 api.add_resource(ListEventsService, '/actions/list_events')
@@ -39,7 +46,6 @@ api.add_resource(CalculateWinnerService, '/actions/calculate_winner')
 api.add_resource(WhatsappMessageService, '/actions/send_whatsapp')
 api.add_resource(BytePlusTokenService, '/actions/byte_plus_token')
 api.add_resource(CouponRewardService, '/actions/coupon_reward')
-api.add_resource(UserReferralService, '/actions/user_referral')
 api.add_resource(ScoreUpdaterService, '/actions/score_update')
 api.add_resource(FCMTokenService, '/actions/update_fcm_token')
 api.add_resource(ValidateOTPService, '/actions/validate_otp')
@@ -57,8 +63,10 @@ api.add_resource(SendOTPService, '/actions/send_otp')
 # - Auth
 api.add_resource(AdminAuthService, '/actions/admin_auth')
 # - Services
+api.add_resource(ChatService, '/actions/chat')
+api.add_resource(PhotosService, '/actions/photos')
+api.add_resource(TimingsService, '/actions/timings')
 api.add_resource(AdminFCMService, '/actions/save_fcm_token')
-api.add_resource(UploadService, '/actions/upload')
 # - Stats
 api.add_resource(DashboardStatsService, '/actions/dashboard_stats')
 

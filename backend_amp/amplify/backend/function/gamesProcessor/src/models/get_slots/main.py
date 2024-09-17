@@ -1,14 +1,15 @@
 import traceback
 from models.constants import OutputStatus
-from models.save_fcm_token.compute import Compute
-from models.save_fcm_token.validate import Validator
-from models.interfaces import SaveFCMTokenInput as Input, Output
+from models.get_slots.compute import Compute
+from models.get_slots.validate import Validator
+from models.interfaces import GetSlotsInput as Input, Output
 
-class SaveAdminFCMToken:
+
+class GetSlots:
     def __init__(self, input: Input) -> None:
         self.input = input
 
-    def process(self):
+    def process(self) -> Output:
         input = self.input
         valid_input, error_message = self._validate(input)
 
