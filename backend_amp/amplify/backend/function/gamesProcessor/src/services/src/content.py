@@ -5,7 +5,7 @@ from flask_restful import Resource
 from models.get_chat.main import Chat
 from models.get_photos.main import Photos
 from models.save_content.main import SaveContent
-from models.interfaces import ChatInput, SaveContentInput, PhotosInput, Output
+from models.interfaces import ChatInput, SaveContentInput, PhotosInput, Output, Content, ContentPhoto
 
 
 class ChatService(Resource):
@@ -34,6 +34,9 @@ class ContentService(Resource):
 
     def post(self) -> Output:
         input = json.loads(request.get_data())
+        
+        input["content"] = Content(**input.get("content", {}))
+        input["photo"] = ContentPhoto(**input.get("photo", {}))
         input = SaveContentInput(**input)
         output = SaveContent(input).process()
         output = dataclasses.asdict(output)
