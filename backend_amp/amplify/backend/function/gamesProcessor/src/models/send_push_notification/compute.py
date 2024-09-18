@@ -1,79 +1,60 @@
-import requests
-import json
-import os
 from models.interfaces import PushNotificationInput as Input, Output
+from firebase_admin import credentials, messaging
 from models.constants import OutputStatus
 from configs import CONFIG as CONFIG
-from http import HTTPStatus
-from db.users import get_user_notification_collection
-from datetime import datetime
-from google.oauth2 import service_account
-import google.auth.transport.requests
+import firebase_admin
+import os
 
-SCOPES = ['https://www.googleapis.com/auth/firebase.messaging'] 
+
 class Compute:
-    def __init__(self,input: Input) -> None:
+    def __init__(self, input: Input) -> None:
         self.input = input
 
-    def create_user_notification_message_id(self, status, user_id):
-        user_collection = get_user_notification_collection()
-        message_data = {
-            "userId": user_id,
-            "status": status,
-            "notificationType": "PUSH_NOTIFICATION",
-            "createdAt": datetime.now()
-        }
-        user_collection.insert_one(message_data)
+    def initialize_firebase_admin(self) -> None:
+        file_path = os.path.join(os.path.dirname(
+            __file__), 'service-account.json')
+        if not firebase_admin._apps:
+            cred = credentials.Certificate(file_path)
+            firebase_admin.initialize_app(cred, {
+                'databaseURL': 'https://games-sukoon-app-default-rtdb.firebaseio.com'
+            })
 
-    def get_access_token(self):
-        """Retrieve a valid access token that can be used to authorize requests.
-
-        :return: Access token.
-        """
-        file_path = os.path.join(os.path.dirname(__file__), 'service-account.json')
-        credentials = service_account.Credentials.from_service_account_file(file_path, scopes=SCOPES)
-        request = google.auth.transport.requests.Request()
-        credentials.refresh(request)
-        return credentials.token
-
-    def send_push_notification(self):
-        variables = CONFIG.PUSH_NOTIFICATION_API
-        push_notification_api_url = variables.get("URL")
-        token = self.get_access_token()
-        headers = {
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {token}",
-        }
-        body = {
-            "message":{
-                "token": self.input.fcm_token,
-                "notification":{
-                    "body": self.input.body,
-                    "title": self.input.title
-                }
+    def send_notification_fcm(self, token, body, image_url, title, user_id, sarathi_id, type_, action='') -> None:
+        message = messaging.Message(
+            token=str(token),
+            notification=messaging.Notification(
+                body=body,
+                image=image_url,
+                title=title
+            ),
+            data={
+                'userId': user_id,
+                'sarathiId': sarathi_id,
+                'type': type_,
+                'action': action
             }
-        }
-        response = requests.request(
-            "POST",
-            url=push_notification_api_url,
-            data=json.dumps(body),
-            headers=headers,
         )
-        print(response.text)
+
+        response = messaging.send(message)
         return response
 
-    def compute(self):
-        response = self.send_push_notification()
+    def compute(self) -> Output:
+        self.initialize_firebase_admin()
+        token = self.input.token
+        body = self.input.body
+        image_url = self.input.image_url
+        title = self.input.title
+        user_id = self.input.user_id
+        sarathi_id = self.input.sarathi_id
+        type_ = self.input.type_
+        action = self.input.action
 
-        status = OutputStatus.FAILURE
-        if response.status_code == HTTPStatus.OK.value:
-            status = OutputStatus.SUCCESS
-
-        if self.input.user_id:
-            self.create_user_notification_message_id(status, self.input.user_id)
+        response = self.send_notification_fcm(
+            token, body, image_url, title, user_id, sarathi_id, type_, action
+        )
 
         return Output(
-            output_details={"response": response.text},
-            output_status=status,
-            output_message="Successfully send push notification"
+            output_details=response,
+            output_status=OutputStatus.SUCCESS,
+            output_message="Successfully sent push notification"
         )
