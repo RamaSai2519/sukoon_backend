@@ -34,7 +34,7 @@ class Common:
 
     @staticmethod
     def string_to_date(doc: dict, field: str) -> date:
-        if field in doc:
+        if field in doc and doc[field] is not None:
             doc[field] = datetime.strptime(doc[field], "%Y-%m-%dT%H:%M:%S.%fZ")
         return doc[field]
 

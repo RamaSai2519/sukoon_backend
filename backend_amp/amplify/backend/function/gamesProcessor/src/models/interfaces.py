@@ -341,12 +341,14 @@ class EventInput:
     name: Optional[str] = None
     slug: Optional[str] = None
     repeat: Optional[str] = None
+    passcode: Optional[str] = None
     subTitle: Optional[str] = None
     hostedBy: Optional[str] = None
     category: Optional[str] = None
     imageUrl: Optional[str] = None
     mainTitle: Optional[str] = None
     eventType: Optional[str] = None
+    meeting_id: Optional[str] = None
     prizeMoney: Optional[int] = None
     isAlways: Optional[bool] = False
     meetingLink: Optional[str] = None
