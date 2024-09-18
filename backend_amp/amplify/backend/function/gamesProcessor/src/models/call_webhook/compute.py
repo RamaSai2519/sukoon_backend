@@ -19,8 +19,21 @@ class Compute:
         self.experts_collection = get_experts_collections()
 
     def prep_call(self, call: dict) -> Call:
-        call["conversationScore"] = call.pop("Conversation Score", None)
-        return Call(**call)
+        fcall = {
+            "_id": call.get("_id", None),
+            "user": call.get("user", None),
+            "expert": call.get("expert", None),
+            "callId": call.get("callId", None),
+            "status": call.get("status", None),
+            "duration": call.get("duration", None),
+            "scheduledId": call.get("scheduledId", None),
+            "failedReason": call.get("failedReason", None),
+            "initiatedTime": call.get("initiatedTime", None),
+            "recording_url": call.get("recording_url", None),
+            "transferDuration": call.get("transferDuration", None),
+            "conversationScore": call.get("Conversation Score", None)
+        }
+        return Call(**fcall)
 
     def find_call(self, callId: str) -> Union[Call, None]:
         call = self.calls_collection.find_one({"callId": callId})
