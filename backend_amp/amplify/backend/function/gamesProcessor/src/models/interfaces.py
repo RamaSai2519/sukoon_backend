@@ -401,6 +401,7 @@ class User:
     active: Optional[bool] = None
     isBusy: Optional[bool] = None
     _id: Optional[ObjectId] = None
+    refSource: Optional[str] = None
     isBlocked: Optional[bool] = None
     isPaidUser: Optional[bool] = None
     wa_opt_out: Optional[bool] = None
