@@ -33,7 +33,7 @@ class Compute:
             name=input.name or "", refCode=input.source,
             phoneNumber=input.phoneNumber, numberOfCalls=3,
             city=input.city or "", email=input.email or "",
-            active=True, isBusy=False, wa_opt_out=False, numberOfGames=0, otp="",
+            active=True, isBusy=False, wa_opt_out=False, numberOfGames=0,
             birthDate=datetime.strptime(
                 input.dob, "%Y-%m-%dT%H:%M:%S.%fZ") if input.dob else ""
         )
