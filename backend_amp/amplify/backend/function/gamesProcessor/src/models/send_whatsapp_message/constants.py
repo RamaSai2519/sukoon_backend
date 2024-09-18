@@ -918,9 +918,11 @@ class WhatsappNotificationTemplates:
                             {"type": "text", "text": "{event_name}"},
                             {"type": "text", "text": "{new_date}"},
                             {"type": "text", "text": "{new_time}"},
-                            {"type": "text", "text": "{date}"},
-                            {"type": "text", "text": "{time}"},
-                            {"type": "text", "text": "{event_details}"}
+                            {"type": "text", "text": "{new_date}"},
+                            {"type": "text", "text": "{new_time}"},
+                            {"type": "text", "text": "{zoom_link}"},
+                            {"type": "text", "text": "{meeting_id}"},
+                            {"type": "text", "text": "{passcode}"},
                         ]
                     }
                 ]
