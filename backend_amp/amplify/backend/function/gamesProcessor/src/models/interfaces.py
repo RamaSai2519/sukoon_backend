@@ -96,6 +96,11 @@ class SaveContentInput:
     content: Content
     photo: ContentPhoto
 
+@dataclass
+class WASlackNotifierInput:
+    name: str
+    body: str
+    from_number: str
 
 @dataclass
 class Call:
