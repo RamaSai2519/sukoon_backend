@@ -15,7 +15,8 @@ class SlackNotifier:
         }
         return status_mapping.get(status, ('Unknown status', ':grey_question:'))
 
-    def _create_message_blocks(self, type_, user_name, sarathi_name, status, call_link='', dashboard_link='https://admin.sukoonunlimited.com/admin/home/calls%20list'):
+    def _create_message_blocks(self, type_, user_name, sarathi_name, status, call_link=''):
+        dashboard_link = 'https://admin.sukoonunlimited.com/admin/home/calls%20list'
         status_message, status_emoji = self._get_status_message(status)
 
         blocks = [
@@ -74,27 +75,25 @@ class SlackNotifier:
                         "value": 'join_call',
                         "url": call_link,
                         "action_id": 'button_join_call',
+                    },
+                    {
+                        "type": 'button',
+                        "text": {
+                            "type": 'plain_text',
+                            "text": 'Go to Admin Dashboard',
+                        },
+                        "value": 'admin_dashboard',
+                        "url": dashboard_link,
+                        "action_id": 'button_admin_dashboard',
                     }
                 ]
-            })
-
-        if dashboard_link:
-            blocks[-1]["elements"].append({
-                "type": 'button',
-                "text": {
-                    "type": 'plain_text',
-                    "text": 'Go to Admin Dashboard',
-                },
-                "value": 'admin_dashboard',
-                "url": dashboard_link,
-                "action_id": 'button_admin_dashboard',
             })
 
         return blocks
 
     def send_notification(self, type_, user_name, sarathi_name, status, call_link='', dashboard_link=''):
         blocks = self._create_message_blocks(
-            type_, user_name, sarathi_name, status, call_link, dashboard_link)
+            type_, user_name, sarathi_name, status, call_link)
 
         try:
             response = requests.post(
