@@ -278,10 +278,15 @@ class WhatsappWebhookEventInput:
 
 @dataclass
 class PushNotificationInput:
-    title: str
     body: str
+    title: str
+    token: str
+    type_: str
     user_id: str
-    fcm_token: str
+    image_url: str
+    sarathi_id: str
+    action: str = field(default_factory=lambda: "")
+
 
 
 @dataclass
@@ -479,3 +484,4 @@ class DashboardStatsInput:
 class CallInput:
     user_id: str
     expert_id: str
+    type_: str = field(default_factory=lambda: 'call')
