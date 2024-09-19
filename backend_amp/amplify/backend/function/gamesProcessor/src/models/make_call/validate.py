@@ -1,8 +1,8 @@
 from bson import ObjectId
-from helpers.slack import SlackNotifier
 from db.users import get_user_collection
 from db.experts import get_experts_collections
 from models.interfaces import CallInput as Input
+from models.make_call.slack import SlackNotifier
 
 
 class Validator:
