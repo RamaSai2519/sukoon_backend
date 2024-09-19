@@ -61,7 +61,7 @@ class SlackNotifier:
             },
         ]
 
-        if status == 'success':
+        if status == 'success' and call_link:
             blocks.append({
                 "type": 'actions',
                 "elements": [
@@ -74,18 +74,20 @@ class SlackNotifier:
                         "value": 'join_call',
                         "url": call_link,
                         "action_id": 'button_join_call',
-                    },
-                    {
-                        "type": 'button',
-                        "text": {
-                            "type": 'plain_text',
-                            "text": 'Go to Admin Dashboard',
-                        },
-                        "value": 'admin_dashboard',
-                        "url": dashboard_link,
-                        "action_id": 'button_admin_dashboard',
-                    },
-                ],
+                    }
+                ]
+            })
+
+        if dashboard_link:
+            blocks[-1]["elements"].append({
+                "type": 'button',
+                "text": {
+                    "type": 'plain_text',
+                    "text": 'Go to Admin Dashboard',
+                },
+                "value": 'admin_dashboard',
+                "url": dashboard_link,
+                "action_id": 'button_admin_dashboard',
             })
 
         return blocks
