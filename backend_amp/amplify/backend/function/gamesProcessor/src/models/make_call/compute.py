@@ -4,11 +4,11 @@ import requests
 from bson import ObjectId
 from datetime import datetime
 from configs import CONFIG as config
-from helpers.slack import SlackNotifier
 from models.constants import OutputStatus
 from db.users import get_user_collection
 from db.calls import get_calls_collection
 from db.experts import get_experts_collections
+from models.make_call.slack import SlackNotifier
 from models.interfaces import CallInput as Input, Output
 
 
