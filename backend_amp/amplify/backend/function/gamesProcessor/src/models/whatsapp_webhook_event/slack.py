@@ -1,5 +1,5 @@
 import requests
-from interfaces import WASlackNotifierInput as Input
+from models.interfaces import WASlackNotifierInput as Input
 
 
 class WASlackNotifier:
