@@ -40,7 +40,7 @@ class ExpertsHelper:
 
     def populate_categories(self, expert_data: dict) -> dict:
         cats = list(self.categories_collection.find(
-            {"_id": {"$in": expert_data["categories"]}}))
+            {"_id": {"$in": [ObjectId(cat) for cat in expert_data["categories"]]}}))
         categories = []
         for cat in cats:
             categories.append(cat["name"])

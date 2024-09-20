@@ -68,6 +68,12 @@ class GetExpertsInput:
 
 
 @dataclass
+class GetContentPostsInput:
+    page: Optional[int] = 0
+    size: Optional[int] = 0
+
+
+@dataclass
 class GetGameConfigInput:
     game_type: str
 
@@ -96,11 +102,13 @@ class SaveContentInput:
     content: Content
     photo: ContentPhoto
 
+
 @dataclass
 class WASlackNotifierInput:
     name: str
     body: str
     from_number: str
+
 
 @dataclass
 class Call:
@@ -291,7 +299,6 @@ class PushNotificationInput:
     image_url: str
     sarathi_id: str
     action: str = field(default_factory=lambda: "")
-
 
 
 @dataclass
