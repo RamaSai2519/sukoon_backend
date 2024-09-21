@@ -35,7 +35,7 @@ class Validator:
             if self.input.status is not None and self.input.status not in ["offline", "online"]:
                 return False, "Field status must be either 'offline' or 'online'"
         if hasattr(self.input, "type"):
-            if self.input.type is not None and self.input.type not in ["saarthi", "expert"]:
+            if self.input.type is not None and self.input.type not in ["saarthi", "expert", "internal"]:
                 return False, "Field type must be either 'sarathi' or 'expert'"
         return True, ""
 
