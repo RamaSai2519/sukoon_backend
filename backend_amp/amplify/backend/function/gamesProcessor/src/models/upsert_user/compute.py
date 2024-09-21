@@ -80,7 +80,9 @@ class Compute:
                    "parameters": {
                        "user_name": user_data.get("name", "")
                    }}
-        response = requests.request("POST", url, headers=headers, data=json.dumps(payload))
+        response = requests.request(
+            "POST", url, headers=headers, data=json.dumps(payload)
+        )
 
         if response.status_code != 200:
             print(response.text)
@@ -149,10 +151,7 @@ class Compute:
         else:
             message, user_data = self.insert_user(user_data)
             response = self.send_welcome_message(user_data)
-            if response:
-                message = "Successfully created user and sent welcome message"
-            else:
-                message = "Successfully created user but failed to send welcome message"
+            message += " and sent welcome message" if response else " but failed to send welcome message"
         self.handle_referral(user_data, prev_user)
 
         return Output(
