@@ -12,13 +12,13 @@ from bson import ObjectId
 
 class Common:
     def __init__(self):
-        self.referrals_collection = get_user_referral_collection()
-        self.schedules_collection = get_schedules_collection()
-        self.experts_collection = get_experts_collections()
-        self.calls_collection = get_calls_collection()
-        self.users_collection = get_user_collection()
-        self.experts_cache = {}
         self.users_cache = {}
+        self.experts_cache = {}
+        self.users_collection = get_user_collection()
+        self.calls_collection = get_calls_collection()
+        self.experts_collection = get_experts_collections()
+        self.schedules_collection = get_schedules_collection()
+        self.referrals_collection = get_user_referral_collection()
 
     @staticmethod
     def get_identity() -> str:
@@ -85,17 +85,25 @@ class Common:
 
     def format_calls(self, calls: list, req_names: bool = True) -> list:
         for call in calls:
+            # Fetch names if requested
             if req_names:
-                call["user"] = self.get_user_name(user_id=ObjectId(
-                    call["user"])) if "user" in call else "Unknown"
+                call["user"] = self.get_user_name(
+                    ObjectId(call.get("user"))) if call.get("user") else "Unknown"
                 call["expert"] = self.get_expert_name(
-                    ObjectId(call["expert"])) if "expert" in call else "Unknown"
+                    ObjectId(call.get("expert"))) if call.get("expert") else "Unknown"
+
+            # Rename "Conversation Score" to "conversationScore"
             call["conversationScore"] = call.pop("Conversation Score", 0)
-            call = Common.jsonify(call)
-            if "failedReason" in call and call["failedReason"] == "call missed":
+
+            # Handle call status and missed calls
+            if call.get("failedReason") == "call missed":
                 call["status"] = "missed"
-            if "status" in call and call["status"] == "successfull":
+            elif call.get("status") == "successfull":
                 call["status"] = "successful"
+
+            # Convert the call to JSON
+            call = Common.jsonify(call)
+
         return calls
 
     def get_events_history(self, query: dict) -> list:
@@ -139,11 +147,12 @@ class Common:
 
         return calls
 
-    def get_internal_expert_ids(self) -> list:
+    def get_internal_exclude_query(self) -> list:
         query = {"type": "internal"}
         projection = {"_id": 1}
         experts = list(self.experts_collection.find(query, projection))
-        return [expert.get("_id", "") for expert in experts]
+        internal_expert_ids = [expert.get("_id", "") for expert in experts]
+        return {"expert": {"$nin": internal_expert_ids}}
 
     @staticmethod
     def paginate_cursor(cursor: Cursor, page: int, size: int) -> Cursor:
