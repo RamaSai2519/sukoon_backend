@@ -62,6 +62,12 @@ class PhotosInput:
 
 
 @dataclass
+class GetCallsInput:
+    dest: str
+    page: Optional[int] = 0
+    size: Optional[int] = 0
+
+@dataclass
 class GetExpertsInput:
     phoneNumber: Optional[str] = None
     schedule_status: Optional[str] = None
