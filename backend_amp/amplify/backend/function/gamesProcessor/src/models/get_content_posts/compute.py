@@ -18,7 +18,7 @@ class Compute:
     def compute(self) -> Output:
         cursor = self.collection.find()
         content_posts = list(Common.paginate_cursor(
-            cursor, self.input.page, self.input.size))
+            cursor, int(self.input.page), int(self.input.size)))
         total_count = self.get_total_count()
         content_posts = self.__format__(content_posts)
 

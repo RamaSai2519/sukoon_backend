@@ -128,9 +128,10 @@ class Common:
         calls = self.calls_collection.find(
             query, projection).sort("initiatedTime", -1)
 
-        if page != 0 and size != 0:
+        if page > 0 and size > 0:
             calls = self.paginate_cursor(calls, page, size)
-        elif size != 0:
+
+        elif size > 0:
             calls = calls.limit(size)
 
         if format:
@@ -140,12 +141,11 @@ class Common:
 
     def get_internal_expert_ids(self) -> list:
         query = {"type": "internal"}
-        experts = list(self.experts_collection.find(query, {"_id": 1}))
-        return [str(expert["_id"]) for expert in experts]
+        projection = {"_id": 1}
+        experts = list(self.experts_collection.find(query, projection))
+        return [expert.get("_id", "") for expert in experts]
 
     @staticmethod
     def paginate_cursor(cursor: Cursor, page: int, size: int) -> Cursor:
-        offset = int((int(page) - 1) * int(size))
-        if offset > 0:
-            cursor = cursor.skip(offset).limit(size)
-        return cursor
+        offset = (page - 1) * size
+        return cursor.skip(offset).limit(size)
