@@ -7,11 +7,11 @@ from models.interfaces import GetCallsInput as Input, Output
 
 class Compute:
     def __init__(self, input: Input) -> None:
-        self.input = input
-        self.common = Common()
         self.internal_expert_ids = self.common.get_internal_expert_ids()
         self.current_date = datetime.now(pytz.timezone("Asia/Kolkata"))
         self.query = {"expert": {"$nin": self.internal_expert_ids}}
+        self.common = Common()
+        self.input = input
 
         # Today Query
         today_start = datetime.combine(self.current_date, datetime.min.time())
