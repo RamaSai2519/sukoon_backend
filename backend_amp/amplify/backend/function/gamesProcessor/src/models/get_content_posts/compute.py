@@ -9,13 +9,6 @@ class Compute:
         self.input = input
         self.collection = get_content_posts_collection()
 
-    def fetch_posts(self) -> list:
-        cursor = self.collection.find()
-        offset = int((int(self.input.page) - 1) * int(self.input.size))
-        if offset > 0:
-            cursor = cursor.skip(offset).limit(self.input.size)
-        return list(cursor)
-
     def __format__(self, format_spec: list) -> list:
         return [Common.jsonify(post) for post in format_spec]
 
@@ -23,7 +16,9 @@ class Compute:
         return self.collection.count_documents({})
 
     def compute(self) -> Output:
-        content_posts = self.fetch_posts()
+        cursor = self.collection.find()
+        content_posts = list(Common.paginate_cursor(
+            cursor, self.input.page, self.input.size))
         total_count = self.get_total_count()
         content_posts = self.__format__(content_posts)
 

@@ -6,6 +6,7 @@ from flask_jwt_extended import get_jwt_identity
 from db.experts import get_experts_collections
 from db.users import get_user_collection
 from datetime import datetime, date
+from pymongo.cursor import Cursor
 from bson import ObjectId
 
 
@@ -82,12 +83,13 @@ class Common:
             )
         return experts_cache[expert_id]
 
-    def format_calls(self, calls: list) -> list:
+    def format_calls(self, calls: list, req_names: bool = True) -> list:
         for call in calls:
-            call["user"] = self.get_user_name(user_id=ObjectId(
-                call["user"])) if "user" in call else "Unknown"
-            call["expert"] = self.get_expert_name(
-                ObjectId(call["expert"])) if "expert" in call else "Unknown"
+            if req_names:
+                call["user"] = self.get_user_name(user_id=ObjectId(
+                    call["user"])) if "user" in call else "Unknown"
+                call["expert"] = self.get_expert_name(
+                    ObjectId(call["expert"])) if "expert" in call else "Unknown"
             call["conversationScore"] = call.pop("Conversation Score", 0)
             call = Common.jsonify(call)
             if "failedReason" in call and call["failedReason"] == "call missed":
@@ -119,14 +121,31 @@ class Common:
             counts[status] = self.schedules_collection.count_documents(query)
         return counts
 
-    def get_calls(self, query: dict = {}, projection: dict = {}, exclude: bool = True, format: bool = True) -> list:
+    def get_calls(self, query: dict = {}, projection: dict = {}, exclude: bool = True, format: bool = True, page: int = 0, size: int = 0, req_names: bool = True) -> list:
         if exclude:
             projection = {**projection, **calls_exclusion_projection}
 
-        calls = list(self.calls_collection.find(
-            query, projection).sort("initiatedTime", -1))
+        calls = self.calls_collection.find(
+            query, projection).sort("initiatedTime", -1)
+
+        if page != 0 and size != 0:
+            calls = self.paginate_cursor(calls, page, size)
+        elif size != 0:
+            calls = calls.limit(size)
 
         if format:
-            calls = self.format_calls(calls)
+            calls = self.format_calls(list(calls), req_names)
 
         return calls
+
+    def get_internal_expert_ids(self) -> list:
+        query = {"type": "internal"}
+        experts = list(self.experts_collection.find(query, {"_id": 1}))
+        return [str(expert["_id"]) for expert in experts]
+
+    @staticmethod
+    def paginate_cursor(cursor: Cursor, page: int, size: int) -> Cursor:
+        offset = int((int(page) - 1) * int(size))
+        if offset > 0:
+            cursor = cursor.skip(offset).limit(size)
+        return cursor
