@@ -9,6 +9,12 @@ def get_calls_collection() -> Collection:
     calls_collection = db["calls"]
     return calls_collection
 
+def get_callsmeta_collection() -> Collection:
+    client = Database().client
+
+    db = client["test"]
+    callsmeta_collection = db["callsmeta"]
+    return callsmeta_collection
 
 def get_schedules_collection() -> Collection:
     client = Database().client

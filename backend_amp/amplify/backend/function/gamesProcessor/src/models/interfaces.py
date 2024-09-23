@@ -67,6 +67,7 @@ class GetCallsInput:
     page: Optional[int] = 0
     size: Optional[int] = 0
 
+
 @dataclass
 class GetExpertsInput:
     phoneNumber: Optional[str] = None
@@ -465,6 +466,30 @@ class ApplicantInput:
     createdDate: datetime = field(default_factory=datetime.now)
 
     _id: Optional[str] = None
+
+
+@dataclass
+class UpdateScoresInput:
+    expert_id: str
+    expert_number: str
+
+
+@dataclass
+class AverageScores:
+    flow: Optional[int] = 0
+    timeSplit: Optional[int] = 0
+    timeSpent: Optional[int] = 0
+    probability: Optional[int] = 0
+    userSentiment: Optional[int] = 0
+    closingGreeting: Optional[int] = 0
+    openingGreeting: Optional[int] = 0
+
+
+@dataclass
+class AverageScoresObject:
+    message: str
+    average_scores: AverageScores
+    score: Optional[int] = 0
 
 
 @dataclass
