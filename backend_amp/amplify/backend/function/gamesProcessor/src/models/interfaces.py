@@ -466,6 +466,10 @@ class ApplicantInput:
 
     _id: Optional[str] = None
 
+@dataclass
+class UpdateScoresInput:
+    call_id: str
+    expert_id: str
 
 @dataclass
 class Output:
