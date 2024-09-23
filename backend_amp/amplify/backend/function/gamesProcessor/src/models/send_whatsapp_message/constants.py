@@ -759,7 +759,7 @@ class WhatsappNotificationTemplates:
                     },
                 ],
             },
-        },
+        }
 
         self.EVENT_INVOICE = {
             "template_name": "EVENT_INVOICE",
