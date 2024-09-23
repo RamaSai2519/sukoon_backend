@@ -1,5 +1,6 @@
 from services.src.shorts import FetchShortsService
 from services.src.game_config import GameConfigService
+from services.src.mark7 import UpdateExpertScoresService
 from services.src.cashfree import CashfreeWebhookService
 from services.src.dashboard import DashboardStatsService
 from services.src.user_referral import UserReferralService

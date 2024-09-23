@@ -39,6 +39,9 @@ api.add_resource(CreateEventUserService, '/actions/create_event_user')
 api.add_resource(CreateScheduledJobsService, '/actions/create_scheduled_job')
 api.add_resource(UpdateScheduledJobsService, '/actions/update_scheduled_job')
 
+# Mark7 Routes
+api.add_resource(UpdateExpertScoresService, '/actions/expert_scores')
+
 
 api.add_resource(CreatePaymentOrderService, '/actions/create_payment_order')
 api.add_resource(CashfreeWebhookService, '/actions/cashfree_webhook')
