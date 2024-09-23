@@ -80,6 +80,38 @@ class WhatsappNotificationTemplates:
             },
         }
 
+        self.SUPPORT_GROUP_WABA_MESSAGES = {
+            "template_name": "Support Group Waba Messages",
+            "template": {
+                "name": "support_group_waba_messages",
+                "language": {"code": "en"},
+            },
+        }
+
+        self.MESSAGE_JOGGING_TEMPLATE = {
+            "template_name": "Message Jogging Template",
+            "template": {
+                "name": "message_jogging_template",
+                "language": {"code": "en"},
+            },
+        }
+
+        self.LEARNING_WEEK_MARKETING_CREATIVE = {
+            "template_name": "Learing Week Marketing Creatinve",
+            "template": {
+                "name": "learning_week_marketing_creative",
+                "language": {"code": "en"},
+                "components": [
+                    {
+                        "type": "header",
+                        "parameters": [
+                            {"type": "image", "image": {"link": "{image_link}"}}
+                        ],
+                    },
+                ],
+            },
+        }
+
         self.REGISTERED_USER_ONLY_EVENT_ACTIVE = {
             "template_name": "Registered User Only Event Active",
             "template": {
@@ -713,6 +745,21 @@ class WhatsappNotificationTemplates:
                 "language": {"code": "en"},
             },
         }
+        self.EVENT_WA_ADV_ACTIVE_USERS = {
+            "template_name": "EVENT_WA_ADV_ACTIVE_USERS",
+            "template": {
+                "name": "event_wa_adv_active_users",
+                "language": {"code": "en"},
+                "components": [
+                    {
+                        "type": "header",
+                        "parameters": [
+                            {"type": "image", "image": {"link": "{image_link}"}}
+                        ],
+                    },
+                ],
+            },
+        },
 
         self.EVENT_INVOICE = {
             "template_name": "EVENT_INVOICE",
