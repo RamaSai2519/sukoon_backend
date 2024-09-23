@@ -5,7 +5,7 @@ from models.update_expert_scores.validate import Validator
 from models.interfaces import UpdateScoresInput as Input, Output
 
 
-class UpsertExpert:
+class UpdateExpertScores:
     def __init__(self, input: Input) -> None:
         self.input = input
 
