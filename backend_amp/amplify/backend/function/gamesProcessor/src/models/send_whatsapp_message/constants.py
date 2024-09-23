@@ -745,6 +745,21 @@ class WhatsappNotificationTemplates:
                 "language": {"code": "en"},
             },
         }
+        self.EVENT_WA_ADV_ACTIVE_USERS = {
+            "template_name": "EVENT_WA_ADV_ACTIVE_USERS" ,
+            "template": {
+                "name": "event_wa_adv_active_users",
+                "language": {"code": "en"},
+                "components": [
+                    {
+                        "type": "header",
+                        "parameters": [
+                            {"type": "image", "image": {"link": "{image_link}"}}
+                        ],
+                    },
+                ],
+            },
+        },
 
         self.EVENT_INVOICE = {
             "template_name": "EVENT_INVOICE",
