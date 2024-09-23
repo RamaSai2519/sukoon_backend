@@ -87,7 +87,7 @@ class Compute:
                 sort=[("online", -1)]
             ))
 
-            if not onlinetime:
+            if not online_time_object:
                 return "No online time found"
 
             onlinetime: datetime = online_time_object.get("online")
