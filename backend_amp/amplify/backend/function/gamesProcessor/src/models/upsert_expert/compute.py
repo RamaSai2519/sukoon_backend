@@ -90,7 +90,9 @@ class Compute:
             if not online_time_object:
                 return "No online time found"
 
-            onlinetime: datetime = online_time_object.get("online")
+            onlinetime = online_time_object.get("online")
+            onlinetime = datetime.strptime(
+                str(onlinetime), "%Y-%m-%d %H:%M:%S.%f").replace(tzinfo=pytz.utc)
             duration = (current_time - onlinetime).total_seconds()
 
             self.expertlogs_collection.find_one_and_update(
