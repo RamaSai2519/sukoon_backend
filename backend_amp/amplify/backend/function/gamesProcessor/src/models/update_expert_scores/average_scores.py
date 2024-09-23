@@ -61,11 +61,11 @@ class CalcAverageScores:
         average_scores = AverageScores(**average_scores)
         return score, average_scores
 
-    def get_payload(self, average_scores: dict, score: float) -> dict:
+    def get_payload(self, average_scores: AverageScores, score: float) -> dict:
         return {"phoneNumber": self.input.expert_number,
                 **average_scores.__dict__, "score": score}
 
-    def update_expert_scores(self, average_scores: dict, score: float) -> str:
+    def update_expert_scores(self, average_scores: AverageScores, score: float) -> str:
         payload = self.get_payload(average_scores, score)
         headers = {'Content-Type': 'application/json'}
         response = requests.request(

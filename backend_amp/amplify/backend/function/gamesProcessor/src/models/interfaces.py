@@ -470,7 +470,6 @@ class ApplicantInput:
 
 @dataclass
 class UpdateScoresInput:
-    call_id: str
     expert_id: str
     expert_number: str
 

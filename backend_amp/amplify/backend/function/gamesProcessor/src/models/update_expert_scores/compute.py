@@ -18,31 +18,34 @@ class Compute:
         return list(calls)
 
     def set_users_per_expert(self, calls: list, expert_id: str) -> tuple:
-        total_users_per_expert = {}
+        total_users_of_expert = set()
         user_calls_to_experts = {}
 
         for call in calls:
-            user_id = str(call["user"])
-            if expert_id not in total_users_per_expert:
-                total_users_per_expert[expert_id] = set()
-            if user_id not in user_calls_to_experts:
-                user_calls_to_experts[user_id] = set()
+            user_id = str(call.get("user"))
+            total_users_of_expert.add(user_id)
 
-            set(total_users_per_expert[expert_id]).add(user_id)
-            set(user_calls_to_experts[user_id]).add(expert_id)
+            if not user_calls_to_experts.get(user_id):
+                user_calls_to_experts[user_id] = []
 
-        return total_users_per_expert, user_calls_to_experts
+            user_calls_to_experts[user_id].append(call.get("callId"))
+
+        return total_users_of_expert, user_calls_to_experts
 
     def calculate_repeat_ratio(self, expert_id: str, calls: list) -> float:
-        repeat_users = 0
-        total_users_per_expert, user_calls_to_experts = self.set_users_per_expert(
+        total_users_of_expert, user_calls_to_experts = self.set_users_per_expert(
             calls, expert_id)
-        total_users = len(total_users_per_expert.get(expert_id, []))
-        for user_id in total_users_per_expert[expert_id]:
-            if len(user_calls_to_experts.get(user_id, [])) > 1 and expert_id in user_calls_to_experts.get(user_id, []):
+
+        repeat_users = 0
+        total_users = len(total_users_of_expert)
+
+        for user_id in user_calls_to_experts:
+            if len(user_calls_to_experts[user_id]) > 2:
                 repeat_users += 1
+
         repeat_ratio = (repeat_users / total_users) * \
             100 if total_users != 0 else 0
+        repeat_ratio = round(repeat_ratio, 2)
 
         return repeat_ratio
 
@@ -54,14 +57,15 @@ class Compute:
 
         return normalized_calls
 
-    def calculate_expert_scores(self, calls: list, score):
+    def calculate_expert_scores(self, calls: list, score) -> dict:
         expert_id = self.input.expert_id
 
         repeat_score = self.calculate_repeat_ratio(expert_id, calls)
 
         normalized_calls = self.calculate_normalized_calls(calls)
 
-        final_score = int((score + repeat_score + normalized_calls) / 3)
+        final_score = ((score * 20) + repeat_score + normalized_calls) / 3
+        final_score = round(final_score, 2)
 
         return {
             "total_score": final_score,
@@ -86,10 +90,9 @@ class Compute:
         final_scores = self.calculate_expert_scores(
             callsmetas, averages_object.score)
         message = self.update_expert(final_scores)
-        message = message + " and " + averages_object.message
 
         return Output(
-            output_details=final_scores,
+            output_details={**final_scores, **averages_object.__dict__},
             output_status=OutputStatus.SUCCESS,
             output_message=message
         )
