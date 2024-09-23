@@ -11,10 +11,14 @@ class DashboardStats:
         self.today_query = today_query
         self.experts_helper = ExpertsHelper()
         self.calls_collection = get_calls_collection()
+        self.exclude_query = self.common.get_internal_exclude_query()
         self.total_successful_calls, self.total_duration = self._total_successful_calls_and_duration_()
 
     def _total_successful_calls_and_duration_(self) -> Tuple[int, int]:
-        query = {**successful_calls_query, "duration": {"$exists": True}}
+        query = {
+            **self.exclude_query,
+            **successful_calls_query, "duration": {"$exists": True}
+        }
         projection = {"duration": 1, "_id": 0}
         successful_calls_data = self.common.get_calls(
             query, projection, False, False)
@@ -28,7 +32,7 @@ class DashboardStats:
         return len(total_seconds), sum(total_seconds)
 
     def _get_successful_scheduled_calls_(self) -> list:
-        query = {**successful_calls_query,
+        query = {**successful_calls_query, **self.exclude_query,
                  "$or": [{"type": "scheduled"}, {"scheduledId": {"$exists": True}}]}
         projection = {"duration": 1, "scheduledId": 1, "type": 1, "_id": 0}
         calls = self.common.get_calls(query, projection, False)
@@ -41,36 +45,38 @@ class DashboardStats:
         return calls
 
     def _get_avg_conversation_score_(self) -> float:
-        query = {"Conversation Score": {
-            "$exists": True, "$gt": 0, "$ne": None}}
+        query = {
+            **self.exclude_query,
+            "Conversation Score": {"$exists": True, "$gt": 0, "$ne": None}
+        }
         projection = {"Conversation Score": 1, "_id": 0}
         calls = self.common.get_calls(query, projection, False, False)
         scores = [call["Conversation Score"] for call in calls]
         return round(sum(scores) / len(scores), 2) if scores else 0
 
     def total_calls(self) -> int:
-        return self.calls_collection.count_documents({})
+        return self.calls_collection.count_documents(self.exclude_query)
 
     def today_calls(self) -> int:
-        return self.calls_collection.count_documents(self.today_query)
+        return self.calls_collection.count_documents({**self.today_query, **self.exclude_query})
 
     def successful_calls(self) -> int:
-        return self.calls_collection.count_documents(successful_calls_query)
+        return self.calls_collection.count_documents({**successful_calls_query, **self.exclude_query})
 
     def today_successful_calls(self) -> int:
-        return self.calls_collection.count_documents({**successful_calls_query, **self.today_query})
+        return self.calls_collection.count_documents({**successful_calls_query, **self.today_query, **self.exclude_query})
 
     def failed_calls(self) -> int:
-        return self.calls_collection.count_documents({"status": "failed"})
+        return self.calls_collection.count_documents({"status": "failed", **self.exclude_query})
 
     def today_failed_calls(self) -> int:
-        return self.calls_collection.count_documents({"status": "failed", **self.today_query})
+        return self.calls_collection.count_documents({"status": "failed", **self.today_query, **self.exclude_query})
 
     def missed_calls(self) -> int:
-        return self.calls_collection.count_documents({"failedReason": "call missed"})
+        return self.calls_collection.count_documents({"failedReason": "call missed", **self.exclude_query})
 
     def today_missed_calls(self) -> int:
-        return self.calls_collection.count_documents({"failedReason": "call missed", **self.today_query})
+        return self.calls_collection.count_documents({"failedReason": "call missed", **self.today_query, **self.exclude_query})
 
     def average_call_duration(self) -> int:
         return Common.seconds_to_duration_str(
@@ -94,7 +100,7 @@ class DashboardStats:
         return self.experts_helper.get_experts(query)
 
     def _get_successful_scheduled_calls_(self) -> list:
-        query = {**successful_calls_query,
+        query = {**successful_calls_query, **self.exclude_query,
                  "$or": [{"type": "scheduled"}, {"scheduledId": {"$exists": True}}]}
         projection = {"duration": 1, "scheduledId": 1, "type": 1, "_id": 0}
         calls = self.common.get_calls(query, projection, False)

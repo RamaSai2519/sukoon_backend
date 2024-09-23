@@ -6,18 +6,19 @@ from flask_jwt_extended import get_jwt_identity
 from db.experts import get_experts_collections
 from db.users import get_user_collection
 from datetime import datetime, date
+from pymongo.cursor import Cursor
 from bson import ObjectId
 
 
 class Common:
     def __init__(self):
-        self.referrals_collection = get_user_referral_collection()
-        self.schedules_collection = get_schedules_collection()
-        self.experts_collection = get_experts_collections()
-        self.calls_collection = get_calls_collection()
-        self.users_collection = get_user_collection()
-        self.experts_cache = {}
         self.users_cache = {}
+        self.experts_cache = {}
+        self.users_collection = get_user_collection()
+        self.calls_collection = get_calls_collection()
+        self.experts_collection = get_experts_collections()
+        self.schedules_collection = get_schedules_collection()
+        self.referrals_collection = get_user_referral_collection()
 
     @staticmethod
     def get_identity() -> str:
@@ -82,18 +83,27 @@ class Common:
             )
         return experts_cache[expert_id]
 
-    def format_calls(self, calls: list) -> list:
+    def format_calls(self, calls: list, req_names: bool = True) -> list:
         for call in calls:
-            call["user"] = self.get_user_name(user_id=ObjectId(
-                call["user"])) if "user" in call else "Unknown"
-            call["expert"] = self.get_expert_name(
-                ObjectId(call["expert"])) if "expert" in call else "Unknown"
+            # Fetch names if requested
+            if req_names:
+                call["user"] = self.get_user_name(
+                    ObjectId(call.get("user"))) if call.get("user") else "Unknown"
+                call["expert"] = self.get_expert_name(
+                    ObjectId(call.get("expert"))) if call.get("expert") else "Unknown"
+
+            # Rename "Conversation Score" to "conversationScore"
             call["conversationScore"] = call.pop("Conversation Score", 0)
-            call = Common.jsonify(call)
-            if "failedReason" in call and call["failedReason"] == "call missed":
+
+            # Handle call status and missed calls
+            if call.get("failedReason") == "call missed":
                 call["status"] = "missed"
-            if "status" in call and call["status"] == "successfull":
+            elif call.get("status") == "successfull":
                 call["status"] = "successful"
+
+            # Convert the call to JSON
+            call = Common.jsonify(call)
+
         return calls
 
     def get_events_history(self, query: dict) -> list:
@@ -119,14 +129,32 @@ class Common:
             counts[status] = self.schedules_collection.count_documents(query)
         return counts
 
-    def get_calls(self, query: dict = {}, projection: dict = {}, exclude: bool = True, format: bool = True) -> list:
+    def get_calls(self, query: dict = {}, projection: dict = {}, exclude: bool = True, format: bool = True, page: int = 0, size: int = 0, req_names: bool = True) -> list:
         if exclude:
             projection = {**projection, **calls_exclusion_projection}
 
-        calls = list(self.calls_collection.find(
-            query, projection).sort("initiatedTime", -1))
+        calls = self.calls_collection.find(
+            query, projection).sort("initiatedTime", -1)
+
+        if page > 0 and size > 0:
+            calls = self.paginate_cursor(calls, page, size)
+
+        elif size > 0:
+            calls = calls.limit(size)
 
         if format:
-            calls = self.format_calls(calls)
+            calls = self.format_calls(list(calls), req_names)
 
         return calls
+
+    def get_internal_exclude_query(self) -> list:
+        query = {"type": "internal"}
+        projection = {"_id": 1}
+        experts = list(self.experts_collection.find(query, projection))
+        internal_expert_ids = [expert.get("_id", "") for expert in experts]
+        return {"expert": {"$nin": internal_expert_ids}}
+
+    @staticmethod
+    def paginate_cursor(cursor: Cursor, page: int, size: int) -> Cursor:
+        offset = (page - 1) * size
+        return cursor.skip(offset).limit(size)
