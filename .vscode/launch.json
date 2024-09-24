@@ -11,12 +11,11 @@
             "module": "flask",
             "env": {
                 "FLASK_APP": "backend_amp/amplify/backend/function/gamesProcessor/src/index.py",
-                "FLASK_DEBUG": "1"
+                "FLASK_DEBUG": "1",
+                "ENV": ""
             },
             "args": [
                 "run",
-                // "--no-debugger",
-                // "--no-reload"
                 "--port=8080"
             ],
             "jinja": true,

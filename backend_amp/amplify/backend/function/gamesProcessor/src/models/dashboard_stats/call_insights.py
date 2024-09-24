@@ -4,9 +4,9 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 class CallInsights:
-    def __init__(self):
+    def __init__(self, exclude_query: dict) -> None:
         self.common = Common()
-        self.exclude_query = self.common.get_internal_exclude_query()
+        self.exclude_query = exclude_query
         self.successful_calls = self._get_successful_calls()
 
     def _get_successful_calls(self) -> list:
