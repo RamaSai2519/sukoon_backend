@@ -23,7 +23,9 @@ class Compute:
         if new_expert:
             expert_data["active"] = False
             expert_data["isBusy"] = False
+            expert_data["categories"] = []
             expert_data["type"] = "saarthi"
+            expert_data["isDeleted"] = False
             expert_data["status"] = "offline"
             expert_data["profileCompleted"] = True
             expert_data["createdDate"] = datetime.now()

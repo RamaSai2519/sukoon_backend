@@ -34,7 +34,13 @@ class Compute:
             if self.input.schedule_status is not None:
                 experts = self.populate_schedules(experts)
         else:
-            experts = self.helper.get_experts()
+            query = self.common.get_internal_exclude_query(
+                self.input.internal, "_id")
+            exclude_deleted_query = {
+                "$or": [{"isDeleted": {"$exists": False}}, {"isDeleted": False}]
+            }
+            query = {**query, **exclude_deleted_query}
+            experts = self.helper.get_experts(query)
 
         return Output(
             output_details=experts,
