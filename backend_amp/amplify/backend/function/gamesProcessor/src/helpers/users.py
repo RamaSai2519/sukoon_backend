@@ -30,8 +30,10 @@ class UsersHelper:
             query = {"userId": user["_id"]}
             user["referrals"] = self.common.get_referrals(query)
 
-        user["customerPersona"] = self.parse_user_persona(
-            user.pop("Customer Persona", ""))
+        if "Customer Persona" in user and isinstance(user["Customer Persona"], str):
+            user["customerPersona"] = self.parse_user_persona(
+                user.pop("Customer Persona", ""))
+        user["customerPersona"] = user.get("Customer Persona", {})
         return Common.jsonify(user)
 
     def parse_user_persona(self, text: str) -> dict:
