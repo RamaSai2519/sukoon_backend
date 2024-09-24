@@ -9,7 +9,7 @@ class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
         self.common = Common()
-        self.query = self.common.get_internal_exclude_query()
+        self.query = self.common.get_internal_exclude_query(input.internal)
         self.current_date = datetime.now(pytz.timezone("Asia/Kolkata"))
 
         # Today Query
