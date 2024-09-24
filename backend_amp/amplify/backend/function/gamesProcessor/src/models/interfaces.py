@@ -26,12 +26,14 @@ class Expert:
     timeSpent: Optional[int] = None
     languages: Optional[str] = None
     timeSplit: Optional[int] = None
+    isDeleted: Optional[bool] = None
     probability: Optional[int] = None
     description: Optional[str] = None
     total_score: Optional[int] = None
     displayScore: Optional[str] = None
     repeat_score: Optional[int] = None
     isGamesPlay: Optional[bool] = None
+    daysLoggedIn: Optional[int] = None
     calls_share: Optional[float] = None
     userSentiment: Optional[int] = None
     closingGreeting: Optional[int] = None
@@ -71,6 +73,7 @@ class GetCallsInput:
 
 @dataclass
 class GetExpertsInput:
+    internal: Optional[str] = ""
     phoneNumber: Optional[str] = None
     schedule_status: Optional[str] = None
 
