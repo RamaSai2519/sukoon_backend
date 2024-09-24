@@ -21,6 +21,8 @@ class ExpertsHelper:
             query = {"expert": ObjectId(expert["_id"])}
             expert["calls"] = self.common.get_calls(query)
         expert = self.populate_time_spent(expert)
+        expert = self.populate_days_logged_in(expert)
+
         return Common.jsonify(expert)
 
     def get_experts(self, query: dict = {}) -> list:
@@ -39,8 +41,11 @@ class ExpertsHelper:
         return None
 
     def populate_categories(self, expert_data: dict) -> dict:
-        cats = list(self.categories_collection.find(
-            {"_id": {"$in": [ObjectId(cat) for cat in expert_data["categories"]]}}))
+        expert_categories = expert_data.get("categories")
+        expert_categories = [
+            ObjectId(cat) for cat in expert_categories] if expert_categories else []
+        query = {"_id": {"$in": expert_categories}}
+        cats = list(self.categories_collection.find(query))
         categories = []
         for cat in cats:
             categories.append(cat["name"])
@@ -59,4 +64,13 @@ class ExpertsHelper:
         )
         expert_data["timeSpent"] = round(
             (total_time / 3600), 2) if total_time else 0
+        return expert_data
+
+    def populate_days_logged_in(self, expert_data: dict) -> dict:
+        query = {"expert": expert_data["_id"]}
+        times_logged_in = self.expertlogs_collection.distinct("online", query)
+
+        days_logged_in = set([log.date() for log in times_logged_in])
+        expert_data["daysLoggedIn"] = len(days_logged_in)
+
         return expert_data
