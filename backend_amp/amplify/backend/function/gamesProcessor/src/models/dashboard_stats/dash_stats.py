@@ -6,12 +6,13 @@ from models.constants import successful_calls_query
 
 
 class DashboardStats:
-    def __init__(self, today_query: dict) -> None:
+    def __init__(self, today_query: dict, exclude_query: dict, internal: str) -> None:
         self.common = Common()
+        self.internal = internal
         self.today_query = today_query
+        self.exclude_query = exclude_query
         self.experts_helper = ExpertsHelper()
         self.calls_collection = get_calls_collection()
-        self.exclude_query = self.common.get_internal_exclude_query()
         self.total_successful_calls, self.total_duration = self._total_successful_calls_and_duration_()
 
     def _total_successful_calls_and_duration_(self) -> Tuple[int, int]:
@@ -96,7 +97,9 @@ class DashboardStats:
         return self._get_avg_conversation_score_()
 
     def onlineSarathis(self) -> list:
-        query = {"status": "online"}
+        exclude_query = self.common.get_internal_exclude_query(
+            self.internal, "_id")
+        query = {"status": "online", **exclude_query}
         return self.experts_helper.get_experts(query)
 
     def _get_successful_scheduled_calls_(self) -> list:

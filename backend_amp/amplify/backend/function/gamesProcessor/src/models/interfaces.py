@@ -66,6 +66,7 @@ class GetCallsInput:
     dest: str
     page: Optional[int] = 0
     size: Optional[int] = 0
+    internal: Optional[str] = ""
 
 
 @dataclass
@@ -521,6 +522,7 @@ class Admin:
 @dataclass
 class DashboardStatsInput:
     item: str
+    internal: Optional[str] = ""
 
 
 @dataclass

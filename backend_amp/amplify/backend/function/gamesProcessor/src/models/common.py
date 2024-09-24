@@ -147,12 +147,13 @@ class Common:
 
         return calls
 
-    def get_internal_exclude_query(self) -> list:
+    def get_internal_exclude_query(self, internal: str = "", field: str = "expert") -> list:
         query = {"type": "internal"}
+        querier = "$in" if internal == "true" else "$nin"
         projection = {"_id": 1}
         experts = list(self.experts_collection.find(query, projection))
         internal_expert_ids = [expert.get("_id", "") for expert in experts]
-        return {"expert": {"$nin": internal_expert_ids}}
+        return {field: {querier: internal_expert_ids}}
 
     @staticmethod
     def paginate_cursor(cursor: Cursor, page: int, size: int) -> Cursor:
