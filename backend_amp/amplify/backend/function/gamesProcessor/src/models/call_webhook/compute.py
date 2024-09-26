@@ -51,7 +51,7 @@ class Compute:
     def update_user(self, call: Call, expert: Expert, user: User) -> str:
         filter = {"_id": call.user}
         update_values = {"isBusy": False}
-        if expert and expert.type != "internal":
+        if expert and expert.type != "internal" and self.common.duration_str_to_seconds(call.duration) > 120:
             update_values["numberOfCalls"] = user.numberOfCalls - \
                 1 if user.numberOfCalls > 0 else 0
         update = {"$set": update_values}
