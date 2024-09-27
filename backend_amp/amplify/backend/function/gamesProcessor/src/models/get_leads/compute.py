@@ -22,10 +22,8 @@ class Compute:
         query = {"user": user.get("_id")}
         user_meta: dict = self.meta_collection.find_one(query)
         if user_meta:
-            user["leadSource"] = user_meta.get("source", "")
-            if str(user["leadSource"]).lower() not in ["events", "zoom"]:
-                user["leadSource"] = "Website"
-        if not user_meta:
+            user["leadSource"] = user_meta.get("source", "Website")
+        else:
             user["leadSource"] = "Website"
 
         return Common.jsonify(user)
