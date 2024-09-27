@@ -793,6 +793,22 @@ class WhatsappNotificationTemplates:
             },
         }
 
+        self.CITY_MISSING_TEMPLATE = {
+            "template_name": "CITY_MISSING_TEMPLATE",
+            "template": {
+                "name": "city_missing_template",
+                "language": {"code": "en"},
+                "components": [
+                    {
+                        "type": "header",
+                        "parameters": [
+                           
+                        ],
+                    },
+                ],
+            },
+        }
+
         self.EVENT_INVOICE = {
             "template_name": "EVENT_INVOICE",
             "template": {
