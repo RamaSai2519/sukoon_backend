@@ -777,6 +777,22 @@ class WhatsappNotificationTemplates:
             },
         }
 
+        self.PROMO_TEPLATE = {
+            "template_name": "PROMO_TEPLATE",
+            "template": {
+                "name": "promo_template",
+                "language": {"code": "en"},
+                "components": [
+                    {
+                        "type": "header",
+                        "parameters": [
+                            {"type": "image", "image": {"link": "{image_link}"}}
+                        ],
+                    },
+                ],
+            },
+        }
+
         self.EVENT_INVOICE = {
             "template_name": "EVENT_INVOICE",
             "template": {
