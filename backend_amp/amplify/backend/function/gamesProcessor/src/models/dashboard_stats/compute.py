@@ -12,14 +12,8 @@ class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
         self.common = Common()
+        self.today_query = Common.get_today_query()
         self.exclude_query = self.common.get_internal_exclude_query(input.internal)
-        self.current_date = datetime.now(pytz.timezone("Asia/Kolkata"))
-
-        # Today Query
-        today_start = datetime.combine(self.current_date, datetime.min.time())
-        today_end = datetime.combine(self.current_date, datetime.max.time())
-        self.today_query = {"initiatedTime": {
-            "$gte": today_start, "$lt": today_end}}
 
     def get_dashboard_stats(self) -> Output:
         stats = DashboardStats(self.today_query, self.exclude_query, self.input.internal)
