@@ -23,7 +23,7 @@ class Compute:
         user_meta: dict = self.meta_collection.find_one(query)
         if user_meta:
             user["leadSource"] = user_meta.get("source", "Website")
-        if not user_meta:
+        else:
             user["leadSource"] = "Website"
 
         return Common.jsonify(user)
