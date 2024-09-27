@@ -64,6 +64,17 @@ class PhotosInput:
 
 
 @dataclass
+class GetLeadsInput:
+    page: Optional[int] = 0
+    size: Optional[int] = 0
+    data: Optional[bool] = False
+    sort_order: Optional[int] = None
+    sort_field: Optional[str] = None
+    filter_field: Optional[str] = None
+    filter_value: Optional[str] = None
+
+
+@dataclass
 class GetCallsInput:
     dest: str
     page: Optional[int] = 0
@@ -494,6 +505,11 @@ class AverageScoresObject:
     message: str
     average_scores: AverageScores
     score: Optional[int] = 0
+
+
+@dataclass
+class GetUserCountsInput:
+    test: Optional[str] = None
 
 
 @dataclass
