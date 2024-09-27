@@ -21,3 +21,4 @@ successful_calls_query = {
     "status": "successfull"
 }
 
+application_json_header = {"Content-Type": "application/json"}

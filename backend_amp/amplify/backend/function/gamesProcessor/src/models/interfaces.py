@@ -511,6 +511,13 @@ class AverageScoresObject:
 class GetUserCountsInput:
     test: Optional[str] = None
 
+@dataclass
+class UserMeta:
+    user: ObjectId
+    source: Optional[str] = ""
+    remarks: Optional[str] = ""
+    context: Optional[str] = ""
+    userStatus: Optional[str] = ""
 
 @dataclass
 class Output:

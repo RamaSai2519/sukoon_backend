@@ -3,9 +3,9 @@ import requests
 from typing import Union
 from models.common import Common
 from db.users import get_user_collection
-from models.constants import OutputStatus
 from db.calls import get_calls_collection
 from db.experts import get_experts_collections
+from models.constants import OutputStatus, application_json_header
 from models.interfaces import WebhookInput as Input, Call, Output, User, Expert
 
 
@@ -105,11 +105,8 @@ class Compute:
                 "sarathi_name": expert.name,
             }
         }
-        headers = {
-            'Content-Type': 'application/json'
-        }
         response = requests.request(
-            "POST", self.url, headers=headers, data=json.dumps(payload)
+            "POST", self.url, headers=application_json_header, data=json.dumps(payload)
         )
         print(response.text, "feedback")
         message = "Feedback message sent" if response.status_code == 200 else "Feedback message not sent"
