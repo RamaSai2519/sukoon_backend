@@ -1,11 +1,10 @@
-import traceback
 from models.constants import OutputStatus
-from models.get_user.compute import Compute
-from models.get_user.validate import Validator
-from models.interfaces import GetUsersInput as Input, Output
+from models.get_leads.compute import Compute
+from models.get_leads.validate import Validator
+from models.interfaces import GetLeadsInput as Input, Output
 
 
-class GetUser:
+class GetLeads:
     def __init__(self, input: Input) -> None:
         self.input = input
 
@@ -17,17 +16,16 @@ class GetUser:
             return Output(
                 output_details={},
                 output_status=OutputStatus.FAILURE,
-                output_message=f"INVALID_INPUT. {error_message}",
+                output_message=f"INVALID_INPUT: {error_message}"
             )
 
         try:
             output = self._compute(input)
         except Exception as e:
-            print(traceback.format_exc())
-            output = Output(
+            return Output(
                 output_details={},
                 output_status=OutputStatus.FAILURE,
-                output_message=f"{e}",
+                output_message=f"ERROR: {str(e)}"
             )
 
         return output

@@ -74,6 +74,8 @@ api.add_resource(TimingsService, '/actions/timings')
 api.add_resource(AdminFCMService, '/actions/save_fcm_token')
 # - Stats
 api.add_resource(DashboardStatsService, '/actions/dashboard_stats')
+# - Data
+api.add_resource(LeadsService, '/actions/leads')
 
 
 def handler(event, context):

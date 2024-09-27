@@ -8,6 +8,7 @@ from db.users import get_user_collection
 from datetime import datetime, date
 from pymongo.cursor import Cursor
 from bson import ObjectId
+import pytz
 
 
 class Common:
@@ -62,6 +63,19 @@ class Common:
             formatted_duration.append(f"{int(seconds)}s")
 
         return " ".join(formatted_duration) if formatted_duration else "0s"
+
+    @staticmethod
+    def paginate_cursor(cursor: Cursor, page: int, size: int) -> Cursor:
+        offset = (page - 1) * size
+        return cursor.skip(offset).limit(size)
+
+    @staticmethod
+    def get_today_query(field: str = "initiatedTime", local: bool = True) -> dict:
+        current_date = datetime.now(pytz.timezone(
+            "Asia/Kolkata")) if local else datetime.now()
+        today_start = datetime.combine(current_date, datetime.min.time())
+        today_end = datetime.combine(current_date, datetime.max.time())
+        return {field: {"$gte": today_start, "$lt": today_end}}
 
     def get_user_name(self, user_id: ObjectId) -> str:
         users_cache = self.users_cache
@@ -154,8 +168,3 @@ class Common:
         experts = list(self.experts_collection.find(query, projection))
         internal_expert_ids = [expert.get("_id", "") for expert in experts]
         return {field: {querier: internal_expert_ids}}
-
-    @staticmethod
-    def paginate_cursor(cursor: Cursor, page: int, size: int) -> Cursor:
-        offset = (page - 1) * size
-        return cursor.skip(offset).limit(size)
