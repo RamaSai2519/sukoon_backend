@@ -8,7 +8,7 @@ from typing import Union
 from datetime import datetime
 from models.common import Common
 from db.users import get_user_collection
-from models.constants import OutputStatus
+from models.constants import OutputStatus, application_json_header
 from models.interfaces import User as Input, Output
 from db.referral import get_user_referral_collection
 
