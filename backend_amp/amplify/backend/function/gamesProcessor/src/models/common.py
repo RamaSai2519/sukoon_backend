@@ -31,7 +31,7 @@ class Common:
             if isinstance(value, ObjectId):
                 doc[field] = str(value)
             elif isinstance(value, datetime):
-                doc[field] = datetime.strftime(value, "%Y-%m-%dT%H:%M:%S")
+                doc[field] = datetime.strftime(value, "%Y-%m-%dT%H:%M:%S.%fZ")
         return doc
 
     @staticmethod
