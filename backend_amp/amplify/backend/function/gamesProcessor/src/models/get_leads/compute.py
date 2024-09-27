@@ -23,7 +23,7 @@ class Compute:
         user_meta: dict = self.meta_collection.find_one(query)
         if user_meta:
             user["leadSource"] = user_meta.get("source", "")
-            if user["leadSource"] != "Events":
+            if str(user["leadSource"]).lower() not in ["events", "zoom"]:
                 user["leadSource"] = "Website"
         if not user_meta:
             user["leadSource"] = "Website"
