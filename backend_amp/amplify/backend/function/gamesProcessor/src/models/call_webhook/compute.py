@@ -48,9 +48,13 @@ class Compute:
         expert = self.experts_collection.find_one({"_id": call.expert})
         return Expert(**expert) if expert else None
 
-    def update_user(self, call: Call) -> str:
+    def update_user(self, call: Call, expert: Expert, user: User) -> str:
         filter = {"_id": call.user}
-        update = {"$set": {"isBusy": False}}
+        update_values = {"isBusy": False}
+        if expert and expert.type != "internal" and self.common.duration_str_to_seconds(call.duration) > 120:
+            update_values["numberOfCalls"] = user.numberOfCalls - \
+                1 if user.numberOfCalls > 0 else 0
+        update = {"$set": update_values}
         response = self.users_collection.update_one(filter, update)
         message = "User updated, " if response.modified_count > 0 else "User not updated, "
         return message
@@ -87,9 +91,7 @@ class Compute:
         message = "Call updated, " if response.modified_count > 0 else "Call not updated, "
         return message
 
-    def send_feedback_message(self, call: Call):
-        user = self.find_user(call)
-        expert = self.find_expert(call)
+    def send_feedback_message(self, call: Call, expert: Expert, user: User) -> str:
         if not user or not expert:
             return "Feedback message not sent"
         payload = {
@@ -125,8 +127,10 @@ class Compute:
                 output_message=f"Call not found with callid: {callId}"
             )
 
+        user = self.find_user(call)
+        expert = self.find_expert(call)
         call_message = self.update_call(call)
-        user_message = self.update_user(call)
+        user_message = self.update_user(call, expert, user)
         expert_message = self.update_expert(call)
         feedback_message = "Feedback message not sent"
 
