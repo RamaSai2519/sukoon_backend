@@ -31,7 +31,9 @@ class Common:
             if isinstance(value, ObjectId):
                 doc[field] = str(value)
             elif isinstance(value, datetime):
-                doc[field] = datetime.strftime(value, "%Y-%m-%dT%H:%M:%S.%fZ")
+                if value.tzinfo is None:
+                    value = value.replace(tzinfo=pytz.utc)
+                doc[field] = value.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
         return doc
 
     @staticmethod
