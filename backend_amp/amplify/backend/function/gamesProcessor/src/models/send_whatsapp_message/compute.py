@@ -91,5 +91,5 @@ class Compute:
         return Output(
             output_details={"response": response.text},
             output_status=OutputStatus.SUCCESS,
-            output_message="Successfully fetched game config"
+            output_message="Successfully sent whatsapp message"
         )
