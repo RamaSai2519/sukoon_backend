@@ -207,5 +207,5 @@ class Compute:
         return Output(
             output_details={"body": body, "from_number": from_number},
             output_status=OutputStatus.SUCCESS,
-            output_message="Successfully fetched game config"
+            output_message="Successfully received message"
         )
