@@ -1025,3 +1025,23 @@ class WhatsappNotificationTemplates:
                 ]
             }
         }
+
+        self.CALL_NOTIFICATION = {
+            "template_name": "CALL_NOTIFICATION",
+            "template": {
+                "name": "call_notification",
+                "language": {"code": "en_us"},
+                "components": [
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"},
+                            {"type": "text", "text": "{city}"},
+                            {"type": "text", "text": "{birth_date}"},
+                            {"type": "text", "text": "{premium}"},
+                            {"type": "text", "text": "{last_expert}"},
+                        ]
+                    }
+                ]
+            }
+        }
