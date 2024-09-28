@@ -4,12 +4,12 @@ import requests
 from bson import ObjectId
 from datetime import datetime
 from configs import CONFIG as config
-from models.constants import OutputStatus
 from db.users import get_user_collection
 from db.calls import get_calls_collection
 from db.experts import get_experts_collections
 from models.make_call.slack import SlackNotifier
 from models.interfaces import CallInput as Input, Output
+from models.constants import OutputStatus, application_json_header
 
 
 class Compute:
@@ -84,9 +84,9 @@ class Compute:
             "image_url": "https://sukoonunlimited.com/_next/image?url=%2Fplay.jpg&w=3840&q=75",
             "sarathi_id": str(expert.get("_id", ""))
         })
-        headers = {'Content-Type': 'application/json'}
 
-        response = requests.request("POST", url, headers=headers, data=payload)
+        response = requests.request(
+            "POST", url, headers=application_json_header, data=payload)
         response_dict: dict = response.json()
         return response_dict.get("output_message", "")
 
@@ -124,7 +124,6 @@ class Compute:
                 status="success",
                 call_link=self.call_link + call_id,
             )
-
 
         return Output(
             output_details={},
