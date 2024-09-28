@@ -86,7 +86,7 @@ class Compute:
 
         user, expert = self.get_users(user_id, expert_id)
         fcm_response = self.notifier.send_fcm_notification(user, expert)
-        if expert.get("type") != "":
+        if expert.get("type") != "internal":
             wa_response = self.notifier.send_wa_notification(user, expert)
         else:
             wa_response = " but Expert is internal, no whatsapp notification sent"
