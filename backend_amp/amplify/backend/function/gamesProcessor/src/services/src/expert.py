@@ -6,15 +6,16 @@ from models.get_slots.main import GetSlots
 from flask_jwt_extended import jwt_required
 from models.get_timings.main import GetTimings
 from models.get_experts.main import ListExperts
+from models.get_categories.main import Categories
 from models.upsert_expert.main import UpsertExpert
 from models.update_timings.main import UpdateTimings
 from models.create_applicant.main import CreateApplicant
-from models.interfaces import Expert, GetExpertsInput, ApplicantInput, GetSlotsInput, GetTimingsInput, UpdateTimingsInput, TimingsRow, Output
+from models.interfaces import Expert, CategoriesInput, GetExpertsInput, ApplicantInput, GetSlotsInput, GetTimingsInput, UpdateTimingsInput, TimingsRow, Output
 
 
 class ExpertService(Resource):
 
-    def post(self) -> Output:
+    def post(self) -> dict:
         input = json.loads(request.get_data())
         input = Expert(**input)
         output = UpsertExpert(input).process()
@@ -22,7 +23,7 @@ class ExpertService(Resource):
 
         return output
 
-    def get(self) -> Output:
+    def get(self) -> dict:
         input_params = request.args
         input = GetExpertsInput(**input_params)
         output = ListExperts(input).process()
@@ -33,7 +34,7 @@ class ExpertService(Resource):
 
 class ApplicantService(Resource):
 
-    def post(self) -> Output:
+    def post(self) -> dict:
         input = json.loads(request.get_data())
         input = ApplicantInput(**input)
         output = CreateApplicant(input).process()
@@ -44,7 +45,7 @@ class ApplicantService(Resource):
 
 class SlotsService(Resource):
 
-    def post(self) -> Output:
+    def post(self) -> dict:
         input = json.loads(request.get_data())
         input = GetSlotsInput(**input)
         output = GetSlots(input).process()
@@ -55,7 +56,7 @@ class SlotsService(Resource):
 
 class TimingsService(Resource):
 
-    def get(self) -> Output:
+    def get(self) -> dict:
         input = request.args
         input = GetTimingsInput(**input)
         output = GetTimings(input).process()
@@ -64,12 +65,23 @@ class TimingsService(Resource):
         return output
 
     @jwt_required()
-    def post(self) -> Output:
+    def post(self) -> dict:
         input = json.loads(request.get_data())
         input = {"expertId": input["expertId"],
                  "row": TimingsRow(**input["row"])}
         input = UpdateTimingsInput(**input)
         output = UpdateTimings(input).process()
+        output = dataclasses.asdict(output)
+
+        return output
+
+
+class CategoriesService(Resource):
+
+    def post(self) -> dict:
+        input = json.loads(request.get_data())
+        input = CategoriesInput(**input)
+        output = Categories(input).process()
         output = dataclasses.asdict(output)
 
         return output
