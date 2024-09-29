@@ -80,6 +80,7 @@ class GetCallsInput:
     page: Optional[int] = 0
     size: Optional[int] = 0
     internal: Optional[str] = ""
+    callId: Optional[str] = None
 
 
 @dataclass
