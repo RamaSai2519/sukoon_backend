@@ -165,10 +165,17 @@ class WebhookInput:
     call_transfer_duration: str
 
 
+@dataclass
 class TimingsRow:
     key: str
     value: str
     field: str
+
+
+@dataclass
+class SaveRemarkInput:
+    key: str
+    value: str
 
 
 @dataclass
@@ -523,6 +530,7 @@ class AverageScoresObject:
 class GetUserCountsInput:
     test: Optional[str] = None
 
+
 @dataclass
 class UserMeta:
     user: ObjectId
@@ -530,6 +538,7 @@ class UserMeta:
     remarks: Optional[str] = ""
     context: Optional[str] = ""
     userStatus: Optional[str] = ""
+
 
 @dataclass
 class Output:

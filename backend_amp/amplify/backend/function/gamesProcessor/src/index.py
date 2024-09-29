@@ -65,6 +65,9 @@ api.add_resource(SendOTPService, '/actions/send_otp')
 # Admin Routes
 # - Auth
 api.add_resource(AdminAuthService, '/actions/admin_auth')
+# - Data
+api.add_resource(LeadsService, '/actions/leads')
+api.add_resource(RemarksService, '/actions/remarks')
 # - Content
 api.add_resource(ChatService, '/actions/chat')
 api.add_resource(PhotosService, '/actions/photos')
@@ -75,8 +78,6 @@ api.add_resource(CategoriesService, '/actions/categories')
 api.add_resource(AdminFCMService, '/actions/save_fcm_token')
 # - Stats
 api.add_resource(DashboardStatsService, '/actions/dashboard_stats')
-# - Data
-api.add_resource(LeadsService, '/actions/leads')
 
 
 def handler(event, context):
