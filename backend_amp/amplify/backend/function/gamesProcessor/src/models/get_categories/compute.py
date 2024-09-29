@@ -32,6 +32,7 @@ class Compute:
         category = self.input.name
         if self.validate_category():
             return Output(
+                output_details={"name": category},
                 output_status=OutputStatus.FAILURE,
                 output_message="Category already exists"
             )
