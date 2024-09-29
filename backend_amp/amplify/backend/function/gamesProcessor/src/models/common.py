@@ -4,6 +4,7 @@ from db.referral import get_user_referral_collection
 from db.events import get_event_users_collection
 from flask_jwt_extended import get_jwt_identity
 from db.experts import get_experts_collections
+from db.calls import get_callsmeta_collection
 from db.users import get_user_collection
 from datetime import datetime, date
 from pymongo.cursor import Cursor
@@ -19,6 +20,7 @@ class Common:
         self.calls_collection = get_calls_collection()
         self.experts_collection = get_experts_collections()
         self.schedules_collection = get_schedules_collection()
+        self.callsmeta_collection = get_callsmeta_collection()
         self.referrals_collection = get_user_referral_collection()
 
     @staticmethod
@@ -170,3 +172,16 @@ class Common:
         experts = list(self.experts_collection.find(query, projection))
         internal_expert_ids = [expert.get("_id", "") for expert in experts]
         return {field: {querier: internal_expert_ids}}
+
+    def populate_call_meta(self, call: dict) -> dict:
+        call_meta: dict = self.callsmeta_collection.find_one(
+            {"callId": call["callId"]}
+        )
+        if call_meta:
+            call["Topics"] = call_meta.get("Topics", [])
+            call["Summary"] = call_meta.get("Summary", "")
+            call["User Callback"] = call_meta.get("User Callback", "")
+            call["Score Breakup"] = call_meta.get("Score Breakup", {})
+            call["transcript_url"] = call_meta.get("transcript_url", "")
+            call["Saarthi Feedback"] = call_meta.get("Saarthi Feedback", "")
+        return call
