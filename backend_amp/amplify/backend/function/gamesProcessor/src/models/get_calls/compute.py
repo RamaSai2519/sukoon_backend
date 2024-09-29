@@ -35,7 +35,7 @@ class Compute:
         query = {"callId": self.input.callId}
         call = self.common.get_calls(query=query)
         if len(call) == 0:
-            return {"data": {}}
+            return {"data": None}
         else:
             call = call[0]
 
@@ -54,6 +54,13 @@ class Compute:
 
         calls = switcher.get(self.input.dest)()
         calls["total"] = self._total_calls()
+
+        if calls.get("data") is None:
+            return Output(
+                output_details={},
+                output_status=OutputStatus.FAILURE,
+                output_message="No Call Found"
+            )
 
         return Output(
             output_details=calls,
