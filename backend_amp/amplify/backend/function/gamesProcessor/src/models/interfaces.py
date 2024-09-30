@@ -57,6 +57,13 @@ class GetTimingsInput:
 
 
 @dataclass
+class GetWaHistoryInput:
+    type: str
+    page: Optional[int] = 0
+    size: Optional[int] = 0
+
+
+@dataclass
 class PhotosInput:
     page: int
     query: str
@@ -511,6 +518,7 @@ class AverageScoresObject:
 class GetUserCountsInput:
     test: Optional[str] = None
 
+
 @dataclass
 class UserMeta:
     user: ObjectId
@@ -518,6 +526,7 @@ class UserMeta:
     remarks: Optional[str] = ""
     context: Optional[str] = ""
     userStatus: Optional[str] = ""
+
 
 @dataclass
 class Output:

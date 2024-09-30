@@ -1,11 +1,11 @@
 import traceback
 from models.constants import OutputStatus
-from models.make_call.compute import Compute
-from models.make_call.validate import Validator
-from models.interfaces import CallInput as Input, Output
+from models.get_wa_history.compute import Compute
+from models.get_wa_history.validate import Validator
+from models.interfaces import GetWaHistoryInput as Input, Output
 
 
-class MakeCall:
+class GetWaHistory:
     def __init__(self, input: Input) -> None:
         self.input = input
 
@@ -17,21 +17,20 @@ class MakeCall:
             return Output(
                 output_details={},
                 output_status=OutputStatus.FAILURE,
-                output_message=f"INVALID_INPUT: {error_message}"
+                output_message=f"INVALID_INPUT. {error_message}",
             )
-        
+
         try:
             output = self._compute(input)
         except Exception as e:
             print(traceback.format_exc())
-            return Output(
+            output = Output(
                 output_details={},
                 output_status=OutputStatus.FAILURE,
-                output_message=f"ERROR: {str(e)}"
+                output_message=f"{e}",
             )
-        
-        return output
 
+        return output
 
     def _validate(self, input: Input):
         validation_obj = Validator(input)

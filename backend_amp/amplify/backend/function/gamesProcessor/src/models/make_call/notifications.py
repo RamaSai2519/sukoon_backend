@@ -37,7 +37,8 @@ class Notifications:
     def send_wa_notification(self, user: dict, expert: dict) -> str:
         url = self.url + "/actions/send_whatsapp"
         birth_date: datetime = user.get("birthDate", "")
-        birth_date = birth_date.strftime("%d %B, %Y") if birth_date else ""
+        if birth_date:
+            birth_date = birth_date.strftime("%d %B, %Y")
         premium = "Yes" if user.get("isPaidUser", False) else "No"
 
         payload = json.dumps({
