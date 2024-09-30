@@ -85,6 +85,13 @@ class Compute:
         expert_id = ObjectId(self.input.expert_id)
 
         user, expert = self.get_users(user_id, expert_id)
+        if not user or not expert:
+            return Output(
+                output_details={},
+                output_status=OutputStatus.FAILURE,
+                output_message="User or Expert not found"
+            )
+
         fcm_response = self.notifier.send_fcm_notification(user, expert)
         if expert.get("type") != "internal":
             wa_response = self.notifier.send_wa_notification(user, expert)
