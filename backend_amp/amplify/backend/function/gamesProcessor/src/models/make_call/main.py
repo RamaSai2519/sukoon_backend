@@ -1,3 +1,4 @@
+import traceback
 from models.constants import OutputStatus
 from models.make_call.compute import Compute
 from models.make_call.validate import Validator
@@ -22,6 +23,7 @@ class MakeCall:
         try:
             output = self._compute(input)
         except Exception as e:
+            print(traceback.format_exc())
             return Output(
                 output_details={},
                 output_status=OutputStatus.FAILURE,
