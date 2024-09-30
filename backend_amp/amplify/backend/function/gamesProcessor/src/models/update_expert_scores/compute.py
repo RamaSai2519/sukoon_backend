@@ -1,3 +1,4 @@
+import json
 import requests
 from configs import CONFIG as config
 from models.constants import OutputStatus
@@ -77,7 +78,7 @@ class Compute:
         payload = {"phoneNumber": self.input.expert_number, **final_scores}
         headers = {'Content-Type': 'application/json'}
         response = requests.request(
-            "POST", self.self_url, headers=headers, data=payload)
+            "POST", self.self_url, headers=headers, data=json.dumps(payload))
         if response.status_code != 200:
             message = f"Failed to update expert: {response.text}"
         message = "Successfully updated expert"
