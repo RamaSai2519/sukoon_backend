@@ -77,6 +77,7 @@ api.add_resource(LeadsService, '/actions/leads')
 api.add_resource(WhatsappHistoryService, '/actions/wa_history')
 # - Services
 api.add_resource(TimingsService, '/actions/timings')
+api.add_resource(CategoriesService, '/actions/categories')
 api.add_resource(AdminFCMService, '/actions/save_fcm_token')
 # - Stats
 api.add_resource(DashboardStatsService, '/actions/dashboard_stats')
