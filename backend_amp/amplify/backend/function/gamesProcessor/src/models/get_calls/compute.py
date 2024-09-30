@@ -1,5 +1,3 @@
-import pytz
-from datetime import datetime
 from models.common import Common
 from models.constants import OutputStatus
 from models.interfaces import GetCallsInput as Input, Output
@@ -33,15 +31,36 @@ class Compute:
         )
         return {"data": calls}
 
+    def _get_call(self) -> dict:
+        query = {"callId": self.input.callId}
+        call = self.common.get_calls(query=query)
+        if len(call) == 0:
+            return {"data": None}
+        else:
+            call = call[0]
+
+        call = self.common.populate_call_meta(call)
+        call = self.common.jsonify(call)
+
+        return {"data": call}
+
     def compute(self) -> Output:
         switcher = {
             "home": self._get_home_calls,
             "graph": self._get_graph_calls,
-            "list": self._get_calls_list
+            "list": self._get_calls_list,
+            "search": self._get_call
         }
 
         calls = switcher.get(self.input.dest)()
         calls["total"] = self._total_calls()
+
+        if calls.get("data") is None:
+            return Output(
+                output_details={},
+                output_status=OutputStatus.FAILURE,
+                output_message="No Call Found"
+            )
 
         return Output(
             output_details=calls,

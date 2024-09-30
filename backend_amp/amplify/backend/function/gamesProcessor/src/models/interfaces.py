@@ -87,6 +87,7 @@ class GetCallsInput:
     page: Optional[int] = 0
     size: Optional[int] = 0
     internal: Optional[str] = ""
+    callId: Optional[str] = None
 
 
 @dataclass
@@ -171,10 +172,17 @@ class WebhookInput:
     call_transfer_duration: str
 
 
+@dataclass
 class TimingsRow:
     key: str
     value: str
     field: str
+
+
+@dataclass
+class SaveRemarkInput:
+    key: str
+    value: str
 
 
 @dataclass
@@ -489,6 +497,17 @@ class ApplicantInput:
 
     _id: Optional[str] = None
 
+@dataclass
+class CategoriesInput:
+    name: Optional[str] = None  
+    action: Optional[str] = None
+
+@dataclass
+class Category:
+    name: str
+    active: bool = True
+    createdDate: datetime = field(default_factory=datetime.now)
+    lastModifiedBy: Optional[str] = None
 
 @dataclass
 class UpdateScoresInput:

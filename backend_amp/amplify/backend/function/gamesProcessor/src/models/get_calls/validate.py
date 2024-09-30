@@ -12,7 +12,7 @@ class Validator():
         except (ValueError, TypeError):
             return False, "Page and size must be integers"
 
-        if self.input.dest not in ["home", "graph", "list"]:
+        if self.input.dest not in ["home", "graph", "list", "search"]:
             return False, "Invalid destination"
 
         return True, ""
