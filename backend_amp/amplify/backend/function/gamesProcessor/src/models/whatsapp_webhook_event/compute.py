@@ -105,11 +105,12 @@ class Compute:
         user_notification_collection = get_user_notification_collection()
         notification = user_notification_collection.find_one(
             {"messageId": message_id})
-        notification_id = notification.get("_id")
-        user_notification_collection.update_one(
-            {"_id": ObjectId(notification_id)},
-            {"$set": {"notification_status": status, }},
-        )
+        if notification:
+            notification_id = notification.get("_id")
+            user_notification_collection.update_one(
+                {"_id": ObjectId(notification_id)},
+                {"$set": {"notification_status": status}},
+            )
 
     def _get_feedback_values(self):
         context_id = None
