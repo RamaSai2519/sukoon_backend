@@ -172,10 +172,17 @@ class WebhookInput:
     call_transfer_duration: str
 
 
+@dataclass
 class TimingsRow:
     key: str
     value: str
     field: str
+
+
+@dataclass
+class SaveRemarkInput:
+    key: str
+    value: str
 
 
 @dataclass
