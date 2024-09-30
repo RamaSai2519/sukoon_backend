@@ -1,18 +1,18 @@
-from models.interfaces import GetCallsInput as Input
+from models.interfaces import GetWaHistoryInput as Input
 
 
 class Validator():
     def __init__(self, input: Input) -> None:
         self.input = input
 
-    def validate_input(self) -> tuple:
+    def validate_input(self):
+        if self.input.type not in ["feedback", "webhook"]:
+            return False, "Invalid type"
+
         try:
             int(self.input.page)
             int(self.input.size)
         except (ValueError, TypeError):
             return False, "Page and size must be integers"
-
-        if self.input.dest not in ["home", "graph", "list", "search"]:
-            return False, "Invalid destination"
 
         return True, ""

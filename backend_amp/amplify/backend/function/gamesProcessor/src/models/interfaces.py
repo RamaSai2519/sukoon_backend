@@ -57,6 +57,13 @@ class GetTimingsInput:
 
 
 @dataclass
+class GetWaHistoryInput:
+    type: str
+    page: Optional[int] = 0
+    size: Optional[int] = 0
+
+
+@dataclass
 class PhotosInput:
     page: int
     query: str
@@ -80,6 +87,7 @@ class GetCallsInput:
     page: Optional[int] = 0
     size: Optional[int] = 0
     internal: Optional[str] = ""
+    callId: Optional[str] = None
 
 
 @dataclass
