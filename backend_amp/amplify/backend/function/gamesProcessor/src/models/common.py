@@ -71,6 +71,8 @@ class Common:
     @staticmethod
     def paginate_cursor(cursor: Cursor, page: int, size: int) -> Cursor:
         offset = (page - 1) * size
+        if offset < 0:
+            offset = 0
         return cursor.skip(offset).limit(size)
 
     @staticmethod
