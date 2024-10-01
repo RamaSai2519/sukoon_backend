@@ -71,6 +71,11 @@ class PhotosInput:
 
 
 @dataclass
+class WaOptionsInput:
+    type: str
+
+
+@dataclass
 class GetLeadsInput:
     page: Optional[int] = 0
     size: Optional[int] = 0
@@ -497,10 +502,12 @@ class ApplicantInput:
 
     _id: Optional[str] = None
 
+
 @dataclass
 class CategoriesInput:
-    name: Optional[str] = None  
+    name: Optional[str] = None
     action: Optional[str] = None
+
 
 @dataclass
 class Category:
@@ -508,6 +515,7 @@ class Category:
     active: bool = True
     createdDate: datetime = field(default_factory=datetime.now)
     lastModifiedBy: Optional[str] = None
+
 
 @dataclass
 class UpdateScoresInput:
