@@ -24,11 +24,13 @@ class Compute:
 
     def find_user(self, phone: str) -> Union[User, None]:
         user = self.user_collection.find_one({"phoneNumber": phone})
+        user = Common.clean_user(user)
         return User(**user) if user else None
 
     def find_event_user(self, phone: str, source: str) -> Union[EventUser, None]:
         event_user = self.event_users_collection.find_one(
             {"phoneNumber": phone, "source": source}, {"createdAt": 0, "updatedAt": 0})
+        event_user = Common.clean_event_user(event_user)
         return EventUser(**event_user) if event_user else None
 
     def create_user(self) -> User:
