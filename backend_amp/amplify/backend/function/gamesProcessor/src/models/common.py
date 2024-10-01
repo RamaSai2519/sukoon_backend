@@ -86,9 +86,10 @@ class Common:
 
     @staticmethod
     def clean_user(user: dict) -> dict:
-        user_fields = set(User.__annotations__.keys())
-        cleaned_user = {k: v for k, v in user.items() if k in user_fields}
-        return cleaned_user
+        if user:
+            user_fields = set(User.__annotations__.keys())
+            user = {k: v for k, v in user.items() if k in user_fields}
+        return user
 
     def get_user_name(self, user_id: ObjectId) -> str:
         users_cache = self.users_cache
