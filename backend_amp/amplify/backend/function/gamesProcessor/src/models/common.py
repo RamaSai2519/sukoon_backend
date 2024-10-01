@@ -7,6 +7,7 @@ from db.experts import get_experts_collections
 from db.calls import get_callsmeta_collection
 from db.users import get_user_collection
 from datetime import datetime, date
+from models.interfaces import User
 from pymongo.cursor import Cursor
 from bson import ObjectId
 import pytz
@@ -82,6 +83,12 @@ class Common:
         today_start = datetime.combine(current_date, datetime.min.time())
         today_end = datetime.combine(current_date, datetime.max.time())
         return {field: {"$gte": today_start, "$lt": today_end}}
+
+    @staticmethod
+    def clean_user(user: dict) -> dict:
+        user_fields = set(User.__annotations__.keys())
+        cleaned_user = {k: v for k, v in user.items() if k in user_fields}
+        return cleaned_user
 
     def get_user_name(self, user_id: ObjectId) -> str:
         users_cache = self.users_cache
