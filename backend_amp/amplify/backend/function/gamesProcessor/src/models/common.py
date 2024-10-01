@@ -5,9 +5,9 @@ from db.events import get_event_users_collection
 from flask_jwt_extended import get_jwt_identity
 from db.experts import get_experts_collections
 from db.calls import get_callsmeta_collection
+from models.interfaces import User, EventUser
 from db.users import get_user_collection
 from datetime import datetime, date
-from models.interfaces import User
 from pymongo.cursor import Cursor
 from bson import ObjectId
 import pytz
@@ -90,6 +90,14 @@ class Common:
             user_fields = set(User.__annotations__.keys())
             user = {k: v for k, v in user.items() if k in user_fields}
         return user
+
+    @staticmethod
+    def clean_event_user(event_user: dict) -> dict:
+        if event_user:
+            event_user_fields = set(EventUser.__annotations__.keys())
+            event_user = {k: v for k, v in event_user.items()
+                          if k in event_user_fields}
+        return event_user
 
     def get_user_name(self, user_id: ObjectId) -> str:
         users_cache = self.users_cache
