@@ -76,6 +76,23 @@ class WaOptionsInput:
 
 
 @dataclass
+class WaPreviewInput:
+    eventSlug: Optional[str] = None
+    usersType: Optional[str] = None
+    cities: Optional[List[str]] = None
+
+
+@dataclass
+class WaSendInput:
+    inputs: dict
+    messageId: str
+    usersType: str
+    templateId: str
+    eventSlug: Optional[str] = None
+    cities: Optional[List[str]] = None
+
+
+@dataclass
 class GetLeadsInput:
     page: Optional[int] = 0
     size: Optional[int] = 0
