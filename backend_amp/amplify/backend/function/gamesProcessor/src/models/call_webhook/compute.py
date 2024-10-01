@@ -42,6 +42,7 @@ class Compute:
 
     def find_user(self, call: Call) -> Union[User, None]:
         user = self.users_collection.find_one({"_id": call.user})
+        user = Common.clean_user(user)
         return User(**user) if user else None
 
     def find_expert(self, call: Call) -> Union[Expert, None]:
