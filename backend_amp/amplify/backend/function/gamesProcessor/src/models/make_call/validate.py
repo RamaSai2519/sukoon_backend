@@ -42,6 +42,9 @@ class Validator:
         if not user:
             return False, "User not found"
 
+        if user["active"] is False:
+            return False, "User is inactive"
+
         if user["isBusy"]:
             self.notifier.send_notification(
                 type_=self.input.type_,

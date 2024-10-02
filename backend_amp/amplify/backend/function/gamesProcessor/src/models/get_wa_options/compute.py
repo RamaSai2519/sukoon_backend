@@ -2,7 +2,7 @@ from models.common import Common
 from db.users import get_user_collection
 from models.constants import OutputStatus
 from db.events import get_events_collection
-from db.whatsapp import get_whatsapp_templates
+from db.whatsapp import get_whatsapp_templates_collection
 from models.interfaces import WaOptionsInput as Input, Output
 
 
@@ -11,7 +11,7 @@ class Compute:
         self.input = input
         self.users_collection = get_user_collection()
         self.events_collection = get_events_collection()
-        self.templates_collection = get_whatsapp_templates()
+        self.templates_collection = get_whatsapp_templates_collection()
 
     def get_user_cities(self) -> list:
         return list(self.users_collection.distinct("city"))

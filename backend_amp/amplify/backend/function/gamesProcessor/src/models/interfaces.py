@@ -76,6 +76,17 @@ class WaOptionsInput:
 
 
 @dataclass
+class AdminWaInput:
+    action: str
+    inputs: Optional[dict] = None
+    eventId: Optional[str] = None
+    usersType: Optional[str] = None
+    messageId: Optional[str] = None
+    templateId: Optional[str] = None
+    cities: Optional[List[str]] = None
+
+
+@dataclass
 class GetLeadsInput:
     page: Optional[int] = 0
     size: Optional[int] = 0
