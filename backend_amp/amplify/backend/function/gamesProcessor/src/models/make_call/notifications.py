@@ -55,7 +55,6 @@ class Notifications:
 
         response = requests.request(
             "POST", url, headers=application_json_header, data=payload)
-        print(response.json())
         response_dict: dict = response.json()
         response_str = json.dumps(response_dict)
         return " and " + response_str

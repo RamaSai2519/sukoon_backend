@@ -23,7 +23,7 @@ class MakeCall:
         try:
             output = self._compute(input)
         except Exception as e:
-            print(traceback.format_exc())
+            print(traceback.format_exc(), "make_call/main.py")
             return Output(
                 output_details={},
                 output_status=OutputStatus.FAILURE,
