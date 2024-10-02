@@ -2,7 +2,7 @@ import traceback
 from models.constants import OutputStatus
 from models.handle_admin_wa.compute import Compute
 from models.handle_admin_wa.validate import Validator
-from models.interfaces import WaOptionsInput as Input, Output
+from models.interfaces import AdminWaInput as Input, Output
 
 
 class AdminWhatsapp:
@@ -19,7 +19,7 @@ class AdminWhatsapp:
                 output_status=OutputStatus.FAILURE,
                 output_message=f"INVALID_INPUT: {error_message}"
             )
-        
+
         try:
             output = self._compute(input)
         except Exception as e:
@@ -29,9 +29,8 @@ class AdminWhatsapp:
                 output_status=OutputStatus.FAILURE,
                 output_message=f"ERROR: {str(e)}"
             )
-        
-        return output
 
+        return output
 
     def _validate(self, input: Input):
         validation_obj = Validator(input)
