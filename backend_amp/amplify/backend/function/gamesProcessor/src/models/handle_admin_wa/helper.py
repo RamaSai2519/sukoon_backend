@@ -51,4 +51,5 @@ class Helper:
             "messageId": messageId,
             "datetime": datetime.now()
         })
+        print(response.text)
         return response
