@@ -37,7 +37,7 @@ class Helper:
     def find_template(self, templateId: str) -> str:
         template = dict(self.templates_collection.find_one(
             {"_id": ObjectId(templateId)}))
-        template = template.get("template", "")
+        template = template.get("name", "")
         return template
 
     def send_whatsapp_message(self, payload: dict, messageId: str) -> requests.Response:
