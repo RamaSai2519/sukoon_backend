@@ -26,7 +26,7 @@ class Compute:
             return query
         return query
 
-    def get_event_or_users_query(self):
+    def get_event_or_users_query(self) -> tuple:
         if self.input.eventId and self.input.usersType == "event":
             query = {"_id": ObjectId(self.input.eventId)}
             event = self.events_collection.find_one(query)
@@ -50,6 +50,7 @@ class Compute:
             inputs = self.input.inputs
             templateId = self.input.templateId
             payload = self.helper.prepare_payload(user, templateId, inputs)
+            self.helper.send_whatsapp_message(payload, self.input.messageId)
 
     def get_preview(self) -> Output:
         query, collection = self.get_event_or_users_query()
