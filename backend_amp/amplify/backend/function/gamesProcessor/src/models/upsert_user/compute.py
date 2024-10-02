@@ -4,13 +4,14 @@ import random
 import hashlib
 import requests
 import dataclasses
-from typing import Union
 from datetime import datetime
+from typing import Union, Tuple
 from models.common import Common
+from configs import CONFIG as config
 from db.users import get_user_collection
-from models.constants import OutputStatus, application_json_header
 from models.interfaces import User as Input, Output
 from db.referral import get_user_referral_collection
+from models.constants import OutputStatus, application_json_header
 
 
 class Compute:
@@ -51,7 +52,6 @@ class Compute:
             user_data = self.defaults(user_data)
         user_data.pop("refCode", None)
 
-        # Check if profile is completed
         user_data["profileCompleted"] = bool(
             user_data.get("name") and user_data.get("city") and user_data.get("birthDate"))
 
@@ -65,25 +65,15 @@ class Compute:
             user_data["birthDate"] = Common.string_to_date(
                 user_data, "birthDate")
 
-        # Remove None values
         user_data = {k: v for k, v in user_data.items() if v is not None}
         return user_data
 
-    def send_welcome_message(self, user_data: dict) -> None:
-        url = "https://6x4j0qxbmk.execute-api.ap-south-1.amazonaws.com/main/actions/send_whatsapp"
-        # url = "http://localhost:8080/actions/send_whatsapp"
-        headers = {
-            'Content-Type': 'application/json'
-        }
-        payload = {"template_name": "WELCOME_REGISTRATION",
-                   "phone_number": user_data.get("phoneNumber", ""),
-                   "parameters": {
-                       "user_name": user_data.get("name", "")
-                   }}
+    def send_wa_message(self, payload: dict) -> None:
+        url = config.URL + "/actions/send_whatsapp"
+        headers = application_json_header
         response = requests.request(
             "POST", url, headers=headers, data=json.dumps(payload)
         )
-
         if response.status_code != 200:
             print(response.text)
         return True if response.status_code == 200 else False
@@ -119,13 +109,22 @@ class Compute:
             self.referrals_collection.insert_one(referral)
 
     def update_user(self, user_data: dict, prev_user: dict) -> str:
+        if user_data.get("isPaidUser") == True and prev_user and prev_user.get("isPaidUser") == False:
+            payload = {
+                "phone_number": prev_user.get("phoneNumber", ""),
+                "template_name": "CLUB_SUKOON_MEMBERSHIP",
+                "parameters": {
+                    "user_name": str(str(prev_user.get("name", "")).split(" ")[0].capitalize())
+                }
+            }
+            self.send_wa_message(payload)
         self.users_collection.update_one(
             {"phoneNumber": user_data["phoneNumber"]},
             {"$set": user_data}
         )
         return "Successfully updated user"
 
-    def insert_user(self, user_data: dict) -> str:
+    def insert_user(self, user_data: dict) -> Tuple[str, dict]:
         user_data["_id"] = self.users_collection.insert_one(
             user_data).inserted_id
         return "Successfully created user", user_data
@@ -150,7 +149,12 @@ class Compute:
             message = self.update_user(user_data, prev_user)
         else:
             message, user_data = self.insert_user(user_data)
-            response = self.send_welcome_message(user_data)
+            payload = {"template_name": "WELCOME_REGISTRATION",
+                       "phone_number": user_data.get("phoneNumber", ""),
+                       "parameters": {
+                           "user_name": user_data.get("name", "")
+                       }}
+            response = self.send_wa_message(payload)
             message += " and sent welcome message" if response else " but failed to send welcome message"
         self.handle_referral(user_data, prev_user)
 
