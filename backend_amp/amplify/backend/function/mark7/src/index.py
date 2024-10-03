@@ -49,22 +49,3 @@ def handler(event, context) -> dict:
     mark7 = Mark7(call)
     mark7.compute()
     return {"message": "Success"}
-
-if __name__ == "__main__":
-    call = {
-        "_id": ObjectId("66f1427d155726d87e736a16"),
-        "callId": "cf8e83da-2874-489b-bc39-e4955ff78680",
-        "status": "successfull",
-        "initiatedTime": datetime.datetime(2024, 9, 23, 10, 27, 9, 836000),
-        "duration": "0:08:12",
-        "transferDuration": "00:07:54",
-        "recording_url": "https://sr.knowlarity.com/vr/fetchsound/?callid%3Dcf8e83da-2874-489b-bc39-e4955ff78680",
-        "failedReason": "",
-        "Conversation Score": None,
-        "expert": ObjectId("6604694542f04a057fa2100f"),
-        "profile": "",
-        "user": ObjectId("6695140413812b454ec0e479"),
-        "__v": 0
-    }
-
-    handler({"call": call}, None)
