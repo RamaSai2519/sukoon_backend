@@ -96,6 +96,13 @@ class WhatsappNotificationTemplates:
                 "language": {"code": "en"},
             },
         }
+        self.OCTOBER_THREE_EVENT = {
+            "template_name": "October Three Event",
+            "template": {
+                "name": "october_three_event",
+                "language": {"code": "en"},
+            },
+        }
 
         self.LEARNING_WEEK_MARKETING_CREATIVE = {
             "template_name": "Learing Week Marketing Creatinve",
