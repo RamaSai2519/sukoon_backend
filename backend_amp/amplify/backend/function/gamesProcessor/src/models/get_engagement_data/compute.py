@@ -88,16 +88,19 @@ class Compute:
             return "Creating Excel File, Please Wait..."
         prev_file_time = prev_url.split("_")[-1].split(".")[0]
         prev_time = datetime.strptime(prev_file_time, "%Y-%m-%d-%H-%M-%S")
-        if (self.current_time - prev_time).seconds < 900:
-            return prev_url
+        time_diff = (self.current_time - prev_time).seconds
+        if time_diff < 900:
+            diff_minutes = round((900 - time_diff) / 60, 2)
+            msg = f" and Next Excel File will be created in {diff_minutes} minutes"
+            return prev_url, msg
         else:
             threading.Thread(target=self.create_excel).start()
-            return prev_url
+            return prev_url, " and Creating Excel File Now..."
 
     def compute(self) -> Output:
         users = self.get_users(self.page, self.size)
         total = self.users_collection.count_documents({})
-        file_url = self.excel_url()
+        file_url, msg = self.excel_url()
 
         final_doc = {"data": users, "total": total,
                      "page": self.page, "size": self.size,
@@ -106,5 +109,5 @@ class Compute:
         return Output(
             output_details=final_doc,
             output_status=OutputStatus.SUCCESS,
-            output_message="Successfully fetched data"
+            output_message="Successfully fetched data" + msg
         )
