@@ -26,12 +26,14 @@ class Expert:
     timeSpent: Optional[int] = None
     languages: Optional[str] = None
     timeSplit: Optional[int] = None
+    isDeleted: Optional[bool] = None
     probability: Optional[int] = None
     description: Optional[str] = None
     total_score: Optional[int] = None
     displayScore: Optional[str] = None
     repeat_score: Optional[int] = None
     isGamesPlay: Optional[bool] = None
+    daysLoggedIn: Optional[int] = None
     calls_share: Optional[float] = None
     userSentiment: Optional[int] = None
     closingGreeting: Optional[int] = None
@@ -55,6 +57,13 @@ class GetTimingsInput:
 
 
 @dataclass
+class GetWaHistoryInput:
+    type: str
+    page: Optional[int] = 0
+    size: Optional[int] = 0
+
+
+@dataclass
 class PhotosInput:
     page: int
     query: str
@@ -62,9 +71,52 @@ class PhotosInput:
 
 
 @dataclass
+class WaOptionsInput:
+    type: str
+
+
+@dataclass
+class AdminWaInput:
+    action: str
+    inputs: Optional[dict] = None
+    eventId: Optional[str] = None
+    usersType: Optional[str] = None
+    messageId: Optional[str] = None
+    templateId: Optional[str] = None
+    cities: Optional[List[str]] = None
+
+
+@dataclass
+class GetLeadsInput:
+    page: Optional[int] = 0
+    size: Optional[int] = 0
+    data: Optional[bool] = False
+    sort_order: Optional[int] = None
+    sort_field: Optional[str] = None
+    filter_field: Optional[str] = None
+    filter_value: Optional[str] = None
+
+
+@dataclass
+class GetCallsInput:
+    dest: str
+    page: Optional[int] = 0
+    size: Optional[int] = 0
+    internal: Optional[str] = ""
+    callId: Optional[str] = None
+
+
+@dataclass
 class GetExpertsInput:
+    internal: Optional[str] = ""
     phoneNumber: Optional[str] = None
     schedule_status: Optional[str] = None
+
+
+@dataclass
+class GetContentPostsInput:
+    page: Optional[int] = 0
+    size: Optional[int] = 0
 
 
 @dataclass
@@ -75,6 +127,33 @@ class GetGameConfigInput:
 @dataclass
 class ChatInput:
     prompt: str
+
+
+@dataclass
+class ContentPhoto:
+    url: Optional[str] = None
+    slug: Optional[str] = None
+    description: Optional[str] = None
+
+
+@dataclass
+class Content:
+    response: Optional[str] = None
+    category: Optional[str] = None
+    tags: Optional[List[str]] = None
+
+
+@dataclass
+class SaveContentInput:
+    content: Content
+    photo: ContentPhoto
+
+
+@dataclass
+class WASlackNotifierInput:
+    name: str
+    body: str
+    from_number: str
 
 
 @dataclass
@@ -109,10 +188,17 @@ class WebhookInput:
     call_transfer_duration: str
 
 
+@dataclass
 class TimingsRow:
     key: str
     value: str
     field: str
+
+
+@dataclass
+class SaveRemarkInput:
+    key: str
+    value: str
 
 
 @dataclass
@@ -151,6 +237,12 @@ class UserReferralInput:
     name: str
     referral_code: str
     phone_number: str
+
+
+@dataclass
+class GetReferralsInput:
+    userId: Optional[str] = None
+    refCode: Optional[str] = None
 
 
 @dataclass
@@ -252,10 +344,14 @@ class WhatsappWebhookEventInput:
 
 @dataclass
 class PushNotificationInput:
-    title: str
     body: str
+    title: str
+    token: str
+    type_: str
     user_id: str
-    fcm_token: str
+    image_url: str
+    sarathi_id: str
+    action: str = field(default_factory=lambda: "")
 
 
 @dataclass
@@ -315,12 +411,14 @@ class EventInput:
     name: Optional[str] = None
     slug: Optional[str] = None
     repeat: Optional[str] = None
+    passcode: Optional[str] = None
     subTitle: Optional[str] = None
     hostedBy: Optional[str] = None
     category: Optional[str] = None
     imageUrl: Optional[str] = None
     mainTitle: Optional[str] = None
     eventType: Optional[str] = None
+    meeting_id: Optional[str] = None
     prizeMoney: Optional[int] = None
     isAlways: Optional[bool] = False
     meetingLink: Optional[str] = None
@@ -373,6 +471,7 @@ class User:
     active: Optional[bool] = None
     isBusy: Optional[bool] = None
     _id: Optional[ObjectId] = None
+    refSource: Optional[str] = None
     isBlocked: Optional[bool] = None
     isPaidUser: Optional[bool] = None
     wa_opt_out: Optional[bool] = None
@@ -416,6 +515,58 @@ class ApplicantInput:
 
 
 @dataclass
+class CategoriesInput:
+    name: Optional[str] = None
+    action: Optional[str] = None
+
+
+@dataclass
+class Category:
+    name: str
+    active: bool = True
+    createdDate: datetime = field(default_factory=datetime.now)
+    lastModifiedBy: Optional[str] = None
+
+
+@dataclass
+class UpdateScoresInput:
+    expert_id: str
+    expert_number: str
+
+
+@dataclass
+class AverageScores:
+    flow: Optional[int] = 0
+    timeSplit: Optional[int] = 0
+    timeSpent: Optional[int] = 0
+    probability: Optional[int] = 0
+    userSentiment: Optional[int] = 0
+    closingGreeting: Optional[int] = 0
+    openingGreeting: Optional[int] = 0
+
+
+@dataclass
+class AverageScoresObject:
+    message: str
+    average_scores: AverageScores
+    score: Optional[int] = 0
+
+
+@dataclass
+class GetUserCountsInput:
+    test: Optional[str] = None
+
+
+@dataclass
+class UserMeta:
+    user: ObjectId
+    source: Optional[str] = ""
+    remarks: Optional[str] = ""
+    context: Optional[str] = ""
+    userStatus: Optional[str] = ""
+
+
+@dataclass
 class Output:
     output_status: str
     output_message: str
@@ -444,9 +595,11 @@ class Admin:
 @dataclass
 class DashboardStatsInput:
     item: str
+    internal: Optional[str] = ""
 
 
 @dataclass
 class CallInput:
     user_id: str
     expert_id: str
+    type_: str = field(default_factory=lambda: 'call')

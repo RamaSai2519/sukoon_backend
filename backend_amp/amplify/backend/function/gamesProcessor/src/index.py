@@ -39,6 +39,9 @@ api.add_resource(CreateEventUserService, '/actions/create_event_user')
 api.add_resource(CreateScheduledJobsService, '/actions/create_scheduled_job')
 api.add_resource(UpdateScheduledJobsService, '/actions/update_scheduled_job')
 
+# Mark7 Routes
+api.add_resource(UpdateExpertScoresService, '/actions/expert_scores')
+
 
 api.add_resource(CreatePaymentOrderService, '/actions/create_payment_order')
 api.add_resource(CashfreeWebhookService, '/actions/cashfree_webhook')
@@ -62,11 +65,19 @@ api.add_resource(SendOTPService, '/actions/send_otp')
 # Admin Routes
 # - Auth
 api.add_resource(AdminAuthService, '/actions/admin_auth')
-# - Services
+# - Data
+api.add_resource(LeadsService, '/actions/leads')
+api.add_resource(RemarksService, '/actions/remarks')
+api.add_resource(WhatsappHistoryService, '/actions/wa_history')
+# - Content
 api.add_resource(ChatService, '/actions/chat')
 api.add_resource(PhotosService, '/actions/photos')
+api.add_resource(ContentService, '/actions/content')
+# - Services
 api.add_resource(TimingsService, '/actions/timings')
+api.add_resource(CategoriesService, '/actions/categories')
 api.add_resource(AdminFCMService, '/actions/save_fcm_token')
+api.add_resource(AdminWhatsappService, '/actions/wa_options')
 # - Stats
 api.add_resource(DashboardStatsService, '/actions/dashboard_stats')
 

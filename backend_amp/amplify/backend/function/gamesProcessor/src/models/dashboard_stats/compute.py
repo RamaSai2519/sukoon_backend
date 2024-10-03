@@ -12,16 +12,11 @@ class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
         self.common = Common()
-        self.current_date = datetime.now(pytz.timezone("Asia/Kolkata"))
-
-        # Today Query
-        today_start = datetime.combine(self.current_date, datetime.min.time())
-        today_end = datetime.combine(self.current_date, datetime.max.time())
-        self.today_query = {"initiatedTime": {
-            "$gte": today_start, "$lt": today_end}}
+        self.today_query = Common.get_today_query()
+        self.exclude_query = self.common.get_internal_exclude_query(input.internal)
 
     def get_dashboard_stats(self) -> Output:
-        stats = DashboardStats(self.today_query)
+        stats = DashboardStats(self.today_query, self.exclude_query, self.input.internal)
         stats_data = {}
 
         methods_to_run = [
@@ -53,7 +48,7 @@ class Compute:
         )
 
     def _get_insights(self):
-        insights = CallInsights().get_insights()
+        insights = CallInsights(self.exclude_query).get_insights()
         successfulCalls = [
             {"key": "1", "category": "< 15 mins",
                 "value": insights.get("_15min", "0%")},

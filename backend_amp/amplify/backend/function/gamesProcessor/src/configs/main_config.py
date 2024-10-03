@@ -2,6 +2,7 @@ from datetime import timedelta
 
 
 class MainConfig:
+    URL = "https://6x4j0qxbmk.execute-api.ap-south-1.amazonaws.com/main"
     DB_CONFIG = {
         "connection_url": "mongodb+srv://sukoon_user:Tcks8x7wblpLL9OA@cluster0.o7vywoz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
     }
@@ -56,7 +57,7 @@ class MainConfig:
 
     MAIN_BE_URL = "https://prod-backend.sukoonunlimited.com/api"
 
-    SLACK_BOT_TOKEN = "xoxb-7127288803060-7529287532416-8SI5ACYFBDK9TjK1MPiw9xwU"
+    SARATHI_SLACK_BOT_TOKEN = "xoxb-7127288803060-7529287532416-8SI5ACYFBDK9TjK1MPiw9xwU"
 
     FB_SERVER_KEY = "AAAAM5jkbNg:APA91bG80zQ8CzD1AeQmV45YT4yWuwSgJ5VwvyLrNynAJBk4AcyCb6vbCSGlIQeQFPAndS0TbXrgEL8HFYQq4DMXmSoJ4ek7nFcCwOEDq3Oi5Or_SibSpywYFrnolM4LSxpRkVeiYGDv"
 

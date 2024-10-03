@@ -4,20 +4,25 @@ from db.referral import get_user_referral_collection
 from db.events import get_event_users_collection
 from flask_jwt_extended import get_jwt_identity
 from db.experts import get_experts_collections
+from db.calls import get_callsmeta_collection
+from models.interfaces import User, EventUser
 from db.users import get_user_collection
 from datetime import datetime, date
+from pymongo.cursor import Cursor
 from bson import ObjectId
+import pytz
 
 
 class Common:
     def __init__(self):
-        self.referrals_collection = get_user_referral_collection()
-        self.schedules_collection = get_schedules_collection()
-        self.experts_collection = get_experts_collections()
-        self.calls_collection = get_calls_collection()
-        self.users_collection = get_user_collection()
-        self.experts_cache = {}
         self.users_cache = {}
+        self.experts_cache = {}
+        self.users_collection = get_user_collection()
+        self.calls_collection = get_calls_collection()
+        self.experts_collection = get_experts_collections()
+        self.schedules_collection = get_schedules_collection()
+        self.callsmeta_collection = get_callsmeta_collection()
+        self.referrals_collection = get_user_referral_collection()
 
     @staticmethod
     def get_identity() -> str:
@@ -29,12 +34,14 @@ class Common:
             if isinstance(value, ObjectId):
                 doc[field] = str(value)
             elif isinstance(value, datetime):
-                doc[field] = datetime.strftime(value, "%Y-%m-%dT%H:%M:%S")
+                if value.tzinfo is None:
+                    value = value.replace(tzinfo=pytz.utc)
+                doc[field] = value.strftime("%Y-%m-%dT%H:%M:%S.%fZ")
         return doc
 
     @staticmethod
     def string_to_date(doc: dict, field: str) -> date:
-        if field in doc:
+        if field in doc and doc[field] is not None:
             doc[field] = datetime.strptime(doc[field], "%Y-%m-%dT%H:%M:%S.%fZ")
         return doc[field]
 
@@ -62,6 +69,36 @@ class Common:
 
         return " ".join(formatted_duration) if formatted_duration else "0s"
 
+    @staticmethod
+    def paginate_cursor(cursor: Cursor, page: int, size: int) -> Cursor:
+        offset = (page - 1) * size
+        if offset < 0:
+            offset = 0
+        return cursor.skip(offset).limit(size)
+
+    @staticmethod
+    def get_today_query(field: str = "initiatedTime", local: bool = True) -> dict:
+        current_date = datetime.now(pytz.timezone(
+            "Asia/Kolkata")) if local else datetime.now()
+        today_start = datetime.combine(current_date, datetime.min.time())
+        today_end = datetime.combine(current_date, datetime.max.time())
+        return {field: {"$gte": today_start, "$lt": today_end}}
+
+    @staticmethod
+    def clean_user(user: dict) -> dict:
+        if user:
+            user_fields = set(User.__annotations__.keys())
+            user = {k: v for k, v in user.items() if k in user_fields}
+        return user
+
+    @staticmethod
+    def clean_event_user(event_user: dict) -> dict:
+        if event_user:
+            event_user_fields = set(EventUser.__annotations__.keys())
+            event_user = {k: v for k, v in event_user.items()
+                          if k in event_user_fields}
+        return event_user
+
     def get_user_name(self, user_id: ObjectId) -> str:
         users_cache = self.users_cache
         if user_id not in users_cache:
@@ -82,18 +119,27 @@ class Common:
             )
         return experts_cache[expert_id]
 
-    def format_calls(self, calls: list) -> list:
+    def format_calls(self, calls: list, req_names: bool = True) -> list:
         for call in calls:
-            call["user"] = self.get_user_name(user_id=ObjectId(
-                call["user"])) if "user" in call else "Unknown"
-            call["expert"] = self.get_expert_name(
-                ObjectId(call["expert"])) if "expert" in call else "Unknown"
+            # Fetch names if requested
+            if req_names:
+                call["user"] = self.get_user_name(
+                    ObjectId(call.get("user"))) if call.get("user") else "Unknown"
+                call["expert"] = self.get_expert_name(
+                    ObjectId(call.get("expert"))) if call.get("expert") else "Unknown"
+
+            # Rename "Conversation Score" to "conversationScore"
             call["conversationScore"] = call.pop("Conversation Score", 0)
-            call = Common.jsonify(call)
-            if "failedReason" in call and call["failedReason"] == "call missed":
+
+            # Handle call status and missed calls
+            if call.get("failedReason") == "call missed":
                 call["status"] = "missed"
-            if "status" in call and call["status"] == "successfull":
+            elif call.get("status") == "successfull":
                 call["status"] = "successful"
+
+            # Convert the call to JSON
+            call = Common.jsonify(call)
+
         return calls
 
     def get_events_history(self, query: dict) -> list:
@@ -119,14 +165,41 @@ class Common:
             counts[status] = self.schedules_collection.count_documents(query)
         return counts
 
-    def get_calls(self, query: dict = {}, projection: dict = {}, exclude: bool = True, format: bool = True) -> list:
+    def get_calls(self, query: dict = {}, projection: dict = {}, exclude: bool = True, format: bool = True, page: int = 0, size: int = 0, req_names: bool = True) -> list:
         if exclude:
             projection = {**projection, **calls_exclusion_projection}
 
-        calls = list(self.calls_collection.find(
-            query, projection).sort("initiatedTime", -1))
+        calls = self.calls_collection.find(
+            query, projection).sort("initiatedTime", -1)
+
+        if page > 0 and size > 0:
+            calls = self.paginate_cursor(calls, page, size)
+
+        elif size > 0:
+            calls = calls.limit(size)
 
         if format:
-            calls = self.format_calls(calls)
+            calls = self.format_calls(list(calls), req_names)
 
         return calls
+
+    def get_internal_exclude_query(self, internal: str = "", field: str = "expert") -> list:
+        query = {"type": "internal"}
+        querier = "$in" if internal == "true" else "$nin"
+        projection = {"_id": 1}
+        experts = list(self.experts_collection.find(query, projection))
+        internal_expert_ids = [expert.get("_id", "") for expert in experts]
+        return {field: {querier: internal_expert_ids}}
+
+    def populate_call_meta(self, call: dict) -> dict:
+        call_meta: dict = self.callsmeta_collection.find_one(
+            {"callId": call["callId"]}
+        )
+        if call_meta:
+            call["Topics"] = call_meta.get("Topics", [])
+            call["Summary"] = call_meta.get("Summary", "")
+            call["User Callback"] = call_meta.get("User Callback", "")
+            call["Score Breakup"] = call_meta.get("Score Breakup", {})
+            call["transcript_url"] = call_meta.get("transcript_url", "")
+            call["Saarthi Feedback"] = call_meta.get("Saarthi Feedback", "")
+        return call

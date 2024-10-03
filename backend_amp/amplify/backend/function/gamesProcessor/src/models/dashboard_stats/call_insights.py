@@ -4,17 +4,18 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 class CallInsights:
-    def __init__(self):
+    def __init__(self, exclude_query: dict) -> None:
         self.common = Common()
+        self.exclude_query = exclude_query
         self.successful_calls = self._get_successful_calls()
 
     def _get_successful_calls(self) -> list:
-        return self.common.get_calls(
-            {"status": "successfull", "failedReason": ""},
+        return list(self.common.get_calls(
+            {**successful_calls_query, **self.exclude_query},
             {"duration": 1, "user": 1, "type": 1, "_id": 0},
             False,
             False,
-        )
+        ))
 
     @staticmethod
     def _get_duration_category(duration_sec):
@@ -158,7 +159,7 @@ class CallInsights:
         return insights_data
 
     def _get_successful_scheduled_calls_(self) -> list:
-        query = {**successful_calls_query,
+        query = {**successful_calls_query, **self.exclude_query,
                  "$or": [{"type": "scheduled"}, {"scheduledId": {"$exists": True}}]}
         projection = {"duration": 1, "scheduledId": 1, "type": 1, "_id": 0}
         calls = self.common.get_calls(query, projection, False)

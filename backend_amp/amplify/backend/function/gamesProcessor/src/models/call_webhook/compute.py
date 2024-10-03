@@ -3,9 +3,9 @@ import requests
 from typing import Union
 from models.common import Common
 from db.users import get_user_collection
-from models.constants import OutputStatus
 from db.calls import get_calls_collection
 from db.experts import get_experts_collections
+from models.constants import OutputStatus, application_json_header
 from models.interfaces import WebhookInput as Input, Call, Output, User, Expert
 
 
@@ -19,8 +19,21 @@ class Compute:
         self.experts_collection = get_experts_collections()
 
     def prep_call(self, call: dict) -> Call:
-        call["conversationScore"] = call.pop("Conversation Score", None)
-        return Call(**call)
+        fcall = {
+            "_id": call.get("_id", None),
+            "user": call.get("user", None),
+            "expert": call.get("expert", None),
+            "callId": call.get("callId", None),
+            "status": call.get("status", None),
+            "duration": call.get("duration", None),
+            "scheduledId": call.get("scheduledId", None),
+            "failedReason": call.get("failedReason", None),
+            "initiatedTime": call.get("initiatedTime", None),
+            "recording_url": call.get("recording_url", None),
+            "transferDuration": call.get("transferDuration", None),
+            "conversationScore": call.get("Conversation Score", None)
+        }
+        return Call(**fcall)
 
     def find_call(self, callId: str) -> Union[Call, None]:
         call = self.calls_collection.find_one({"callId": callId})
@@ -29,15 +42,20 @@ class Compute:
 
     def find_user(self, call: Call) -> Union[User, None]:
         user = self.users_collection.find_one({"_id": call.user})
+        user = Common.clean_user(user)
         return User(**user) if user else None
 
     def find_expert(self, call: Call) -> Union[Expert, None]:
         expert = self.experts_collection.find_one({"_id": call.expert})
         return Expert(**expert) if expert else None
 
-    def update_user(self, call: Call) -> str:
+    def update_user(self, call: Call, expert: Expert, user: User) -> str:
         filter = {"_id": call.user}
-        update = {"$set": {"isBusy": False}}
+        update_values = {"isBusy": False}
+        if expert and expert.type != "internal" and self.common.duration_str_to_seconds(call.duration) > 120:
+            update_values["numberOfCalls"] = user.numberOfCalls - \
+                1 if user.numberOfCalls > 0 else 0
+        update = {"$set": update_values}
         response = self.users_collection.update_one(filter, update)
         message = "User updated, " if response.modified_count > 0 else "User not updated, "
         return message
@@ -74,9 +92,7 @@ class Compute:
         message = "Call updated, " if response.modified_count > 0 else "Call not updated, "
         return message
 
-    def send_feedback_message(self, call: Call):
-        user = self.find_user(call)
-        expert = self.find_expert(call)
+    def send_feedback_message(self, call: Call, expert: Expert, user: User) -> str:
         if not user or not expert:
             return "Feedback message not sent"
         payload = {
@@ -92,11 +108,8 @@ class Compute:
                 "sarathi_name": expert.name,
             }
         }
-        headers = {
-            'Content-Type': 'application/json'
-        }
         response = requests.request(
-            "POST", self.url, headers=headers, data=json.dumps(payload)
+            "POST", self.url, headers=application_json_header, data=json.dumps(payload)
         )
         print(response.text, "feedback")
         message = "Feedback message sent" if response.status_code == 200 else "Feedback message not sent"
@@ -112,8 +125,10 @@ class Compute:
                 output_message=f"Call not found with callid: {callId}"
             )
 
+        user = self.find_user(call)
+        expert = self.find_expert(call)
         call_message = self.update_call(call)
-        user_message = self.update_user(call)
+        user_message = self.update_user(call, expert, user)
         expert_message = self.update_expert(call)
         feedback_message = "Feedback message not sent"
 

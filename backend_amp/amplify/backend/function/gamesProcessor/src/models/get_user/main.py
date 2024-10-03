@@ -1,15 +1,15 @@
 import traceback
-from models.interfaces import ScheduledJobInput as Input, Output
 from models.constants import OutputStatus
 from models.get_user.compute import Compute
 from models.get_user.validate import Validator
+from models.interfaces import GetUsersInput as Input, Output
 
 
 class GetUser:
     def __init__(self, input: Input) -> None:
         self.input = input
 
-    def process(self):
+    def process(self) -> Output:
         input = self.input
         valid_input, error_message = self._validate(input)
 

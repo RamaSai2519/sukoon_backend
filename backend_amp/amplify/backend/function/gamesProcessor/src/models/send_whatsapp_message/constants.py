@@ -48,7 +48,7 @@ class WhatsappNotificationTemplates:
                 "name": "games_gala",
                 "language": {"code": "en"},
                 "components": [
-                    {       
+                    {
                         "type": "header",
                         "parameters": [
                             {"type": "video", "video": {"link": "{video_link}"}}
@@ -63,7 +63,6 @@ class WhatsappNotificationTemplates:
                 ],
             },
         }
-
 
         self.NON_REGISTERED_USER_QUERY = {
             "template_name": "Non Registered User Query",
@@ -81,6 +80,38 @@ class WhatsappNotificationTemplates:
             },
         }
 
+        self.SUPPORT_GROUP_WABA_MESSAGES = {
+            "template_name": "Support Group Waba Messages",
+            "template": {
+                "name": "support_group_waba_messages",
+                "language": {"code": "en"},
+            },
+        }
+
+        self.MESSAGE_JOGGING_TEMPLATE = {
+            "template_name": "Message Jogging Template",
+            "template": {
+                "name": "message_jogging_template",
+                "language": {"code": "en"},
+            },
+        }
+
+        self.LEARNING_WEEK_MARKETING_CREATIVE = {
+            "template_name": "Learing Week Marketing Creatinve",
+            "template": {
+                "name": "learning_week_marketing_creative",
+                "language": {"code": "en"},
+                "components": [
+                    {
+                        "type": "header",
+                        "parameters": [
+                            {"type": "image", "image": {"link": "{image_link}"}}
+                        ],
+                    },
+                ],
+            },
+        }
+
         self.REGISTERED_USER_ONLY_EVENT_ACTIVE = {
             "template_name": "Registered User Only Event Active",
             "template": {
@@ -88,7 +119,6 @@ class WhatsappNotificationTemplates:
                 "language": {"code": "en"},
             },
         }
-
 
         self.COMMON_CALL_REPLY = {
             "template_name": "Common Call Reply",
@@ -114,7 +144,6 @@ class WhatsappNotificationTemplates:
             },
         }
 
-
         self.GAMES_EVENT = {
             "template_name": "Games Event",
             "template": {
@@ -122,7 +151,6 @@ class WhatsappNotificationTemplates:
                 "language": {"code": "en"},
             },
         }
-
 
         self.GAMES_MARKETING_MESSAGE = {
             "template_name": "Games Marketing Message",
@@ -173,7 +201,7 @@ class WhatsappNotificationTemplates:
                 "name": "holistic_wellness",
                 "language": {"code": "en"},
                 "components": [
-                    {       
+                    {
                         "type": "header",
                         "parameters": [
                             {"type": "image", "image": {"link": "{image_link}"}}
@@ -221,14 +249,13 @@ class WhatsappNotificationTemplates:
             },
         }
 
-
         self.DEMENTIA = {
             "template_name": "DEMENTIA",
             "template": {
                 "name": "dementia_template",
                 "language": {"code": "en"},
                 "components": [
-                    {       
+                    {
                         "type": "header",
                         "parameters": [
                             {"type": "image", "image": {"link": "{image_link}"}}
@@ -244,7 +271,7 @@ class WhatsappNotificationTemplates:
                 "name": "event_registration",
                 "language": {"code": "en"},
                 "components": [
-                    {       
+                    {
                         "type": "header",
                         "parameters": [
                             {"type": "image", "image": {"link": "{image_link}"}}
@@ -304,7 +331,7 @@ class WhatsappNotificationTemplates:
                 "name": "event_reminder",
                 "language": {"code": "en"},
                 "components": [
-                   {       
+                    {
                         "type": "header",
                         "parameters": [
                             {"type": "image", "image": {"link": "{image_link}"}}
@@ -334,7 +361,7 @@ class WhatsappNotificationTemplates:
                 "name": "step_up_challenge",
                 "language": {"code": "en"},
                 "components": [
-                    {       
+                    {
                         "type": "header",
                         "parameters": [
                             {"type": "image", "image": {"link": "{image_link}"}}
@@ -352,14 +379,13 @@ class WhatsappNotificationTemplates:
             },
         }
 
-
         self.AGING_MESSAGE = {
             "template_name": "AGING_MESSAGE",
             "template": {
                 "name": "aging_template",
                 "language": {"code": "en"},
                 "components": [
-                    {       
+                    {
                         "type": "header",
                         "parameters": [
                             {"type": "image", "image": {"link": "{image_link}"}}
@@ -419,14 +445,13 @@ class WhatsappNotificationTemplates:
             },
         }
 
-
         self.NEST_SUPPORT = {
             "template_name": "NEST_SUPPORT",
             "template": {
                 "name": "nest_support",
                 "language": {"code": "en"},
                 "components": [
-                    {       
+                    {
                         "type": "header",
                         "parameters": [
                             {"type": "image", "image": {"link": "{image_link}"}}
@@ -436,14 +461,13 @@ class WhatsappNotificationTemplates:
             },
         }
 
-
         self.FUN_EVENT_REGISTRATION = {
             "template_name": "FUN_EVENT_REGISTRATION",
             "template": {
                 "name": "fun_event_registration",
                 "language": {"code": "en"},
                 "components": [
-                    {       
+                    {
                         "type": "header",
                         "parameters": [
                             {"type": "image", "image": {"link": "{image_link}"}}
@@ -501,7 +525,7 @@ class WhatsappNotificationTemplates:
                 "name": "fun_event_reminder",
                 "language": {"code": "en"},
                 "components": [
-                   {       
+                    {
                         "type": "header",
                         "parameters": [
                             {"type": "image", "image": {"link": "{image_link}"}}
@@ -530,7 +554,7 @@ class WhatsappNotificationTemplates:
                 "name": "support_group_registration",
                 "language": {"code": "en"},
                 "components": [
-                    {       
+                    {
                         "type": "header",
                         "parameters": [
                             {"type": "image", "image": {"link": "{image_link}"}}
@@ -588,7 +612,7 @@ class WhatsappNotificationTemplates:
                 "name": "support_group_reminder",
                 "language": {"code": "en"},
                 "components": [
-                   {       
+                    {
                         "type": "header",
                         "parameters": [
                             {"type": "image", "image": {"link": "{image_link}"}}
@@ -617,7 +641,7 @@ class WhatsappNotificationTemplates:
                 "name": "fitness_announcement",
                 "language": {"code": "en_us"},
                 "components": [
-                    {       
+                    {
                         "type": "header",
                         "parameters": [
                             {"type": "image", "image": {"link": "{image_link}"}}
@@ -674,7 +698,7 @@ class WhatsappNotificationTemplates:
                 "name": "fitness_reminder",
                 "language": {"code": "en_us"},
                 "components": [
-                   {       
+                    {
                         "type": "header",
                         "parameters": [
                             {"type": "image", "image": {"link": "{image_link}"}}
@@ -703,10 +727,11 @@ class WhatsappNotificationTemplates:
                 "name": "sukoon_invoice_download",
                 "language": {"code": "en_us"},
                 "components": [
-                    {       
+                    {
                         "type": "header",
                         "parameters": [
-                            {"type": "document", "document": { "filename": "invoice.pdf" , "link": "{document_link}"}}
+                            {"type": "document", "document": {
+                                "filename": "invoice.pdf", "link": "{document_link}"}}
                         ],
                     }
                 ],
@@ -720,6 +745,21 @@ class WhatsappNotificationTemplates:
                 "language": {"code": "en"},
             },
         }
+        self.EVENT_WA_ADV_ACTIVE_USERS = {
+            "template_name": "EVENT_WA_ADV_ACTIVE_USERS",
+            "template": {
+                "name": "event_wa_adv_active_users",
+                "language": {"code": "en"},
+                "components": [
+                    {
+                        "type": "header",
+                        "parameters": [
+                            {"type": "image", "image": {"link": "{image_link}"}}
+                        ],
+                    },
+                ],
+            },
+        },
 
         self.EVENT_INVOICE = {
             "template_name": "EVENT_INVOICE",
@@ -727,10 +767,11 @@ class WhatsappNotificationTemplates:
                 "name": "sukoon_event_invoice",
                 "language": {"code": "en_us"},
                 "components": [
-                    {       
+                    {
                         "type": "header",
                         "parameters": [
-                            {"type": "document", "document": { "filename": "invoice.pdf" , "link": "{document_link}"}}
+                            {"type": "document", "document": {
+                                "filename": "invoice.pdf", "link": "{document_link}"}}
                         ],
                     },
                     {
@@ -749,7 +790,7 @@ class WhatsappNotificationTemplates:
                 "name": "senior_citizen_day",
                 "language": {"code": "en_us"},
                 "components": [
-                    {       
+                    {
                         "type": "header",
                         "parameters": [
                             {"type": "image", "image": {"link": "{image_link}"}}
@@ -794,14 +835,14 @@ class WhatsappNotificationTemplates:
                     {
                         "type": "body",
                         "parameters": [
-                            {"type": "text","text": "{otp}"}
+                            {"type": "text", "text": "{otp}"}
                         ]
                     },
                     {
                         "type": "button",
                         "sub_type": "url",
                         "index": "0",
-                        "parameters": [{"type": "text","text": "{otp}"}]
+                        "parameters": [{"type": "text", "text": "{otp}"}]
                     }
                 ]
             },
@@ -813,7 +854,7 @@ class WhatsappNotificationTemplates:
                 "name": "referral_confirmation_for_referree",
                 "language": {"code": "en"},
                 "components": [
-                   {       
+                    {
                         "type": "header",
                         "parameters": [
                             {"type": "image", "image": {"link": "{image_link}"}}
@@ -851,7 +892,7 @@ class WhatsappNotificationTemplates:
                 "name": "referral_video",
                 "language": {"code": "en_us"},
                 "components": [
-                    {       
+                    {
                         "type": "header",
                         "parameters": [
                             {"type": "video", "video": {"link": "{video_link}"}}
@@ -865,4 +906,94 @@ class WhatsappNotificationTemplates:
                     },
                 ],
             },
+        }
+
+        self.USER_EVENT_REGISTRATION = {
+            "template_name": "USER_EVENT_REGISTRATION",
+            "template": {
+                "name": "user_event_registration",
+                "language": {"code": "en_us"},
+                "components": [
+                    {
+                        "type": "header",
+                        "parameters": [
+                            {"type": "image", "image": {"link": "{image_link}"}}
+                        ],
+                    },
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"},
+                            {"type": "text", "text": "{event_name}"},
+                            {"type": "text", "text": "{date}"},
+                            {"type": "text", "text": "{time}"},
+                            {"type": "text", "text": "{zoom_link}"},
+                            {"type": "text", "text": "{meeting_id}"},
+                            {"type": "text", "text": "{passcode}"},
+                        ],
+                    },
+                ]
+            }
+        }
+
+        self.EVENT_CANCELLATION = {
+            "template_name": "EVENT_CANCELLATION",
+            "template": {
+                "name": "event_cancellation",
+                "language": {"code": "en_us"},
+                "components": [
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"},
+                            {"type": "text", "text": "{event_name}"},
+                            {"type": "text", "text": "{date_time}"},
+                        ]
+                    }
+                ]
+            }
+        }
+
+        self.EVENT_TIME_CHANGE = {
+            "template_name": "EVENT_TIME_CHANGE",
+            "template": {
+                "name": "event_time_change",
+                "language": {"code": "en_us"},
+                "components": [
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"},
+                            {"type": "text", "text": "{event_name}"},
+                            {"type": "text", "text": "{new_date}"},
+                            {"type": "text", "text": "{new_time}"},
+                            {"type": "text", "text": "{new_date}"},
+                            {"type": "text", "text": "{new_time}"},
+                            {"type": "text", "text": "{zoom_link}"},
+                            {"type": "text", "text": "{meeting_id}"},
+                            {"type": "text", "text": "{passcode}"},
+                        ]
+                    }
+                ]
+            }
+        }
+
+        self.CALL_NOTIFICATION = {
+            "template_name": "CALL_NOTIFICATION",
+            "template": {
+                "name": "call_notification",
+                "language": {"code": "en_us"},
+                "components": [
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"},
+                            {"type": "text", "text": "{city}"},
+                            {"type": "text", "text": "{birth_date}"},
+                            {"type": "text", "text": "{premium}"},
+                            {"type": "text", "text": "{last_expert}"},
+                        ]
+                    }
+                ]
+            }
         }
