@@ -51,9 +51,7 @@
         "aws:asset:property": "Code"
       },
       "Properties": {
-        "Layers": [
-          "arn:aws:lambda:ap-south-1:533267308676:layer:flask-layer:1"
-        ],
+        "Layers": [],
         "Code": {
           "S3Bucket": {
             "Ref": "deploymentBucketName"

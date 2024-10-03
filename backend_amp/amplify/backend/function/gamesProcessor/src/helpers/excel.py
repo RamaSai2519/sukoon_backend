@@ -41,10 +41,10 @@ class ExcelS3Helper:
         return formatted_data
 
     def save_to_excel(self, data: List[Dict]) -> BytesIO:
-        """Generate an Excel file from the provided data and return the file in memory."""
+        """Generate a CSV file from the provided data and return the file in memory."""
         df = pd.DataFrame(data)
         file_buffer = BytesIO()
-        df.to_excel(file_buffer, index=False)
+        df.to_csv(file_buffer, index=False)
         file_buffer.seek(0)
         return file_buffer
 
@@ -117,7 +117,7 @@ class ExcelS3Helper:
 # Example usage 1
 # uploader = ExcelS3Helper()
 # data = [{"timeCreated": "2024-01-01T10:00:00.000Z", "timeSpent": 120}]
-# url = uploader.create_and_upload_excel('example.xlsx', data)
+# url = uploader.create_and_upload_excel('example.csv', data)
 # print(url)
 
 # Usage example 2

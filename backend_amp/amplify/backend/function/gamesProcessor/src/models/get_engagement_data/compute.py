@@ -77,7 +77,7 @@ class Compute:
     def create_excel(self) -> str:
         users = self.get_users(0, 0)
         time_string = self.current_time.strftime("%Y-%m-%d-%H-%M-%S")
-        filename = f"engagement_data_{time_string}.xlsx"
+        filename = f"engagement_data_{time_string}.csv"
         self.excel_helper.create_and_upload_excel(filename, users)
 
     def excel_url(self) -> str:
