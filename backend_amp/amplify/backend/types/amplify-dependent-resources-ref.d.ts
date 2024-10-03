@@ -12,6 +12,13 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "function": {
+    "excelUploader": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
     "gamesProcessor": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
@@ -21,7 +28,21 @@ export type AmplifyDependentResourcesAttributes = {
     },
     "notificationProcessor": {
       "Arn": "string",
-      "DynamoDBTableName": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "pdfGenerator": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "LambdaExecutionRoleArn": "string",
+      "Name": "string",
+      "Region": "string"
+    },
+    "scheduler": {
+      "Arn": "string",
+      "CloudWatchEventRule": "string",
       "LambdaExecutionRole": "string",
       "LambdaExecutionRoleArn": "string",
       "Name": "string",
