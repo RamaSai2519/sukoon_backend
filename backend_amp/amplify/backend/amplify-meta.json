@@ -131,7 +131,20 @@
     "pdfGenerator": {
       "build": true,
       "providerPlugin": "awscloudformation",
-      "service": "Lambda",
+      "service": "Lambda"
+    },
+    "mark7": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    }
+  },
+  "storage": {
+    "UserNotificationju26pqpij5dfhgjxg3p25jngtedev": {
+      "service": "DynamoDB",
+      "serviceType": "imported",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
       "output": {
         "LambdaExecutionRoleArn": "arn:aws:iam::533267308676:role/backendampLambdaRole4848f557-dev",
         "Region": "ap-south-1",

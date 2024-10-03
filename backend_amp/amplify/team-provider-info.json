@@ -54,7 +54,8 @@
         },
         "scheduler": {},
         "pdfGenerator": {},
-        "excelUploader": {}
+        "excelUploader": {},
+        "mark7": {}
       },
       "api": {
         "sukoonAPI": {},
