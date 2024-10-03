@@ -33,10 +33,10 @@ class ExcelS3Helper:
             print(f"Error retrieving file: {e}")
             return None
 
-    def invoke_excel_helper(data, file_name):
+    def invoke_excel_helper(self, data, file_name):
         client = boto3.client('lambda')
         response = client.invoke(
-            FunctionName="excelUploader",
+            FunctionName="excelUploader-main",
             InvocationType='RequestResponse',
             Payload=json.dumps({
                 "data": data,
