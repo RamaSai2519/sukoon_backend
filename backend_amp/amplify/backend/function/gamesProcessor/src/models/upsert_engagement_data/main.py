@@ -1,7 +1,7 @@
 import traceback
 from models.constants import OutputStatus
-from models.get_engagement_data.compute import Compute
-from models.get_engagement_data.validate import Validator
+from models.upsert_engagement_data.compute import Compute
+from models.upsert_engagement_data.validate import Validator
 from models.interfaces import UpsertEngagementDataInput as Input, Output
 
 

@@ -69,6 +69,7 @@ api.add_resource(AdminAuthService, '/actions/admin_auth')
 api.add_resource(LeadsService, '/actions/leads')
 api.add_resource(RemarksService, '/actions/remarks')
 api.add_resource(WhatsappHistoryService, '/actions/wa_history')
+api.add_resource(EngagementDataService, '/actions/user_engagement')
 # - Content
 api.add_resource(ChatService, '/actions/chat')
 api.add_resource(PhotosService, '/actions/photos')
