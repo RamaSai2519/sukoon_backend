@@ -2,10 +2,10 @@ import threading
 from typing import List, Dict
 from datetime import datetime
 from models.common import Common
-from models.constants import OutputStatus
 from helpers.excel import ExcelS3Helper
 from db.calls import get_calls_collection
 from models.constants import successful_calls_query
+from models.constants import OutputStatus, meta_fields
 from db.users import get_user_collection, get_meta_collection
 from models.interfaces import GetEngagementDataInput as Input, Output
 
@@ -16,13 +16,12 @@ class Compute:
         self.common = Common()
         self.page = int(input.page)
         self.size = int(input.size)
+        self.meta_fields = meta_fields
         self.current_time = datetime.now()
         self.excel_helper = ExcelS3Helper()
-        self.calls_collection = get_calls_collection()
         self.meta_collection = get_meta_collection()
         self.users_collection = get_user_collection()
-        self.meta_fields = ["remarks", "expert", "lastReached",
-                            "status", "userStatus", "source"]
+        self.calls_collection = get_calls_collection()
 
     def populate_meta_data(self, user: dict, query: dict) -> dict:
         meta_data: dict = self.meta_collection.find_one(query)
