@@ -33,7 +33,7 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "AppSync",
-      "lastPushTimeStamp": "2024-10-03T19:52:19.924Z",
+      "lastPushTimeStamp": "2024-07-15T13:22:06.233Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-backendamp-dev-caa78-deployment/amplify-cfn-templates/api/cloudformation-template.json",
         "logicalId": "apibackendamp"
@@ -58,7 +58,7 @@
         "RootUrl": "https://ij8f1oonya.execute-api.ap-south-1.amazonaws.com/dev",
         "ApiId": "ij8f1oonya"
       },
-      "lastPushTimeStamp": "2024-10-03T19:52:19.925Z",
+      "lastPushTimeStamp": "2024-07-15T13:15:34.984Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-backendamp-dev-caa78-deployment/amplify-cfn-templates/api/sukoonAPI-cloudformation-template.json",
         "logicalId": "apisukoonAPI"
@@ -77,7 +77,7 @@
         "Name": "gamesProcessor-dev",
         "LambdaExecutionRole": "backendampLambdaRoledcea3a31-dev"
       },
-      "lastPushTimeStamp": "2024-10-03T19:52:19.925Z",
+      "lastPushTimeStamp": "2024-08-16T08:52:13.511Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-backendamp-dev-caa78-deployment/amplify-cfn-templates/function/gamesProcessor-cloudformation-template.json",
         "logicalId": "functiongamesProcessor"
@@ -122,7 +122,7 @@
         "Name": "notificationProcessor-dev",
         "LambdaExecutionRole": "backendampLambdaRole84bff967-dev"
       },
-      "lastPushTimeStamp": "2024-10-03T19:52:19.926Z",
+      "lastPushTimeStamp": "2024-07-16T12:09:49.664Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-backendamp-dev-caa78-deployment/amplify-cfn-templates/function/notificationProcessor-cloudformation-template.json",
         "logicalId": "functionnotificationProcessor"
@@ -174,107 +174,12 @@
         }
       ],
       "lastDevBuildTimeStamp": "2024-07-19T10:02:23.712Z",
-      "lastBuildType": "DEV",
-      "output": {
-        "LambdaExecutionRoleArn": "arn:aws:iam::533267308676:role/backendampLambdaRolec4d51036-dev",
-        "Region": "ap-south-1",
-        "CloudWatchEventRule": "amplify-backendamp-dev-caa78-functi-CloudWatchEvent-xnzsiOjITE11",
-        "Arn": "arn:aws:lambda:ap-south-1:533267308676:function:scheduler-dev",
-        "Name": "scheduler-dev",
-        "LambdaExecutionRole": "backendampLambdaRolec4d51036-dev"
-      },
-      "lastPushTimeStamp": "2024-10-03T19:52:19.926Z",
-      "providerMetadata": {
-        "s3TemplateURL": "https://s3.amazonaws.com/amplify-backendamp-dev-caa78-deployment/amplify-cfn-templates/function/scheduler-cloudformation-template.json",
-        "logicalId": "functionscheduler"
-      }
+      "lastBuildType": "DEV"
     },
     "pdfGenerator": {
       "build": true,
       "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "output": {
-        "LambdaExecutionRoleArn": "arn:aws:iam::533267308676:role/backendampLambdaRole4848f557-dev",
-        "Region": "ap-south-1",
-        "Arn": "arn:aws:lambda:ap-south-1:533267308676:function:pdfGenerator-dev",
-        "Name": "pdfGenerator-dev",
-        "LambdaExecutionRole": "backendampLambdaRole4848f557-dev"
-      },
-      "lastPushTimeStamp": "2024-10-03T19:52:19.927Z",
-      "providerMetadata": {
-        "s3TemplateURL": "https://s3.amazonaws.com/amplify-backendamp-dev-caa78-deployment/amplify-cfn-templates/function/pdfGenerator-cloudformation-template.json",
-        "logicalId": "functionpdfGenerator"
-      }
-    },
-    "excelUploader": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda",
-      "dependsOn": [
-        {
-          "category": "api",
-          "resourceName": "backendamp",
-          "attributes": [
-            "GraphQLAPIIdOutput",
-            "GraphQLAPIEndpointOutput",
-            "GraphQLAPIKeyOutput"
-          ]
-        },
-        {
-          "category": "api",
-          "resourceName": "sukoonAPI",
-          "attributes": [
-            "ApiName",
-            "ApiId"
-          ]
-        },
-        {
-          "category": "function",
-          "resourceName": "gamesProcessor",
-          "attributes": [
-            "Name"
-          ]
-        },
-        {
-          "category": "function",
-          "resourceName": "notificationProcessor",
-          "attributes": [
-            "Name"
-          ]
-        },
-        {
-          "category": "function",
-          "resourceName": "scheduler",
-          "attributes": [
-            "Name"
-          ]
-        },
-        {
-          "category": "function",
-          "resourceName": "pdfGenerator",
-          "attributes": [
-            "Name"
-          ]
-        },
-        {
-          "category": "storage",
-          "resourceName": "UserNotificationju26pqpij5dfhgjxg3p25jngtedev",
-          "attributes": [
-            "Name",
-            "Arn",
-            "StreamArn"
-          ]
-        },
-        {
-          "category": "storage",
-          "resourceName": "UserNotificationllgowbhayjdbhhowtgmd3wd6kemain",
-          "attributes": [
-            "Name",
-            "Arn",
-            "StreamArn"
-          ]
-        }
-      ]
+      "service": "Lambda"
     }
   },
   "storage": {
