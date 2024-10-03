@@ -64,6 +64,19 @@ class GetWaHistoryInput:
 
 
 @dataclass
+class GetEngagementDataInput:
+    page: Optional[int] = 0
+    size: Optional[int] = 0
+
+
+@dataclass
+class UpsertEngagementDataInput:
+    key: str
+    field: str
+    value: str
+
+
+@dataclass
 class PhotosInput:
     page: int
     query: str

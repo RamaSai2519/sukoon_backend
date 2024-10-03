@@ -7,7 +7,9 @@ from models.get_leads.main import GetLeads
 from models.save_remark.main import SaveRemark
 from models.upsert_user.main import UpsertUser
 from models.create_event_user.main import CreateEventUser
-from models.interfaces import User, GetUsersInput, EventUserInput, GetLeadsInput, SaveRemarkInput
+from models.get_engagement_data.main import GetEngagementData
+from models.upsert_engagement_data.main import UpsertEngagementData
+from models.interfaces import User, GetUsersInput, EventUserInput, GetLeadsInput, SaveRemarkInput, GetEngagementDataInput, UpsertEngagementDataInput
 
 
 class UserService(Resource):
@@ -60,3 +62,23 @@ class RemarksService(Resource):
         output = dataclasses.asdict(output)
 
         return output
+
+
+class EngagementDataService(Resource):
+
+    def get(self) -> dict:
+        input_params = request.args
+        input = GetEngagementDataInput(**input_params)
+        output = GetEngagementData(input).process()
+        output = dataclasses.asdict(output)
+
+        return output
+
+    def post(self) -> dict:
+        input = json.loads(request.get_data())
+        input = UpsertEngagementDataInput(**input)
+        output = UpsertEngagementData(input).process()
+        output = dataclasses.asdict(output)
+
+        return output
+        
