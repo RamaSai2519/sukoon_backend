@@ -22,3 +22,6 @@ successful_calls_query = {
 }
 
 application_json_header = {"Content-Type": "application/json"}
+
+meta_fields = ["remarks", "expert", "lastReached",
+               "status", "userStatus", "source"]

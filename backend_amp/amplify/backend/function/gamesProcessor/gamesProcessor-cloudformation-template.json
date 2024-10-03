@@ -51,6 +51,7 @@
         "aws:asset:property": "Code"
       },
       "Properties": {
+        "Layers": [],
         "Code": {
           "S3Bucket": {
             "Ref": "deploymentBucketName"
@@ -107,7 +108,6 @@
           ]
         },
         "Runtime": "python3.8",
-        "Layers": [],
         "Timeout": 300
       }
     },

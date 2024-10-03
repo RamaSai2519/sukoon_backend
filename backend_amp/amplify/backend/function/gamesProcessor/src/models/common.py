@@ -41,7 +41,7 @@ class Common:
 
     @staticmethod
     def string_to_date(doc: dict, field: str) -> date:
-        if field in doc and doc[field] is not None:
+        if field in doc and doc[field] is not None and isinstance(doc[field], str):
             doc[field] = datetime.strptime(doc[field], "%Y-%m-%dT%H:%M:%S.%fZ")
         return doc[field]
 
@@ -98,6 +98,16 @@ class Common:
             event_user = {k: v for k, v in event_user.items()
                           if k in event_user_fields}
         return event_user
+
+    @staticmethod
+    def get_call_status(calls_done: int) -> str:
+        status_messages = {
+            0: "First call Pending",
+            1: "First call Done",
+            2: "Second call Done",
+            3: "Third call Done"
+        }
+        return status_messages.get(calls_done, "Engaged")
 
     def get_user_name(self, user_id: ObjectId) -> str:
         users_cache = self.users_cache
