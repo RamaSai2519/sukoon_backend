@@ -1,23 +1,15 @@
 [[source]]
-name = "pypi"
 url = "https://pypi.org/simple"
 verify_ssl = true
+name = "pypi"
+
+[packages]
+pytz = "2024.2"
+requests = "2.32.3"
+openai = "1.51.0"
+pymongo = "4.10.1"
 
 [dev-packages]
 
-[packages]
-src = {editable = true, path = "./src"}
-google-generativeai = "*"
-openai = "*"
-pymongo = "*"
-python-socketio = "*"
-requests = "*"
-schedule = "*"
-boto3 = "*"
-nltk = "*"
-pytz = "*"
-python-dotenv = "*"
-jq = "*"
-
 [requires]
-python_version = "3.12"
+python_version = "3.8"

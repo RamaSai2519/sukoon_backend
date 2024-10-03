@@ -3,7 +3,6 @@ from download_audio import download_audio
 from json_extractor import extract_json
 from notify import notify
 import subprocess
-import logging
 import re
 import os
 
@@ -11,6 +10,16 @@ import os
 def process_call_recording(document, user, expert, persona, user_calls):
     audio_filename = f"{document['callId']}.mp3"
     print(f"Starting process for call ID: {document['callId']}")
+
+    working_directory = os.getcwd()
+    file_path_1 = os.path.join(working_directory, "guidelines.txt")
+    file_path_2 = os.path.join(working_directory, "guidelines2.txt")
+    if user_calls == 1:
+        with open(file_path_1, "r", encoding="utf-8") as file:
+            guidelines = file.read()
+    else:
+        with open(file_path_2, "r", encoding="utf-8") as file:
+            guidelines = file.read()
 
     download_audio(document, audio_filename)
     print(
@@ -64,7 +73,7 @@ def process_call_recording(document, user, expert, persona, user_calls):
         print(f"Removed audio file {audio_filename}")
         error_message = f"An error occurred processing the call ({document['callId']}): {str(e)} while transcribing the audio"
         notify(error_message)
-        logging.error(error_message)
+        print(error_message)
         return None, None, None, None, None, None, None, None
     
     os.remove(audio_filename)
@@ -184,14 +193,6 @@ def process_call_recording(document, user, expert, persona, user_calls):
             # Add the assistant's response to the conversation history
             message_history.append({"role": "assistant", "content": saarthi_feedback})
 
-            if user_calls == 1:
-
-                with open("guidelines.txt", "r", encoding="utf-8") as file:
-                    guidelines = file.read()
-            else:
-                with open("guidelines2.txt", "r", encoding="utf-8") as file:
-                    guidelines = file.read()
-
             print("Read guidelines from guidelines.txt")
 
             message_history.append({"role": "user", "content": f"This is the guidelines {guidelines}. Remember this"})
@@ -248,7 +249,7 @@ def process_call_recording(document, user, expert, persona, user_calls):
                     f"Calculated total score: {conversation_score} for call ID: {document['callId']}"
                 )
             except Exception as e:
-                logging.error(f"Error calculating total score: {str(e)}")
+                print(f"Error calculating total score: {str(e)}")
                 conversation_score = 0
 
 
@@ -384,14 +385,14 @@ def process_call_recording(document, user, expert, persona, user_calls):
                 topics,
             )
         else:
-            logging.warning(
+            print(
                 f"Inappropriate content found for call ID: {document['callId']}"
             )
             return None, None, None, None, None, None, None, None
 
     except Exception as e:
         notify(f"An error occurred on process_call_recording:{str(e)}")
-        logging.error(
+        print(
             f"An error occurred during chat processing for call ID: {document['callId']}: {str(e)}"
         )
         return None, None, None, None, None, None, None, None

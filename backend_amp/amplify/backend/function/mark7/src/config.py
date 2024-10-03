@@ -29,8 +29,6 @@ schedules_collection = db["schedules"]
 # # Initialize the generative model
 # model = genai.GenerativeModel("gemini-pro")
 
-DEEPGRAM_API_KEY = DEEPGRAM_API_KEY
-
 open_ai_client = AzureOpenAI(
     azure_endpoint="https://sukoon-chat.openai.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2023-03-15-preview",
     api_key="13c72289e9704b4ca63f683df19a7afe",
