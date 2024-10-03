@@ -49,8 +49,8 @@ class DevConfig:
     AZURE_API_VERSION = "2023-03-15-preview"
 
     REGION = "ap-south-1"
-    ACCESS_KEY = "AKIAXYKJVMCCBZESPREV"
-    SECRET_ACCESS_KEY = "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"
+    ACCESS_KEY = "AKIAXYKJVMCCK4G3OGPC"
+    SECRET_ACCESS_KEY = "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"
 
     GRAPH_API_KEY = "da2-jesqcxttxba57itwhh5m3neijm"
     GRAPH_API_URL = "https://x3bch5zipbbwdlxc5efyhkas3y.appsync-api.ap-south-1.amazonaws.com/graphql"
