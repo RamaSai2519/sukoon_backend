@@ -75,7 +75,7 @@ class Compute:
         return users
 
     def create_excel(self) -> str:
-        users = self.get_users(1, 10)
+        users = self.get_users(0, 0)
         time_string = self.current_time.strftime("%Y-%m-%d-%H-%M-%S")
         filename = f"engagement_data_{time_string}.xlsx"
         self.excel_helper.invoke_excel_helper(users, filename)
