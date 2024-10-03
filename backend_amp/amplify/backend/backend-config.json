@@ -34,6 +34,11 @@
     }
   },
   "function": {
+    "excelUploader": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "gamesProcessor": {
       "build": true,
       "dependsOn": [
