@@ -586,6 +586,11 @@ class UploadInput:
 
 
 @dataclass
+class InvokeMarkInput:
+    callId: str
+
+
+@dataclass
 class Output:
     output_status: str
     output_message: str

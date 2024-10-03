@@ -1,0 +1,6 @@
+MONGO_KEY = "mongodb+srv://sukoon_user:Tcks8x7wblpLL9OA@cluster0.o7vywoz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+DEEPGRAM_API_KEY = "61d43268e4d0be1e597f3bf9e797c025ac7ff214"
+GEMNAI_KEY = "AIzaSyC6Xogj-eD1WcMoX4zGy53qirBMqXHaRbM"
+AWS_ACCESS_KEY_ID = "AKIAXYKJVMCCCYTFEVUC"
+AWS_SECRET_ACCESS_KEY = "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"
+MAIN_LAMBDA_URL = "https://6x4j0qxbmk.execute-api.ap-south-1.amazonaws.com/main/actions/expert_scores"
