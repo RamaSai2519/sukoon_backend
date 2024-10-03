@@ -44,7 +44,7 @@ class ExcelS3Helper:
         """Generate a CSV file from the provided data and return the file in memory."""
         df = pd.DataFrame(data)
         file_buffer = BytesIO()
-        df.to_csv(file_buffer, index=False)
+        df.to_excel(file_buffer, index=False)
         file_buffer.seek(0)
         return file_buffer
 
