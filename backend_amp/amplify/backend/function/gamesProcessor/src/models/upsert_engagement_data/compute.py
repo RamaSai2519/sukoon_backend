@@ -31,8 +31,8 @@ class Compute:
         )
 
     def update_meta_data(self, user_id: str, user_field: str, user_value: str) -> Output:
-        prev_meta: dict = self.meta_collection.find_one(
-            {"user": ObjectId(user_id)})
+        query = {"user": ObjectId(user_id)}
+        prev_meta: dict = self.meta_collection.find_one(query)
         if prev_meta and prev_meta.get(user_field) == user_value:
             return Output(
                 output_details={},
