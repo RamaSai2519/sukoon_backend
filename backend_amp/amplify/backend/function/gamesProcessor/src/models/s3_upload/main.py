@@ -1,13 +1,11 @@
 import traceback
-from models.interfaces import Output
 from models.constants import OutputStatus
 from models.s3_upload.compute import Compute
 from models.s3_upload.validate import Validator
-from werkzeug.datastructures import FileStorage
-
+from models.interfaces import UploadInput as Input, Output
 
 class S3Upload:
-    def __init__(self, input: FileStorage) -> None:
+    def __init__(self, input: Input) -> None:
         self.input = input
 
     def process(self) -> Output:
@@ -33,13 +31,13 @@ class S3Upload:
 
         return output
     
-    def _validate(self, input: FileStorage):
+    def _validate(self, input: Input):
         validation_obj = Validator(input)
         validation_result, error_message = validation_obj.validate_input()
 
         return validation_result, error_message
 
-    def _compute(self, input: FileStorage) -> Output:
+    def _compute(self, input: Input) -> Output:
         computation_obj = Compute(input)
         output = computation_obj.compute()
 

@@ -567,6 +567,12 @@ class UserMeta:
 
 
 @dataclass
+class UploadInput:
+    file_name: str
+    file_type: str
+
+
+@dataclass
 class Output:
     output_status: str
     output_message: str
