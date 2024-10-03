@@ -1,13 +1,21 @@
 from process_call_data import process_call_data
 from config import db, calls_collection
 from score_updater import updater
-from bson import ObjectId
 from notify import notify
-import datetime
+from common import Common
+from bson import ObjectId
 
 class Mark7:
     def __init__(self, call: dict) -> None:
-        self.call = call
+        self.call = self.format_call(call)
+
+    def format_call(self, call: dict) -> dict:
+        if "expert" in call:
+            call["expert"] = ObjectId(call["expert"])
+        if "user" in call:
+            call["user"] = ObjectId(call["user"])
+        call["initiatedTime"] = Common.string_to_date(call, "initiatedTime")
+        return call
 
     def compute(self) -> None:
         duration = self.call.get("duration", "00:00:00")

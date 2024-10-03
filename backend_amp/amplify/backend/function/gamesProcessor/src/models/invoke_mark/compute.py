@@ -1,5 +1,6 @@
 import json
 import boto3
+from models.common import Common
 from db.calls import get_calls_collection
 from models.constants import OutputStatus
 from models.interfaces import InvokeMarkInput as Input, Output
@@ -27,6 +28,7 @@ class Compute:
     def compute(self) -> Output:
         call = self.find_call()
         if call:
+            call = Common.jsonify(call)
             response = self.invoke_mark(call)
             return Output(
                 output_details=response,
