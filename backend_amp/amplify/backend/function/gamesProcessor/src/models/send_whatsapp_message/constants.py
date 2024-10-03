@@ -759,7 +759,55 @@ class WhatsappNotificationTemplates:
                     },
                 ],
             },
-        },
+        }
+
+        self.EVENT_APPOLO_SEPT = {
+            "template_name": "EVENT_APPOLO_SEPT",
+            "template": {
+                "name": "event_appolo_sept",
+                "language": {"code": "en"},
+                "components": [
+                    {
+                        "type": "header",
+                        "parameters": [
+                            {"type": "image", "image": {"link": "{image_link}"}}
+                        ],
+                    },
+                ],
+            },
+        }
+
+        self.PROMO_TEPLATE = {
+            "template_name": "PROMO_TEPLATE",
+            "template": {
+                "name": "promo_template",
+                "language": {"code": "en"},
+                "components": [
+                    {
+                        "type": "header",
+                        "parameters": [
+                            {"type": "image", "image": {"link": "{image_link}"}}
+                        ],
+                    },
+                ],
+            },
+        }
+
+        self.CITY_MISSING_TEMPLATE = {
+            "template_name": "CITY_MISSING_TEMPLATE",
+            "template": {
+                "name": "city_missing_template",
+                "language": {"code": "en"},
+                "components": [
+                    {
+                        "type": "header",
+                        "parameters": [
+                           
+                        ],
+                    },
+                ],
+            },
+        }
 
         self.EVENT_INVOICE = {
             "template_name": "EVENT_INVOICE",

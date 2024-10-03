@@ -1,8 +1,9 @@
-from bson import ObjectId
+import threading
 from typing import List, Dict
 from datetime import datetime
 from models.common import Common
 from models.constants import OutputStatus
+from helpers.excel import ExcelS3Helper
 from db.calls import get_calls_collection
 from models.constants import successful_calls_query
 from db.users import get_user_collection, get_meta_collection
@@ -16,6 +17,7 @@ class Compute:
         self.page = int(input.page)
         self.size = int(input.size)
         self.current_time = datetime.now()
+        self.excel_helper = ExcelS3Helper()
         self.calls_collection = get_calls_collection()
         self.meta_collection = get_meta_collection()
         self.users_collection = get_user_collection()
@@ -65,20 +67,41 @@ class Compute:
             user = Common.jsonify(user)
         return users
 
-    def get_users(self) -> list:
+    def get_users(self, page: int, size: int) -> list:
         projection = {"Customer Persona": 0}
         cursor = self.users_collection.find(
             {}, projection).sort("createdDate", 1)
-        users = Common.paginate_cursor(cursor, self.page, self.size)
+        users = Common.paginate_cursor(cursor, page, size)
         users = self.format_users(list(users))
         return users
 
+    def create_excel(self) -> str:
+        users = self.get_users(0, 0)
+        time_string = self.current_time.strftime("%Y-%m-%d-%H-%M-%S")
+        filename = f"engagement_data_{time_string}.xlsx"
+        self.excel_helper.create_and_upload_excel(filename, users)
+
+    def excel_url(self) -> str:
+        prev_url = self.excel_helper.get_latest_file_url("engagement_data_")
+        if not prev_url:
+            threading.Thread(target=self.create_excel).start()
+            return "Creating Excel File, Please Wait..."
+        prev_file_time = prev_url.split("_")[-1].split(".")[0]
+        prev_time = datetime.strptime(prev_file_time, "%Y-%m-%d-%H-%M-%S")
+        if (self.current_time - prev_time).seconds < 900:
+            return prev_url
+        else:
+            threading.Thread(target=self.create_excel).start()
+            return prev_url
+
     def compute(self) -> Output:
-        users = self.get_users()
+        users = self.get_users(self.page, self.size)
         total = self.users_collection.count_documents({})
+        file_url = self.excel_url()
 
         final_doc = {"data": users, "total": total,
-                     "page": self.page, "size": self.size}
+                     "page": self.page, "size": self.size,
+                     "fileUrl": file_url}
 
         return Output(
             output_details=final_doc,
