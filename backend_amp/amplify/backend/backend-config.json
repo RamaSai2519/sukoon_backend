@@ -34,6 +34,76 @@
     }
   },
   "function": {
+    "excelUploader": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ],
+          "category": "api",
+          "resourceName": "backendamp"
+        },
+        {
+          "attributes": [
+            "ApiName",
+            "ApiId"
+          ],
+          "category": "api",
+          "resourceName": "sukoonAPI"
+        },
+        {
+          "attributes": [
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "gamesProcessor"
+        },
+        {
+          "attributes": [
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "notificationProcessor"
+        },
+        {
+          "attributes": [
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "scheduler"
+        },
+        {
+          "attributes": [
+            "Name"
+          ],
+          "category": "function",
+          "resourceName": "pdfGenerator"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ],
+          "category": "storage",
+          "resourceName": "UserNotificationju26pqpij5dfhgjxg3p25jngtedev"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn",
+            "StreamArn"
+          ],
+          "category": "storage",
+          "resourceName": "UserNotificationllgowbhayjdbhhowtgmd3wd6kemain"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "gamesProcessor": {
       "build": true,
       "dependsOn": [
@@ -96,6 +166,14 @@
     }
   },
   "parameters": {
+    "AMPLIFY_function_excelUploader_env": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "excelUploader"
+        }
+      ]
+    },
     "AMPLIFY_function_gamesProcessor_deploymentBucketName": {
       "usedBy": [
         {

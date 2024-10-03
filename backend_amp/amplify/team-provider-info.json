@@ -53,7 +53,10 @@
           "s3Key": "amplify-builds/notificationProcessor-63567848597457345a6d-build.zip"
         },
         "scheduler": {},
-        "pdfGenerator": {}
+        "pdfGenerator": {},
+        "excelUploader": {
+          "env": "main"
+        }
       },
       "api": {
         "sukoonAPI": {},
