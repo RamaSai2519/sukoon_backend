@@ -36,7 +36,7 @@ class ExcelS3Helper:
     def invoke_excel_helper(data, file_name):
         client = boto3.client('lambda')
         response = client.invoke(
-            FunctionName="excelUploader",
+            FunctionName="excelUploader-dev",
             InvocationType='RequestResponse',
             Payload=json.dumps({
                 "data": data,
