@@ -9,7 +9,6 @@ verify_ssl = true
 aws-wsgi = "0.2.7"
 bcrypt = "3.2.2"
 cryptography = "3.4.8"
-flask = "3.0.2"
 flask-cors = "4.0.0"
 flask-jwt-extended = "4.6.0"
 flask-restful = "0.3.10"
@@ -25,8 +24,6 @@ requests-toolbelt="1.0.0"
 openai="1.45.0"
 firebase-admin="6.5.0"
 slack-sdk = "3.33.1"
-pandas = "2.0.3"
-openpyxl = "3.1.5"
 
 [requires]
 python_version = "3.8"

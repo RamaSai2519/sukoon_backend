@@ -51,6 +51,9 @@
         "aws:asset:property": "Code"
       },
       "Properties": {
+        "Layers": [
+          "arn:aws:lambda:ap-south-1:533267308676:layer:flask-layer:1"
+        ],
         "Code": {
           "S3Bucket": {
             "Ref": "deploymentBucketName"
@@ -107,7 +110,6 @@
           ]
         },
         "Runtime": "python3.8",
-        "Layers": [],
         "Timeout": 300
       }
     },
