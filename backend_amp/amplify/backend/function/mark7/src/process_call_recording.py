@@ -1,6 +1,7 @@
 from config import DEEPGRAM_API_KEY, open_ai_client as client
 from download_audio import download_audio
 from json_extractor import extract_json
+from txthelper import download_txt_file
 from notify import notify
 import subprocess
 import re
@@ -12,69 +13,71 @@ def process_call_recording(document, user, expert, persona, user_calls):
     print(f"Starting process for call ID: {document['callId']}")
 
     if user_calls == 1:
-        with open("guidelines.txt", "r", encoding="utf-8") as file:
-            guidelines = file.read()
+        guidelines = download_txt_file('https://sukoon-media.s3.ap-south-1.amazonaws.com/guidelines.txt')
     else:
-        with open("guidelines2.txt", "r", encoding="utf-8") as file:
-            guidelines = file.read()
+        guidelines = download_txt_file('https://sukoon-media.s3.ap-south-1.amazonaws.com/guidelines.txt')
 
-    download_audio(document, audio_filename)
-    print(
-        f"Downloaded audio for call ID: {document['callId']} to {audio_filename}"
-    )
+    transcript = download_txt_file(
+        f'https://sukoontest.s3.ap-south-1.amazonaws.com/{document['callId']}.txt')
+    if not transcript:
+        download_audio(document, audio_filename)
+        print(
+            f"Downloaded audio for call ID: {document['callId']} to {audio_filename}"
+        )
 
-    try:
-        print("Initialized Deepgram client")
+        try:
+            print("Initialized Deepgram client")
 
-        curl_command = [
-            'curl',
-            '--request', 'POST',
-            '--url', 'https://api.deepgram.com/v1/listen?model=whisper-large&diarize=true&punctuate=true&utterances=true',
-            '--header', f'Authorization: Token {DEEPGRAM_API_KEY}',
-            '--header', 'content-type: audio/mp3',
-            '--data-binary', f'@{audio_filename}'
-        ]
-
-        # Run the curl command using subprocess
-        result = subprocess.run(
-            curl_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-
-        # Check for errors
-        if result.returncode != 0:
-            print(f"Error: {result.stderr}")
-            return None, None, None, None, None, None, None, None
-        else:
-            # Use jq to process the result
-            jq_command = [
-                'jq',
-                '-r',
-                '.results.utterances[] | "[Speaker:\(.speaker)] \(.transcript)"'
+            curl_command = [
+                'curl',
+                '--request', 'POST',
+                '--url', 'https://api.deepgram.com/v1/listen?model=whisper-large&diarize=true&punctuate=true&utterances=true',
+                '--header', f'Authorization: Token {DEEPGRAM_API_KEY}',
+                '--header', 'content-type: audio/mp3',
+                '--data-binary', f'@{audio_filename}'
             ]
 
-            # Run jq command using subprocess and pipe the result from curl to jq
-            jq_result = subprocess.run(
-                jq_command, input=result.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+            # Run the curl command using subprocess
+            result = subprocess.run(
+                curl_command, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
-            if jq_result.returncode != 0:
-                print(f"Error: {jq_result.stderr}")
+            # Check for errors
+            if result.returncode != 0:
+                print(f"Error: {result.stderr}")
                 return None, None, None, None, None, None, None, None
             else:
-                # Print the processed result
-                print(jq_result.stdout)
-                transcript = jq_result.stdout
+                # Use jq to process the result
+                jq_command = [
+                    'jq',
+                    '-r',
+                    '.results.utterances[] | "[Speaker:\(.speaker)] \(.transcript)"'
+                ]
 
-        print(f"Transcription completed for call ID: {document['callId']}")
+                # Run jq command using subprocess and pipe the result from curl to jq
+                jq_result = subprocess.run(
+                    jq_command, input=result.stdout, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
 
-    except Exception as e:
-        os.remove(audio_filename)
-        print(f"Removed audio file {audio_filename}")
-        error_message = f"An error occurred processing the call ({document['callId']}): {str(e)} while transcribing the audio"
-        notify(error_message)
-        print(error_message)
-        return None, None, None, None, None, None, None, None
-    
-    os.remove(audio_filename)
-    print(f"Removed audio file {audio_filename}")
+                if jq_result.returncode != 0:
+                    print(f"Error: {jq_result.stderr}")
+                    return None, None, None, None, None, None, None, None
+                else:
+                    # Print the processed result
+                    print(jq_result.stdout)
+                    transcript = jq_result.stdout
+
+            print(f"Transcription completed for call ID: {document['callId']}")
+            os.remove(audio_filename)
+            print(f"Removed audio file {audio_filename}")
+
+        except Exception as e:
+            os.remove(audio_filename)
+            print(f"Removed audio file {audio_filename}")
+            error_message = f"An error occurred processing the call ({document['callId']}): {str(e)} while transcribing the audio"
+            notify(error_message)
+            print(error_message)
+            return None, None, None, None, None, None, None, None
+    else:
+        print(f"Transcript already exists for call ID: {document['callId']}")
 
     system_message = {"role": "system", "content": "You are a helpful assistant."}
     message_history = [system_message]
@@ -250,8 +253,7 @@ def process_call_recording(document, user, expert, persona, user_calls):
                 conversation_score = 0
 
 
-            with open("topics.txt", "r", encoding="utf-8") as file:
-                topics = file.read()
+            topics = download_txt_file('https://sukoon-media.s3.ap-south-1.amazonaws.com/topics.txt')
             message_history.append({"role": "user", "content": f"""
             Identify the topics they are talking about from the {topics}.
             Give me the output in a json format like this:
