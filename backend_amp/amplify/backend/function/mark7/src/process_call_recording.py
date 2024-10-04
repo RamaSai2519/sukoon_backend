@@ -11,14 +11,11 @@ def process_call_recording(document, user, expert, persona, user_calls):
     audio_filename = f"{document['callId']}.mp3"
     print(f"Starting process for call ID: {document['callId']}")
 
-    working_directory = os.getcwd()
-    file_path_1 = os.path.join(working_directory, "guidelines.txt")
-    file_path_2 = os.path.join(working_directory, "guidelines2.txt")
     if user_calls == 1:
-        with open(file_path_1, "r", encoding="utf-8") as file:
+        with open("guidelines.txt", "r", encoding="utf-8") as file:
             guidelines = file.read()
     else:
-        with open(file_path_2, "r", encoding="utf-8") as file:
+        with open("guidelines2.txt", "r", encoding="utf-8") as file:
             guidelines = file.read()
 
     download_audio(document, audio_filename)
