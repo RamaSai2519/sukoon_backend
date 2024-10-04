@@ -17,8 +17,8 @@ def process_call_recording(document, user, expert, persona, user_calls):
     else:
         guidelines = download_txt_file('https://sukoon-media.s3.ap-south-1.amazonaws.com/guidelines.txt')
 
-    transcript = download_txt_file(
-        f'https://sukoontest.s3.ap-south-1.amazonaws.com/{document['callId']}.txt')
+    transcript_url = f"https://sukoontest.s3.ap-south-1.amazonaws.com/{document['callId']}.txt"
+    transcript = download_txt_file(transcript_url)
     if not transcript:
         download_audio(document, audio_filename)
         print(
