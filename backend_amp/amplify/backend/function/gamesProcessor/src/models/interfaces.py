@@ -627,10 +627,10 @@ class InvokeMarkInput:
 
 @dataclass
 class CreateScheduleInput:
-    user: str
-    expert: str
     action: str
-    datetime: str
+    user: Optional[str] = None
+    expert: Optional[str] = None
+    datetime: Optional[str] = None
     duration: int = field(default_factory=lambda: 30)
     type: str = field(default_factory=lambda: "User")
     scheduleId: Optional[str] = None
