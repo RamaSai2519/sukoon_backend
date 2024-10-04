@@ -70,6 +70,10 @@ class Common:
         return " ".join(formatted_duration) if formatted_duration else "0s"
 
     @staticmethod
+    def array_to_string(arr: list) -> str:
+        return ", ".join(arr)
+
+    @staticmethod
     def paginate_cursor(cursor: Cursor, page: int, size: int) -> Cursor:
         offset = (page - 1) * size
         if offset < 0:

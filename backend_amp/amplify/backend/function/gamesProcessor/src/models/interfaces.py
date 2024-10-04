@@ -70,6 +70,34 @@ class GetEngagementDataInput:
 
 
 @dataclass
+class GetClubInterestsInput:
+    page: Optional[int] = 0
+    size: Optional[int] = 0
+
+
+@dataclass
+class GetErrorLogsInput:
+    page: Optional[int] = 0
+    size: Optional[int] = 0
+
+
+@dataclass
+class CreateClubInterestInput:
+    user_id: str
+    isInterested: Optional[bool] = False
+
+
+@dataclass
+class ClubInterest:
+    user_id: str
+    isInterested: Optional[bool] = False
+    createdAt: datetime = field(default_factory=datetime.now)
+    updatedAt: datetime = field(default_factory=datetime.now)
+
+    _id: Optional[str] = None
+
+
+@dataclass
 class UpsertEngagementDataInput:
     key: str
     field: str
@@ -446,8 +474,8 @@ class EventInput:
 
 @dataclass
 class GetEventsInput:
-    page: Optional[int] = 1
-    limit: Optional[int] = 10
+    page: Optional[int] = 0
+    size: Optional[int] = 0
     slug: Optional[str] = None
     fromToday: Optional[str] = "false"
     isHomePage: Optional[str] = "false"
@@ -525,6 +553,13 @@ class ApplicantInput:
     createdDate: datetime = field(default_factory=datetime.now)
 
     _id: Optional[str] = None
+
+
+@dataclass
+class GetApplicantsInput:
+    formType: str
+    page: Optional[int] = 0
+    size: Optional[int] = 0
 
 
 @dataclass

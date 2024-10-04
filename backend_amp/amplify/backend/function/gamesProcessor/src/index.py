@@ -23,6 +23,7 @@ api.add_resource(CallService, '/actions/call')
 api.add_resource(CallWebhookService, '/actions/call_webhook')
 
 # Users Routes
+api.add_resource(ClubService, '/actions/club')
 api.add_resource(UserService, '/actions/user')
 api.add_resource(SlotsService, '/actions/slots')
 api.add_resource(ExpertService, '/actions/expert')
@@ -67,6 +68,7 @@ api.add_resource(SendOTPService, '/actions/send_otp')
 # - Auth
 api.add_resource(AdminAuthService, '/actions/admin_auth')
 # - Data
+api.add_resource(LogsService, '/actions/logs')
 api.add_resource(LeadsService, '/actions/leads')
 api.add_resource(RemarksService, '/actions/remarks')
 api.add_resource(WhatsappHistoryService, '/actions/wa_history')
