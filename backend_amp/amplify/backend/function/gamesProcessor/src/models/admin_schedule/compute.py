@@ -4,9 +4,9 @@ from datetime import datetime
 from models.common import Common
 from helpers.base import call_graphql
 from models.constants import OutputStatus
-from models.admin_schedule import Schedule
 from db.calls import get_schedules_collection
 from helpers.schedule import ScheduleManager as sm
+from models.admin_schedule.Schedule import Schedule
 from models.interfaces import CreateScheduleInput as Input, Output
 
 
