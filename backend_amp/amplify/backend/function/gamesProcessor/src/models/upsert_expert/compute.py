@@ -66,6 +66,7 @@ class Compute:
         status = self.input.status
         name = prev_expert.get("name")
         expert_id = str(prev_expert.get("_id"))
+        number = prev_expert.get("phoneNumber")
         prev_status = prev_expert.get("status")
 
         if status is None:
@@ -81,7 +82,7 @@ class Compute:
                 "expert": expert_obj_id,
                 status: current_time
             })
-            return self.slack_manager.send_message(True, name, expert_id)
+            return self.slack_manager.send_message(True, name, number)
 
         if status == "offline":
             online_time_object = dict(self.expertlogs_collection.find_one(
@@ -102,7 +103,7 @@ class Compute:
                 {"$set": {status: current_time, "duration": int(duration)}},
                 sort=[("online", -1)]
             )
-            return self.slack_manager.send_message(False, name, expert_id)
+            return self.slack_manager.send_message(False, name, number)
 
     def compute(self) -> Output:
         expert_data = self.input

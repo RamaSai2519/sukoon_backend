@@ -6,19 +6,20 @@ from configs import CONFIG as config
 
 
 class SlackManager:
-    def __init__(self):
-        self.client = WebClient(token=config.SARATHI_SLACK_BOT_TOKEN)
-        self.channel = "C07FK8DJLJC"
+    def __init__(self) -> None:
+        self.client = WebClient(token=config.USER_SLACK_BOT_TOKEN)
+        self.channel = "C07R58933DW"
         self.timezone = pytz.timezone("Asia/Kolkata")
-        self.dashboard_url = "https://admin.sukoonunlimited.com/admin/experts/"
+        self.dashboard_url = "https://admin.sukoonunlimited.com/admin/users/"
 
-    def join_channel(self):
+    def join_channel(self) -> None:
         try:
             self.client.conversations_join(channel=self.channel)
         except SlackApiError as e:
             print(f"Error joining channel: {e}")
 
-    def compose_message(self, status: bool, expert_name: str, expert_number: str):
+    # -> list[dict[str, Any]]:
+    def compose_message(self, user_name: str, type: str, user_id: str) -> list:
         details_block = {
             "type": 'section',
             "text": {
@@ -33,11 +34,11 @@ class SlackManager:
                     "type": 'button',
                     "text": {
                         "type": 'plain_text',
-                        "text": 'Check Sarathi Timings',
+                        "text": 'Check User Details',
                     },
-                    "value": 'expert_timings',
-                    "url": f"{self.dashboard_url}{expert_number}#timings",
-                    "action_id": 'button_expert_timings',
+                    "value": 'user_details',
+                    "url": f"{self.dashboard_url}{user_id}",
+                    "action_id": 'button_user_details',
                 },
             ],
         }
@@ -47,7 +48,7 @@ class SlackManager:
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": f"@channel *{expert_name}* is now *{'online' if status else 'offline'}*. {'🎉' if status else '🚫'}"
+                    "text": f"@channel *{user_name}* has just signed up as a *{type}* {'🎉' if type == 'User' else '👍'}"
                 }
             },
             details_block,
@@ -60,7 +61,7 @@ class SlackManager:
                     },
                     {
                         "type": 'mrkdwn',
-                        "text": f'*Status:*\n{"Online" if status else "Offline"}'
+                        "text": f'*Type:*\n{type}'
                     }
                 ]
             },
@@ -68,21 +69,20 @@ class SlackManager:
         ]
         return blocks
 
-    def send_message(self, status: bool, expert_name: str, expert_number: str) -> str:
-        message = self.compose_message(status, expert_name, expert_number)
+    def send_message(self, user_name: str, type: str, user_id: str) -> str:
+        message = self.compose_message(user_name, type, user_id)
         try:
             self.join_channel()
             response = self.client.chat_postMessage(
                 channel=self.channel,
                 blocks=message,
-                text=f"{expert_name} is now" +
-                'online' if status else 'offline'
+                text=f"{user_name} has just signed up"
             )
             if response["ok"]:
-                message = "Status Message sent to channel"
+                message = " and signup Message sent to channel"
             else:
-                message = f"Error sending status message: {response}"
+                message = f" but Error sending signup message: {response}"
             return message
         except SlackApiError as e:
             print(f"Error: {e}")
-            return f"Error sending status message: {e.response['error']}"
+            return f" but Error sending signup message: {e.response['error']}"

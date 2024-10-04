@@ -9,6 +9,7 @@ from typing import Union, Tuple
 from models.common import Common
 from configs import CONFIG as config
 from db.users import get_user_collection
+from models.upsert_user.slack import SlackManager
 from models.interfaces import User as Input, Output
 from db.referral import get_user_referral_collection
 from models.constants import OutputStatus, application_json_header
@@ -17,6 +18,7 @@ from models.constants import OutputStatus, application_json_header
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
+        self.slack_manager = SlackManager()
         self.users_collection = get_user_collection()
         self.referrals_collection = get_user_referral_collection()
 
@@ -109,6 +111,11 @@ class Compute:
             self.referrals_collection.insert_one(referral)
 
     def update_user(self, user_data: dict, prev_user: dict) -> str:
+        self.users_collection.update_one(
+            {"phoneNumber": user_data["phoneNumber"]},
+            {"$set": user_data}
+        )
+
         if user_data.get("isPaidUser") == True and prev_user and prev_user.get("isPaidUser") == False:
             payload = {
                 "phone_number": prev_user.get("phoneNumber", ""),
@@ -118,16 +125,30 @@ class Compute:
                 }
             }
             self.send_wa_message(payload)
-        self.users_collection.update_one(
-            {"phoneNumber": user_data["phoneNumber"]},
-            {"$set": user_data}
-        )
+
+        if user_data.get("profileCompleted") == True and prev_user and prev_user.get("profileCompleted") == False:
+            user_name = user_data.get("name", user_data.get("phoneNumber"))
+            message = self.slack_manager.send_message(
+                user_name, "User", str(prev_user["_id"]))
+            return f"Successfully updated user{message}"
+
         return "Successfully updated user"
 
     def insert_user(self, user_data: dict) -> Tuple[str, dict]:
         user_data["_id"] = self.users_collection.insert_one(
             user_data).inserted_id
-        return "Successfully created user", user_data
+
+        message = "Successfully created user"
+        user_name = user_data.get("name", user_data.get("phoneNumber"))
+        user_number = user_data.get("phoneNumber", "")
+        response = self.send_insert_message(user_name, user_number)
+        message += " and sent welcome message" if response else " but failed to send welcome message"
+
+        signup_type = "User" if user_data.get(
+            "profileCompleted", False) else "Lead"
+        message += self.slack_manager.send_message(
+            user_name, signup_type, str(user_data["_id"]))
+        return message, user_data
 
     def handle_referral(self, user_data: dict, prev_user: dict) -> str:
         if self.input.refCode:
@@ -139,6 +160,15 @@ class Compute:
                     user_data["refSource"] = self.input.refCode
         self.update_user(user_data, prev_user)
 
+    def send_insert_message(self, name: str, phone_number: str):
+        payload = {"template_name": "WELCOME_REGISTRATION",
+                   "phone_number": name,
+                   "parameters": {
+                       "user_name": phone_number
+                   }}
+        response = self.send_wa_message(payload)
+        return response
+
     def compute(self) -> Output:
         user = self.input
         user_data = dataclasses.asdict(user)
@@ -149,13 +179,6 @@ class Compute:
             message = self.update_user(user_data, prev_user)
         else:
             message, user_data = self.insert_user(user_data)
-            payload = {"template_name": "WELCOME_REGISTRATION",
-                       "phone_number": user_data.get("phoneNumber", ""),
-                       "parameters": {
-                           "user_name": user_data.get("name", "")
-                       }}
-            response = self.send_wa_message(payload)
-            message += " and sent welcome message" if response else " but failed to send welcome message"
         self.handle_referral(user_data, prev_user)
 
         return Output(
