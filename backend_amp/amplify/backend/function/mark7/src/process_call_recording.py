@@ -9,7 +9,7 @@ import os
 
 
 def process_call_recording(document, user, expert, persona, user_calls):
-    audio_filename = f"{document['callId']}.mp3"
+    audio_filename = f"/tmp/{document['callId']}.mp3"
     print(f"Starting process for call ID: {document['callId']}")
 
     if user_calls == 1:
