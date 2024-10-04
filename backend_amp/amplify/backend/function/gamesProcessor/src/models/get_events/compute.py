@@ -8,7 +8,7 @@ from datetime import datetime
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
-        self.offset = int(int(input.page) - 1) * int(input.limit)
+        self.offset = int(int(input.page) - 1) * int(input.size)
         self.projection = {"_id": 0, "createdAt": 0,
                            "updatedAt": 0, "lastModifiedBy": 0}
         self.events_collection = get_events_collection()
@@ -43,12 +43,24 @@ class Compute:
             if self.input.isHomePage.lower() == "true":
                 events = self.fetch_homepage_events(query)
             else:
-                events = list(self.events_collection.find(
-                    query, self.projection).sort("validUpto", 1).skip(self.offset).limit(int(self.input.limit)))
+                cursor = self.events_collection.find(
+                    query, self.projection).sort("validUpto", 1)
+                paginated_cursor = Common.paginate_cursor(
+                    cursor, int(self.input.page), int(self.input.size))
+                events = list(paginated_cursor)
                 events = [Common.jsonify(event) for event in events]
 
+        total_events = self.events_collection.count_documents(query)
+
+        if len(events) == 0:
+            return Output(
+                output_details=[],
+                output_status=OutputStatus.FAILURE,
+                output_message="No events found"
+            )
+
         return Output(
-            output_details=events,
+            output_details={"data": events, "total": total_events},
             output_status=OutputStatus.SUCCESS,
             output_message="Successfully fetched events"
         )

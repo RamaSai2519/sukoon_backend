@@ -12,7 +12,7 @@ class Validator:
             return False, "Page should be an integer"
 
         try:
-            int(self.input.limit)
+            int(self.input.size)
         except ValueError:
             return False, "Limit should be an integer"
 

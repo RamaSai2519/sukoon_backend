@@ -33,8 +33,17 @@ class Compute:
         event_users = [Common.jsonify(event_user)
                        for event_user in event_users]
 
+        total = self.event_users_collection.count_documents(query)
+
+        if len(event_users) == 0:
+            return Output(
+                output_details=[],
+                output_status=OutputStatus.SUCCESS,
+                output_message="No event users found"
+            )
+
         return Output(
-            output_details=event_users,
+            output_details={"data": event_users, "total": total},
             output_status=OutputStatus.SUCCESS,
-            output_message="Successfully fetched events"
+            output_message="Successfully fetched event users"
         )

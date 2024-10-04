@@ -23,8 +23,8 @@ class Mark7:
             int(x) * 60**i for i, x in enumerate(reversed(duration.split(":")))
         )
         if seconds > 120:
-            conScore = self.call["Conversation Score"] if "Conversation Score" in self.call else None
-            if conScore is None and self.call.get("recording_url") not in ["None", ""]:
+            print(f"call with duration {duration} longer than 2 minutes")
+            if self.call.get("recording_url") not in ["None", ""]:
                 print(f"Processing call {str(self.call['callId'])}")
                 try:
                     user_document = db.users.find_one(
@@ -49,11 +49,11 @@ class Mark7:
                     error_message = f"An error occurred processing the call ({self.call.get('callId')}): {str(e)} on backup loop"
                     print(error_message)
                     notify(error_message)
-                   
+
 
 def handler(event, context) -> dict:
     print(event)
     call = event.get("call", {})
     mark7 = Mark7(call)
     mark7.compute()
-    return {"message": "Success"}
+    return {"message": "Call is being processed"}
