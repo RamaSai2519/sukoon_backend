@@ -38,12 +38,18 @@ class Compute:
 
     def format_schedules(self, schedules):
         for schedule in schedules:
-            schedule["requestMeta"] = json.loads(schedule["requestMeta"])
+            schedule["requestMeta"] = json.loads(
+                schedule.get("requestMeta", "{}"))
+
+            expert_id = schedule["requestMeta"].get("expertId")
             schedule["expert"] = self.common.get_expert_name(
-                ObjectId(schedule["requestMeta"]["expertId"]))
+                ObjectId(expert_id)) if expert_id else None
+
+            user_id = schedule["requestMeta"].get("userId")
             schedule["user"] = self.common.get_user_name(
-                ObjectId(schedule["requestMeta"]["userId"]))
-            schedule["datetime"] = schedule["scheduledJobTime"]
+                ObjectId(user_id)) if user_id else None
+
+            schedule["datetime"] = schedule.get("scheduledJobTime")
         return {"data": schedules}
 
     def get_dynamo_schedules(self):
