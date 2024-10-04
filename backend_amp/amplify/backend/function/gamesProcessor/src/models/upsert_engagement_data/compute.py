@@ -1,4 +1,5 @@
 from bson import ObjectId
+from pymongo.collection import Collection
 from models.constants import OutputStatus, meta_fields
 from db.users import get_user_collection, get_meta_collection
 from models.interfaces import UpsertEngagementDataInput as Input, Output
@@ -10,7 +11,7 @@ class Compute:
         self.collection = get_user_collection()
         self.meta_collection = get_meta_collection()
 
-    def update_data(self, collection, filter_field, filter_value, update_data, insert_data=None) -> Output:
+    def update_data(self, collection: Collection, filter_field: str, filter_value: str, update_data: dict, insert_data: dict = None) -> Output:
         update = collection.update_one(
             {filter_field: ObjectId(filter_value)}, {"$set": update_data}
         )

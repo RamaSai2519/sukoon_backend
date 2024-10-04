@@ -1,6 +1,7 @@
 from typing import Union
 from bson import ObjectId
 from models.common import Common
+from db.users import get_user_collection
 from pymongo.collection import Collection
 from models.constants import OutputStatus
 from models.interfaces import Output, SaveRemarkInput as Input
@@ -11,9 +12,11 @@ class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
         self.filter = {"_id": ObjectId(self.input.key)}
+        self.users_collection = get_user_collection()
         self.events_collection = get_event_users_collection()
         self.applicants_collection = get_become_saarthis_collection()
-        self.collections = [self.events_collection, self.applicants_collection]
+        self.collections = [self.events_collection,
+                            self.applicants_collection, self.users_collection]
 
     def get_document(self, collection: Collection) -> Union[dict, None]:
         return collection.find_one(self.filter)

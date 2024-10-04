@@ -35,6 +35,7 @@ class ListEventsService(Resource):
 
     def get(self) -> Output:
         input_params = request.args
+        print(input_params) 
         input = GetEventsInput(**input_params)
         output = ListEvents(input).process()
         output = dataclasses.asdict(output)

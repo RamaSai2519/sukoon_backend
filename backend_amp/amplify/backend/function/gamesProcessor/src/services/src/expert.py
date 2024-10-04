@@ -8,9 +8,10 @@ from models.get_timings.main import GetTimings
 from models.get_experts.main import ListExperts
 from models.get_categories.main import Categories
 from models.upsert_expert.main import UpsertExpert
+from models.get_applicants.main import GetApplicants
 from models.update_timings.main import UpdateTimings
 from models.create_applicant.main import CreateApplicant
-from models.interfaces import Expert, CategoriesInput, GetExpertsInput, ApplicantInput, GetSlotsInput, GetTimingsInput, UpdateTimingsInput, TimingsRow, Output
+from models.interfaces import Expert, CategoriesInput, GetExpertsInput, ApplicantInput, GetSlotsInput, GetTimingsInput, UpdateTimingsInput, TimingsRow, GetApplicantsInput
 
 
 class ExpertService(Resource):
@@ -38,6 +39,14 @@ class ApplicantService(Resource):
         input = json.loads(request.get_data())
         input = ApplicantInput(**input)
         output = CreateApplicant(input).process()
+        output = dataclasses.asdict(output)
+
+        return output
+
+    def get(self) -> dict:
+        input_params = request.args
+        input = GetApplicantsInput(**input_params)
+        output = GetApplicants(input).process()
         output = dataclasses.asdict(output)
 
         return output
