@@ -1,4 +1,4 @@
-from db.users import get_user_collection
+from db.users import get_user_collection, get_user_notification_collection, get_user_webhook_messages_collection
 from models.common import Common
 from bson import ObjectId
 from typing import Union
@@ -9,26 +9,49 @@ class UsersHelper:
     def __init__(self):
         self.common = Common()
         self.users_collection = get_user_collection()
+        self.notifications_collection = get_user_notification_collection()
+        self.webhook_messages_collection = get_user_webhook_messages_collection()
 
-    def prep_projection(self, single_user: bool = False):
+    def prep_projection(self, single_user: bool = False) -> dict:
         projection = {"__v": 0, "lastModifiedBy": 0, "userGameStats": 0}
         if single_user:
             return projection
         projection["Customer Persona"] = 0
         return projection
 
+    def get_notifications(self, user_id_obj: ObjectId) -> list:
+        query = {"userId": user_id_obj, "templateName": {"$exists": True}}
+        notifications = list(self.notifications_collection.find(
+            query).sort("createdAt", -1))
+        return notifications
+
+    def get_webhook_messages(self, user_id_obj: ObjectId) -> list:
+        query = {"userId": user_id_obj, "body": {"$ne": None}}
+        messages = list(self.webhook_messages_collection.find(
+            query).sort("createdAt", -1))
+        for message in messages:
+            message["type"] = "Outgoing" if "templateName" in message else "Incoming"
+        return messages
+
+    def get_wa_history(self, user_id_obj: ObjectId) -> list:
+        wa_history = self.get_notifications(user_id_obj)
+        wa_history += self.get_webhook_messages(user_id_obj)
+        wa_history = [Common.jsonify(history) for history in wa_history]
+        return sorted(wa_history, key=lambda x: x["createdAt"], reverse=True)
+
     def __format__(self, user: dict, single_user: bool = False) -> dict:
         if single_user:
             # Get calls, events and referrals
-            query = {"user": ObjectId(user["_id"])}
+            user_id_obj = ObjectId(user["_id"])
+            query = {"user": user_id_obj}
             user["calls"] = self.common.get_calls(query)
 
-            query = {"userId": ObjectId(
-                user["_id"]), "phoneNumber": user["phoneNumber"]}
+            query = {"userId": user_id_obj, "phoneNumber": user["phoneNumber"]}
             user["events"] = self.common.get_events_history(query)
 
             query = {"userId": user["_id"]}
             user["referrals"] = self.common.get_referrals(query)
+            user["notifications"] = self.get_wa_history(user_id_obj)
 
         if "Customer Persona" in user and isinstance(user["Customer Persona"], str):
             user["customerPersona"] = self.parse_user_persona(

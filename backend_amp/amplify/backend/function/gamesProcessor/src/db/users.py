@@ -42,7 +42,7 @@ def get_user_game_plays_collection():
     return users_game_play_collection
 
 
-def get_user_notification_collection():
+def get_user_notification_collection() -> Collection:
     client = Database().client
 
     db = client["test"]
