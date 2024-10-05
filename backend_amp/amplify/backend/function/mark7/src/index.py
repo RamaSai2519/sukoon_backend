@@ -57,3 +57,8 @@ def handler(event, context) -> dict:
     mark7 = Mark7(call)
     mark7.compute()
     return {"message": "Call is being processed"}
+
+
+# call =  {'_id': '66ffd0d74da8255a7ca5273c', 'callId': 'ee08fde7-f33f-466e-9515-440e4a01837b', 'status': 'successfull', 'user': '666d7f5025e35288b0d70287', 'expert': '665ee6a5ef29f5b2e07b1a81', 'initiatedTime': '2024-10-04T11:26:15.428000Z', 'duration': '0:03:54', 'failedReason': '', 'recording_url': 'https://sr.knowlarity.com/vr/fetchsound/?callid%3Dee08fde7-f33f-466e-9515-440e4a01837b', 'transferDuration': '00:03:41'}
+
+# handler({"call": call}, None)
