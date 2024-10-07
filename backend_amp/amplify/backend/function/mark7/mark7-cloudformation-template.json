@@ -46,25 +46,7 @@
                 }
             },
             "Handler": "index.handler",
-            "FunctionName": {
-                "Fn::If": [
-                    "ShouldNotCreateEnvResources",
-                    "mark7",
-                    {
-
-                        "Fn::Join": [
-                            "",
-                            [
-                                "mark7",
-                                "-",
-                                {
-                                    "Ref": "env"
-                                }
-                            ]
-                        ]
-                    }
-                ]
-            },
+            
             "Environment": {
                 "Variables" : {"ENV":{"Ref":"env"},"REGION":{"Ref":"AWS::Region"}}
             },
