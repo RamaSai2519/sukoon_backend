@@ -127,15 +127,15 @@ class Compute:
             {"_id": ObjectId(payment_id)},
             {"$set": {"payment_status": payment_status, "invoice_number": invoice_number, "invoice_link": invoice_s3_url}},
         )
-        return True, payment_status
+        return True, payment_status, int(payment_amount)
 
     
     def compute(self):
 
         self.payment_data = self.input.data
         self.user_id = self.get_user_id_from_number()
-        response , payment_status = self.update_payment_status()
-        if payment_status == "SUCCESS":
+        response , payment_status, payment_amount = self.update_payment_status()
+        if payment_status == "SUCCESS" and payment_amount == 999:
             self.update_user_membership_status()
 
         return Output(
