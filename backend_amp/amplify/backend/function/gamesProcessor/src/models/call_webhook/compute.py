@@ -70,13 +70,13 @@ class Compute:
     def determine_status(self) -> str:
         call_status = self.input.call_status.lower()
         call_transfer_status = self.input.call_transfer_status.lower()
+        if call_transfer_status == "missed":
+            return "missed"
         if call_status == "connected":
             if self.common.duration_str_to_seconds(self.input.call_duration) > 120:
                 return "successfull"
             else:
                 return "inadequate"
-        elif call_transfer_status == "missed":
-            return "missed"
         return "failed"
 
     def update_call(self, call: Call) -> str:
@@ -143,7 +143,7 @@ class Compute:
         call = self.find_call(callId)
         duration = self.common.duration_str_to_seconds(call.duration)
         if self.input.call_status == "Connected" and duration > 120:
-            feedback_message = self.send_feedback_message(call)
+            feedback_message = self.send_feedback_message(call, expert, user)
 
         final_message = call_message + schedule_message + \
             user_message + expert_message + feedback_message
