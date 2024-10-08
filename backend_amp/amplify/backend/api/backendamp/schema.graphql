@@ -58,6 +58,7 @@ type ScheduledJobs @model @auth(rules: [{ allow: public }])
   id: ID!
   scheduledJobType: ScheduledJobType
   scheduledJobTime: AWSDateTime
+  user_requested: Boolean
   status: String
   isDeleted: Boolean
   scheduledJobStatus: ScheduledJobStatus @index(name: "scheduledJobsByStatusAndTimeIdx", sortKeyFields: ["scheduledJobTime"]   queryField: "scheduledJobsByStatusAndTime") 

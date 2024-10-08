@@ -44,25 +44,17 @@ api.add_resource(UpdateScheduledJobsService, '/actions/update_scheduled_job')
 api.add_resource(InvokeMarkService, '/actions/invoke_mark')
 api.add_resource(UpdateExpertScoresService, '/actions/expert_scores')
 
-
-api.add_resource(CreatePaymentOrderService, '/actions/create_payment_order')
+# Cashfree Routes
 api.add_resource(CashfreeWebhookService, '/actions/cashfree_webhook')
-api.add_resource(CalculateWinnerService, '/actions/calculate_winner')
-api.add_resource(WhatsappMessageService, '/actions/send_whatsapp')
-api.add_resource(BytePlusTokenService, '/actions/byte_plus_token')
-api.add_resource(CouponRewardService, '/actions/coupon_reward')
-api.add_resource(ScoreUpdaterService, '/actions/score_update')
-api.add_resource(FCMTokenService, '/actions/update_fcm_token')
-api.add_resource(ValidateOTPService, '/actions/validate_otp')
-api.add_resource(GameHistoryService, '/actions/game_history')
+api.add_resource(CreatePaymentOrderService, '/actions/create_payment_order')
+
+# WhatsApp Routes
 api.add_resource(WhatsappWebhookService, '/actions/webhooks')
-api.add_resource(UpdateEventService, '/actions/update_event')
-api.add_resource(FetchShortsService, '/actions/fetch_shorts')
-api.add_resource(GameConfigService, '/actions/game_config')
-api.add_resource(PushNotificationService, '/actions/push')
-api.add_resource(QuizGameService, '/actions/quiz_game')
-api.add_resource(CardGameService, '/actions/card_game')
+api.add_resource(WhatsappMessageService, '/actions/send_whatsapp')
+
+# OTP Routes
 api.add_resource(SendOTPService, '/actions/send_otp')
+api.add_resource(ValidateOTPService, '/actions/validate_otp')
 
 # Admin Routes
 # - Auth
@@ -86,6 +78,20 @@ api.add_resource(AdminWhatsappService, '/actions/wa_options')
 api.add_resource(AdminSchedulesService, '/actions/schedules')
 # - Stats
 api.add_resource(DashboardStatsService, '/actions/dashboard_stats')
+
+# Push Notification Routes
+api.add_resource(PushNotificationService, '/actions/push')
+api.add_resource(FCMTokenService, '/actions/update_fcm_token')
+api.add_resource(BytePlusTokenService, '/actions/byte_plus_token')
+
+# Game Routes (deprecated)
+api.add_resource(CalculateWinnerService, '/actions/calculate_winner')
+api.add_resource(CouponRewardService, '/actions/coupon_reward')
+api.add_resource(ScoreUpdaterService, '/actions/score_update')
+api.add_resource(GameHistoryService, '/actions/game_history')
+api.add_resource(GameConfigService, '/actions/game_config')
+api.add_resource(QuizGameService, '/actions/quiz_game')
+api.add_resource(CardGameService, '/actions/card_game')
 
 
 def handler(event, context):

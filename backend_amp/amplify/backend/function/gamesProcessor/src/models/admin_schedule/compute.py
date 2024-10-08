@@ -27,9 +27,9 @@ class Compute:
         return schedule
 
     def schedule_call_job(self, document, schedule: Schedule) -> str:
-        time = datetime.strptime(schedule.time, "%Y-%m-%dT%H:%M:%S.%fZ")
-        record = self.collection.find_one(document, {"_id": 1})
-        record_id = str(record["_id"]) if record else ""
+        time = datetime.strptime(schedule.time, '%Y-%m-%dT%H:%M:%S.%fZ')
+        record = self.collection.find_one(document, {'_id': 1})
+        record_id = str(record['_id']) if record else ''
 
         response = sm.scheduleCall(
             time, schedule.expert_id, schedule.user_id, record_id)
@@ -38,22 +38,27 @@ class Compute:
 
     def format_schedules(self, schedules):
         for schedule in schedules:
-            schedule["requestMeta"] = json.loads(
-                schedule.get("requestMeta", "{}"))
+            request_meta = schedule.get('requestMeta', None)
+            user_requested = schedule.get('user_requested', None)
+            if request_meta is not None:
+                request_meta = json.loads(request_meta)
 
-            expert_id = schedule["requestMeta"].get("expertId")
-            schedule["expert"] = self.common.get_expert_name(
-                ObjectId(expert_id)) if expert_id else None
+                expert_id = request_meta.get('expertId')
+                schedule['expert'] = self.common.get_expert_name(
+                    ObjectId(expert_id)) if expert_id else None
 
-            user_id = schedule["requestMeta"].get("userId")
-            schedule["user"] = self.common.get_user_name(
-                ObjectId(user_id)) if user_id else None
+                user_id = request_meta.get('userId')
+                schedule['user'] = self.common.get_user_name(
+                    ObjectId(user_id)) if user_id else None
+            else:
+                schedule['user'] = None
+                schedule['expert'] = None
+            schedule['datetime'] = schedule.get('scheduledJobTime')
+            schedule['source'] = Common.get_call_source(user_requested)
+        return {'data': schedules}
 
-            schedule["datetime"] = schedule.get("scheduledJobTime")
-        return {"data": schedules}
-
-    def get_dynamo_schedules(self):
-        query = """
+    def get_dynamo_schedules(self): 
+        query = '''
             query MyQuery($limit: Int = 1000, $nextToken: String) {
                 listScheduledJobs(limit: $limit, nextToken: $nextToken) {
                     nextToken
@@ -62,25 +67,26 @@ class Compute:
                         status
                         isDeleted
                         requestMeta
+                        user_requested
                         scheduledJobTime
                         scheduledJobStatus
                     }
                 }
             }
-        """
+        '''
 
-        params = {"limit": 1000}
+        params = {'limit': 1000}
         all_items = []
         next_token = None
 
         while True:
             if next_token:
-                params["nextToken"] = next_token
+                params['nextToken'] = next_token
             else:
-                params.pop("nextToken", None)
+                params.pop('nextToken', None)
 
             response = call_graphql(
-                query=query, params=params, message="get_scheduled_jobs")
+                query=query, params=params, message='get_scheduled_jobs')
             all_items.extend(response['listScheduledJobs']['items'])
 
             next_token = response['listScheduledJobs'].get('nextToken')
@@ -92,19 +98,19 @@ class Compute:
         return formatted_response
 
     def compute(self) -> Output:
-        if self.input.action == "create":
+        if self.input.action == 'create':
             schedule = self.prep_schedule()
             document = schedule.to_document()
             self.collection.insert_one(document)
             response = self.schedule_call_job(document, schedule)
-        elif self.input.action == "delete":
-            response = "Schedule deleted successfully"
+        elif self.input.action == 'delete':
+            response = 'Schedule deleted successfully'
             sm.cancelCall(self.input.scheduleId)
-        elif self.input.action == "get":
+        elif self.input.action == 'get':
             response = self.get_dynamo_schedules()
 
         return Output(
             output_details=response,
             output_status=OutputStatus.SUCCESS,
-            output_message="Data received successfully"
+            output_message='Data received successfully'
         )

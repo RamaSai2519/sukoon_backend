@@ -13,7 +13,7 @@ class Validator:
         self.experts_collection = get_experts_collections()
 
     def validate_input(self):
-        if self.input.type_ not in ["call", "scheduledCall"]:
+        if self.input.type_ not in ["call", "scheduled"]:
             return False, "Invalid type"
 
         user, expert = self.get_users(

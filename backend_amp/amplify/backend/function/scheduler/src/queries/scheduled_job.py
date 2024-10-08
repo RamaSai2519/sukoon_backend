@@ -11,6 +11,7 @@ def get_pending_scheduled_jobs(status, time, next_token):
                     items {
                         id
                         requestMeta
+                        user_requested
                         scheduledJobStatus
                         scheduledJobTime
                         scheduledJobType
@@ -28,6 +29,7 @@ def get_pending_scheduled_jobs(status, time, next_token):
                     nextToken
                     items {
                         id
+                        user_requested
                         requestMeta
                         scheduledJobStatus
                         scheduledJobTime

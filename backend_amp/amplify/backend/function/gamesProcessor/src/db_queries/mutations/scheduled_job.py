@@ -1,17 +1,17 @@
 from helpers.base import call_graphql
 
 
-def create_scheduled_job(request_meta, status, job_time, job_type) -> None:
+def create_scheduled_job(request_meta, status, job_time, job_type, user_requested=None) -> None:
 
     query = """
-        mutation MyMutation($requestMeta: String, $scheduledJobStatus: ScheduledJobStatus, $scheduledJobTime: AWSDateTime, $scheduledJobType: ScheduledJobType) {
-            createScheduledJobs(input: {requestMeta: $requestMeta, scheduledJobStatus: $scheduledJobStatus, scheduledJobTime: $scheduledJobTime, scheduledJobType: $scheduledJobType}) {
-            id
-            }
-        }
+    mutation MyMutation($requestMeta: String, $scheduledJobStatus: ScheduledJobStatus, $scheduledJobTime: AWSDateTime, $scheduledJobType: ScheduledJobType, $user_requested: Boolean) {
+      createScheduledJobs(input: {requestMeta: $requestMeta, scheduledJobStatus: $scheduledJobStatus, scheduledJobTime: $scheduledJobTime, scheduledJobType: $scheduledJobType, user_requested: $user_requested}) {
+        id
+      }
+    }
     """
     params = {"requestMeta": request_meta, "scheduledJobStatus": status,
-              "scheduledJobTime": job_time, "scheduledJobType": job_type}
+              "scheduledJobTime": job_time, "scheduledJobType": job_type, "user_requested": user_requested}
     return call_graphql(query=query, params=params, message="create_scheduled_job")
 
 

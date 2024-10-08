@@ -54,8 +54,8 @@ class Compute:
         return call_id
 
     def prep_call(self, user_id: ObjectId, expert_id: ObjectId, call_id: str) -> dict:
-        call = Call(user=user_id, expert=expert_id, callId=call_id,
-                    initiatedTime=datetime.now(pytz.utc), status="initiated")
+        call = Call(user=user_id, expert=expert_id, callId=call_id, user_requested=self.input.user_requested,
+                    initiatedTime=datetime.now(pytz.utc), status="initiated", type=self.input.type_)
         return asdict(call)
 
     def _update_db(self, user_id: ObjectId, expert_id: ObjectId, call_id: str) -> bool:
