@@ -56,7 +56,7 @@ class Notifications:
         response = requests.request(
             "POST", url, headers=application_json_header, data=payload)
         response_dict: dict = response.json()
-        response_str = json.dumps(response_dict)
+        response_str = response_dict.get("output_message", "")
         return " and " + response_str
 
     def get_last_expert_name(self) -> str:

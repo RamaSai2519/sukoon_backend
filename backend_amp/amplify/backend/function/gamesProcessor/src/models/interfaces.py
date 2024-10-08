@@ -675,5 +675,6 @@ class DashboardStatsInput:
 class CallInput:
     user_id: str
     expert_id: str
+    scheduledId: Optional[str] = None
     user_requested: Optional[bool] = None
     type_: str = field(default_factory=lambda: 'call')
