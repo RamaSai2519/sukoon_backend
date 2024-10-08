@@ -199,6 +199,7 @@ class WASlackNotifierInput:
 
 @dataclass
 class Call:
+    type: Optional[str] = None
     callId: Optional[str] = None
     status: Optional[str] = None
     _id: Optional[ObjectId] = None
@@ -208,6 +209,7 @@ class Call:
     scheduledId: Optional[str] = None
     failedReason: Optional[str] = None
     recording_url: Optional[str] = None
+    user_requested: Optional[bool] = None
     transferDuration: Optional[str] = None
     conversationScore: Optional[int] = None
     initiatedTime: Optional[datetime] = None
@@ -403,6 +405,7 @@ class UpdateFCMTokenInput:
 
 @dataclass
 class ScheduledJobInput:
+    user_requested: Optional[bool] = None
     action: str = field(default_factory=lambda: "")
     status: str = field(default_factory=lambda: "")
     job_type: str = field(default_factory=lambda: "")
@@ -416,7 +419,6 @@ class GetUsersInput:
     size: Optional[int] = None
     page: Optional[int] = None
     phoneNumber: Optional[str] = None
-    schedule_status: Optional[str] = None
 
 
 @dataclass
@@ -631,9 +633,10 @@ class CreateScheduleInput:
     user: Optional[str] = None
     expert: Optional[str] = None
     datetime: Optional[str] = None
+    scheduleId: Optional[str] = None
+    user_requested: Optional[bool] = None
     duration: int = field(default_factory=lambda: 30)
     type: str = field(default_factory=lambda: "User")
-    scheduleId: Optional[str] = None
 
 
 @dataclass
@@ -672,4 +675,5 @@ class DashboardStatsInput:
 class CallInput:
     user_id: str
     expert_id: str
+    user_requested: Optional[bool] = None
     type_: str = field(default_factory=lambda: 'call')

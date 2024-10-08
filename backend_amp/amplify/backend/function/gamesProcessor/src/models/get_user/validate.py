@@ -9,7 +9,4 @@ class Validator():
         if self.input.phoneNumber and len(self.input.phoneNumber) != 10:
             return False, "Invalid phone number"
 
-        if self.input.schedule_status and self.input.schedule_status not in ["pending", "completed", "missed"]:
-            return False, "Invalid schedule status"
-
         return True, ""

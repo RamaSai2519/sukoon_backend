@@ -12,7 +12,8 @@ calls_exclusion_projection = {
     "failedReason": 1,
     "initiatedTime": 1,
     "lastModifiedBy": 1,
-    "Conversation Score": 1
+    "user_requested": 1,
+    "Conversation Score": 1,
 }
 
 

@@ -10,7 +10,7 @@ class Compute:
     def compute(self) -> Output:
 
         create_scheduled_job(self.input.request_meta, self.input.status,
-                             self.input.job_time,  self.input.job_type)
+                             self.input.job_time, self.input.job_type, self.input.user_requested)
 
         return Output(
             output_details="",

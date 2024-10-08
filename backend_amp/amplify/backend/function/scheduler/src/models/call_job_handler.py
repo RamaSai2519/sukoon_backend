@@ -6,8 +6,9 @@ from queries.scheduled_job import update_scheduled_job_status
 
 class CallJobHandler(IProcessor):
     def __init__(self, job):
-        self.request_meta = json.loads(job.get("requestMeta")) or {}
         self.job_id = job.get("id", "")
+        self.user_requested = job.get("user_requested", None)
+        self.request_meta = json.loads(job.get("requestMeta")) or {}
 
     def invoke_call_backend_api(self):
         url = "https://6x4j0qxbmk.execute-api.ap-south-1.amazonaws.com/main/actions/call"
@@ -15,9 +16,10 @@ class CallJobHandler(IProcessor):
         headers = {'Content-Type': 'application/json'}
 
         payload = json.dumps({
-            "userId": self.request_meta.get("userId"),
-            "expertId": self.request_meta.get("expertId"),
-            "scheduledCallId": self.request_meta.get("scheduledCallId", "") or "",
+            "type_": 'scheduled',
+            "user_requested": self.user_requested,
+            "user_id": self.request_meta.get("userId"),
+            "expert_id": self.request_meta.get("expertId"),
         })
 
         response = requests.request("POST", url, headers=headers, data=payload)

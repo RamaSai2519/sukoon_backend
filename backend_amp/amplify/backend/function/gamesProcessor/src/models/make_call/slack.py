@@ -91,7 +91,7 @@ class SlackNotifier:
 
         return blocks
 
-    def send_notification(self, type_, user_name, sarathi_name, status, call_link='', dashboard_link=''):
+    def send_notification(self, type_, user_name, sarathi_name, status, call_link=''):
         blocks = self._create_message_blocks(
             type_, user_name, sarathi_name, status, call_link)
 
