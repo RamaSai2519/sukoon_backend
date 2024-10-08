@@ -50,14 +50,16 @@ class Compute:
                 user_id = request_meta.get('userId')
                 schedule['user'] = self.common.get_user_name(
                     ObjectId(user_id)) if user_id else None
+                schedule['initatedBy'] = request_meta.get('initatedBy', 'User')
             else:
                 schedule['user'] = None
                 schedule['expert'] = None
+                schedule['initatedBy'] = None
             schedule['datetime'] = schedule.get('scheduledJobTime')
             schedule['source'] = Common.get_call_source(user_requested)
         return {'data': schedules}
 
-    def get_dynamo_schedules(self): 
+    def get_dynamo_schedules(self):
         query = '''
             query MyQuery($limit: Int = 1000, $nextToken: String) {
                 listScheduledJobs(limit: $limit, nextToken: $nextToken) {

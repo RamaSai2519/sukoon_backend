@@ -96,8 +96,10 @@ class Compute:
 
     def update_schedule(self, call: Call) -> str:
         if call.scheduledId:
-            update_scheduled_job_status(
-                call.scheduledId, self.determine_status())
+            status = self.determine_status()
+            reason = self.determine_failed_reason()
+            status_str = status + ', ' + reason
+            update_scheduled_job_status(call.scheduledId, status_str)
             return "Scheduled job updated, "
         return "Scheduled job not updated, "
 
