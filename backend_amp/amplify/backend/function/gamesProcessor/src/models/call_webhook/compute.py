@@ -6,6 +6,7 @@ from db.users import get_user_collection
 from db.calls import get_calls_collection
 from db.experts import get_experts_collections
 from models.constants import OutputStatus, application_json_header
+from db_queries.mutations.scheduled_job import update_scheduled_job_status
 from models.interfaces import WebhookInput as Input, Call, Output, User, Expert
 
 
@@ -19,7 +20,7 @@ class Compute:
         self.experts_collection = get_experts_collections()
 
     def prep_call(self, call: dict) -> Call:
-        fcall = Common.clean_call(call)
+        fcall = Common.clean_dict(call, Call)
         fcall['conversationScore'] = call.get("Conversation Score", 0)
         return Call(**fcall)
 
@@ -30,17 +31,18 @@ class Compute:
 
     def find_user(self, call: Call) -> Union[User, None]:
         user = self.users_collection.find_one({"_id": call.user})
-        user = Common.clean_user(user)
+        user = Common.clean_dict(user, User)
         return User(**user) if user else None
 
     def find_expert(self, call: Call) -> Union[Expert, None]:
         expert = self.experts_collection.find_one({"_id": call.expert})
+        expert = Common.clean_dict(expert, Expert)
         return Expert(**expert) if expert else None
 
     def update_user(self, call: Call, expert: Expert, user: User) -> str:
         filter = {"_id": call.user}
         update_values = {"isBusy": False}
-        if expert and expert.type != "internal" and self.common.duration_str_to_seconds(call.duration) > 120:
+        if expert and expert.type != "internal" and self.common.duration_str_to_seconds(self.input.call_duration) > 600:
             update_values["numberOfCalls"] = user.numberOfCalls - \
                 1 if user.numberOfCalls > 0 else 0
         update = {"$set": update_values}
@@ -48,28 +50,40 @@ class Compute:
         message = "User updated, " if response.modified_count > 0 else "User not updated, "
         return message
 
-    def update_expert(self, call: Call):
+    def update_expert(self, call: Call) -> str:
         filter = {"_id": call.expert}
         update = {"$set": {"isBusy": False}}
         response = self.experts_collection.update_one(filter, update)
         message = "Expert updated, " if response.modified_count > 0 else "Expert not updated, "
         return message
 
-    def determine_failed_reason(self):
+    def determine_failed_reason(self) -> str:
         call_transfer_status = self.input.call_transfer_status.lower()
         if call_transfer_status == "missed":
-            return "call missed"
+            return "user missed"
         elif call_transfer_status == "not connected" or call_transfer_status == "none":
-            return "call not picked"
+            return "expert missed"
         elif call_transfer_status == "did not process":
-            return "call not processed"
+            return "knowlarity missed"
         return ""
 
-    def update_call(self, call: Call):
+    def determine_status(self) -> str:
+        call_status = self.input.call_status.lower()
+        call_transfer_status = self.input.call_transfer_status.lower()
+        if call_status == "connected":
+            if self.common.duration_str_to_seconds(self.input.call_duration) > 120:
+                return "successfull"
+            else:
+                return "inadequate"
+        elif call_transfer_status == "missed":
+            return "missed"
+        return "failed"
+
+    def update_call(self, call: Call) -> str:
         filter = {"callId": call.callId}
         update = {
             "$set": {
-                "status": ("successfull" if self.input.call_status == "Connected" else "failed"),
+                "status": self.determine_status(),
                 "failedReason": self.determine_failed_reason(),
                 "duration": self.input.call_duration,
                 "recording_url": self.input.callrecordingurl,
@@ -79,6 +93,13 @@ class Compute:
         response = self.calls_collection.update_one(filter, update)
         message = "Call updated, " if response.modified_count > 0 else "Call not updated, "
         return message
+
+    def update_schedule(self, call: Call) -> str:
+        if call.scheduledId:
+            update_scheduled_job_status(
+                call.scheduledId, self.determine_status())
+            return "Scheduled job updated, "
+        return "Scheduled job not updated, "
 
     def send_feedback_message(self, call: Call, expert: Expert, user: User) -> str:
         if not user or not expert:
@@ -91,14 +112,10 @@ class Compute:
                 "callId": call.callId,
                 "userId": str(user._id)
             }),
-            "parameters": {
-                "user_name": user.name,
-                "sarathi_name": expert.name,
-            }
+            "parameters": {"user_name": user.name, "sarathi_name": expert.name}
         }
         response = requests.request(
-            "POST", self.url, headers=application_json_header, data=json.dumps(payload)
-        )
+            "POST", self.url, headers=application_json_header, data=json.dumps(payload))
         print(response.text, "feedback")
         message = "Feedback message sent" if response.status_code == 200 else "Feedback message not sent"
         return message
@@ -116,6 +133,7 @@ class Compute:
         user = self.find_user(call)
         expert = self.find_expert(call)
         call_message = self.update_call(call)
+        schedule_message = self.update_schedule(call)
         user_message = self.update_user(call, expert, user)
         expert_message = self.update_expert(call)
         feedback_message = "Feedback message not sent"
@@ -125,7 +143,8 @@ class Compute:
         if self.input.call_status == "Connected" and duration > 120:
             feedback_message = self.send_feedback_message(call)
 
-        final_message = call_message + user_message + expert_message + feedback_message
+        final_message = call_message + schedule_message + \
+            user_message + expert_message + feedback_message
         print(final_message, "final")
 
         return Output(

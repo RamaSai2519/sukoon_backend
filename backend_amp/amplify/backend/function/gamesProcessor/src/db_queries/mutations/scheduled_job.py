@@ -25,3 +25,15 @@ def update_scheduled_job(variables):
     }
     """
     return call_graphql(query=query, params=variables, message="update_scheduled_job")
+
+
+def update_scheduled_job_status(job_id, status):
+    query = """
+        mutation MyMutation2($id: ID!, $status: String) {
+            updateScheduledJobs(input: {id: $id, status: $status}) {
+                id
+            }
+        }
+    """
+    params = {"id": job_id, "status": status}
+    return call_graphql(query=query, params=params, message="update_scheduled_job_status")

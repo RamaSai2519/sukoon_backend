@@ -90,26 +90,11 @@ class Common:
         return {field: {'$gte': today_start, '$lt': today_end}}
 
     @staticmethod
-    def clean_user(user: dict) -> dict:
-        if user:
-            user_fields = set(User.__annotations__.keys())
-            user = {k: v for k, v in user.items() if k in user_fields}
-        return user
-
-    @staticmethod
-    def clean_event_user(event_user: dict) -> dict:
-        if event_user:
-            event_user_fields = set(EventUser.__annotations__.keys())
-            event_user = {k: v for k, v in event_user.items()
-                          if k in event_user_fields}
-        return event_user
-
-    @staticmethod
-    def clean_call(call: dict) -> dict:
-        if call:
-            call_fields = set(Call.__annotations__.keys())
-            call = {k: v for k, v in call.items() if k in call_fields}
-        return call
+    def clean_dict(doc: dict, dataClass) -> dict:
+        if doc:
+            document_fields = set(dataClass.__annotations__.keys())
+            doc = {k: v for k, v in doc.items() if k in document_fields}
+        return doc
 
     @staticmethod
     def get_call_status(calls_done: int) -> str:
