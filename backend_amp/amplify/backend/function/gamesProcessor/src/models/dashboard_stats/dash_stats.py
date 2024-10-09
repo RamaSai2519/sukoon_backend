@@ -74,10 +74,10 @@ class DashboardStats:
         return self.calls_collection.count_documents({"status": "failed", **self.today_query, **self.exclude_query})
 
     def missed_calls(self) -> int:
-        return self.calls_collection.count_documents({"failedReason": "call missed", **self.exclude_query})
+        return self.calls_collection.count_documents({"status": "missed", **self.exclude_query})
 
     def today_missed_calls(self) -> int:
-        return self.calls_collection.count_documents({"failedReason": "call missed", **self.today_query, **self.exclude_query})
+        return self.calls_collection.count_documents({"status": "missed", **self.today_query, **self.exclude_query})
 
     def average_call_duration(self) -> int:
         return Common.seconds_to_duration_str(
