@@ -11,8 +11,9 @@ class Compute:
         self.helper = UsersHelper()
 
     def compute(self) -> Output:
-        if self.input.phoneNumber is not None:
-            users = self.helper.get_user(self.input.phoneNumber)
+        if self.input.phoneNumber is not None or self.input.user_id is not None:
+            users = self.helper.get_user(
+                self.input.phoneNumber, self.input.user_id)
             if not users:
                 return Output(
                     output_details={},

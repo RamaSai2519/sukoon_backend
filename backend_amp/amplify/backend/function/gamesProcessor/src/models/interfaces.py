@@ -418,6 +418,7 @@ class ScheduledJobInput:
 class GetUsersInput:
     size: Optional[int] = None
     page: Optional[int] = None
+    user_id: Optional[str] = None
     phoneNumber: Optional[str] = None
 
 

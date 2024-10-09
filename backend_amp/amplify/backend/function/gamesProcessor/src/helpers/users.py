@@ -77,8 +77,11 @@ class UsersHelper:
 
         return result
 
-    def get_user(self, phoneNumber: str) -> Union[dict, None]:
-        query = {"phoneNumber": phoneNumber}
+    def get_user(self, phoneNumber: str, user_id: str) -> Union[dict, None]:
+        if user_id:
+            query = {"_id": ObjectId(user_id)}
+        else:
+            query = {"phoneNumber": phoneNumber}
         user = self.users_collection.find_one(
             query, self.prep_projection(True))
         if user:
