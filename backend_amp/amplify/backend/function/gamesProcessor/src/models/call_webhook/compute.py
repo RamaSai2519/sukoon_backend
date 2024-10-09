@@ -72,7 +72,7 @@ class Compute:
             return "missed"
         if call_status == "connected":
             if self.common.duration_str_to_seconds(self.input.call_duration) > 120:
-                return "successfull"
+                return "successful"
             else:
                 return "inadequate"
         return "failed"

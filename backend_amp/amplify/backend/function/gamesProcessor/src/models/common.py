@@ -144,12 +144,6 @@ class Common:
                 call['expert'] = self.get_expert_name(
                     ObjectId(call.get('expert'))) if call.get('expert') else 'Unknown'
 
-            # Handle call status and missed calls
-            if call.get('failedReason') == 'call missed':
-                call['status'] = 'missed'
-            elif call.get('status') == 'successfull':
-                call['status'] = 'successful'
-
             # Handle call source
             user_requested = call.get('user_requested', None)
             call['source'] = self.get_call_source(user_requested)

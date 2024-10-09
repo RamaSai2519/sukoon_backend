@@ -20,7 +20,7 @@ calls_exclusion_projection = {
 
 successful_calls_query = {
     'failedReason': '',
-    'status': 'successfull'
+    'status': 'successful'
 }
 
 application_json_header = {'Content-Type': 'application/json'}
