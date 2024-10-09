@@ -33,7 +33,7 @@ def process_call_data(call, user, expert, user_document, expert_document, user_c
         "callId": call["callId"],
         "user": user_document["_id"],
         "expert": str(expert_document["_id"]),
-        "Conversation Score": conversation_score,
+        "conversationScore": conversation_score,
         "Score Breakup": conversation_score_details,
         "Saarthi Feedback": saarthi_feedback,
         "User Callback": user_callback,
@@ -56,6 +56,6 @@ def process_call_data(call, user, expert, user_document, expert_document, user_c
 
     calls_collection.update_one(
         {"callId": call["callId"]},
-        {"$set": {"Conversation Score": conversation_score}},
+        {"$set": {"conversationScore": conversation_score}},
     )
     return True

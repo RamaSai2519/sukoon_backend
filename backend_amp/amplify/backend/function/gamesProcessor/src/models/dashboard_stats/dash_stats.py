@@ -48,11 +48,11 @@ class DashboardStats:
     def _get_avg_conversation_score_(self) -> float:
         query = {
             **self.exclude_query,
-            "Conversation Score": {"$exists": True, "$gt": 0, "$ne": None}
+            "conversationScore": {"$exists": True, "$gt": 0, "$ne": None}
         }
-        projection = {"Conversation Score": 1, "_id": 0}
+        projection = {"conversationScore": 1, "_id": 0}
         calls = self.common.get_calls(query, projection, False, False)
-        scores = [call["Conversation Score"] for call in calls]
+        scores = [call["conversationScore"] for call in calls]
         return round(sum(scores) / len(scores), 2) if scores else 0
 
     def total_calls(self) -> int:

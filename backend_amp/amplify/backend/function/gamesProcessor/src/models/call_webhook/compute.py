@@ -20,9 +20,8 @@ class Compute:
         self.experts_collection = get_experts_collections()
 
     def prep_call(self, call: dict) -> Call:
-        fcall = Common.clean_dict(call, Call)
-        fcall['conversationScore'] = call.get("Conversation Score", 0)
-        return Call(**fcall)
+        call = Common.clean_dict(call, Call)
+        return Call(**call)
 
     def find_call(self, callId: str) -> Union[Call, None]:
         call = self.calls_collection.find_one({"callId": callId})

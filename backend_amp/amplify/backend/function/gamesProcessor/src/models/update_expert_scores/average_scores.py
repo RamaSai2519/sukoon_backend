@@ -8,8 +8,8 @@ class CalcAverageScores:
     def __init__(self, input: Input, callsmetas: list) -> None:
         self.input = input
         self.calls = callsmetas
+        self.main_field = "conversationScore"
         self.self_url = config.URL + "/actions/expert"
-        self.main_field = "Conversation Score"
         self.calls_collection = get_calls_collection()
         self.callsmeta_collection = get_callsmeta_collection()
         self.score_fields = ["openingGreeting", "timeSplit", "userSentiment",
