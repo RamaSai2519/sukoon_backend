@@ -42,9 +42,8 @@ class Compute:
     def update_user(self, call: Call, expert: Expert, user: User) -> str:
         filter = {"_id": call.user}
         update_values = {"isBusy": False}
-        if expert and expert.type != "internal" and self.common.duration_str_to_seconds(self.input.call_duration) > 600:
-            update_values["numberOfCalls"] = user.numberOfCalls - \
-                1 if user.numberOfCalls > 0 else 0
+        if expert and user and expert.type != "internal" and self.common.duration_str_to_seconds(self.input.call_duration) > 600 and user.numberOfCalls > 0 and user.isPaidUser == False:
+            update_values["numberOfCalls"] = user.numberOfCalls - 1
         update = {"$set": update_values}
         response = self.users_collection.update_one(filter, update)
         message = "User updated, " if response.modified_count > 0 else "User not updated, "
