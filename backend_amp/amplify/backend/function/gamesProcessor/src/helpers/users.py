@@ -77,7 +77,7 @@ class UsersHelper:
 
         return result
 
-    def get_user(self, phoneNumber: str, user_id: str) -> Union[dict, None]:
+    def get_user(self, phoneNumber: str = None, user_id: str = None) -> Union[dict, None]:
         if user_id:
             query = {"_id": ObjectId(user_id)}
         else:
