@@ -29,7 +29,7 @@ class Compute:
         return Common.jsonify(user)
 
     def get_leads(self, query: dict) -> list:
-        projection = {"Customer Persona": 0}
+        projection = {"customerPersona": 0}
         sort_order = self.input.sort_order if self.input.sort_order else -1
         sort_field = self.input.sort_field if self.input.sort_field else "createdDate"
 

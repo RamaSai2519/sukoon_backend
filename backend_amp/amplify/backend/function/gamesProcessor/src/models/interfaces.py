@@ -522,6 +522,7 @@ class User:
     numberOfGames: Optional[int] = None
     numberOfCalls: Optional[int] = None
     birthDate: Optional[datetime] = None
+    customerPersona: Optional[dict] = None
     profileCompleted: Optional[bool] = None
 
 
