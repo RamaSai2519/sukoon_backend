@@ -63,7 +63,7 @@ class SlotsService(Resource):
         return output
 
 
-class TimingsService(Resource):
+class TimingService(Resource):
 
     def get(self) -> dict:
         input = request.args
@@ -85,7 +85,7 @@ class TimingsService(Resource):
         return output
 
 
-class CategoriesService(Resource):
+class CategoryService(Resource):
 
     def post(self) -> dict:
         input = json.loads(request.get_data())

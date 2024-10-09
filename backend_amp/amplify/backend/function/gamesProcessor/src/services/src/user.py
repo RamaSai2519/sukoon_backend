@@ -56,7 +56,7 @@ class LeadsService(Resource):
         return output
 
 
-class RemarksService(Resource):
+class RemarkService(Resource):
 
     def post(self) -> dict:
         input = json.loads(request.get_data())

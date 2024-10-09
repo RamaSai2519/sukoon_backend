@@ -20,7 +20,7 @@ class ChatService(Resource):
         return output
 
 
-class PhotosService(Resource):
+class PhotoService(Resource):
 
     def get(self) -> Output:
         input_params = request.args
@@ -35,7 +35,7 @@ class ContentService(Resource):
 
     def post(self) -> Output:
         input = json.loads(request.get_data())
-        
+
         input["content"] = Content(**input.get("content", {}))
         input["photo"] = ContentPhoto(**input.get("photo", {}))
         input = SaveContentInput(**input)
@@ -51,5 +51,3 @@ class ContentService(Resource):
         output = dataclasses.asdict(output)
 
         return output
-
-    
