@@ -213,10 +213,6 @@ class Common:
             {'callId': call['callId']}
         )
         if call_meta:
-            call['Topics'] = call_meta.get('Topics', [])
-            call['Summary'] = call_meta.get('Summary', '')
-            call['User Callback'] = call_meta.get('User Callback', '')
-            call['Score Breakup'] = call_meta.get('Score Breakup', {})
-            call['transcript_url'] = call_meta.get('transcript_url', '')
-            call['Saarthi Feedback'] = call_meta.get('Saarthi Feedback', '')
+            for key, value in call_meta.items():
+                call[key] = value
         return call
