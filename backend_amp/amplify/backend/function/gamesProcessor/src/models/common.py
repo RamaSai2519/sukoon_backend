@@ -144,9 +144,6 @@ class Common:
                 call['expert'] = self.get_expert_name(
                     ObjectId(call.get('expert'))) if call.get('expert') else 'Unknown'
 
-            # Rename 'Conversation Score' to 'conversationScore'
-            call['conversationScore'] = call.pop('Conversation Score', 0)
-
             # Handle call status and missed calls
             if call.get('failedReason') == 'call missed':
                 call['status'] = 'missed'

@@ -14,7 +14,7 @@ calls_exclusion_projection = {
     'recording_url': 1,
     'lastModifiedBy': 1,
     'user_requested': 1,
-    'Conversation Score': 1,
+    'conversationScore': 1,
 }
 
 
