@@ -1,6 +1,7 @@
 import json
 import dataclasses
 from flask import request
+from models.common import Common
 from flask_restful import Resource
 from models.get_slots.main import GetSlots
 from flask_jwt_extended import jwt_required
@@ -18,6 +19,7 @@ class ExpertService(Resource):
 
     def post(self) -> dict:
         input = json.loads(request.get_data())
+        input = Common.clean_dict(input, Expert)
         input = Expert(**input)
         output = UpsertExpert(input).process()
         output = dataclasses.asdict(output)
