@@ -144,15 +144,6 @@ class Common:
                 call['expert'] = self.get_expert_name(
                     ObjectId(call.get('expert'))) if call.get('expert') else 'Unknown'
 
-            # Rename 'Conversation Score' to 'conversationScore'
-            call['conversationScore'] = call.pop('Conversation Score', 0)
-
-            # Handle call status and missed calls
-            if call.get('failedReason') == 'call missed':
-                call['status'] = 'missed'
-            elif call.get('status') == 'successfull':
-                call['status'] = 'successful'
-
             # Handle call source
             user_requested = call.get('user_requested', None)
             call['source'] = self.get_call_source(user_requested)
@@ -216,10 +207,6 @@ class Common:
             {'callId': call['callId']}
         )
         if call_meta:
-            call['Topics'] = call_meta.get('Topics', [])
-            call['Summary'] = call_meta.get('Summary', '')
-            call['User Callback'] = call_meta.get('User Callback', '')
-            call['Score Breakup'] = call_meta.get('Score Breakup', {})
-            call['transcript_url'] = call_meta.get('transcript_url', '')
-            call['Saarthi Feedback'] = call_meta.get('Saarthi Feedback', '')
+            for key, value in call_meta.items():
+                call[key] = value
         return call

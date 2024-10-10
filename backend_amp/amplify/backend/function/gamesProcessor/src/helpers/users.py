@@ -16,7 +16,7 @@ class UsersHelper:
         projection = {"__v": 0, "lastModifiedBy": 0, "userGameStats": 0}
         if single_user:
             return projection
-        projection["Customer Persona"] = 0
+        projection["customerPersona"] = 0
         return projection
 
     def get_notifications(self, user_id_obj: ObjectId) -> list:
@@ -53,10 +53,10 @@ class UsersHelper:
             user["referrals"] = self.common.get_referrals(query)
             user["notifications"] = self.get_wa_history(user_id_obj)
 
-        if "Customer Persona" in user and isinstance(user["Customer Persona"], str):
+        if "customerPersona" in user and isinstance(user["customerPersona"], str):
             user["customerPersona"] = self.parse_user_persona(
-                user.pop("Customer Persona", ""))
-        user["customerPersona"] = user.get("Customer Persona", {})
+                user.get("customerPersona", ""))
+        user["customerPersona"] = user.get("customerPersona", {})
         return Common.jsonify(user)
 
     def parse_user_persona(self, text: str) -> dict:
@@ -77,8 +77,11 @@ class UsersHelper:
 
         return result
 
-    def get_user(self, phoneNumber: str) -> Union[dict, None]:
-        query = {"phoneNumber": phoneNumber}
+    def get_user(self, phoneNumber: str = None, user_id: str = None) -> Union[dict, None]:
+        if user_id:
+            query = {"_id": ObjectId(user_id)}
+        else:
+            query = {"phoneNumber": phoneNumber}
         user = self.users_collection.find_one(
             query, self.prep_projection(True))
         if user:

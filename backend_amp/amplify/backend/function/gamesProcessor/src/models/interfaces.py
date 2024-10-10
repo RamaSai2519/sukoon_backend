@@ -418,7 +418,13 @@ class ScheduledJobInput:
 class GetUsersInput:
     size: Optional[int] = None
     page: Optional[int] = None
+    user_id: Optional[str] = None
     phoneNumber: Optional[str] = None
+
+
+@dataclass
+class VerifyUserInput:
+    token: str
 
 
 @dataclass
@@ -521,6 +527,7 @@ class User:
     numberOfGames: Optional[int] = None
     numberOfCalls: Optional[int] = None
     birthDate: Optional[datetime] = None
+    customerPersona: Optional[dict] = None
     profileCompleted: Optional[bool] = None
 
 

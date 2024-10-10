@@ -8,12 +8,12 @@ from services.src.payment import CreatePaymentOrderService
 from services.src.call import CallWebhookService, CallService
 from services.src.admin import AdminFCMService, UploadService, LogsService
 from services.src.mark7 import UpdateExpertScoresService, InvokeMarkService
-from services.src.content import ChatService, PhotosService, ContentService
+from services.src.content import ChatService, PhotoService, ContentService
 from services.src.push_notification import PushNotificationService, FCMTokenService
 from services.src.authenticate import SendOTPService, ValidateOTPService, AdminAuthService
 from services.src.events import UpsertEventsService, ListEventsService, ListEventUsersService
-from services.src.expert import ExpertService, ApplicantService, SlotsService, TimingsService, CategoriesService
+from services.src.expert import ExpertService, ApplicantService, SlotsService, TimingService, CategoryService
 from services.src.scheduled_jobs import CreateScheduledJobsService, UpdateScheduledJobsService, AdminSchedulesService
-from services.src.user import CreateEventUserService, UserService, LeadsService, RemarksService, EngagementDataService, ClubService
+from services.src.user import CreateEventUserService, UserService, LeadsService, RemarkService, EngagementDataService, ClubService, VerifyUserService
 from services.src.whatsapp import WhatsappMessageService, WhatsappWebhookService, WhatsappWebhookEvent, WhatsappHistoryService, AdminWhatsappService
 from services.src.game import QuizGameService, CardGameService, ScoreUpdaterService, CalculateWinnerService, GameHistoryService, BytePlusTokenService

@@ -1,5 +1,6 @@
 import json
 from bson import ObjectId
+from typing import List, Dict
 from datetime import datetime
 from models.common import Common
 from helpers.base import call_graphql
@@ -36,12 +37,12 @@ class Compute:
 
         return response
 
-    def format_schedules(self, schedules):
+    def format_schedules(self, schedules: List[Dict]):
         for schedule in schedules:
-            request_meta = schedule.get('requestMeta', None)
+            request_meta: str = schedule.get('requestMeta', None)
             user_requested = schedule.get('user_requested', None)
             if request_meta is not None:
-                request_meta = json.loads(request_meta)
+                request_meta: dict = json.loads(request_meta)
 
                 expert_id = request_meta.get('expertId')
                 schedule['expert'] = self.common.get_expert_name(
@@ -50,14 +51,16 @@ class Compute:
                 user_id = request_meta.get('userId')
                 schedule['user'] = self.common.get_user_name(
                     ObjectId(user_id)) if user_id else None
+                schedule['initiatedBy'] = request_meta.get('initiatedBy', '')
             else:
                 schedule['user'] = None
                 schedule['expert'] = None
+                schedule['initiatedBy'] = None
             schedule['datetime'] = schedule.get('scheduledJobTime')
             schedule['source'] = Common.get_call_source(user_requested)
         return {'data': schedules}
 
-    def get_dynamo_schedules(self): 
+    def get_dynamo_schedules(self):
         query = '''
             query MyQuery($limit: Int = 1000, $nextToken: String) {
                 listScheduledJobs(limit: $limit, nextToken: $nextToken) {

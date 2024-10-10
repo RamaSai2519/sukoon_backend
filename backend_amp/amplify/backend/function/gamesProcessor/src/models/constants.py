@@ -14,13 +14,13 @@ calls_exclusion_projection = {
     'recording_url': 1,
     'lastModifiedBy': 1,
     'user_requested': 1,
-    'Conversation Score': 1,
+    'conversationScore': 1,
 }
 
 
 successful_calls_query = {
     'failedReason': '',
-    'status': 'successfull'
+    'status': 'successful'
 }
 
 application_json_header = {'Content-Type': 'application/json'}

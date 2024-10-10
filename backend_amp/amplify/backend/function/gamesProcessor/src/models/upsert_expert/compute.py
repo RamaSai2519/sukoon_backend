@@ -19,18 +19,41 @@ class Compute:
         self.categories_collection = get_categories_collection()
         self.expertlogs_collection = get_expertlogs_collection()
 
-    def prep_data(self, expert_data: dict, new_expert=True):
-        if new_expert:
-            expert_data["active"] = False
-            expert_data["isBusy"] = False
-            expert_data["categories"] = []
-            expert_data["type"] = "saarthi"
-            expert_data["isDeleted"] = False
-            expert_data["status"] = "offline"
-            expert_data["profileCompleted"] = True
-            expert_data["createdDate"] = datetime.now()
+    def set_defaults(self, expert_data: dict) -> dict:
+        expert_data["active"] = True
+        expert_data["isBusy"] = False
+        expert_data["categories"] = []
+        expert_data["type"] = "saarthi"
+        expert_data["isDeleted"] = False
+        expert_data["status"] = "offline"
+        expert_data["profileCompleted"] = False
+        expert_data["createdDate"] = datetime.now()
+        return expert_data
+
+    def merge_old_data(self, expert_data: dict, previous_data: dict) -> dict:
+        for key, value in previous_data.items():
+            if key not in expert_data or expert_data[key] is None or expert_data[key] == "":
+                expert_data[key] = value
+        return expert_data
+
+    def pop_immutable_fields(self, expert_data: dict) -> dict:
+        fields = ["_id", "phoneNumber", "createdDate"]
+        for field in fields:
+            expert_data.pop(field, None)
+        return expert_data
+
+    def prep_data(self, expert_data: dict, previous_data: dict = None) -> dict:
+        if previous_data:
+            expert_data = self.pop_immutable_fields(expert_data)
+            expert_data = self.merge_old_data(expert_data, previous_data)
+        else:
+            expert_data = self.set_defaults(expert_data)
         expert_data = self.populate_categories(expert_data)
-        expert_data.pop("_id", None)
+
+        if isinstance(expert_data.get('createdDate'), str):
+            expert_data['createdDate'] = Common.string_to_date(
+                expert_data, 'createdDate')
+
         expert_data = {k: v for k, v in expert_data.items() if v is not None}
         return expert_data
 
@@ -112,7 +135,7 @@ class Compute:
         prev_expert = self.validate_phoneNumber(expert_data["phoneNumber"])
 
         if prev_expert:
-            expert_data = self.prep_data(expert_data, new_expert=False)
+            expert_data = self.prep_data(expert_data, prev_expert)
             self.experts_collection.update_one(
                 {"phoneNumber": expert_data["phoneNumber"]},
                 {"$set": expert_data}

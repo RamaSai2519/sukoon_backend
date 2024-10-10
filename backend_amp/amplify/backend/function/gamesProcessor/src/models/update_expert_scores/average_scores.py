@@ -1,15 +1,16 @@
 import requests
+from typing import List, Dict
 from configs import CONFIG as config
 from db.calls import get_callsmeta_collection, get_calls_collection
 from models.interfaces import UpdateScoresInput as Input, AverageScores, AverageScoresObject
 
 
 class CalcAverageScores:
-    def __init__(self, input: Input, callsmetas: list) -> None:
+    def __init__(self, input: Input, callsmetas: List[Dict]) -> None:
         self.input = input
         self.calls = callsmetas
+        self.main_field = "conversationScore"
         self.self_url = config.URL + "/actions/expert"
-        self.main_field = "Conversation Score"
         self.calls_collection = get_calls_collection()
         self.callsmeta_collection = get_callsmeta_collection()
         self.score_fields = ["openingGreeting", "timeSplit", "userSentiment",
@@ -19,7 +20,7 @@ class CalcAverageScores:
         expert_scores = {}
         main_field = self.main_field
         for call in self.calls:
-            score_breakup: dict = call.get("Score Breakup", {})
+            score_breakup: dict = call.get("scoreBreakup", {})
 
             if not score_breakup or isinstance(score_breakup, str):
                 continue
@@ -34,7 +35,6 @@ class CalcAverageScores:
                 if main_field not in expert_scores:
                     expert_scores[main_field] = []
                 expert_scores[main_field].append(score)
-        print(expert_scores)
         return expert_scores
 
     def get_total_scores(self, expert_scores: dict) -> dict:
