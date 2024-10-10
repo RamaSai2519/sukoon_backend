@@ -55,34 +55,44 @@ class Compute:
         message = "Expert updated, " if response.modified_count > 0 else "Expert not updated, "
         return message
 
-    def determine_failed_reason(self) -> str:
-        call_transfer_status = self.input.call_transfer_status.lower()
+    def determine_status(self, call_transfer_status: str, call_status: str) -> str:
         if call_transfer_status == "missed":
-            return "user missed"
-        elif call_transfer_status == "not connected" or call_transfer_status == "none":
-            return "expert missed"
-        elif call_transfer_status == "did not process":
-            return "knowlarity missed"
-        return ""
-
-    def determine_status(self) -> str:
-        call_status = self.input.call_status.lower()
-        call_transfer_status = self.input.call_transfer_status.lower()
-        if call_transfer_status == "missed":
-            return "missed"
-        if call_status == "connected":
+            status = "missed"
+        elif call_status == "connected":
             if self.common.duration_str_to_seconds(self.input.call_duration) > 120:
-                return "successful"
+                status = "successful"
             else:
-                return "inadequate"
-        return "failed"
+                status = "inadequate"
+        else:
+            status = "failed"
+        return status
+
+    def determine_failed_reason(self, call_transfer_status: str) -> str:
+        if call_transfer_status == "missed":
+            failed_reason = "user missed"
+        elif call_transfer_status in ["not connected", "none"]:
+            failed_reason = "expert missed"
+        elif call_transfer_status == "did not process":
+            failed_reason = "knowlarity missed"
+        else:
+            failed_reason = ""
+        return failed_reason
+
+    def determine_failed_reason_and_status(self) -> tuple[str, str]:
+        call_transfer_status = self.input.call_transfer_status.lower()
+        call_status = self.input.call_status.lower()
+
+        status = self.determine_status(call_transfer_status, call_status)
+        failed_reason = self.determine_failed_reason(call_transfer_status)
+        return status, failed_reason
 
     def update_call(self, call: Call) -> str:
+        status, failed_reason = self.determine_failed_reason_and_status()
         filter = {"callId": call.callId}
         update = {
             "$set": {
-                "status": self.determine_status(),
-                "failedReason": self.determine_failed_reason(),
+                "status": status,
+                "failedReason": failed_reason,
                 "duration": self.input.call_duration,
                 "recording_url": self.input.callrecordingurl,
                 "transferDuration": self.input.call_transfer_duration
@@ -94,8 +104,7 @@ class Compute:
 
     def update_schedule(self, call: Call) -> str:
         if call.scheduledId:
-            status = self.determine_status()
-            reason = self.determine_failed_reason()
+            status, reason = self.determine_failed_reason_and_status()
             status_str = status + ', ' + reason
             update_scheduled_job_status(call.scheduledId, status_str)
             return "Scheduled job updated, "
