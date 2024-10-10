@@ -137,8 +137,9 @@ class Common:
 
     def format_calls(self, calls: List[Dict], req_names: bool = True) -> list:
         for call in calls:
-            # Fetch names if requested
             if req_names:
+                call['user_id'] = call.get('user')
+                call['expert_id'] = call.get('expert')
                 call['user'] = self.get_user_name(
                     ObjectId(call.get('user'))) if call.get('user') else 'Unknown'
                 call['expert'] = self.get_expert_name(
