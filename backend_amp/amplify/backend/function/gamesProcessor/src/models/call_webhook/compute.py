@@ -78,7 +78,7 @@ class Compute:
             failed_reason = ""
         return failed_reason
 
-    def determine_failed_reason_and_status(self) -> tuple[str, str]:
+    def determine_failed_reason_and_status(self) -> tuple:
         call_transfer_status = self.input.call_transfer_status.lower()
         call_status = self.input.call_status.lower()
 
