@@ -24,6 +24,7 @@ class Notifications:
             "token": expert.get("fcmToken", ""),
             "type_": self.input.type_,
             "sound": "longbell",
+            "priority" :"high",
             "user_id": str(user.get("_id", "")),
             "image_url": "https://sukoonunlimited.com/_next/image?url=%2Fplay.jpg&w=3840&q=75",
             "sarathi_id": str(expert.get("_id", ""))

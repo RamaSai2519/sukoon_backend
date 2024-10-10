@@ -394,7 +394,8 @@ class PushNotificationInput:
     user_id: str
     image_url: str
     sarathi_id: str
-    sound: Optional[str] = None 
+    priority: Optional[str] = field(default="high") 
+    sound: Optional[str] = field(default="longbell")  
     action: str = field(default_factory=lambda: "")
 
 
