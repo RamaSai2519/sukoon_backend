@@ -423,6 +423,11 @@ class GetUsersInput:
 
 
 @dataclass
+class VerifyUserInput:
+    token: str
+
+
+@dataclass
 class CreateNonRegisteredUserInput:
     mobile_number: str
 
