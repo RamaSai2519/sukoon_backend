@@ -424,7 +424,7 @@ class GetUsersInput:
 
 @dataclass
 class VerifyUserInput:
-    token: str
+    hash_code: str
 
 
 @dataclass
