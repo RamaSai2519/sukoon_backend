@@ -7,7 +7,7 @@ from models.common import Common
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
-        self.projection = {"createdAt": 0, "updatedAt": 0, "_id": 0}
+        self.projection = {"_id": 0}
         self.event_users_collection = get_event_users_collection()
 
     def prepare_query(self) -> dict:

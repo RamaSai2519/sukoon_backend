@@ -9,8 +9,7 @@ class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
         self.offset = int(int(input.page) - 1) * int(input.size)
-        self.projection = {"_id": 0, "createdAt": 0,
-                           "updatedAt": 0, "lastModifiedBy": 0}
+        self.projection = {"_id": 0, "lastModifiedBy": 0}
         self.events_collection = get_events_collection()
         self.event_categories = ["support_groups",
                                  "active_together", "wellness_connect"]
