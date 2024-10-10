@@ -110,7 +110,6 @@ class ClubService(Resource):
 
 class VerifyUserService(Resource):
 
-    @jwt_required()
     def get(self) -> dict:
         input_params = request.args
         input = VerifyUserInput(**input_params)
