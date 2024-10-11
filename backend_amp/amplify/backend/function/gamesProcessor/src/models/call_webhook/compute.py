@@ -149,12 +149,11 @@ class Compute:
 
         call = self.find_call(callId)
         duration = self.common.duration_str_to_seconds(call.duration)
-        if self.input.call_status == "Connected" and duration > 120:
+        if call.status == "successful" and duration > 120 and expert.type != "internal":
             feedback_message = self.send_feedback_message(call, expert, user)
 
         final_message = call_message + schedule_message + \
             user_message + expert_message + feedback_message
-        print(final_message, "final")
 
         return Output(
             output_details={},
