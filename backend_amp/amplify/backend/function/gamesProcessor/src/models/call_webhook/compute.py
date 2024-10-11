@@ -111,23 +111,24 @@ class Compute:
         return "Scheduled job not updated, "
 
     def send_feedback_message(self, call: Call, expert: Expert, user: User) -> str:
-        if not user or not expert:
-            return "Feedback message not sent"
-        payload = {
-            "template_name": "FEEDBACK_SURVEY",
-            "phone_number": user.phoneNumber,
-            "request_meta": json.dumps({
-                "sarathiId": str(expert._id),
-                "callId": call.callId,
-                "userId": str(user._id)
-            }),
-            "parameters": {"user_name": user.name, "sarathi_name": expert.name}
-        }
-        response = requests.request(
-            "POST", self.url, headers=application_json_header, data=json.dumps(payload))
-        print(response.text, "feedback")
-        message = "Feedback message sent" if response.status_code == 200 else "Feedback message not sent"
-        return message
+        duration = self.common.duration_str_to_seconds(call.duration)
+        if call.status == "successful" and duration > 120 and expert.type != "internal":
+            if not user or not expert:
+                return "Feedback message not sent"
+            payload = {
+                "template_name": "FEEDBACK_SURVEY",
+                "phone_number": user.phoneNumber,
+                "request_meta": json.dumps({
+                    "sarathiId": str(expert._id),
+                    "callId": call.callId,
+                    "userId": str(user._id)
+                }),
+                "parameters": {"user_name": user.name, "sarathi_name": expert.name}
+            }
+            response = requests.request(
+                "POST", self.url, headers=application_json_header, data=json.dumps(payload))
+            message = "Feedback message sent" if response.status_code == 200 else "Feedback message not sent"
+            return message
 
     def compute(self) -> Output:
         callId = self.input.call_uuid.replace("_0", "")
@@ -148,15 +149,13 @@ class Compute:
         feedback_message = "Feedback message not sent"
 
         call = self.find_call(callId)
-        duration = self.common.duration_str_to_seconds(call.duration)
-        if call.status == "successful" and duration > 120 and expert.type != "internal":
-            feedback_message = self.send_feedback_message(call, expert, user)
+        feedback_message = self.send_feedback_message(call, expert, user)
 
-        final_message = call_message + schedule_message + \
+        message = call_message + schedule_message + \
             user_message + expert_message + feedback_message
 
         return Output(
-            output_details={},
+            output_details=Common.jsonify(call.__dict__),
             output_status=OutputStatus.SUCCESS,
-            output_message=final_message
+            output_message=message
         )
