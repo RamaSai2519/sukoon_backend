@@ -6,21 +6,32 @@ from bson import ObjectId
 import base64
 
 
+class BarcodeDecoder:
+    def __init__(self, barcode_result: str) -> None:
+        self.barcode_result = barcode_result
+
+    def decode_barcode_to_user_id(self) -> str:
+        '''Decode the scanned barcode result to get the original user_id.'''
+        # Decode the base64 string back to bytes
+        # Adding '==' in case padding is missing
+        decoded_bytes = base64.urlsafe_b64decode(self.barcode_result + '==')
+
+        # Convert bytes back to the original string
+        user_id = decoded_bytes.decode('utf-8')
+
+        return user_id
+
+
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
         self.common = Common()
         self.prusers_collection = get_prusers_collection()
 
-    def int_to_string(self, n: int) -> str:
-        byte_length = (n.bit_length() + 7) // 8
-        encoded_bytes = n.to_bytes(byte_length, 'big')
-        decoded_string = base64.b64decode(encoded_bytes).decode('utf-8')
-        return decoded_string
-
     def compute(self) -> Output:
-        user_id = self.int_to_string(int(self.input.hash_code))
-        user = self.prusers_collection.find_one({"_id": ObjectId(user_id)})
+        # barcode_decoder = BarcodeDecoder(self.input.hash_code)
+        # user_id = barcode_decoder.decode_barcode_to_user_id()
+        user = self.prusers_collection.find_one({"_id": ObjectId(self.input.hash_code)})
         if not user:
             return Output(
                 output_details={},
