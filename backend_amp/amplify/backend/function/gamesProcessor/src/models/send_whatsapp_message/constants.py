@@ -745,6 +745,7 @@ class WhatsappNotificationTemplates:
                 "language": {"code": "en"},
             },
         }
+
         self.EVENT_WA_ADV_ACTIVE_USERS = {
             "template_name": "EVENT_WA_ADV_ACTIVE_USERS",
             "template": {
@@ -802,7 +803,7 @@ class WhatsappNotificationTemplates:
                     {
                         "type": "header",
                         "parameters": [
-                           
+
                         ],
                     },
                 ],
