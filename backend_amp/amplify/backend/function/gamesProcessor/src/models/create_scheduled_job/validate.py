@@ -34,7 +34,7 @@ class Validator:
         except ValueError:
             return False, "Job time is not a valid AWS time string"
 
-        if self.input.status != "PENDING":
-            return False, "Status must be 'PENDING'"
+        if self.input.status not in ['PENDING', 'WAPENDING']:
+            return False, "Invalid status"
 
         return True, ""
