@@ -8,9 +8,11 @@ from models.whatsapp_webhook_event.slack import WASlackNotifier
 from models.interfaces import WhatsappWebhookEventInput as Input, Output, WASlackNotifierInput
 from db.users import get_user_collection, get_user_webhook_messages_collection, get_user_notification_collection, get_user_whatsapp_feedback_collection, get_user_notification_collection
 
+FIX_CALL_BODY = ["Speak with same Sarathi"]
+SCHEDULE_REMINDER_BODY = ["I am available",
+                          "Reschedule the call", "Cancel the call"]
 COMMON_CALL_REPLY_BODY = ["Connect with Sarathis", "Connect with Experts",
                           "I want something else", "Speak to another Sarathi"]
-FIX_CALL_BODY = ["Speak with same Sarathi"]
 
 
 class Compute:
@@ -178,6 +180,9 @@ class Compute:
                     parameters = {}
                     self._send_whatsapp_message(
                         parameters, phone_number, template_name="FIX_TIME_REPLY")
+
+                elif body in SCHEDULE_REMINDER_BODY:
+                    print("Replied to Schedule Reminder:", body)
 
                 else:
                     parameters = {}

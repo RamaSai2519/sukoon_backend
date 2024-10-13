@@ -13,7 +13,7 @@ sys.path.insert(0, parent_dir)
 
 from models.call_job_handler import CallJobHandler
 
-def setup_factory():
+def setup_factory() -> ProcessorsFactory:
     processors_factory = ProcessorsFactory()
 
     processors_factory.register_processor("CALL", CallJobHandler)

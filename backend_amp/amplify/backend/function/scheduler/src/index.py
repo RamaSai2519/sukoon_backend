@@ -100,6 +100,3 @@ def handler(event, context):
         )
         return construct_response(statusCode=400, body={})
     return construct_response(statusCode=200, body={})
-
-
-# handler({"time": "2021-08-25T10:00:00Z"}, None)
