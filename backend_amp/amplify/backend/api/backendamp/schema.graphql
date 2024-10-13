@@ -71,6 +71,7 @@ enum ScheduledJobType {
 }
 
 enum ScheduledJobStatus {
+  WAPENDING
   PENDING 
   PICKED
   FAILED
