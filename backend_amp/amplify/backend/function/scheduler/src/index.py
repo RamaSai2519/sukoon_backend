@@ -19,7 +19,7 @@ def construct_response(statusCode, body):
     return response
 
 def get_lower_time_str(time_str: str) -> str:
-    time_format = "%Y-%m-%dT%H:%M:%S"
+    time_format = "%Y-%m-%dT%H:%M:%SZ"
     input_time = datetime.strptime(time_str, time_format)
 
     adjusted_time = input_time + timedelta(minutes=25)

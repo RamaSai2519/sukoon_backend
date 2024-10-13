@@ -18,14 +18,10 @@ class Validator:
         return True, ""
 
     def validate_mandatory_fields(self):
-        if not self.input.job_time:
-            return False, "Job time is mandatory"
-        if not self.input.job_type:
-            return False, "Job type is mandatory"
-        if not self.input.status:
-            return False, "Status is mandatory"
-        if not self.input.request_meta:
-            return False, "Request meta is mandatory"
+        mandatory_fields = ['job_time', 'job_type', 'status', 'request_meta']
+        for field in mandatory_fields:
+            if not getattr(self.input, field):
+                return False, f"{field.replace('_', ' ').capitalize()} is mandatory"
         return True, ""
 
     def validate_job_time_and_status(self):
