@@ -59,7 +59,7 @@ def call_graphql(query, params, message):
     try:
         formatted_query = re.sub(" +", "", str(query).replace("\n", ""))
         resp = execute_gql_call(client, query, params)
-        print(f"{message} executed with the following parameters: {params}. The query is {formatted_query}")
+        print(f"{message} executed with the following query {formatted_query}")
 
     except Exception as e:
         _q = formatted_query or query

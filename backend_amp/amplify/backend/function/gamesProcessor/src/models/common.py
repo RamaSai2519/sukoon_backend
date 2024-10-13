@@ -43,7 +43,11 @@ class Common:
     @staticmethod
     def string_to_date(doc: dict, field: str) -> date:
         if field in doc and doc[field] is not None and isinstance(doc[field], str):
-            doc[field] = datetime.strptime(doc[field], '%Y-%m-%dT%H:%M:%S.%fZ')
+            try:
+                doc[field] = datetime.strptime(
+                    doc[field], '%Y-%m-%dT%H:%M:%S.%fZ')
+            except ValueError:
+                doc[field] = datetime.now(pytz.utc)
         return doc[field]
 
     @staticmethod

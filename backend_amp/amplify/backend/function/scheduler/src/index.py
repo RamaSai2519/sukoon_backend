@@ -28,10 +28,10 @@ def get_lower_time_str(time_str: str) -> str:
     return lower_bound_str
 
 def handle_wa_notifications(time_str: str) -> None:
+    next_token = None
     status = "WAPENDING"
     lower_bound_str = get_lower_time_str(time_str)
     params = {"scheduledJobStatus": status, "ge": lower_bound_str, "le": time_str, "nextToken": next_token, "limit": 1000}
-    next_token = None
     all_jobs = []
     
     while True:
@@ -91,3 +91,6 @@ def handler(event, context):
         )
         return construct_response(statusCode=400, body={})
     return construct_response(statusCode=200, body={})
+
+
+handler({"time": "2021-08-25T10:00:00Z"}, None)
