@@ -60,7 +60,6 @@ api.add_resource(ValidateOTPService, '/actions/validate_otp')
 # Admin Routes
 # - Auth
 api.add_resource(AdminAuthService, '/actions/admin_auth')
-api.add_resource(VerifyUserService, '/actions/verify_user')
 # - Data
 api.add_resource(LogsService, '/actions/logs')
 api.add_resource(LeadsService, '/actions/leads')
