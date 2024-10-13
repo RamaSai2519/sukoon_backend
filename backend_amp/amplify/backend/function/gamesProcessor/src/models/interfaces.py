@@ -425,6 +425,11 @@ class GetUsersInput:
 
 
 @dataclass
+class VerifyUserInput:
+    hash_code: str
+
+
+@dataclass
 class CreateNonRegisteredUserInput:
     mobile_number: str
 

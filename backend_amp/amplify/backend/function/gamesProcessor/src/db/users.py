@@ -1,4 +1,4 @@
-from db.base import Database
+from db.base import Database, PrDatabase
 from pymongo.collection import Collection
 
 
@@ -48,6 +48,14 @@ def get_user_notification_collection() -> Collection:
     db = client["test"]
     users_game_play_collection = db["usernotifications"]
     return users_game_play_collection
+
+
+def get_prusers_collection() -> Collection:
+    client = PrDatabase().client
+
+    db = client["prerana"]
+    prusers_collection = db["users"]
+    return prusers_collection
 
 
 def get_user_webhook_messages_collection():

@@ -7,12 +7,13 @@ from models.get_leads.main import GetLeads
 from flask_jwt_extended import jwt_required
 from models.save_remark.main import SaveRemark
 from models.upsert_user.main import UpsertUser
+from models.verify_user.main import VerifyUser
 from models.get_club_interests.main import GetInterests
 from models.create_event_user.main import CreateEventUser
 from models.get_engagement_data.main import GetEngagementData
 from models.create_club_interest.main import CreateClubInterest
 from models.upsert_engagement_data.main import UpsertEngagementData
-from models.interfaces import User, GetUsersInput, EventUserInput, GetLeadsInput, SaveRemarkInput, GetEngagementDataInput, UpsertEngagementDataInput, CreateClubInterestInput, GetClubInterestsInput
+from models.interfaces import User, GetUsersInput, EventUserInput, GetLeadsInput, SaveRemarkInput, GetEngagementDataInput, UpsertEngagementDataInput, CreateClubInterestInput, GetClubInterestsInput, VerifyUserInput
 
 
 class UserService(Resource):
@@ -102,6 +103,17 @@ class ClubService(Resource):
         input = json.loads(request.get_data())
         input = CreateClubInterestInput(**input)
         output = CreateClubInterest(input).process()
+        output = dataclasses.asdict(output)
+
+        return output
+
+
+class VerifyUserService(Resource):
+
+    def get(self) -> dict:
+        input_params = request.args
+        input = VerifyUserInput(**input_params)
+        output = VerifyUser(input).process()
         output = dataclasses.asdict(output)
 
         return output
