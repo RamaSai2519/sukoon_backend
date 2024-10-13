@@ -83,7 +83,7 @@ def update_scheduled_job_status(job_id, status):
 def get_schedules_near_time(params: dict):
     query = """
         query MyQuery($scheduledJobStatus: ScheduledJobStatus!, $ge: String, $le: String, $nextToken: String, $limit: Int = 1000) {
-            scheduledJobsByStatusAndTime(scheduledJobStatus: $scheduledJobStatus, filter: {isDeleted: {ne: true}}, limit: $limit, scheduledJobTime: {ge: $ge, le: $le}, nextToken: $nextToken) {
+            scheduledJobsByStatusAndTime(scheduledJobStatus: $scheduledJobStatus, filter: {isDeleted: {ne: true}}, limit: $limit, scheduledJobTime: {between: [$ge, $le]}, nextToken: $nextToken) {
                 nextToken
                 items {
                     id

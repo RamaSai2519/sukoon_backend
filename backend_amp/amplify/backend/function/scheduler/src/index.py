@@ -19,22 +19,25 @@ def construct_response(statusCode, body):
     return response
 
 
-def get_lower_time_str(time_str: str) -> str:
+def get_lower_time_str(time_str: str) -> tuple:
     time_format = "%Y-%m-%dT%H:%M:%SZ"
     input_time = datetime.strptime(time_str, time_format)
 
-    adjusted_time = input_time + timedelta(minutes=25)
-    lower_bound_str = adjusted_time.strftime(time_format)
+    upper_bound = input_time + timedelta(minutes=30)
+    lower_bound = upper_bound - timedelta(minutes=5)
 
-    return lower_bound_str
+    lower_bound_str = lower_bound.strftime(time_format)
+    upper_bound_str = upper_bound.strftime(time_format)
+
+    return upper_bound_str, lower_bound_str
 
 
 def handle_wa_notifications(time_str: str) -> None:
     next_token = None
     status = "WAPENDING"
-    lower_bound_str = get_lower_time_str(time_str)
-    params = {"scheduledJobStatus": status, "ge": lower_bound_str,
-        "le": time_str, "nextToken": next_token, "limit": 1000}
+    upper_bound_str, lower_bound_str = get_lower_time_str(time_str)
+    params = {"scheduledJobStatus": status, "ge": lower_bound_str, "le": upper_bound_str,
+              "nextToken": next_token, "limit": 1000}
     all_jobs = []
     hit = 0
 
@@ -99,4 +102,4 @@ def handler(event, context):
     return construct_response(statusCode=200, body={})
 
 
-handler({"time": "2021-08-25T10:00:00Z"}, None)
+# handler({"time": "2021-08-25T10:00:00Z"}, None)
