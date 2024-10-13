@@ -1054,3 +1054,21 @@ class WhatsappNotificationTemplates:
                 ]
             }
         }
+
+        self.SCHEDULE_REMINDER = {
+            "template_name": "SCHEDULE_REMINDER",
+            "template": {
+                "name": "schedule_reminder",
+                "language": {"code": "en_us"},
+                "components": [
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"},
+                            {"type": "text", "text": "{expert_name}"},
+                            {"type": "text", "text": "{expert_name}"}
+                        ]
+                    }
+                ]
+            }
+        }

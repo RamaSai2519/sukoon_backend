@@ -6,11 +6,11 @@ from configs.local_config import LocalConfig
 
 ENV = os.environ.get('ENV')
 
-if ENV =='main':
+if ENV == 'main':
     CONFIG = MainConfig
-elif ENV == 'dev':
-    CONFIG = DevConfig
-    print(f'\n!!! Server started in DEV environment !!!\n')
 elif ENV == 'local':
     CONFIG = LocalConfig
-    print(f'\n!!! Server started in LOCAL environment !!!\n')    
+    print(f'\n!!! Server started in LOCAL environment !!!\n')
+else:
+    CONFIG = DevConfig
+    print(f'\n!!! Server started in DEV environment !!!\n')

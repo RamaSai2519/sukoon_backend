@@ -1,14 +1,11 @@
 import json
 from bson import ObjectId
 from typing import List, Dict
-from datetime import datetime
 from models.common import Common
 from helpers.base import call_graphql
 from models.constants import OutputStatus
 from db.calls import get_schedules_collection
-from helpers.schedule import ScheduleManager as sm
-from models.admin_schedule.Schedule import Schedule
-from models.interfaces import CreateScheduleInput as Input, Output
+from models.interfaces import GetScheduledJobsInput as Input, Output
 
 
 class Compute:
@@ -16,26 +13,6 @@ class Compute:
         self.input = input
         self.common = Common()
         self.collection = get_schedules_collection()
-
-    def prep_schedule(self) -> Schedule:
-        schedule = Schedule(
-            expert_id=self.input.expert,
-            user_id=self.input.user,
-            time=self.input.datetime,
-            duration=self.input.duration,
-            type=self.input.type
-        )
-        return schedule
-
-    def schedule_call_job(self, document, schedule: Schedule) -> str:
-        time = datetime.strptime(schedule.time, '%Y-%m-%dT%H:%M:%S.%fZ')
-        record = self.collection.find_one(document, {'_id': 1})
-        record_id = str(record['_id']) if record else ''
-
-        response = sm.scheduleCall(
-            time, schedule.expert_id, schedule.user_id, record_id)
-
-        return response
 
     def format_schedules(self, schedules: List[Dict]):
         for schedule in schedules:
@@ -52,10 +29,7 @@ class Compute:
                 schedule['user'] = self.common.get_user_name(
                     ObjectId(user_id)) if user_id else None
                 schedule['initiatedBy'] = request_meta.get('initiatedBy', '')
-            else:
-                schedule['user'] = None
-                schedule['expert'] = None
-                schedule['initiatedBy'] = None
+
             schedule['datetime'] = schedule.get('scheduledJobTime')
             schedule['source'] = Common.get_call_source(user_requested)
         return {'data': schedules}
@@ -101,16 +75,7 @@ class Compute:
         return formatted_response
 
     def compute(self) -> Output:
-        if self.input.action == 'create':
-            schedule = self.prep_schedule()
-            document = schedule.to_document()
-            self.collection.insert_one(document)
-            response = self.schedule_call_job(document, schedule)
-        elif self.input.action == 'delete':
-            response = 'Schedule deleted successfully'
-            sm.cancelCall(self.input.scheduleId)
-        elif self.input.action == 'get':
-            response = self.get_dynamo_schedules()
+        response = self.get_dynamo_schedules()
 
         return Output(
             output_details=response,

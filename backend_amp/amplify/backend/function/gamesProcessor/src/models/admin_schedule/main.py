@@ -2,7 +2,8 @@ import traceback
 from models.constants import OutputStatus
 from models.admin_schedule.compute import Compute
 from models.admin_schedule.validate import Validator
-from models.interfaces import CreateScheduleInput as Input, Output
+from models.interfaces import GetScheduledJobsInput as Input, Output
+
 
 class AdminSchedules:
     def __init__(self, input: Input) -> None:
@@ -30,7 +31,7 @@ class AdminSchedules:
             )
 
         return output
-    
+
     def _validate(self, input: Input):
         validation_obj = Validator(input)
         validation_result, error_message = validation_obj.validate_input()

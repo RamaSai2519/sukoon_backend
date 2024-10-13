@@ -1,18 +1,19 @@
-import requests
 import json
+import requests
+from configs import CONFIG as config
 from models.iprocessor import IProcessor
 from queries.scheduled_job import update_scheduled_job_status
 
 
 class CallJobHandler(IProcessor):
-    def __init__(self, job):
+    def __init__(self, job: dict):
+        self.url = config.URL
         self.job_id = job.get('id', '')
         self.user_requested = job.get('user_requested', None)
         self.request_meta = json.loads(job.get('requestMeta')) or {}
 
     def invoke_call_backend_api(self):
-        url = 'https://6x4j0qxbmk.execute-api.ap-south-1.amazonaws.com/main/actions/call'
-
+        url = self.url + '/actions/call'
         headers = {'Content-Type': 'application/json'}
 
         payload = json.dumps({
