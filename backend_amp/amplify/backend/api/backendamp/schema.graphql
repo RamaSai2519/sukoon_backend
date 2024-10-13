@@ -1,322 +1,68 @@
-schema {
-  query: Query
-  mutation: Mutation
-  subscription: Subscription
-}
-
-type Event {
-  createdAt: AWSDateTime!
-  description: String
-  eventEndTime: AWSDateTime
-  eventStartTime: AWSDateTime
-  eventType: EventType
-  guestSpeaker: String
-  hostedBy: String
+type User @model @auth(rules: [{ allow: public }]) {
   id: ID!
-  imageUrl: [String]
-  isDeleted: Boolean
-  isPremiumUserOnly: Boolean
-  mainTitle: String
-  maxVisitorsAllowed: Int
-  meetingLink: String
-  prizeMoney: Int
-  registrationAllowedTillTime: AWSDateTime
-  repeat: String
-  slug: String
-  subTitle: String
-  updatedAt: AWSDateTime!
-}
-
-type ModelEventConnection {
-  items: [Event]!
-  nextToken: String
-}
-
-type ModelMultipleChoiceQuestionsConnection {
-  items: [MultipleChoiceQuestions]!
-  nextToken: String
-}
-
-type ModelScheduledJobsConnection {
-  items: [ScheduledJobs]!
-  nextToken: String
-}
-
-type ModelUserConnection {
-  items: [User]!
-  nextToken: String
-}
-
-type ModelUserConversationsConnection {
-  items: [UserConversations]!
-  nextToken: String
-}
-
-type ModelUserNotificationConnection {
-  items: [UserNotification]!
-  nextToken: String
-}
-
-type ModelUserReceivedMessagesConnection {
-  items: [UserReceivedMessages]!
-  nextToken: String
-}
-
-type ModelUserWhatsappFeedbackConnection {
-  items: [UserWhatsappFeedback]!
-  nextToken: String
-}
-
-type MultipleChoiceQuestions {
-  createdAt: AWSDateTime!
-  game: Game
-  id: ID!
-  level: Int
-  options: [String!]!
-  question: String
-  questionNumber: Int
-  updatedAt: AWSDateTime!
-}
-
-type Mutation {
-  createEvent(condition: ModelEventConditionInput, input: CreateEventInput!): Event
-  createMultipleChoiceQuestions(condition: ModelMultipleChoiceQuestionsConditionInput, input: CreateMultipleChoiceQuestionsInput!): MultipleChoiceQuestions
-  createScheduledJobs(condition: ModelScheduledJobsConditionInput, input: CreateScheduledJobsInput!): ScheduledJobs
-  createUser(condition: ModelUserConditionInput, input: CreateUserInput!): User
-  createUserConversations(condition: ModelUserConversationsConditionInput, input: CreateUserConversationsInput!): UserConversations
-  createUserNotification(condition: ModelUserNotificationConditionInput, input: CreateUserNotificationInput!): UserNotification
-  createUserReceivedMessages(condition: ModelUserReceivedMessagesConditionInput, input: CreateUserReceivedMessagesInput!): UserReceivedMessages
-  createUserWhatsappFeedback(condition: ModelUserWhatsappFeedbackConditionInput, input: CreateUserWhatsappFeedbackInput!): UserWhatsappFeedback
-  deleteEvent(condition: ModelEventConditionInput, input: DeleteEventInput!): Event
-  deleteMultipleChoiceQuestions(condition: ModelMultipleChoiceQuestionsConditionInput, input: DeleteMultipleChoiceQuestionsInput!): MultipleChoiceQuestions
-  deleteScheduledJobs(condition: ModelScheduledJobsConditionInput, input: DeleteScheduledJobsInput!): ScheduledJobs
-  deleteUser(condition: ModelUserConditionInput, input: DeleteUserInput!): User
-  deleteUserConversations(condition: ModelUserConversationsConditionInput, input: DeleteUserConversationsInput!): UserConversations
-  deleteUserNotification(condition: ModelUserNotificationConditionInput, input: DeleteUserNotificationInput!): UserNotification
-  deleteUserReceivedMessages(condition: ModelUserReceivedMessagesConditionInput, input: DeleteUserReceivedMessagesInput!): UserReceivedMessages
-  deleteUserWhatsappFeedback(condition: ModelUserWhatsappFeedbackConditionInput, input: DeleteUserWhatsappFeedbackInput!): UserWhatsappFeedback
-  updateEvent(condition: ModelEventConditionInput, input: UpdateEventInput!): Event
-  updateMultipleChoiceQuestions(condition: ModelMultipleChoiceQuestionsConditionInput, input: UpdateMultipleChoiceQuestionsInput!): MultipleChoiceQuestions
-  updateScheduledJobs(condition: ModelScheduledJobsConditionInput, input: UpdateScheduledJobsInput!): ScheduledJobs
-  updateUser(condition: ModelUserConditionInput, input: UpdateUserInput!): User
-  updateUserConversations(condition: ModelUserConversationsConditionInput, input: UpdateUserConversationsInput!): UserConversations
-  updateUserNotification(condition: ModelUserNotificationConditionInput, input: UpdateUserNotificationInput!): UserNotification
-  updateUserReceivedMessages(condition: ModelUserReceivedMessagesConditionInput, input: UpdateUserReceivedMessagesInput!): UserReceivedMessages
-  updateUserWhatsappFeedback(condition: ModelUserWhatsappFeedbackConditionInput, input: UpdateUserWhatsappFeedbackInput!): UserWhatsappFeedback
-}
-
-type Query {
-  getEvent(id: ID!): Event
-  getMultipleChoiceQuestions(id: ID!): MultipleChoiceQuestions
-  getScheduledJobs(id: ID!): ScheduledJobs
-  getUser(id: ID!): User
-  getUserConversations(id: ID!): UserConversations
-  getUserNotification(id: ID!): UserNotification
-  getUserReceivedMessages(id: ID!): UserReceivedMessages
-  getUserWhatsappFeedback(id: ID!): UserWhatsappFeedback
-  listEvents(filter: ModelEventFilterInput, limit: Int, nextToken: String): ModelEventConnection
-  listMultipleChoiceQuestions(filter: ModelMultipleChoiceQuestionsFilterInput, limit: Int, nextToken: String): ModelMultipleChoiceQuestionsConnection
-  listScheduledJobs(filter: ModelScheduledJobsFilterInput, limit: Int, nextToken: String): ModelScheduledJobsConnection
-  listUserConversations(filter: ModelUserConversationsFilterInput, limit: Int, nextToken: String): ModelUserConversationsConnection
-  listUserNotifications(filter: ModelUserNotificationFilterInput, limit: Int, nextToken: String): ModelUserNotificationConnection
-  listUserReceivedMessages(filter: ModelUserReceivedMessagesFilterInput, limit: Int, nextToken: String): ModelUserReceivedMessagesConnection
-  listUserWhatsappFeedbacks(filter: ModelUserWhatsappFeedbackFilterInput, limit: Int, nextToken: String): ModelUserWhatsappFeedbackConnection
-  listUsers(filter: ModelUserFilterInput, limit: Int, nextToken: String): ModelUserConnection
-  scheduledJobsByStatusAndTime(filter: ModelScheduledJobsFilterInput, limit: Int, nextToken: String, scheduledJobStatus: ScheduledJobStatus!, scheduledJobTime: ModelStringKeyConditionInput, sortDirection: ModelSortDirection): ModelScheduledJobsConnection
-  userByMobileNumber(filter: ModelUserFilterInput, limit: Int, mobileNumber: String!, nextToken: String, sortDirection: ModelSortDirection): ModelUserConnection
-  userConversationsBySarathiId(filter: ModelUserConversationsFilterInput, limit: Int, nextToken: String, sarathiId: ID!, sortDirection: ModelSortDirection): ModelUserConversationsConnection
-  userConversationsByUserId(filter: ModelUserConversationsFilterInput, limit: Int, nextToken: String, sortDirection: ModelSortDirection, userId: ID!): ModelUserConversationsConnection
-  userNotificationsByUserId(filter: ModelUserNotificationFilterInput, limit: Int, nextToken: String, sortDirection: ModelSortDirection, userId: ID!): ModelUserNotificationConnection
-}
-
-type ScheduledJobs {
-  createdAt: AWSDateTime!
-  id: ID!
-  isDeleted: Boolean
-  requestMeta: String
-  scheduledJobStatus: ScheduledJobStatus
-  scheduledJobTime: AWSDateTime
-  scheduledJobType: ScheduledJobType
-  status: String
-  updatedAt: AWSDateTime!
-  user_requested: Boolean
-}
-
-type Subscription {
-  onCreateEvent(filter: ModelSubscriptionEventFilterInput): Event @aws_subscribe(mutations : ["createEvent"])
-  onCreateMultipleChoiceQuestions(filter: ModelSubscriptionMultipleChoiceQuestionsFilterInput): MultipleChoiceQuestions @aws_subscribe(mutations : ["createMultipleChoiceQuestions"])
-  onCreateScheduledJobs(filter: ModelSubscriptionScheduledJobsFilterInput): ScheduledJobs @aws_subscribe(mutations : ["createScheduledJobs"])
-  onCreateUser(filter: ModelSubscriptionUserFilterInput): User @aws_subscribe(mutations : ["createUser"])
-  onCreateUserConversations(filter: ModelSubscriptionUserConversationsFilterInput): UserConversations @aws_subscribe(mutations : ["createUserConversations"])
-  onCreateUserNotification(filter: ModelSubscriptionUserNotificationFilterInput): UserNotification @aws_subscribe(mutations : ["createUserNotification"])
-  onCreateUserReceivedMessages(filter: ModelSubscriptionUserReceivedMessagesFilterInput): UserReceivedMessages @aws_subscribe(mutations : ["createUserReceivedMessages"])
-  onCreateUserWhatsappFeedback(filter: ModelSubscriptionUserWhatsappFeedbackFilterInput): UserWhatsappFeedback @aws_subscribe(mutations : ["createUserWhatsappFeedback"])
-  onDeleteEvent(filter: ModelSubscriptionEventFilterInput): Event @aws_subscribe(mutations : ["deleteEvent"])
-  onDeleteMultipleChoiceQuestions(filter: ModelSubscriptionMultipleChoiceQuestionsFilterInput): MultipleChoiceQuestions @aws_subscribe(mutations : ["deleteMultipleChoiceQuestions"])
-  onDeleteScheduledJobs(filter: ModelSubscriptionScheduledJobsFilterInput): ScheduledJobs @aws_subscribe(mutations : ["deleteScheduledJobs"])
-  onDeleteUser(filter: ModelSubscriptionUserFilterInput): User @aws_subscribe(mutations : ["deleteUser"])
-  onDeleteUserConversations(filter: ModelSubscriptionUserConversationsFilterInput): UserConversations @aws_subscribe(mutations : ["deleteUserConversations"])
-  onDeleteUserNotification(filter: ModelSubscriptionUserNotificationFilterInput): UserNotification @aws_subscribe(mutations : ["deleteUserNotification"])
-  onDeleteUserReceivedMessages(filter: ModelSubscriptionUserReceivedMessagesFilterInput): UserReceivedMessages @aws_subscribe(mutations : ["deleteUserReceivedMessages"])
-  onDeleteUserWhatsappFeedback(filter: ModelSubscriptionUserWhatsappFeedbackFilterInput): UserWhatsappFeedback @aws_subscribe(mutations : ["deleteUserWhatsappFeedback"])
-  onUpdateEvent(filter: ModelSubscriptionEventFilterInput): Event @aws_subscribe(mutations : ["updateEvent"])
-  onUpdateMultipleChoiceQuestions(filter: ModelSubscriptionMultipleChoiceQuestionsFilterInput): MultipleChoiceQuestions @aws_subscribe(mutations : ["updateMultipleChoiceQuestions"])
-  onUpdateScheduledJobs(filter: ModelSubscriptionScheduledJobsFilterInput): ScheduledJobs @aws_subscribe(mutations : ["updateScheduledJobs"])
-  onUpdateUser(filter: ModelSubscriptionUserFilterInput): User @aws_subscribe(mutations : ["updateUser"])
-  onUpdateUserConversations(filter: ModelSubscriptionUserConversationsFilterInput): UserConversations @aws_subscribe(mutations : ["updateUserConversations"])
-  onUpdateUserNotification(filter: ModelSubscriptionUserNotificationFilterInput): UserNotification @aws_subscribe(mutations : ["updateUserNotification"])
-  onUpdateUserReceivedMessages(filter: ModelSubscriptionUserReceivedMessagesFilterInput): UserReceivedMessages @aws_subscribe(mutations : ["updateUserReceivedMessages"])
-  onUpdateUserWhatsappFeedback(filter: ModelSubscriptionUserWhatsappFeedbackFilterInput): UserWhatsappFeedback @aws_subscribe(mutations : ["updateUserWhatsappFeedback"])
-}
-
-type User {
-  createdAt: AWSDateTime!
-  dateOfBirth: AWSDate
   firstName: String
-  gender: Gender
-  id: ID!
-  interestedInClubSukoon: Boolean
-  isDeleted: Boolean
   lastName: String
-  mobileNumber: String!
+  gender: Gender
   status: UserStatus
-  updatedAt: AWSDateTime!
-  userConversationsAsSarathi(filter: ModelUserConversationsFilterInput, limit: Int, nextToken: String, sortDirection: ModelSortDirection): ModelUserConversationsConnection
-  userConversationsAsUser(filter: ModelUserConversationsFilterInput, limit: Int, nextToken: String, sortDirection: ModelSortDirection): ModelUserConversationsConnection
-  userNotifications(filter: ModelUserNotificationFilterInput, limit: Int, nextToken: String, sortDirection: ModelSortDirection): ModelUserNotificationConnection
-}
-
-type UserConversations {
-  conversationPlatform: ConversationPlatform
-  createdAt: AWSDateTime!
-  duration: AWSTime
-  externalConversationId: String
-  id: ID!
-  initiatedTime: AWSDateTime
-  recordingURL: String
-  requestMeta: String
-  sarathiId: ID!
-  status: ConversationStatus
-  transferDuration: AWSTime
-  updatedAt: AWSDateTime!
-  userId: ID!
-}
-
-type UserNotification {
-  createdAt: AWSDateTime!
-  externalMessageId: String
-  id: ID!
-  notificationJobType: NotificationJobType
-  notificationType: NotificationType
-  requestMeta: String
-  status: NotificationStatus
-  updatedAt: AWSDateTime!
-  userId: ID!
-}
-
-type UserReceivedMessages {
-  createdAt: AWSDateTime!
-  id: ID!
-  message: String
-  source: ReceivedMessageSource
-  updatedAt: AWSDateTime!
-  userId: ID!
-}
-
-type UserWhatsappFeedback {
-  createdAt: AWSDateTime!
-  eventId: String
-  feedback: String
-  feedbackEvent: FeedbackEvent
-  id: ID!
-  sarathiId: ID!
-  updatedAt: AWSDateTime!
-  userId: ID!
-}
-
-enum ConversationPlatform {
-  CALL
-  GAMES
-}
-
-enum ConversationStatus {
-  FAILED
-  SUCCESSFUL
-}
-
-enum EventRepeat {
-  DAILY
-  MONTHLY
-  WEEKLY
-}
-
-enum EventType {
-  CHALLENGE
-  SESSION
-}
-
-enum FeedbackEvent {
-  CALL
-  GAME
-}
-
-enum Game {
-  CARD
-  QUIZ
+  isDeleted: Boolean
+  interestedInClubSukoon: Boolean
+  dateOfBirth: AWSDate
+  mobileNumber: String! @index(name: "userByMobileNumberIdx", queryField: "userByMobileNumber") 
+  userNotifications: [UserNotification] @hasMany(indexName: "userNotificationsByUserIdx", fields: ["id"])
+  userConversationsAsUser: [UserConversations] @hasMany(indexName: "userConversationsByUserIdx", fields: ["id"])
+  userConversationsAsSarathi: [UserConversations] @hasMany(indexName: "userConversationsBySarathiIdx", fields: ["id"])
 }
 
 enum Gender {
-  FEMALE
   MALE
+  FEMALE
 }
 
-enum ModelAttributeTypes {
-  _null
-  binary
-  binarySet
-  bool
-  list
-  map
-  number
-  numberSet
-  string
-  stringSet
+enum UserStatus {
+  REGISTERED
+  NON_REGISTERED
 }
 
-enum ModelSortDirection {
-  ASC
-  DESC
-}
-
-enum NotificationJobType {
-  EMAIL
-  PUSH
-  SMS
-  WHATSAPP
-}
-
-enum NotificationStatus {
-  FAILURE
-  SUCCESS
+type UserNotification @model @auth(rules: [{ allow: public }]) 
+{
+  id: ID!
+  userId: ID! @index(name: "userNotificationsByUserIdx", queryField: "userNotificationsByUserId") 
+  requestMeta: String
+  externalMessageId: String
+  status: NotificationStatus
+  notificationType: NotificationType
+  notificationJobType: NotificationJobType
 }
 
 enum NotificationType {
-  EMAIL
-  PUSH
   SMS
   WHATSAPP
+  PUSH
+  EMAIL
 }
 
-enum ReceivedMessageSource {
+enum NotificationJobType {
+  SMS
   WHATSAPP
+  PUSH
+  EMAIL
 }
 
-enum ScheduledJobStatus {
-  COMPLETED
-  FAILED
-  PENDING
-  PICKED
-  WAPENDING
+enum NotificationStatus {
+  SUCCESS
+  FAILURE
+}
+
+type ScheduledJobs @model @auth(rules: [{ allow: public }]) 
+{
+  id: ID!
+  scheduledJobType: ScheduledJobType
+  scheduledJobTime: AWSDateTime
+  user_requested: Boolean
+  status: String
+  isDeleted: Boolean
+  scheduledJobStatus: ScheduledJobStatus @index(name: "scheduledJobsByStatusAndTimeIdx", sortKeyFields: ["scheduledJobTime"]   queryField: "scheduledJobsByStatusAndTime") 
+  requestMeta: String 
 }
 
 enum ScheduledJobType {
@@ -324,815 +70,111 @@ enum ScheduledJobType {
   NOTIFICATION
 }
 
-enum UserStatus {
-  NON_REGISTERED
-  REGISTERED
+enum ScheduledJobStatus {
+  WAPENDING
+  PENDING 
+  PICKED
+  FAILED
+  COMPLETED
 }
 
-input CreateEventInput {
-  description: String
-  eventEndTime: AWSDateTime
-  eventStartTime: AWSDateTime
-  eventType: EventType
-  guestSpeaker: String
-  hostedBy: String
-  id: ID
-  imageUrl: [String]
-  isDeleted: Boolean
-  isPremiumUserOnly: Boolean
-  mainTitle: String
-  maxVisitorsAllowed: Int
-  meetingLink: String
-  prizeMoney: Int
-  registrationAllowedTillTime: AWSDateTime
-  repeat: String
-  slug: String
-  subTitle: String
+type UserConversations @model @auth(rules: [{ allow: public }]) 
+{
+  id: ID!
+  userId: ID! @index(name: "userConversationsByUserIdx", queryField: "userConversationsByUserId") 
+  sarathiId: ID! @index(name: "userConversationsBySarathiIdx", queryField: "userConversationsBySarathiId") 
+  initiatedTime: AWSDateTime
+  duration: AWSTime
+  transferDuration: AWSTime
+  recordingURL: String
+  requestMeta: String
+  externalConversationId: String
+  status: ConversationStatus
+  conversationPlatform: ConversationPlatform
 }
 
-input CreateMultipleChoiceQuestionsInput {
-  game: Game
-  id: ID
-  level: Int
+enum ConversationStatus {
+  FAILED
+  SUCCESSFUL
+}
+
+enum ConversationPlatform {
+  CALL
+  GAMES
+}
+
+type UserWhatsappFeedback @model @auth(rules: [{ allow: public }]) 
+{
+  id: ID!
+  userId: ID! 
+  sarathiId: ID!
+  eventId: String
+  feedback: String
+  feedbackEvent: FeedbackEvent
+}
+
+enum FeedbackEvent {
+  CALL
+  GAME
+}
+
+type UserReceivedMessages @model @auth(rules: [{ allow: public }]) 
+{
+  id: ID!
+  userId: ID! 
+  message: String
+  source: ReceivedMessageSource
+}
+
+enum ReceivedMessageSource {
+  WHATSAPP
+}
+
+type MultipleChoiceQuestions @model @auth(rules: [{ allow: public }]) 
+{
+  id: ID!
+  question: String
   options: [String!]!
-  question: String
+  level: Int
   questionNumber: Int
+  game: Game
 }
 
-input CreateScheduledJobsInput {
-  id: ID
-  isDeleted: Boolean
-  requestMeta: String
-  scheduledJobStatus: ScheduledJobStatus
-  scheduledJobTime: AWSDateTime
-  scheduledJobType: ScheduledJobType
-  status: String
-  user_requested: Boolean
+enum Game {
+  QUIZ
+  CARD
 }
 
-input CreateUserConversationsInput {
-  conversationPlatform: ConversationPlatform
-  duration: AWSTime
-  externalConversationId: String
-  id: ID
-  initiatedTime: AWSDateTime
-  recordingURL: String
-  requestMeta: String
-  sarathiId: ID!
-  status: ConversationStatus
-  transferDuration: AWSTime
-  userId: ID!
-}
 
-input CreateUserInput {
-  dateOfBirth: AWSDate
-  firstName: String
-  gender: Gender
-  id: ID
-  interestedInClubSukoon: Boolean
-  isDeleted: Boolean
-  lastName: String
-  mobileNumber: String!
-  status: UserStatus
-}
-
-input CreateUserNotificationInput {
-  externalMessageId: String
-  id: ID
-  notificationJobType: NotificationJobType
-  notificationType: NotificationType
-  requestMeta: String
-  status: NotificationStatus
-  userId: ID!
-}
-
-input CreateUserReceivedMessagesInput {
-  id: ID
-  message: String
-  source: ReceivedMessageSource
-  userId: ID!
-}
-
-input CreateUserWhatsappFeedbackInput {
-  eventId: String
-  feedback: String
-  feedbackEvent: FeedbackEvent
-  id: ID
-  sarathiId: ID!
-  userId: ID!
-}
-
-input DeleteEventInput {
+type Event @model @auth(rules: [{ allow: public }]) {
   id: ID!
-}
-
-input DeleteMultipleChoiceQuestionsInput {
-  id: ID!
-}
-
-input DeleteScheduledJobsInput {
-  id: ID!
-}
-
-input DeleteUserConversationsInput {
-  id: ID!
-}
-
-input DeleteUserInput {
-  id: ID!
-}
-
-input DeleteUserNotificationInput {
-  id: ID!
-}
-
-input DeleteUserReceivedMessagesInput {
-  id: ID!
-}
-
-input DeleteUserWhatsappFeedbackInput {
-  id: ID!
-}
-
-input ModelBooleanInput {
-  attributeExists: Boolean
-  attributeType: ModelAttributeTypes
-  eq: Boolean
-  ne: Boolean
-}
-
-input ModelConversationPlatformInput {
-  eq: ConversationPlatform
-  ne: ConversationPlatform
-}
-
-input ModelConversationStatusInput {
-  eq: ConversationStatus
-  ne: ConversationStatus
-}
-
-input ModelEventConditionInput {
-  and: [ModelEventConditionInput]
-  createdAt: ModelStringInput
-  description: ModelStringInput
-  eventEndTime: ModelStringInput
-  eventStartTime: ModelStringInput
-  eventType: ModelEventTypeInput
-  guestSpeaker: ModelStringInput
-  hostedBy: ModelStringInput
-  imageUrl: ModelStringInput
-  isDeleted: ModelBooleanInput
-  isPremiumUserOnly: ModelBooleanInput
-  mainTitle: ModelStringInput
-  maxVisitorsAllowed: ModelIntInput
-  meetingLink: ModelStringInput
-  not: ModelEventConditionInput
-  or: [ModelEventConditionInput]
-  prizeMoney: ModelIntInput
-  registrationAllowedTillTime: ModelStringInput
-  repeat: ModelStringInput
-  slug: ModelStringInput
-  subTitle: ModelStringInput
-  updatedAt: ModelStringInput
-}
-
-input ModelEventFilterInput {
-  and: [ModelEventFilterInput]
-  createdAt: ModelStringInput
-  description: ModelStringInput
-  eventEndTime: ModelStringInput
-  eventStartTime: ModelStringInput
-  eventType: ModelEventTypeInput
-  guestSpeaker: ModelStringInput
-  hostedBy: ModelStringInput
-  id: ModelIDInput
-  imageUrl: ModelStringInput
-  isDeleted: ModelBooleanInput
-  isPremiumUserOnly: ModelBooleanInput
-  mainTitle: ModelStringInput
-  maxVisitorsAllowed: ModelIntInput
-  meetingLink: ModelStringInput
-  not: ModelEventFilterInput
-  or: [ModelEventFilterInput]
-  prizeMoney: ModelIntInput
-  registrationAllowedTillTime: ModelStringInput
-  repeat: ModelStringInput
-  slug: ModelStringInput
-  subTitle: ModelStringInput
-  updatedAt: ModelStringInput
-}
-
-input ModelEventTypeInput {
-  eq: EventType
-  ne: EventType
-}
-
-input ModelFeedbackEventInput {
-  eq: FeedbackEvent
-  ne: FeedbackEvent
-}
-
-input ModelFloatInput {
-  attributeExists: Boolean
-  attributeType: ModelAttributeTypes
-  between: [Float]
-  eq: Float
-  ge: Float
-  gt: Float
-  le: Float
-  lt: Float
-  ne: Float
-}
-
-input ModelGameInput {
-  eq: Game
-  ne: Game
-}
-
-input ModelGenderInput {
-  eq: Gender
-  ne: Gender
-}
-
-input ModelIDInput {
-  attributeExists: Boolean
-  attributeType: ModelAttributeTypes
-  beginsWith: ID
-  between: [ID]
-  contains: ID
-  eq: ID
-  ge: ID
-  gt: ID
-  le: ID
-  lt: ID
-  ne: ID
-  notContains: ID
-  size: ModelSizeInput
-}
-
-input ModelIntInput {
-  attributeExists: Boolean
-  attributeType: ModelAttributeTypes
-  between: [Int]
-  eq: Int
-  ge: Int
-  gt: Int
-  le: Int
-  lt: Int
-  ne: Int
-}
-
-input ModelMultipleChoiceQuestionsConditionInput {
-  and: [ModelMultipleChoiceQuestionsConditionInput]
-  createdAt: ModelStringInput
-  game: ModelGameInput
-  level: ModelIntInput
-  not: ModelMultipleChoiceQuestionsConditionInput
-  options: ModelStringInput
-  or: [ModelMultipleChoiceQuestionsConditionInput]
-  question: ModelStringInput
-  questionNumber: ModelIntInput
-  updatedAt: ModelStringInput
-}
-
-input ModelMultipleChoiceQuestionsFilterInput {
-  and: [ModelMultipleChoiceQuestionsFilterInput]
-  createdAt: ModelStringInput
-  game: ModelGameInput
-  id: ModelIDInput
-  level: ModelIntInput
-  not: ModelMultipleChoiceQuestionsFilterInput
-  options: ModelStringInput
-  or: [ModelMultipleChoiceQuestionsFilterInput]
-  question: ModelStringInput
-  questionNumber: ModelIntInput
-  updatedAt: ModelStringInput
-}
-
-input ModelNotificationJobTypeInput {
-  eq: NotificationJobType
-  ne: NotificationJobType
-}
-
-input ModelNotificationStatusInput {
-  eq: NotificationStatus
-  ne: NotificationStatus
-}
-
-input ModelNotificationTypeInput {
-  eq: NotificationType
-  ne: NotificationType
-}
-
-input ModelReceivedMessageSourceInput {
-  eq: ReceivedMessageSource
-  ne: ReceivedMessageSource
-}
-
-input ModelScheduledJobStatusInput {
-  eq: ScheduledJobStatus
-  ne: ScheduledJobStatus
-}
-
-input ModelScheduledJobTypeInput {
-  eq: ScheduledJobType
-  ne: ScheduledJobType
-}
-
-input ModelScheduledJobsConditionInput {
-  and: [ModelScheduledJobsConditionInput]
-  createdAt: ModelStringInput
-  isDeleted: ModelBooleanInput
-  not: ModelScheduledJobsConditionInput
-  or: [ModelScheduledJobsConditionInput]
-  requestMeta: ModelStringInput
-  scheduledJobStatus: ModelScheduledJobStatusInput
-  scheduledJobTime: ModelStringInput
-  scheduledJobType: ModelScheduledJobTypeInput
-  status: ModelStringInput
-  updatedAt: ModelStringInput
-  user_requested: ModelBooleanInput
-}
-
-input ModelScheduledJobsFilterInput {
-  and: [ModelScheduledJobsFilterInput]
-  createdAt: ModelStringInput
-  id: ModelIDInput
-  isDeleted: ModelBooleanInput
-  not: ModelScheduledJobsFilterInput
-  or: [ModelScheduledJobsFilterInput]
-  requestMeta: ModelStringInput
-  scheduledJobStatus: ModelScheduledJobStatusInput
-  scheduledJobTime: ModelStringInput
-  scheduledJobType: ModelScheduledJobTypeInput
-  status: ModelStringInput
-  updatedAt: ModelStringInput
-  user_requested: ModelBooleanInput
-}
-
-input ModelSizeInput {
-  between: [Int]
-  eq: Int
-  ge: Int
-  gt: Int
-  le: Int
-  lt: Int
-  ne: Int
-}
-
-input ModelStringInput {
-  attributeExists: Boolean
-  attributeType: ModelAttributeTypes
-  beginsWith: String
-  between: [String]
-  contains: String
-  eq: String
-  ge: String
-  gt: String
-  le: String
-  lt: String
-  ne: String
-  notContains: String
-  size: ModelSizeInput
-}
-
-input ModelStringKeyConditionInput {
-  beginsWith: String
-  between: [String]
-  eq: String
-  ge: String
-  gt: String
-  le: String
-  lt: String
-}
-
-input ModelSubscriptionBooleanInput {
-  eq: Boolean
-  ne: Boolean
-}
-
-input ModelSubscriptionEventFilterInput {
-  and: [ModelSubscriptionEventFilterInput]
-  createdAt: ModelSubscriptionStringInput
-  description: ModelSubscriptionStringInput
-  eventEndTime: ModelSubscriptionStringInput
-  eventStartTime: ModelSubscriptionStringInput
-  eventType: ModelSubscriptionStringInput
-  guestSpeaker: ModelSubscriptionStringInput
-  hostedBy: ModelSubscriptionStringInput
-  id: ModelSubscriptionIDInput
-  imageUrl: ModelSubscriptionStringInput
-  isDeleted: ModelSubscriptionBooleanInput
-  isPremiumUserOnly: ModelSubscriptionBooleanInput
-  mainTitle: ModelSubscriptionStringInput
-  maxVisitorsAllowed: ModelSubscriptionIntInput
-  meetingLink: ModelSubscriptionStringInput
-  or: [ModelSubscriptionEventFilterInput]
-  prizeMoney: ModelSubscriptionIntInput
-  registrationAllowedTillTime: ModelSubscriptionStringInput
-  repeat: ModelSubscriptionStringInput
-  slug: ModelSubscriptionStringInput
-  subTitle: ModelSubscriptionStringInput
-  updatedAt: ModelSubscriptionStringInput
-}
-
-input ModelSubscriptionFloatInput {
-  between: [Float]
-  eq: Float
-  ge: Float
-  gt: Float
-  in: [Float]
-  le: Float
-  lt: Float
-  ne: Float
-  notIn: [Float]
-}
-
-input ModelSubscriptionIDInput {
-  beginsWith: ID
-  between: [ID]
-  contains: ID
-  eq: ID
-  ge: ID
-  gt: ID
-  in: [ID]
-  le: ID
-  lt: ID
-  ne: ID
-  notContains: ID
-  notIn: [ID]
-}
-
-input ModelSubscriptionIntInput {
-  between: [Int]
-  eq: Int
-  ge: Int
-  gt: Int
-  in: [Int]
-  le: Int
-  lt: Int
-  ne: Int
-  notIn: [Int]
-}
-
-input ModelSubscriptionMultipleChoiceQuestionsFilterInput {
-  and: [ModelSubscriptionMultipleChoiceQuestionsFilterInput]
-  createdAt: ModelSubscriptionStringInput
-  game: ModelSubscriptionStringInput
-  id: ModelSubscriptionIDInput
-  level: ModelSubscriptionIntInput
-  options: ModelSubscriptionStringInput
-  or: [ModelSubscriptionMultipleChoiceQuestionsFilterInput]
-  question: ModelSubscriptionStringInput
-  questionNumber: ModelSubscriptionIntInput
-  updatedAt: ModelSubscriptionStringInput
-}
-
-input ModelSubscriptionScheduledJobsFilterInput {
-  and: [ModelSubscriptionScheduledJobsFilterInput]
-  createdAt: ModelSubscriptionStringInput
-  id: ModelSubscriptionIDInput
-  isDeleted: ModelSubscriptionBooleanInput
-  or: [ModelSubscriptionScheduledJobsFilterInput]
-  requestMeta: ModelSubscriptionStringInput
-  scheduledJobStatus: ModelSubscriptionStringInput
-  scheduledJobTime: ModelSubscriptionStringInput
-  scheduledJobType: ModelSubscriptionStringInput
-  status: ModelSubscriptionStringInput
-  updatedAt: ModelSubscriptionStringInput
-  user_requested: ModelSubscriptionBooleanInput
-}
-
-input ModelSubscriptionStringInput {
-  beginsWith: String
-  between: [String]
-  contains: String
-  eq: String
-  ge: String
-  gt: String
-  in: [String]
-  le: String
-  lt: String
-  ne: String
-  notContains: String
-  notIn: [String]
-}
-
-input ModelSubscriptionUserConversationsFilterInput {
-  and: [ModelSubscriptionUserConversationsFilterInput]
-  conversationPlatform: ModelSubscriptionStringInput
-  createdAt: ModelSubscriptionStringInput
-  duration: ModelSubscriptionStringInput
-  externalConversationId: ModelSubscriptionStringInput
-  id: ModelSubscriptionIDInput
-  initiatedTime: ModelSubscriptionStringInput
-  or: [ModelSubscriptionUserConversationsFilterInput]
-  recordingURL: ModelSubscriptionStringInput
-  requestMeta: ModelSubscriptionStringInput
-  sarathiId: ModelSubscriptionIDInput
-  status: ModelSubscriptionStringInput
-  transferDuration: ModelSubscriptionStringInput
-  updatedAt: ModelSubscriptionStringInput
-  userId: ModelSubscriptionIDInput
-}
-
-input ModelSubscriptionUserFilterInput {
-  and: [ModelSubscriptionUserFilterInput]
-  createdAt: ModelSubscriptionStringInput
-  dateOfBirth: ModelSubscriptionStringInput
-  firstName: ModelSubscriptionStringInput
-  gender: ModelSubscriptionStringInput
-  id: ModelSubscriptionIDInput
-  interestedInClubSukoon: ModelSubscriptionBooleanInput
-  isDeleted: ModelSubscriptionBooleanInput
-  lastName: ModelSubscriptionStringInput
-  mobileNumber: ModelSubscriptionStringInput
-  or: [ModelSubscriptionUserFilterInput]
-  status: ModelSubscriptionStringInput
-  updatedAt: ModelSubscriptionStringInput
-}
-
-input ModelSubscriptionUserNotificationFilterInput {
-  and: [ModelSubscriptionUserNotificationFilterInput]
-  createdAt: ModelSubscriptionStringInput
-  externalMessageId: ModelSubscriptionStringInput
-  id: ModelSubscriptionIDInput
-  notificationJobType: ModelSubscriptionStringInput
-  notificationType: ModelSubscriptionStringInput
-  or: [ModelSubscriptionUserNotificationFilterInput]
-  requestMeta: ModelSubscriptionStringInput
-  status: ModelSubscriptionStringInput
-  updatedAt: ModelSubscriptionStringInput
-  userId: ModelSubscriptionIDInput
-}
-
-input ModelSubscriptionUserReceivedMessagesFilterInput {
-  and: [ModelSubscriptionUserReceivedMessagesFilterInput]
-  createdAt: ModelSubscriptionStringInput
-  id: ModelSubscriptionIDInput
-  message: ModelSubscriptionStringInput
-  or: [ModelSubscriptionUserReceivedMessagesFilterInput]
-  source: ModelSubscriptionStringInput
-  updatedAt: ModelSubscriptionStringInput
-  userId: ModelSubscriptionIDInput
-}
-
-input ModelSubscriptionUserWhatsappFeedbackFilterInput {
-  and: [ModelSubscriptionUserWhatsappFeedbackFilterInput]
-  createdAt: ModelSubscriptionStringInput
-  eventId: ModelSubscriptionStringInput
-  feedback: ModelSubscriptionStringInput
-  feedbackEvent: ModelSubscriptionStringInput
-  id: ModelSubscriptionIDInput
-  or: [ModelSubscriptionUserWhatsappFeedbackFilterInput]
-  sarathiId: ModelSubscriptionIDInput
-  updatedAt: ModelSubscriptionStringInput
-  userId: ModelSubscriptionIDInput
-}
-
-input ModelUserConditionInput {
-  and: [ModelUserConditionInput]
-  createdAt: ModelStringInput
-  dateOfBirth: ModelStringInput
-  firstName: ModelStringInput
-  gender: ModelGenderInput
-  interestedInClubSukoon: ModelBooleanInput
-  isDeleted: ModelBooleanInput
-  lastName: ModelStringInput
-  mobileNumber: ModelStringInput
-  not: ModelUserConditionInput
-  or: [ModelUserConditionInput]
-  status: ModelUserStatusInput
-  updatedAt: ModelStringInput
-}
-
-input ModelUserConversationsConditionInput {
-  and: [ModelUserConversationsConditionInput]
-  conversationPlatform: ModelConversationPlatformInput
-  createdAt: ModelStringInput
-  duration: ModelStringInput
-  externalConversationId: ModelStringInput
-  initiatedTime: ModelStringInput
-  not: ModelUserConversationsConditionInput
-  or: [ModelUserConversationsConditionInput]
-  recordingURL: ModelStringInput
-  requestMeta: ModelStringInput
-  sarathiId: ModelIDInput
-  status: ModelConversationStatusInput
-  transferDuration: ModelStringInput
-  updatedAt: ModelStringInput
-  userId: ModelIDInput
-}
-
-input ModelUserConversationsFilterInput {
-  and: [ModelUserConversationsFilterInput]
-  conversationPlatform: ModelConversationPlatformInput
-  createdAt: ModelStringInput
-  duration: ModelStringInput
-  externalConversationId: ModelStringInput
-  id: ModelIDInput
-  initiatedTime: ModelStringInput
-  not: ModelUserConversationsFilterInput
-  or: [ModelUserConversationsFilterInput]
-  recordingURL: ModelStringInput
-  requestMeta: ModelStringInput
-  sarathiId: ModelIDInput
-  status: ModelConversationStatusInput
-  transferDuration: ModelStringInput
-  updatedAt: ModelStringInput
-  userId: ModelIDInput
-}
-
-input ModelUserFilterInput {
-  and: [ModelUserFilterInput]
-  createdAt: ModelStringInput
-  dateOfBirth: ModelStringInput
-  firstName: ModelStringInput
-  gender: ModelGenderInput
-  id: ModelIDInput
-  interestedInClubSukoon: ModelBooleanInput
-  isDeleted: ModelBooleanInput
-  lastName: ModelStringInput
-  mobileNumber: ModelStringInput
-  not: ModelUserFilterInput
-  or: [ModelUserFilterInput]
-  status: ModelUserStatusInput
-  updatedAt: ModelStringInput
-}
-
-input ModelUserNotificationConditionInput {
-  and: [ModelUserNotificationConditionInput]
-  createdAt: ModelStringInput
-  externalMessageId: ModelStringInput
-  not: ModelUserNotificationConditionInput
-  notificationJobType: ModelNotificationJobTypeInput
-  notificationType: ModelNotificationTypeInput
-  or: [ModelUserNotificationConditionInput]
-  requestMeta: ModelStringInput
-  status: ModelNotificationStatusInput
-  updatedAt: ModelStringInput
-  userId: ModelIDInput
-}
-
-input ModelUserNotificationFilterInput {
-  and: [ModelUserNotificationFilterInput]
-  createdAt: ModelStringInput
-  externalMessageId: ModelStringInput
-  id: ModelIDInput
-  not: ModelUserNotificationFilterInput
-  notificationJobType: ModelNotificationJobTypeInput
-  notificationType: ModelNotificationTypeInput
-  or: [ModelUserNotificationFilterInput]
-  requestMeta: ModelStringInput
-  status: ModelNotificationStatusInput
-  updatedAt: ModelStringInput
-  userId: ModelIDInput
-}
-
-input ModelUserReceivedMessagesConditionInput {
-  and: [ModelUserReceivedMessagesConditionInput]
-  createdAt: ModelStringInput
-  message: ModelStringInput
-  not: ModelUserReceivedMessagesConditionInput
-  or: [ModelUserReceivedMessagesConditionInput]
-  source: ModelReceivedMessageSourceInput
-  updatedAt: ModelStringInput
-  userId: ModelIDInput
-}
-
-input ModelUserReceivedMessagesFilterInput {
-  and: [ModelUserReceivedMessagesFilterInput]
-  createdAt: ModelStringInput
-  id: ModelIDInput
-  message: ModelStringInput
-  not: ModelUserReceivedMessagesFilterInput
-  or: [ModelUserReceivedMessagesFilterInput]
-  source: ModelReceivedMessageSourceInput
-  updatedAt: ModelStringInput
-  userId: ModelIDInput
-}
-
-input ModelUserStatusInput {
-  eq: UserStatus
-  ne: UserStatus
-}
-
-input ModelUserWhatsappFeedbackConditionInput {
-  and: [ModelUserWhatsappFeedbackConditionInput]
-  createdAt: ModelStringInput
-  eventId: ModelStringInput
-  feedback: ModelStringInput
-  feedbackEvent: ModelFeedbackEventInput
-  not: ModelUserWhatsappFeedbackConditionInput
-  or: [ModelUserWhatsappFeedbackConditionInput]
-  sarathiId: ModelIDInput
-  updatedAt: ModelStringInput
-  userId: ModelIDInput
-}
-
-input ModelUserWhatsappFeedbackFilterInput {
-  and: [ModelUserWhatsappFeedbackFilterInput]
-  createdAt: ModelStringInput
-  eventId: ModelStringInput
-  feedback: ModelStringInput
-  feedbackEvent: ModelFeedbackEventInput
-  id: ModelIDInput
-  not: ModelUserWhatsappFeedbackFilterInput
-  or: [ModelUserWhatsappFeedbackFilterInput]
-  sarathiId: ModelIDInput
-  updatedAt: ModelStringInput
-  userId: ModelIDInput
-}
-
-input UpdateEventInput {
-  description: String
-  eventEndTime: AWSDateTime
-  eventStartTime: AWSDateTime
-  eventType: EventType
-  guestSpeaker: String
-  hostedBy: String
-  id: ID!
-  imageUrl: [String]
-  isDeleted: Boolean
-  isPremiumUserOnly: Boolean
   mainTitle: String
-  maxVisitorsAllowed: Int
-  meetingLink: String
-  prizeMoney: Int
-  registrationAllowedTillTime: AWSDateTime
+  subTitle: String
+  hostedBy: String
+  guestSpeaker: String
   repeat: String
   slug: String
-  subTitle: String
-}
-
-input UpdateMultipleChoiceQuestionsInput {
-  game: Game
-  id: ID!
-  level: Int
-  options: [String!]
-  question: String
-  questionNumber: Int
-}
-
-input UpdateScheduledJobsInput {
-  id: ID!
   isDeleted: Boolean
-  requestMeta: String
-  scheduledJobStatus: ScheduledJobStatus
-  scheduledJobTime: AWSDateTime
-  scheduledJobType: ScheduledJobType
-  status: String
-  user_requested: Boolean
+  eventType: EventType
+  imageUrl: [String]
+  meetingLink: String
+  description: String
+  maxVisitorsAllowed: Int
+  prizeMoney: Int
+  eventEndTime: AWSDateTime
+  eventStartTime: AWSDateTime
+  registrationAllowedTillTime: AWSDateTime
+  isPremiumUserOnly: Boolean
 }
 
-input UpdateUserConversationsInput {
-  conversationPlatform: ConversationPlatform
-  duration: AWSTime
-  externalConversationId: String
-  id: ID!
-  initiatedTime: AWSDateTime
-  recordingURL: String
-  requestMeta: String
-  sarathiId: ID
-  status: ConversationStatus
-  transferDuration: AWSTime
-  userId: ID
+enum EventRepeat {
+  DAILY
+  WEEKLY
+  MONTHLY
 }
 
-input UpdateUserInput {
-  dateOfBirth: AWSDate
-  firstName: String
-  gender: Gender
-  id: ID!
-  interestedInClubSukoon: Boolean
-  isDeleted: Boolean
-  lastName: String
-  mobileNumber: String
-  status: UserStatus
+enum EventType {
+  SESSION
+  CHALLENGE
 }
 
-input UpdateUserNotificationInput {
-  externalMessageId: String
-  id: ID!
-  notificationJobType: NotificationJobType
-  notificationType: NotificationType
-  requestMeta: String
-  status: NotificationStatus
-  userId: ID
-}
-
-input UpdateUserReceivedMessagesInput {
-  id: ID!
-  message: String
-  source: ReceivedMessageSource
-  userId: ID
-}
-
-input UpdateUserWhatsappFeedbackInput {
-  eventId: String
-  feedback: String
-  feedbackEvent: FeedbackEvent
-  id: ID!
-  sarathiId: ID
-  userId: ID
-}
