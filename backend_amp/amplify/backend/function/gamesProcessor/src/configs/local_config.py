@@ -1,8 +1,8 @@
 from datetime import timedelta
 
 
-class DevConfig:
-    URL = "https://ij8f1oonya.execute-api.ap-south-1.amazonaws.com/dev"
+class LocalConfig:
+    URL = "http://localhost:8080"
 
     DB_CONFIG = {
         "connection_url": "mongodb+srv://techcouncil:2lfNFMZIjdfZJl2R@cluster0.h3kssoa.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",

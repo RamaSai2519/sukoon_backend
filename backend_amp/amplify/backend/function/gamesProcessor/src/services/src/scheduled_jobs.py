@@ -5,7 +5,7 @@ from flask import request
 from models.admin_schedule.main import AdminSchedules
 from models.create_scheduled_job.main import CreateScheduledJob
 from models.update_scheduled_job.main import UpdateScheduledJob
-from models.interfaces import ScheduledJobInput, CreateScheduleInput
+from models.interfaces import ScheduledJobInput, GetScheduledJobsInput
 
 
 class CreateScheduledJobsService(Resource):
@@ -30,11 +30,11 @@ class UpdateScheduledJobsService(Resource):
         return output
 
 
-class AdminSchedulesService(Resource):
+class GetSchedulesService(Resource):
 
-    def post(self) -> dict:
-        input = json.loads(request.get_data())
-        input = CreateScheduleInput(**input)
+    def get(self) -> dict:
+        input_params = request.args
+        input = GetScheduledJobsInput(**input_params)
         output = AdminSchedules(input).process()
         output = dataclasses.asdict(output)
 

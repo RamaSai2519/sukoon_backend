@@ -743,8 +743,17 @@ class WhatsappNotificationTemplates:
             "template": {
                 "name": "leads",
                 "language": {"code": "en"},
+                "components": [
+                    {
+                        "type": "header",
+                        "parameters": [
+                            {"type": "image", "image": {"link": "{image_link}"}}
+                        ],
+                    },
+                ],
             },
         }
+
         self.EVENT_WA_ADV_ACTIVE_USERS = {
             "template_name": "EVENT_WA_ADV_ACTIVE_USERS",
             "template": {
@@ -802,7 +811,7 @@ class WhatsappNotificationTemplates:
                     {
                         "type": "header",
                         "parameters": [
-                           
+
                         ],
                     },
                 ],
@@ -1040,6 +1049,24 @@ class WhatsappNotificationTemplates:
                             {"type": "text", "text": "{birth_date}"},
                             {"type": "text", "text": "{premium}"},
                             {"type": "text", "text": "{last_expert}"},
+                        ]
+                    }
+                ]
+            }
+        }
+
+        self.SCHEDULE_REMINDER = {
+            "template_name": "SCHEDULE_REMINDER",
+            "template": {
+                "name": "schedule_reminder",
+                "language": {"code": "en_us"},
+                "components": [
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"},
+                            {"type": "text", "text": "{expert_name}"},
+                            {"type": "text", "text": "{expert_name}"}
                         ]
                     }
                 ]

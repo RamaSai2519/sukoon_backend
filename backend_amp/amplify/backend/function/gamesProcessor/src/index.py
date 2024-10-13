@@ -37,6 +37,7 @@ api.add_resource(ListEventUsersService, '/actions/list_event_users')
 api.add_resource(CreateEventUserService, '/actions/create_event_user')
 
 # Scheduled Jobs Routes
+api.add_resource(GetSchedulesService, '/actions/schedules')
 api.add_resource(CreateScheduledJobsService, '/actions/create_scheduled_job')
 api.add_resource(UpdateScheduledJobsService, '/actions/update_scheduled_job')
 
@@ -75,7 +76,6 @@ api.add_resource(TimingService, '/actions/timings')
 api.add_resource(CategoryService, '/actions/categories')
 api.add_resource(AdminFCMService, '/actions/save_fcm_token')
 api.add_resource(AdminWhatsappService, '/actions/wa_options')
-api.add_resource(AdminSchedulesService, '/actions/schedules')
 # - Stats
 api.add_resource(DashboardStatsService, '/actions/dashboard_stats')
 

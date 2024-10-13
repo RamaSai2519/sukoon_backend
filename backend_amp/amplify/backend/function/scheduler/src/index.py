@@ -1,6 +1,8 @@
 import json
 import controller
-from queries.scheduled_job import get_pending_scheduled_jobs, mark_my_job_as_picked
+from models.wa_notify import WAHandler
+from datetime import datetime, timedelta
+from queries.scheduled_job import get_pending_scheduled_jobs, mark_my_job_as_picked, get_schedules_near_time
 
 
 def construct_response(statusCode, body):
@@ -16,6 +18,40 @@ def construct_response(statusCode, body):
     }
     return response
 
+def get_lower_time_str(time_str: str) -> str:
+    time_format = "%Y-%m-%dT%H:%M:%S"
+    input_time = datetime.strptime(time_str, time_format)
+
+    adjusted_time = input_time + timedelta(minutes=25)
+    lower_bound_str = adjusted_time.strftime(time_format)
+
+    return lower_bound_str
+
+def handle_wa_notifications(time_str: str) -> None:
+    status = "WAPENDING"
+    lower_bound_str = get_lower_time_str(time_str)
+    params = {"scheduledJobStatus": status, "ge": lower_bound_str, "le": time_str, "nextToken": next_token, "limit": 1000}
+    next_token = None
+    all_jobs = []
+    
+    while True:
+        if next_token:
+            params['nextToken'] = next_token
+        else:
+            params.pop('nextToken', None)
+
+        response = get_schedules_near_time(params)
+        all_jobs.extend(response['scheduledJobsByStatusAndTime']['items'])
+
+        next_token = response['scheduledJobsByStatusAndTime'].get('nextToken')
+        if not next_token:
+            break
+
+    for job in all_jobs:
+        wa_handler = WAHandler(job)
+        wa_handler.reminder_user()
+
+
 def handler(event, context):
     try:
         print(f"Event: {event}")
@@ -26,11 +62,12 @@ def handler(event, context):
         next_token = None
         first_time = True
 
+        handle_wa_notifications(time)
         while next_token or first_time:
             data = get_pending_scheduled_jobs(
-               status=status, time=time, next_token=next_token
+                status=status, time=time, next_token=next_token
             )["scheduledJobsByStatusAndTime"]
-           
+
             jobs = data["items"]
             print(jobs)
             for job in jobs:
