@@ -18,6 +18,7 @@ def construct_response(statusCode, body):
     }
     return response
 
+
 def get_lower_time_str(time_str: str) -> str:
     time_format = "%Y-%m-%dT%H:%M:%SZ"
     input_time = datetime.strptime(time_str, time_format)
@@ -27,13 +28,16 @@ def get_lower_time_str(time_str: str) -> str:
 
     return lower_bound_str
 
+
 def handle_wa_notifications(time_str: str) -> None:
     next_token = None
     status = "WAPENDING"
     lower_bound_str = get_lower_time_str(time_str)
-    params = {"scheduledJobStatus": status, "ge": lower_bound_str, "le": time_str, "nextToken": next_token, "limit": 1000}
+    params = {"scheduledJobStatus": status, "ge": lower_bound_str,
+        "le": time_str, "nextToken": next_token, "limit": 1000}
     all_jobs = []
-    
+    hit = 0
+
     while True:
         if next_token:
             params['nextToken'] = next_token
@@ -41,6 +45,8 @@ def handle_wa_notifications(time_str: str) -> None:
             params.pop('nextToken', None)
 
         response = get_schedules_near_time(params)
+        hit += 1
+        print(f"{hit}Response: {response}")
         all_jobs.extend(response['scheduledJobsByStatusAndTime']['items'])
 
         next_token = response['scheduledJobsByStatusAndTime'].get('nextToken')
