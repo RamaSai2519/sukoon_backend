@@ -3,6 +3,13 @@ class OutputStatus:
     FAILURE = 'FAILURE'
 
 
+class CallStatus:
+    MISSED = 'missed'
+    FAILED = 'failed'
+    SUCCESSFUL = 'successful'
+    INADEQUATE = 'inadequate'
+
+
 calls_exclusion_projection = {
     'user': 1,
     'callId': 1,

@@ -304,6 +304,8 @@ class ValidateOTPInput:
     otp: str
     user_type: str
     phone_number: str
+    internal: Optional[str] = ""
+    call_status: Optional[str] = None
 
 
 @dataclass
@@ -420,7 +422,9 @@ class ScheduledJobInput:
 class GetUsersInput:
     size: Optional[int] = None
     page: Optional[int] = None
+    internal: Optional[str] = ""
     user_id: Optional[str] = None
+    call_status: Optional[str] = None
     phoneNumber: Optional[str] = None
 
 

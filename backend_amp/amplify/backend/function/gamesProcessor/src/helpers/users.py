@@ -39,11 +39,13 @@ class UsersHelper:
         wa_history = [Common.jsonify(history) for history in wa_history]
         return sorted(wa_history, key=lambda x: x["createdAt"], reverse=True)
 
-    def __format__(self, user: dict, single_user: bool = False) -> dict:
+    def __format__(self, user: dict, single_user: bool = False, internal: str = 'false', call_status: str = None) -> dict:
         if single_user:
-            # Get calls, events and referrals
             user_id_obj = ObjectId(user["_id"])
-            query = {"user": user_id_obj}
+            exclude_query = self.common.get_internal_exclude_query(internal)
+            query = {"user": user_id_obj, **exclude_query}
+            if call_status:
+                query["status"] = call_status
             user["calls"] = self.common.get_calls(query)
 
             query = {"userId": user_id_obj, "phoneNumber": user["phoneNumber"]}
@@ -77,15 +79,15 @@ class UsersHelper:
 
         return result
 
-    def get_user(self, phoneNumber: str = None, user_id: str = None) -> Union[dict, None]:
+    def get_user(self, phoneNumber: str = None, user_id: str = None, internal: str = 'false', call_status: str = None) -> Union[dict, None]:
         if user_id:
             query = {"_id": ObjectId(user_id)}
         else:
             query = {"phoneNumber": phoneNumber}
-        user = self.users_collection.find_one(
-            query, self.prep_projection(True))
+        proj = self.prep_projection(True)
+        user = self.users_collection.find_one(query, proj)
         if user:
-            user = self.__format__(user, True)
+            user = self.__format__(user, True, internal, call_status)
             return user
         return None
 

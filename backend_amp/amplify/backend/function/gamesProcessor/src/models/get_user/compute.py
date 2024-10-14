@@ -13,7 +13,7 @@ class Compute:
     def compute(self) -> Output:
         if self.input.phoneNumber is not None or self.input.user_id is not None:
             users = self.helper.get_user(
-                self.input.phoneNumber, self.input.user_id)
+                self.input.phoneNumber, self.input.user_id, self.input.internal, self.input.call_status)
             if not users:
                 return Output(
                     output_details={},

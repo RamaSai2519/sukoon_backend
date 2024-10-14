@@ -26,7 +26,7 @@ class Compute:
 
     def populate_user_details(self) -> dict:
         if self.input.user_type == "user":
-            return self.user_helper.get_user(self.input.phone_number)
+            return self.user_helper.get_user(self.input.phone_number, None, self.input.internal, self.input.call_status)
         return self.expert_helper.get_expert(self.input.phone_number)
 
     def compute(self) -> Output:

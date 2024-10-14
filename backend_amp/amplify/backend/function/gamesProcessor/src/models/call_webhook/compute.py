@@ -5,8 +5,8 @@ from models.common import Common
 from db.users import get_user_collection
 from db.calls import get_calls_collection
 from db.experts import get_experts_collections
-from models.constants import OutputStatus, application_json_header
 from db_queries.mutations.scheduled_job import update_scheduled_job_status
+from models.constants import OutputStatus, application_json_header, CallStatus
 from models.interfaces import WebhookInput as Input, Call, Output, User, Expert
 
 
@@ -57,14 +57,14 @@ class Compute:
 
     def determine_status(self, call_transfer_status: str, call_status: str) -> str:
         if call_transfer_status == "missed":
-            status = "missed"
+            status = CallStatus.MISSED
         elif call_status == "connected":
             if self.common.duration_str_to_seconds(self.input.call_duration) > 120:
-                status = "successful"
+                status = CallStatus.SUCCESSFUL
             else:
-                status = "inadequate"
+                status = CallStatus.INADEQUATE
         else:
-            status = "failed"
+            status = CallStatus.FAILED
         return status
 
     def determine_failed_reason(self, call_transfer_status: str) -> str:
