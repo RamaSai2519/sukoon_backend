@@ -12,7 +12,7 @@ class Validator():
         if self.input.phoneNumber and len(self.input.phoneNumber) != 10:
             return False, "Invalid phone number"
 
-        if self.input.call_status not in self.status_list:
+        if self.input.call_status and self.input.call_status not in self.status_list:
             return False, "Invalid call status, must be one of: " + ", ".join(self.status_list)
 
         return True, ""
