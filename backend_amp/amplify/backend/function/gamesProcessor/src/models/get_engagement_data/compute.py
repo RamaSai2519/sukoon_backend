@@ -31,7 +31,8 @@ class Compute:
         return user
 
     def populate_call_data(self, user: dict, query: dict) -> dict:
-        query = {**query, **successful_calls_query}
+        exclude_internal = self.common.get_internal_exclude_query()
+        query = {**query, **successful_calls_query, **exclude_internal}
         projection = {"_id": 0, "initiatedTime": 1, "expert": 1}
         sort = [("initiatedTime", -1)]
         last_call: dict = self.calls_collection.find_one(
