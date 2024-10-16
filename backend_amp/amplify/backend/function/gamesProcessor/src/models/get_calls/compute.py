@@ -1,4 +1,7 @@
+import threading
+from datetime import datetime
 from models.common import Common
+from helpers.excel import ExcelS3Helper
 from models.constants import OutputStatus
 from models.interfaces import GetCallsInput as Input, Output
 
@@ -7,6 +10,7 @@ class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
         self.common = Common()
+        self.excel_helper = ExcelS3Helper()
         self.today_query = Common.get_today_query()
         self.query = self.common.get_internal_exclude_query(input.internal)
 
@@ -24,12 +28,35 @@ class Compute:
         calls = self.common.get_calls(req_names=False, query=self.query)
         return {"data": calls}
 
+    def create_excel(self) -> str:
+        calls = self.common.get_calls(query=self.query)
+        time_string = self.common.current_time.strftime("%Y-%m-%d-%H-%M-%S")
+        file_name = f"calls_data_{time_string}.xlsx"
+        self.excel_helper.invoke_excel_helper(calls, file_name)
+
+    def excel_url(self) -> str:
+        prev_url = self.excel_helper.get_latest_file_url("engagement_data_")
+        if not prev_url:
+            threading.Thread(target=self.create_excel).start()
+            return "Creating Excel File Now..."
+        prev_file_time = prev_url.split("_")[-1].split(".")[0]
+        prev_time = datetime.strptime(prev_file_time, "%Y-%m-%d-%H-%M-%S")
+        time_diff = (self.common.current_time - prev_time).seconds
+        if time_diff < 1800:
+            diff_minutes = round((1800 - time_diff) / 60, 2)
+            msg = f" and Next Excel File will be created in {diff_minutes} minutes"
+            return prev_url, msg
+        else:
+            threading.Thread(target=self.create_excel).start()
+            return prev_url, " and Creating Excel File Now..."
+
     def _get_calls_list(self) -> dict:
         calls = self.common.get_calls(
             query=self.query,
             page=int(self.input.page), size=int(self.input.size)
         )
-        return {"data": calls}
+        file_url, msg = self.excel_url()
+        return {"data": calls, "fileUrl": file_url, "s3_msg": msg}
 
     def _get_call(self) -> dict:
         query = {"callId": self.input.callId}

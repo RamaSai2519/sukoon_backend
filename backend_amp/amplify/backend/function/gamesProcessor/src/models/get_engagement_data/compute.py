@@ -17,7 +17,6 @@ class Compute:
         self.page = int(input.page)
         self.size = int(input.size)
         self.meta_fields = meta_fields
-        self.current_time = datetime.now()
         self.excel_helper = ExcelS3Helper()
         self.meta_collection = get_meta_collection()
         self.users_collection = get_user_collection()
@@ -77,7 +76,7 @@ class Compute:
 
     def create_excel(self) -> str:
         users = self.get_users(0, 0)
-        time_string = self.current_time.strftime("%Y-%m-%d-%H-%M-%S")
+        time_string = self.common.current_time.strftime("%Y-%m-%d-%H-%M-%S")
         filename = f"engagement_data_{time_string}.xlsx"
         self.excel_helper.invoke_excel_helper(users, filename)
 
@@ -88,9 +87,9 @@ class Compute:
             return "Creating Excel File, Please Wait..."
         prev_file_time = prev_url.split("_")[-1].split(".")[0]
         prev_time = datetime.strptime(prev_file_time, "%Y-%m-%d-%H-%M-%S")
-        time_diff = (self.current_time - prev_time).seconds
-        if time_diff < 900:
-            diff_minutes = round((900 - time_diff) / 60, 2)
+        time_diff = (self.common.current_time - prev_time).seconds
+        if time_diff < 1800:
+            diff_minutes = round((1800 - time_diff) / 60, 2)
             msg = f" and Next Excel File will be created in {diff_minutes} minutes"
             return prev_url, msg
         else:

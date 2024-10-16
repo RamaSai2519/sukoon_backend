@@ -18,6 +18,7 @@ class Common:
     def __init__(self):
         self.users_cache = {}
         self.experts_cache = {}
+        self.current_time = datetime.now()
         self.users_collection = get_user_collection()
         self.calls_collection = get_calls_collection()
         self.experts_collection = get_experts_collections()

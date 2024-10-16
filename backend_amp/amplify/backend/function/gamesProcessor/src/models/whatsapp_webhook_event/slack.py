@@ -5,7 +5,7 @@ from models.interfaces import WASlackNotifierInput as Input
 class WASlackNotifier:
     def __init__(self, input: Input) -> None:
         self.input = input
-        self.webhook_url = "https://hooks.slack.com/services/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"
+        self.webhook_url = "https://hooks.slack.com/services/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"
 
     def _create_message_blocks(self) -> list:
         blocks = [
@@ -19,6 +19,7 @@ class WASlackNotifier:
         ]
 
         return blocks
+
 
     def send_notification(self):
         blocks = self._create_message_blocks()

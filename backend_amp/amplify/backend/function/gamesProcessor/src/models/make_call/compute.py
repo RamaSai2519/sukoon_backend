@@ -98,7 +98,10 @@ class Compute:
         else:
             wa_response = " but Expert is internal, no whatsapp notification sent"
 
-        time.sleep(15)
+        if expert.get("type") == "internal":
+            pass
+        else:
+            time.sleep(15)
 
         call_id = self._make_call(user["phoneNumber"], expert["phoneNumber"])
         if not call_id:

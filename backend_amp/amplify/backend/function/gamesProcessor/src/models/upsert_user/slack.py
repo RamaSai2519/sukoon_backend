@@ -18,7 +18,6 @@ class SlackManager:
         except SlackApiError as e:
             print(f"Error joining channel: {e}")
 
-    # -> list[dict[str, Any]]:
     def compose_message(self, user_name: str, type: str, user_id: str) -> list:
         details_block = {
             "type": 'section',
