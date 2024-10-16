@@ -500,6 +500,7 @@ class EventUserInput:
     dob: Optional[datetime] = None
     eventName: Optional[str] = None
     advSeenOn: Optional[str] = None
+    isUserPaid: Optional[bool] = None
 
 
 @dataclass
@@ -547,6 +548,7 @@ class EventUser:
     eventName: Optional[str] = None
     advSeenOn: Optional[str] = None
     userId: Optional[ObjectId] = None
+    isUserPaid: Optional[bool] = None
 
 
 @dataclass
