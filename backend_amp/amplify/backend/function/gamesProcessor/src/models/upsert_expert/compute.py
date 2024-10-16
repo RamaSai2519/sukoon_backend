@@ -32,7 +32,7 @@ class Compute:
 
     def merge_old_data(self, expert_data: dict, previous_data: dict) -> dict:
         for key, value in previous_data.items():
-            if key not in expert_data or expert_data[key] is None or expert_data[key] == "":
+            if key not in expert_data or expert_data[key] is None or expert_data[key] == "" or expert_data[key] == []:
                 expert_data[key] = value
         return expert_data
 
@@ -43,6 +43,7 @@ class Compute:
         return expert_data
 
     def prep_data(self, expert_data: dict, previous_data: dict = None) -> dict:
+        expert_data = {k: v for k, v in expert_data.items() if v is not None}
         if previous_data:
             expert_data = self.pop_immutable_fields(expert_data)
             expert_data = self.merge_old_data(expert_data, previous_data)
@@ -53,8 +54,6 @@ class Compute:
         if isinstance(expert_data.get('createdDate'), str):
             expert_data['createdDate'] = Common.string_to_date(
                 expert_data, 'createdDate')
-
-        expert_data = {k: v for k, v in expert_data.items() if v is not None}
         return expert_data
 
     def validate_phoneNumber(self, phoneNumber: str) -> Union[bool, dict]:
@@ -62,13 +61,12 @@ class Compute:
         return expert if expert else False
 
     def populate_categories(self, expert_data: dict):
-        categories = expert_data.get("categories")
-        if not categories:
-            return expert_data
+        categories = expert_data.get("categories", [])
         categories = list(self.categories_collection.find(
             {"name": {"$in": categories}}))
-        expert_data["categories"] = [
-            str(category["_id"]) for category in categories]
+        if not categories:
+            return expert_data
+        expert_data["categories"] = [str(category["_id"]) for category in categories]
         return expert_data
 
     def insert_blank_timings(self, expert_id) -> dict:
