@@ -7,7 +7,7 @@ from configs import CONFIG as config
 
 class SlackManager:
     def __init__(self) -> None:
-        self.client = WebClient(token=config.USER_SLACK_BOT_TOKEN)
+        self.client = WebClient(token=config.SARATHI_SLACK_BOT_TOKEN)
         self.channel = "C07R58933DW"
         self.timezone = pytz.timezone("Asia/Kolkata")
         self.dashboard_url = "https://admin.sukoonunlimited.com/admin/users/"
