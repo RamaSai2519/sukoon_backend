@@ -10,7 +10,7 @@ class WASlackNotifier:
         self.from_number = from_number
         self.name = name
         self.body = body
-        self.channel = "C07DYT3RS4T"
+        self.channel = "C07NG499ATT"
         self.timezone = pytz.timezone("Asia/Kolkata")
         self.client = WebClient(token=config.SARATHI_SLACK_BOT_TOKEN)
 
