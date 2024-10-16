@@ -3,14 +3,13 @@ from datetime import datetime
 from models.common import Common
 from models.constants import OutputStatus
 from db.events import get_events_collection
-from models.interfaces import EventInput as Input, Output
+from models.interfaces import Event as Input, Output
 
 
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
         self.events_collection = get_events_collection()
-        
 
     def prep_data(self, event_data: dict, new_event=True):
         date_fields = ["validUpto",

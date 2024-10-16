@@ -5,14 +5,14 @@ from flask_restful import Resource
 from models.get_events.main import ListEvents
 from models.get_event_users.main import ListEventUsers
 from models.upsert_event_config.main import UpsertEvent
-from models.interfaces import EventInput, GetEventsInput, GetEventUsersInput, Output
+from models.interfaces import Event, GetEventsInput, GetEventUsersInput, Output
 
 
 class UpsertEventsService(Resource):
 
     def post(self) -> Output:
         input = json.loads(request.get_data())
-        input = EventInput(**input)
+        input = Event(**input)
         output = UpsertEvent(input).process()
         output = dataclasses.asdict(output)
 

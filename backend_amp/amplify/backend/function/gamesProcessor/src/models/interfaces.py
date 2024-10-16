@@ -457,7 +457,7 @@ class CashfreeWebhookEventInput:
 
 
 @dataclass
-class EventInput:
+class Event:
     name: Optional[str] = None
     slug: Optional[str] = None
     repeat: Optional[str] = None

@@ -1,4 +1,4 @@
-from models.interfaces import EventInput as Input
+from models.interfaces import Event as Input
 
 
 class Validator:

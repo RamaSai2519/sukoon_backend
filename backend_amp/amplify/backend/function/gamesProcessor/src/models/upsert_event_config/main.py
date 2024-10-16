@@ -1,15 +1,15 @@
 import traceback
 from models.constants import OutputStatus
+from models.interfaces import Event as Input, Output
 from models.upsert_event_config.compute import Compute
 from models.upsert_event_config.validate import Validator
-from models.interfaces import EventInput as Input, Output
 
 
 class UpsertEvent:
     def __init__(self, input: Input) -> None:
         self.input = input
 
-    def process(self):
+    def process(self) -> Output:
         input = self.input
         valid_input, error_message = self._validate(input)
 
@@ -32,7 +32,7 @@ class UpsertEvent:
 
         return output
 
-    def _validate(self, input: Input):
+    def _validate(self, input: Input) -> tuple:
         validation_obj = Validator(input)
         validation_result, error_message = validation_obj.validate_input()
 

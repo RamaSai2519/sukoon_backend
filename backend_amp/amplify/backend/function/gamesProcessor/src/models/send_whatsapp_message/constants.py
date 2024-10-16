@@ -786,8 +786,8 @@ class WhatsappNotificationTemplates:
             },
         }
 
-        self.PROMO_TEPLATE = {
-            "template_name": "PROMO_TEPLATE",
+        self.PROMO_TEMPLATE = {
+            "template_name": "PROMO_TEMPLATE",
             "template": {
                 "name": "promo_template",
                 "language": {"code": "en"},
@@ -1067,6 +1067,25 @@ class WhatsappNotificationTemplates:
                             {"type": "text", "text": "{user_name}"},
                             {"type": "text", "text": "{expert_name}"},
                             {"type": "text", "text": "{expert_name}"}
+                        ]
+                    }
+                ]
+            }
+        }
+
+        self.POST_EVENT_REGISTRATION = {
+            "template_name": "POST_EVENT_REGISTRATION",
+            "template": {
+                "name": "post_event_registration_7th_oct",
+                "language": {"code": "en_us"},
+                "components": [
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"},
+                            {"type": "text", "text": "{event_name}"},
+                            {"type": "text", "text": "{date_time}"},
+                            {"type": "text", "text": "{zoom_link}"}
                         ]
                     }
                 ]

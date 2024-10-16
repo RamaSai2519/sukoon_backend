@@ -2,6 +2,7 @@ import json
 import requests
 from typing import Union
 from models.common import Common
+from configs import CONFIG as config
 from db.users import get_user_collection
 from db.calls import get_calls_collection
 from db.experts import get_experts_collections
@@ -14,10 +15,12 @@ class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
         self.common = Common()
-        self.url = "https://6x4j0qxbmk.execute-api.ap-south-1.amazonaws.com/main/actions/send_whatsapp"
         self.users_collection = get_user_collection()
         self.calls_collection = get_calls_collection()
+        self.url = config.URL + '/actions/send_whatsapp'
         self.experts_collection = get_experts_collections()
+        self.duration_secs = self.common.duration_str_to_seconds(
+            input.call_duration)
 
     def prep_call(self, call: dict) -> Call:
         call = Common.clean_dict(call, Call)
@@ -41,7 +44,7 @@ class Compute:
     def update_user(self, call: Call, expert: Expert, user: User) -> str:
         filter = {"_id": call.user}
         update_values = {"isBusy": False}
-        if expert and user and expert.type != "internal" and self.common.duration_str_to_seconds(self.input.call_duration) > 600 and user.numberOfCalls > 0 and user.isPaidUser == False:
+        if expert and user and expert.type != "internal" and self.duration_secs > 600 and user.numberOfCalls > 0 and user.isPaidUser == False:
             update_values["numberOfCalls"] = user.numberOfCalls - 1
         update = {"$set": update_values}
         response = self.users_collection.update_one(filter, update)
@@ -59,7 +62,7 @@ class Compute:
         if call_transfer_status == "missed":
             status = CallStatus.MISSED
         elif call_status == "connected":
-            if self.common.duration_str_to_seconds(self.input.call_duration) > 120:
+            if self.duration_secs > 120:
                 status = CallStatus.SUCCESSFUL
             else:
                 status = CallStatus.INADEQUATE
@@ -111,10 +114,9 @@ class Compute:
         return "Scheduled job not updated, "
 
     def send_feedback_message(self, call: Call, expert: Expert, user: User) -> str:
-        duration = self.common.duration_str_to_seconds(call.duration)
-        if call.status == "successful" and duration > 120 and expert.type != "internal":
+        if call.status == "successful" and self.duration_secs > 120 and expert.type != "internal":
             if not user or not expert:
-                return "Feedback message not sent"
+                return "Feedback message not sent as user or expert not found"
             payload = {
                 "template_name": "FEEDBACK_SURVEY",
                 "phone_number": user.phoneNumber,
@@ -128,6 +130,24 @@ class Compute:
             response = requests.request(
                 "POST", self.url, headers=application_json_header, data=json.dumps(payload))
             message = "Feedback message sent" if response.status_code == 200 else "Feedback message not sent"
+            return message
+
+    def send_promo_message(self, call: Call, expert: Expert, user: User) -> str:
+        internal_include = self.common.get_internal_exclude_query('true')
+        query = {**internal_include, 'user': user._id}
+        calls_count = self.calls_collection.count_documents(query)
+        if call.status == "successful" and expert.type == "internal" and self.duration_secs > 120 and calls_count > 1:
+            if not user or not expert:
+                return "Promo message not sent as user or expert not found"
+            payload = {
+                "template_name": "PROMO_TEMPLATE",
+                "phone_number": user.phoneNumber,
+                "request_meta": json.dumps({"expert_name": expert.name, "callId": call.callId, "user_name": user.name or user.phoneNumber}),
+                "parameters": {'image_link': 'https://sukoon-media.s3.ap-south-1.amazonaws.com/wa_promo_image.jpeg'}
+            }
+            response = requests.request(
+                "POST", self.url, headers=application_json_header, data=json.dumps(payload))
+            message = "Promo message sent" if response.status_code == 200 else "Promo message not sent"
             return message
 
     def compute(self) -> Output:
@@ -150,9 +170,10 @@ class Compute:
 
         call = self.find_call(callId)
         feedback_message = self.send_feedback_message(call, expert, user)
+        promo_message = self.send_promo_message(call, expert, user)
 
         message = call_message + schedule_message + \
-            user_message + expert_message + feedback_message
+            user_message + expert_message + feedback_message + promo_message
 
         return Output(
             output_details=Common.jsonify(call.__dict__),
