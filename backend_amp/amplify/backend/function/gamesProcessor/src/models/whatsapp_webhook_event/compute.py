@@ -55,14 +55,8 @@ class Compute:
             "userId": user_id,
             "createdAt": datetime.now()
         }
-
-        # Send Slack notification
-        slack_input = WASlackNotifierInput(
-            from_number=from_number,
-            body=body,
-            name=name
-        )
-        slack_notifier = WASlackNotifier(slack_input)
+        slack_notifier = WASlackNotifier(
+            from_number=from_number, name=name, body=body)
         slack_notifier.send_notification()
 
         user_webhook_messages_collection.insert_one(message_data)
