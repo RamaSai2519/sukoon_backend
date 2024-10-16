@@ -115,6 +115,7 @@ class Compute:
         event_user = self.find_event_user(
             self.input.phoneNumber, self.input.source)
         event_message = self.create_message(True, "Event ")
+        nudge_message = ""
         if not event_user:
             event_user = self.create_event_user(user)
             event_user = self.insert_event_user(
