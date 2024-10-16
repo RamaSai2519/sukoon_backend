@@ -40,7 +40,7 @@ class Compute:
         if last_call:
             last_call_time = Common.string_to_date(last_call, "initiatedTime")
             user["lastCallDate"] = last_call_time
-            user["callAge"] = (self.current_time - last_call_time).days
+            user["callAge"] = (self.common.current_time - last_call_time).days
             user["expert"] = last_call.get("expert", "")
             user["expert"] = self.common.get_expert_name(user["expert"])
         else:
@@ -55,7 +55,7 @@ class Compute:
     def format_users(self, users: List[Dict]) -> list:
         for user in users:
             created_date = Common.string_to_date(user, "createdDate")
-            user["slDays"] = (self.current_time - created_date).days
+            user["slDays"] = (self.common.current_time - created_date).days
             user_profile = user.get("profileCompleted", False)
             user["type"] = "Lead" if user_profile is False else "User"
             population_query = {"user": user.get("_id")}
