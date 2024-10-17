@@ -167,9 +167,12 @@ class Compute:
         # payload = {'template_name': 'LEADS',
         #            'phone_number': phone_number, 'parameters': {'image_link': image_link}}
         if profileCompleted == True:
-            payload = {'template_name': 'WELCOME_REGISTRATION',
-                       'phone_number': phone_number,
-                       'parameters': {'user_name': name if name else phone_number}}
+            payload = {
+                'template_name': 'PROMO_TEMPLATE',
+                'phone_number': phone_number,
+                'request_meta': json.dumps({'user_name': name}),
+                'parameters': {'image_link': 'https://sukoon-media.s3.ap-south-1.amazonaws.com/wa_promo_image.jpeg'}
+            }
             response = self.send_wa_message(payload)
             return response
         return None
