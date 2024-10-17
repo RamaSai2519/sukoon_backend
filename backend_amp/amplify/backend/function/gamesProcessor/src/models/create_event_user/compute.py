@@ -103,6 +103,22 @@ class Compute:
         message = "Nudge message sent" if response.status_code == 200 else "Nudge message not sent"
         return message
 
+    def pop_immutable_fields(self, data: dict) -> dict:
+        fields = ["_id", "phoneNumber", "createdAt"]
+        for field in fields:
+            data.pop(field, None)
+        return data
+
+    def prep_data(self, new_data: dict, old_data: dict) -> dict:
+        new_data = {k: v for k, v in new_data.items() if v is not None}
+        old_data = self.pop_immutable_fields(old_data)
+        old_data.update(new_data)
+        date_fields = ["dob", "createdAt", "updatedAt"]
+        for field in date_fields:
+            if isinstance(old_data.get(field), str):
+                old_data[field] = Common.string_to_date(old_data, field)
+        return old_data
+
     def compute(self) -> Output:
         user = self.find_user(self.input.phoneNumber)
         user_message = self.create_message(True)
@@ -122,6 +138,13 @@ class Compute:
                 event_user, self.event_users_collection)
             nudge_message = self.send_nudge_message(user)
             event_message = self.create_message(False, "Event ")
+        else:
+            event_user = self.prep_data(asdict(self.input), asdict(event_user))
+            self.event_users_collection.update_one(
+                {"phoneNumber": self.input.phoneNumber, "source": self.input.source},
+                {"$set": event_user}
+            )
+            event_message = "Event User updated successfully"
 
         event_user = self.find_event_user(
             self.input.phoneNumber, self.input.source)

@@ -5,7 +5,7 @@ from models.create_event_user.validate import Validator
 from models.interfaces import EventUserInput as Input, Output
 
 
-class CreateEventUser:
+class UpsertEventUser:
     def __init__(self, input: Input) -> None:
         self.input = input
 

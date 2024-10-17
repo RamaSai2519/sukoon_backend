@@ -8,7 +8,7 @@ from flask_jwt_extended import jwt_required
 from models.save_remark.main import SaveRemark
 from models.upsert_user.main import UpsertUser
 from models.get_club_interests.main import GetInterests
-from models.create_event_user.main import CreateEventUser
+from models.create_event_user.main import UpsertEventUser
 from models.get_engagement_data.main import GetEngagementData
 from models.create_club_interest.main import CreateClubInterest
 from models.upsert_engagement_data.main import UpsertEngagementData
@@ -34,12 +34,12 @@ class UserService(Resource):
         return output
 
 
-class CreateEventUserService(Resource):
+class UpsertEventUserService(Resource):
 
     def post(self) -> dict:
         input = json.loads(request.get_data())
         input = EventUserInput(**input)
-        output = CreateEventUser(input).process()
+        output = UpsertEventUser(input).process()
         output = dataclasses.asdict(output)
 
         return output
