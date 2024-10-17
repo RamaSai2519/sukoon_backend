@@ -1107,3 +1107,19 @@ class WhatsappNotificationTemplates:
                 ]
             }
         }
+
+        self.REGISTRATION_MARKETING = {
+            "template_name": "REGISTRATION_MARKETING",
+            "template": {
+                "name": "welcome_marketing_7th_oct",
+                "language": {"code": "en_us"},
+                "components": [
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"}
+                        ]
+                    }
+                ]
+            }
+        }
