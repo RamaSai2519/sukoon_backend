@@ -162,12 +162,11 @@ class Compute:
         self.update_user(user_data, prev_user)
 
     def send_insert_message(self, name: str, phone_number: str, profileCompleted: bool):
-        if profileCompleted == False:
-            pass
+        # if profileCompleted == False:
             # image_link = 'https://sukoon-media.s3.ap-south-1.amazonaws.com/wa_promo_image.jpeg'
             # payload = {'template_name': 'LEADS',
             #            'phone_number': phone_number, 'parameters': {'image_link': image_link}}
-        else:
+        if profileCompleted == True:
             payload = {'template_name': 'WELCOME_REGISTRATION',
                        'phone_number': phone_number,
                        'parameters': {'user_name': name if name else phone_number}}
