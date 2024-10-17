@@ -54,7 +54,7 @@ class Compute:
         user_data.pop('refCode', None)
 
         user_data['profileCompleted'] = bool(
-            user_data.get('name') and user_data.get('city') and user_data.get('birthDate'))
+            user_data.get('name') and user_data.get('birthDate'))
 
         if user_data.get('profileCompleted') and (not prev_user or not prev_user.get('refCode')):
             user_data['refCode'] = self.generate_referral_code(
@@ -142,7 +142,8 @@ class Compute:
         user_name = user_data.get('name', None)
         user_number = user_data.get('phoneNumber')
         user_profile = user_data.get('profileCompleted', False)
-        response = self.send_insert_message(user_name, user_number, user_profile)
+        response = self.send_insert_message(
+            user_name, user_number, user_profile)
         message += ' and sent welcome message' if response else ' but did not send welcome message'
 
         signup_type = 'User' if user_profile else 'Lead'
@@ -162,9 +163,9 @@ class Compute:
 
     def send_insert_message(self, name: str, phone_number: str, profileCompleted: bool):
         # if profileCompleted == False:
-            # image_link = 'https://sukoon-media.s3.ap-south-1.amazonaws.com/wa_promo_image.jpeg'
-            # payload = {'template_name': 'LEADS',
-            #            'phone_number': phone_number, 'parameters': {'image_link': image_link}}
+        # image_link = 'https://sukoon-media.s3.ap-south-1.amazonaws.com/wa_promo_image.jpeg'
+        # payload = {'template_name': 'LEADS',
+        #            'phone_number': phone_number, 'parameters': {'image_link': image_link}}
         if profileCompleted == True:
             payload = {'template_name': 'WELCOME_REGISTRATION',
                        'phone_number': phone_number,
