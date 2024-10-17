@@ -1091,3 +1091,19 @@ class WhatsappNotificationTemplates:
                 ]
             }
         }
+
+        self.REMIND_INACTIVE_USER = {
+            "template_name": "REMIND_INACTIVE_USER",
+            "template": {
+                "name": "welcome_reminder_7th_october",
+                "language": {"code": "en_us"},
+                "components": [
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"}
+                        ]
+                    }
+                ]
+            }
+        }

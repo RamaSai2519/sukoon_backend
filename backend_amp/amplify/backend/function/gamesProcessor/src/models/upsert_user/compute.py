@@ -142,9 +142,8 @@ class Compute:
         user_name = user_data.get('name', None)
         user_number = user_data.get('phoneNumber')
         user_profile = user_data.get('profileCompleted', False)
-        response = self.send_insert_message(
-            user_name, user_number, user_profile)
-        message += ' and sent welcome message' if response else ' but failed to send welcome message'
+        response = self.send_insert_message(user_name, user_number, user_profile)
+        message += ' and sent welcome message' if response else ' but did not send welcome message'
 
         signup_type = 'User' if user_profile else 'Lead'
         message += self.slack_manager.send_message(
@@ -170,8 +169,9 @@ class Compute:
             payload = {'template_name': 'WELCOME_REGISTRATION',
                        'phone_number': phone_number,
                        'parameters': {'user_name': name if name else phone_number}}
-        response = self.send_wa_message(payload)
-        return response
+            response = self.send_wa_message(payload)
+            return response
+        return None
 
     def compute(self) -> Output:
         user = self.input
