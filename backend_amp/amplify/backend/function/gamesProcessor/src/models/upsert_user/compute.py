@@ -163,9 +163,10 @@ class Compute:
 
     def send_insert_message(self, name: str, phone_number: str, profileCompleted: bool):
         if profileCompleted == False:
-            image_link = 'https://sukoon-media.s3.ap-south-1.amazonaws.com/wa_promo_image.jpeg'
-            payload = {'template_name': 'LEADS',
-                       'phone_number': phone_number, 'parameters': {'image_link': image_link}}
+            pass
+            # image_link = 'https://sukoon-media.s3.ap-south-1.amazonaws.com/wa_promo_image.jpeg'
+            # payload = {'template_name': 'LEADS',
+            #            'phone_number': phone_number, 'parameters': {'image_link': image_link}}
         else:
             payload = {'template_name': 'WELCOME_REGISTRATION',
                        'phone_number': phone_number,
