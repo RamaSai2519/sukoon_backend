@@ -40,38 +40,5 @@
         "backendamp": {}
       }
     }
-  },
-  "dev": {
-    "awscloudformation": {
-      "AuthRoleName": "amplify-backendamp-dev-caa78-authRole",
-      "UnauthRoleArn": "arn:aws:iam::533267308676:role/amplify-backendamp-dev-caa78-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::533267308676:role/amplify-backendamp-dev-caa78-authRole",
-      "Region": "ap-south-1",
-      "DeploymentBucketName": "amplify-backendamp-dev-caa78-deployment",
-      "UnauthRoleName": "amplify-backendamp-dev-caa78-unauthRole",
-      "StackName": "amplify-backendamp-dev-caa78",
-      "StackId": "arn:aws:cloudformation:ap-south-1:533267308676:stack/amplify-backendamp-dev-caa78/f724cdc0-37b4-11ef-8260-02c0f83c72ff",
-      "AmplifyAppId": "d227q70xwaiboi"
-    },
-    "categories": {
-      "function": {
-        "gamesProcessor": {
-          "deploymentBucketName": "amplify-backendamp-dev-caa78-deployment",
-          "s3Key": "amplify-builds/gamesProcessor-30684e36753275763878-build.zip"
-        },
-        "notificationProcessor": {
-          "userNotificationTableStreamTimestamp": "2024-07-03T10:17:21.979",
-          "deploymentBucketName": "amplify-backendamp-dev-caa78-deployment",
-          "s3Key": "amplify-builds/notificationProcessor-63567848597457345a6d-build.zip"
-        },
-        "scheduler": {},
-        "pdfGenerator": {},
-        "excelUploader": {}
-      },
-      "api": {
-        "sukoonAPI": {},
-        "backendamp": {}
-      }
-    }
   }
 }
