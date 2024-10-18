@@ -66,7 +66,9 @@ class Notifications:
         query = {"user": ObjectId(self.input.user_id),
                  "status": {"$ne": "initiated"}}
         sort = [("initiatedTime", -1)]
-        last_call = dict(calls_collection.find_one(query, sort=sort))
-        last_expert = last_call.get("expert", "") if last_call else ""
+        last_call: dict = calls_collection.find_one(query, sort=sort)
+        if not last_call:
+            return "First call"
+        last_expert = last_call.get("expert", "")
         last_expert_name = self.common.get_expert_name(last_expert)
         return last_expert_name
