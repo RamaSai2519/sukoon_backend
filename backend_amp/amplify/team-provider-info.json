@@ -15,7 +15,7 @@
       "function": {
         "gamesProcessor": {
           "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
-          "s3Key": "amplify-builds/gamesProcessor-37796c6f7a6143676c35-build.zip"
+          "s3Key": "amplify-builds/gamesProcessor-61785546444e737a4f77-build.zip"
         },
         "notificationProcessor": {
           "userNotificationTableStreamTimestamp": "2024-07-03T10:50:48.205",
