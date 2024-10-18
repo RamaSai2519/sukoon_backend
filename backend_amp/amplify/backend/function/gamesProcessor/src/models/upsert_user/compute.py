@@ -122,9 +122,8 @@ class Compute:
             self.send_wa_message(payload)
 
         if user_data.get('profileCompleted') == True and prev_user and prev_user.get('profileCompleted') == False:
-            user_name = user_data.get('name', None)
             user_number = user_data.get('phoneNumber')
-            user_name = user_name if user_name else user_number
+            user_name = user_data.get('name', user_number)
             message = self.slack_manager.send_message(
                 user_name, 'User', str(prev_user['_id']))
             response = self.send_insert_message(user_name, user_number, True)
@@ -139,8 +138,8 @@ class Compute:
             user_data).inserted_id
 
         message = 'Successfully created user'
-        user_name = user_data.get('name', None)
         user_number = user_data.get('phoneNumber')
+        user_name = user_data.get('name', user_number)
         user_profile = user_data.get('profileCompleted', False)
         response = self.send_insert_message(
             user_name, user_number, user_profile)
