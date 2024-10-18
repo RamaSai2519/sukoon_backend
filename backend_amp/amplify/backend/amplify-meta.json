@@ -33,7 +33,7 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "AppSync",
-      "lastPushTimeStamp": "2024-10-18T18:15:18.829Z",
+      "lastPushTimeStamp": "2024-10-18T18:49:58.021Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-backendamp-main-3186f-deployment/amplify-cfn-templates/api/cloudformation-template.json",
         "logicalId": "apibackendamp"
@@ -57,7 +57,7 @@
         "RootUrl": "https://6x4j0qxbmk.execute-api.ap-south-1.amazonaws.com/main",
         "ApiId": "6x4j0qxbmk"
       },
-      "lastPushTimeStamp": "2024-10-18T18:15:18.830Z",
+      "lastPushTimeStamp": "2024-10-18T18:49:58.025Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-backendamp-main-3186f-deployment/amplify-cfn-templates/api/sukoonAPI-cloudformation-template.json",
         "logicalId": "apisukoonAPI"
@@ -76,7 +76,7 @@
         "Name": "excelUploader-main",
         "LambdaExecutionRole": "backendampLambdaRole44457109-main"
       },
-      "lastPushTimeStamp": "2024-10-18T18:15:18.831Z",
+      "lastPushTimeStamp": "2024-10-18T18:49:58.026Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-backendamp-main-3186f-deployment/amplify-cfn-templates/function/excelUploader-cloudformation-template.json",
         "logicalId": "functionexcelUploader"
@@ -115,20 +115,15 @@
         "Name": "gamesProcessor-main",
         "LambdaExecutionRole": "backendampLambdaRoledcea3a31-main"
       },
-      "lastPushTimeStamp": "2024-10-18T18:15:18.831Z",
+      "lastPushTimeStamp": "2024-10-18T18:49:58.026Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-backendamp-main-3186f-deployment/amplify-cfn-templates/function/gamesProcessor-cloudformation-template.json",
         "logicalId": "functiongamesProcessor"
       },
-      "lastBuildTimeStamp": "2024-10-18T17:46:26.468Z",
-      "lastBuildType": "PROD",
-      "lastPackageTimeStamp": "2024-10-18T17:46:35.417Z",
-      "distZipFilename": "gamesProcessor-61785546444e737a4f77-build.zip",
       "s3Bucket": {
         "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
         "s3Key": "amplify-builds/gamesProcessor-61785546444e737a4f77-build.zip"
-      },
-      "lastPushDirHash": "axUFDNszOwgz9f9WvM7Xo1vbM40="
+      }
     },
     "notificationProcessor": {
       "build": true,
@@ -152,20 +147,15 @@
         "Name": "notificationProcessor-main",
         "LambdaExecutionRole": "backendampLambdaRole84bff967-main"
       },
-      "lastPushTimeStamp": "2024-10-18T18:15:18.832Z",
+      "lastPushTimeStamp": "2024-10-18T18:49:58.027Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-backendamp-main-3186f-deployment/amplify-cfn-templates/function/notificationProcessor-cloudformation-template.json",
         "logicalId": "functionnotificationProcessor"
       },
-      "lastBuildTimeStamp": "2024-10-18T17:46:47.682Z",
-      "lastBuildType": "PROD",
-      "lastPackageTimeStamp": "2024-10-18T17:46:52.200Z",
-      "distZipFilename": "notificationProcessor-65445248424a76795554-build.zip",
       "s3Bucket": {
         "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
         "s3Key": "amplify-builds/notificationProcessor-65445248424a76795554-build.zip"
-      },
-      "lastPushDirHash": "eDRHBJvyUTYzVx74OncGu+br0rk="
+      }
     },
     "pdfGenerator": {
       "build": true,
@@ -178,7 +168,7 @@
         "Name": "pdfGenerator-main",
         "LambdaExecutionRole": "backendampLambdaRole4848f557-main"
       },
-      "lastPushTimeStamp": "2024-10-18T18:15:18.832Z",
+      "lastPushTimeStamp": "2024-10-18T18:49:58.027Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-backendamp-main-3186f-deployment/amplify-cfn-templates/function/pdfGenerator-cloudformation-template.json",
         "logicalId": "functionpdfGenerator"
@@ -211,7 +201,7 @@
         "Name": "scheduler-main",
         "LambdaExecutionRole": "backendampLambdaRolec4d51036-main"
       },
-      "lastPushTimeStamp": "2024-10-18T18:15:18.833Z",
+      "lastPushTimeStamp": "2024-10-18T18:49:58.028Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-backendamp-main-3186f-deployment/amplify-cfn-templates/function/scheduler-cloudformation-template.json",
         "logicalId": "functionscheduler"
