@@ -631,12 +631,6 @@ class UploadInput:
     file_name: str
     file_type: str
 
-
-@dataclass
-class InvokeMarkInput:
-    callId: str
-
-
 @dataclass
 class GetScheduledJobsInput:
     limit: Optional[int] = None

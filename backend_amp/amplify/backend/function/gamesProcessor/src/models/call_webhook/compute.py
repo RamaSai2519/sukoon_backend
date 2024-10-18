@@ -1,5 +1,6 @@
 import json
 import requests
+import threading
 from typing import Union
 from models.common import Common
 from configs import CONFIG as config
@@ -145,6 +146,12 @@ class Compute:
             message = 'Promo message sent' if response.status_code == 200 else 'Promo message not sent'
             return message
 
+    def call_mark(self) -> None:
+        callId = self.input.call_uuid.replace('_0', '')
+        payload = {'callId': callId}
+        requests.request(
+            'POST', config.MARK_URL + '/process', headers=application_json_header, data=json.dumps(payload))
+
     def compute(self) -> Output:
         callId = self.input.call_uuid.replace('_0', '')
         call = self.find_call(callId)
@@ -166,6 +173,8 @@ class Compute:
         call = self.find_call(callId)
         feedback_message = self.send_feedback_message(call, expert, user)
         promo_message = self.send_promo_message(call, expert, user)
+
+        threading.Thread(target=self.call_mark).start()
 
         message = call_message + schedule_message + \
             user_message + expert_message + feedback_message + promo_message

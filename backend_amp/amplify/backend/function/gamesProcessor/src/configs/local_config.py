@@ -3,6 +3,7 @@ from datetime import timedelta
 
 class LocalConfig:
     URL = "http://localhost:8080"
+    MARK_URL = "https://mark.sukoonunlimited.com"
 
     DB_CONFIG = {
         "connection_url": "mongodb+srv://techcouncil:2lfNFMZIjdfZJl2R@cluster0.h3kssoa.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",

@@ -3,6 +3,8 @@ from datetime import timedelta
 
 class MainConfig:
     URL = "https://6x4j0qxbmk.execute-api.ap-south-1.amazonaws.com/main"
+    MARK_URL = "https://mark.sukoonunlimited.com"
+    
     DB_CONFIG = {
         "connection_url": "mongodb+srv://sukoon_user:Tcks8x7wblpLL9OA@cluster0.o7vywoz.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
     }
