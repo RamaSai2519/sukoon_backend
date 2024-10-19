@@ -214,5 +214,6 @@ class Common:
         )
         if call_meta:
             for key, value in call_meta.items():
-                call[key] = value
+                if key not in call:
+                    call[key] = value
         return call

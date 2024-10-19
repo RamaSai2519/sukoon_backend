@@ -2,22 +2,31 @@ from models.interfaces import GetErrorLogsInput as Input, Output
 from db.admins import get_error_logs_collection
 from models.constants import OutputStatus
 from models.common import Common
-
+from datetime import datetime
 
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
         self.collection = get_error_logs_collection()
+        
 
     def compute(self) -> Output:
-        cursor = self.collection.find().sort("time", -1)
-        paginated_cursor = Common.paginate_cursor(
-            cursor, int(self.input.page), int(self.input.size))
-        data = [Common.jsonify(spec) for spec in paginated_cursor]
-        total_count = self.collection.count_documents({})
+        query = {'callId': self.input.callId}
+        log: dict = self.collection.find_one(query)
+
+        if not log:
+            return Output(
+                output_status=OutputStatus.FAILURE,
+                output_message="Call Logs not found",
+                output_details={}
+            )
+
+        logs: list = log.get("logs", [])
+        logs = [Common.jsonify(log) for log in logs]
+        logs = sorted(logs, key=lambda x: x.get('time', datetime.min), reverse=True)
 
         return Output(
             output_status=OutputStatus.SUCCESS,
             output_message="Data fetched successfully",
-            output_details={"data": data, "total": total_count}
+            output_details={"data": logs}
         )

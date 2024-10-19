@@ -77,8 +77,7 @@ class GetClubInterestsInput:
 
 @dataclass
 class GetErrorLogsInput:
-    page: Optional[int] = 0
-    size: Optional[int] = 0
+    callId: str
 
 
 @dataclass
