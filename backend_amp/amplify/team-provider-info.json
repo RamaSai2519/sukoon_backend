@@ -15,7 +15,7 @@
       "function": {
         "gamesProcessor": {
           "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
-          "s3Key": "amplify-builds/gamesProcessor-2b7642385a326d667a7a-build.zip"
+          "s3Key": "amplify-builds/gamesProcessor-6e77736661696a725377-build.zip"
         },
         "excelUploader": {
           "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
