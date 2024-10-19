@@ -15,12 +15,7 @@
       "function": {
         "gamesProcessor": {
           "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
-          "s3Key": "amplify-builds/gamesProcessor-61785546444e737a4f77-build.zip"
-        },
-        "notificationProcessor": {
-          "userNotificationTableStreamTimestamp": "2024-07-03T10:50:48.205",
-          "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
-          "s3Key": "amplify-builds/notificationProcessor-65445248424a76795554-build.zip"
+          "s3Key": "amplify-builds/gamesProcessor-2b7642385a326d667a7a-build.zip"
         },
         "excelUploader": {
           "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
