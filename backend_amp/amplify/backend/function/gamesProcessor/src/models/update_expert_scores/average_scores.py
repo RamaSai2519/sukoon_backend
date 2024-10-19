@@ -1,3 +1,4 @@
+import json
 import requests
 from typing import List, Dict
 from configs import CONFIG as config
@@ -62,8 +63,8 @@ class CalcAverageScores:
         return score, average_scores
 
     def get_payload(self, average_scores: AverageScores, score: float) -> dict:
-        return {"phoneNumber": self.input.expert_number,
-                **average_scores.__dict__, "score": score}
+        return json.dumps({"phoneNumber": self.input.expert_number,
+                **average_scores.__dict__, "score": score})
 
     def update_expert_scores(self, average_scores: AverageScores, score: float) -> str:
         payload = self.get_payload(average_scores, score)
