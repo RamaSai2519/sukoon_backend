@@ -35,6 +35,7 @@ class Compute:
             new_data = self.merge_old_data(new_data, old_data)
         else:
             new_data = self.set_defaults(new_data)
+            new_data["user_id"] = ObjectId(self.input.user_id)
         return new_data
 
     def get_old_data(self, user_id: str) -> PhoneConfig:
