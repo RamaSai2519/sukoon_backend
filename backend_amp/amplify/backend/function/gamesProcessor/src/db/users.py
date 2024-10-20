@@ -17,6 +17,12 @@ def get_meta_collection() -> Collection:
     meta_collection = db["meta"]
     return meta_collection
 
+def get_phone_configs_collection() -> Collection:
+    client = Database().client
+
+    db = client["test"]
+    phone_configs_collection = db["phoneconfigs"]
+    return phone_configs_collection
 
 def get_admins_collection() -> Collection:
     client = Database().client

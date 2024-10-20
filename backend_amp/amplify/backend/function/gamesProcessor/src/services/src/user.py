@@ -10,9 +10,10 @@ from models.upsert_user.main import UpsertUser
 from models.get_club_interests.main import GetInterests
 from models.create_event_user.main import UpsertEventUser
 from models.get_engagement_data.main import GetEngagementData
+from models.upsert_phone_config.main import UpsertPhoneConfig
 from models.create_club_interest.main import CreateClubInterest
 from models.upsert_engagement_data.main import UpsertEngagementData
-from models.interfaces import User, GetUsersInput, EventUserInput, GetLeadsInput, SaveRemarkInput, GetEngagementDataInput, UpsertEngagementDataInput, CreateClubInterestInput, GetClubInterestsInput
+from models.interfaces import User, GetUsersInput, EventUserInput, GetLeadsInput, SaveRemarkInput, GetEngagementDataInput, UpsertEngagementDataInput, CreateClubInterestInput, GetClubInterestsInput, PhoneConfigInput
 
 
 class UserService(Resource):
@@ -32,6 +33,17 @@ class UserService(Resource):
         output = dataclasses.asdict(output)
 
         return output
+
+class PhoneConfigService(Resource):
+
+    def post(self) -> dict:
+        input = json.loads(request.get_data())
+        input = PhoneConfigInput(**input)
+        output = UpsertPhoneConfig(input).process()
+        output = dataclasses.asdict(output)
+
+        return output
+        
 
 
 class UpsertEventUserService(Resource):

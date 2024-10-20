@@ -2,7 +2,7 @@ from datetime import timedelta
 
 
 class DevConfig:
-    URL = "https://ij8f1oonya.execute-api.ap-south-1.amazonaws.com/dev"
+    URL = "https://h6u6b6ei84.execute-api.ap-south-1.amazonaws.com/dev"
     MARK_URL = "https://mark.sukoonunlimited.com"
 
     DB_CONFIG = {

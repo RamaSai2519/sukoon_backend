@@ -510,6 +510,30 @@ class GetEventUsersInput:
 
 
 @dataclass
+class PhoneConfigInput:
+    user_id: str
+    model: Optional[str] = None
+    serial: Optional[str] = None
+    location: Optional[str] = None
+    metadata: Optional[dict] = None
+    user_type: Optional[str] = None
+    installedApps: Optional[list] = None
+
+
+@dataclass
+class PhoneConfig:
+    user_id: str
+    _id: Optional[str] = None
+    model: Optional[str] = None
+    serial: Optional[str] = None
+    location: Optional[str] = None
+    metadata: Optional[dict] = None
+    user_type: Optional[str] = None
+    installedApps: Optional[list] = None
+    createdDate: datetime = field(default_factory=datetime.now)
+
+
+@dataclass
 class User:
     phoneNumber: str = None
     createdDate: datetime = field(default_factory=datetime.now)
@@ -629,6 +653,7 @@ class UserMeta:
 class UploadInput:
     file_name: str
     file_type: str
+
 
 @dataclass
 class GetScheduledJobsInput:

@@ -1,14 +1,15 @@
 import traceback
-from models.interfaces import UpsertRegisteredUserInput as Input, Output
 from models.constants import OutputStatus
-from models.upsert_registered_user.compute import Compute
-from models.upsert_registered_user.validate import Validator
+from models.upsert_phone_config.compute import Compute
+from models.upsert_phone_config.validate import Validator
+from models.interfaces import PhoneConfigInput as Input, Output
 
-class UpsertRegisteredUser:
+
+class UpsertPhoneConfig:
     def __init__(self, input: Input) -> None:
         self.input = input
 
-    def process(self):
+    def process(self) -> Output:
         input = self.input
         valid_input, error_message = self._validate(input)
 
@@ -30,8 +31,8 @@ class UpsertRegisteredUser:
             )
 
         return output
-    
-    def _validate(self, input: Input):
+
+    def _validate(self, input: Input) -> tuple:
         validation_obj = Validator(input)
         validation_result, error_message = validation_obj.validate_input()
 
