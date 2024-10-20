@@ -50,10 +50,6 @@ class Compute:
         else:
             expert_data = self.set_defaults(expert_data)
         expert_data = self.populate_categories(expert_data)
-
-        if isinstance(expert_data.get('createdDate'), str):
-            expert_data['createdDate'] = Common.string_to_date(
-                expert_data, 'createdDate')
         return expert_data
 
     def validate_phoneNumber(self, phoneNumber: str) -> Union[bool, dict]:

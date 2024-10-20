@@ -28,6 +28,7 @@ api.add_resource(UserService, '/actions/user')
 api.add_resource(SlotsService, '/actions/slots')
 api.add_resource(ExpertService, '/actions/expert')
 api.add_resource(ApplicantService, '/actions/applicant')
+api.add_resource(PhoneConfigService, '/actions/phone_config')
 api.add_resource(UserReferralService, '/actions/user_referrals')
 
 # Events Routes
