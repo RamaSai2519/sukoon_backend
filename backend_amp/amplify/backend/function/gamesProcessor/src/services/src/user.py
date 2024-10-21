@@ -1,6 +1,7 @@
 import json
 import dataclasses
 from flask import request
+from models.common import Common
 from flask_restful import Resource
 from models.get_user.main import GetUser
 from models.get_leads.main import GetLeads
@@ -20,6 +21,7 @@ class UserService(Resource):
 
     def post(self) -> dict:
         input = json.loads(request.get_data())
+        input = Common.clean_dict(input, User)
         input = User(**input)
         output = UpsertUser(input).process()
         output = dataclasses.asdict(output)
@@ -34,6 +36,7 @@ class UserService(Resource):
 
         return output
 
+
 class PhoneConfigService(Resource):
 
     def post(self) -> dict:
@@ -43,7 +46,6 @@ class PhoneConfigService(Resource):
         output = dataclasses.asdict(output)
 
         return output
-        
 
 
 class UpsertEventUserService(Resource):
