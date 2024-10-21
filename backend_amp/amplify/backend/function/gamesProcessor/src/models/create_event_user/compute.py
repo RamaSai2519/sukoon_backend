@@ -17,6 +17,7 @@ class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
         self.url = config.URL + "/actions/user"
+        self.wa_url = config.URL + "/actions/send_whatsapp"
         self.current_date = datetime.now()
         self.meta_collection = get_meta_collection()
         self.user_collection = get_user_collection()
@@ -99,7 +100,7 @@ class Compute:
             }
         }
         response = requests.request(
-            "POST", self.url, headers=application_json_header, data=json.dumps(payload))
+            "POST", self.wa_url, headers=application_json_header, data=json.dumps(payload))
         message = "Nudge message sent" if response.status_code == 200 else "Nudge message not sent"
         return message
 
@@ -141,7 +142,8 @@ class Compute:
         else:
             event_user = self.prep_data(asdict(self.input), asdict(event_user))
             self.event_users_collection.update_one(
-                {"phoneNumber": self.input.phoneNumber, "source": self.input.source},
+                {"phoneNumber": self.input.phoneNumber,
+                    "source": self.input.source},
                 {"$set": event_user}
             )
             event_message = "Event User updated successfully"
