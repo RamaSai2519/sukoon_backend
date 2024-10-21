@@ -19,7 +19,7 @@
         },
         "excelUploader": {
           "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
-          "s3Key": "amplify-builds/excelUploader-6d576a3969464e627a68-build.zip"
+          "s3Key": "amplify-builds/excelUploader-4e6d376361624a424553-build.zip"
         },
         "pdfGenerator": {
           "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
@@ -27,7 +27,7 @@
         },
         "scheduler": {
           "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
-          "s3Key": "amplify-builds/scheduler-4d377969573349383358-build.zip"
+          "s3Key": "amplify-builds/scheduler-7235676e4137446b7252-build.zip"
         }
       },
       "api": {

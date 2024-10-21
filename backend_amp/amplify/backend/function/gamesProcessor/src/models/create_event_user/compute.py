@@ -79,7 +79,7 @@ class Compute:
 
     def find_event(self) -> Union[Event, None]:
         event = self.events_collection.find_one(
-            {"slug": self.input.eventName})
+            {"slug": self.input.source})
         event = Common.clean_dict(event, Event)
         return Event(**event) if event else None
 
