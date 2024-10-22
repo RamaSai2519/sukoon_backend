@@ -538,7 +538,6 @@ class PhoneConfig:
 class User:
     createdDate: datetime = field(default_factory=datetime.now)
 
-    _id: Optional[str] = None
     name: Optional[str] = None
     city: Optional[str] = None
     email: Optional[str] = None
