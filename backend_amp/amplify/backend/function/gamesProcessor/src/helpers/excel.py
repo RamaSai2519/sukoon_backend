@@ -1,15 +1,15 @@
 import json
 import boto3
-from configs import CONFIG as Config
+from configs import CONFIG as config
 
 
 class ExcelS3Helper:
     def __init__(self, bucket_name: str = "sukoon-user-data") -> None:
         self.s3_client = boto3.client(
             "s3",
-            region_name=Config.REGION,
-            aws_access_key_id=Config.ACCESS_KEY,
-            aws_secret_access_key=Config.SECRET_ACCESS_KEY
+            region_name=config.REGION,
+            aws_access_key_id=config.ACCESS_KEY,
+            aws_secret_access_key=config.SECRET_ACCESS_KEY
         )
         self.bucket_name = bucket_name
 

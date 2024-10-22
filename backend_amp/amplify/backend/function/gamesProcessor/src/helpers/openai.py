@@ -1,20 +1,38 @@
 from openai import AzureOpenAI
-from configs import CONFIG as Config
+from configs import CONFIG as config
 
 
-class AzureOpenAIConfig:
+class GPT_Client:
     def __init__(self) -> None:
-        self.azure_key = Config.AZURE_KEY
-        self.azure_endpoint = Config.AZURE_ENDPOINT
-        self.azure_version = Config.AZURE_API_VERSION
-        self.openai_client = self._create_openai_client()
+        self.key = config.GPT_API_KEY
+        self.version = config.GPT_VERSION
+        self.endpoint = config.GPT_ENDPOINT
+        self.client = self._create_gpt_client()
 
-    def _create_openai_client(self) -> AzureOpenAI:
+    def _create_gpt_client(self) -> AzureOpenAI:
         return AzureOpenAI(
-            api_key=self.azure_key,
-            azure_endpoint=self.azure_endpoint,
-            api_version=self.azure_version
+            api_key=self.key,
+            api_version=self.version,
+            azure_endpoint=self.endpoint
         )
 
-    def get_openai_client(self) -> AzureOpenAI:
-        return self.openai_client
+    def get_gpt_client(self) -> AzureOpenAI:
+        return self.client
+
+
+class ADA_Client:
+    def __init__(self) -> None:
+        self.key = config.ADA_API_KEY
+        self.version = config.ADA_VERSION
+        self.endpoint = config.ADA_ENDPOINT
+        self.client = self._create_ada_client()
+
+    def _create_ada_client(self) -> AzureOpenAI:
+        return AzureOpenAI(
+            api_key=self.key,
+            api_version=self.version,
+            azure_endpoint=self.endpoint
+        )
+
+    def get_ada_client(self) -> AzureOpenAI:
+        return self.client

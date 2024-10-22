@@ -12,6 +12,8 @@ from pymongo.cursor import Cursor
 from typing import List, Dict
 from bson import ObjectId
 import pytz
+import json
+import re
 
 
 class Common:
@@ -217,3 +219,23 @@ class Common:
                 if key not in call:
                     call[key] = value
         return call
+
+    def extract_json(self, json_str: str) -> dict:
+        def clean_json(json_str: str) -> str:
+            json_str = json_str.replace("\n", "").replace(
+                "```", "").replace("json", "").strip()
+            return json_str
+
+        try:
+            if "json" in json_str:
+                match = re.search(r'```json\n(.*?)```', json_str, re.DOTALL)
+                if match:
+                    response_text = clean_json(match.group(1))
+                    response_text = json.loads(response_text)
+                    return response_text
+            cleaned_json_str = clean_json(json_str)
+            cleaned_json_str = json.loads(cleaned_json_str)
+            return cleaned_json_str
+        except Exception as e:
+            print(f"JSON Error: {str(e)}")
+            return {}

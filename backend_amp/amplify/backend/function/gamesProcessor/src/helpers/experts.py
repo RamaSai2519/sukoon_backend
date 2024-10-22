@@ -31,8 +31,14 @@ class ExpertsHelper:
         experts = [self.__format__(expert) for expert in experts]
         return experts
 
-    def get_expert(self, phoneNumber: str) -> dict:
-        query = {"phoneNumber": phoneNumber}
+    def get_expert(self, phoneNumber: str = None, expert_id: str = None) -> dict:
+        query = {}
+        if phoneNumber:
+            query["phoneNumber"] = phoneNumber
+        elif expert_id:
+            query["_id"] = ObjectId(expert_id)
+        else:
+            return None
         expert = self.experts_collection.find_one(
             query, self.prep_projection(True))
         if expert:

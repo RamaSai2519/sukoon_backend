@@ -1,7 +1,7 @@
 from models.interfaces import SendOTPInput as Input, Output
 from models.constants import OutputStatus
 from db.otp import get_otp_collection
-from configs import CONFIG as Config
+from configs import CONFIG as config
 import requests
 import string
 import random
@@ -16,10 +16,10 @@ class Compute:
         return ''.join(random.choices(string.digits, k=length))
 
     def _send_otp_via_sms(self, phone_number, otp):
-        query_params = Config.SMS_API_CONFIG
+        query_params = config.SMS_API_CONFIG
         query_params["msg"] = self.otp_string.replace("__OTP__", otp)
         query_params["send_to"] = "91" + phone_number
-        response = requests.get(url=Config.SMS_API_URL,
+        response = requests.get(url=config.SMS_API_URL,
                                 params=query_params, verify=False)
         if response.text.startswith("success"):
             return "OTP generated and sent successfully via SMS", OutputStatus.SUCCESS

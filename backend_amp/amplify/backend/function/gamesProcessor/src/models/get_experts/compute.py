@@ -23,8 +23,9 @@ class Compute:
         return expert
 
     def compute(self) -> Output:
-        if self.input.phoneNumber is not None:
-            experts = self.helper.get_expert(self.input.phoneNumber)
+        if self.input.phoneNumber is not None or self.input.expert_id is not None:
+            experts = self.helper.get_expert(
+                self.input.phoneNumber, self.input.expert_id)
             if not experts:
                 return Output(
                     output_details={},

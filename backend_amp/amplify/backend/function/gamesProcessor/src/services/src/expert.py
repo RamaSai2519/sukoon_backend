@@ -12,7 +12,8 @@ from models.upsert_expert.main import UpsertExpert
 from models.get_applicants.main import GetApplicants
 from models.update_timings.main import UpdateTimings
 from models.create_applicant.main import CreateApplicant
-from models.interfaces import Expert, CategoriesInput, GetExpertsInput, ApplicantInput, GetSlotsInput, GetTimingsInput, UpdateTimingsInput, TimingsRow, GetApplicantsInput
+from models.recommend_expert.main import RecommendExpert
+from models.interfaces import Expert, CategoriesInput, GetExpertsInput, ApplicantInput, GetSlotsInput, GetTimingsInput, UpdateTimingsInput, TimingsRow, GetApplicantsInput, RecommendExpertInput
 
 
 class ExpertService(Resource):
@@ -93,6 +94,17 @@ class CategoryService(Resource):
         input = json.loads(request.get_data())
         input = CategoriesInput(**input)
         output = Categories(input).process()
+        output = dataclasses.asdict(output)
+
+        return output
+
+
+class RecommendExpertService(Resource):
+
+    def post(self) -> dict:
+        input = json.loads(request.get_data())
+        input = RecommendExpertInput(**input)
+        output = RecommendExpert(input).process()
         output = dataclasses.asdict(output)
 
         return output

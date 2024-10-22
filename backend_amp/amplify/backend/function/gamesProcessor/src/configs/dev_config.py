@@ -65,3 +65,11 @@ class DevConfig:
     FB_SERVER_KEY = "AAAAM5jkbNg:APA91bG80zQ8CzD1AeQmV45YT4yWuwSgJ5VwvyLrNynAJBk4AcyCb6vbCSGlIQeQFPAndS0TbXrgEL8HFYQq4DMXmSoJ4ek7nFcCwOEDq3Oi5Or_SibSpywYFrnolM4LSxpRkVeiYGDv"
 
     UNSPLASH_API_KEY = "I7e7Sy0qOspZ6whpNAp1gpCe4MXGIxWlMdSLBCfFpYI"
+
+    GPT_VERSION = "2024-08-01-preview"
+    GPT_API_KEY = "13c72289e9704b4ca63f683df19a7afe"
+    GPT_ENDPOINT = "https://sukoon-chat.openai.azure.com/openai/deployments/gpt-4o/chat/completions?api-version=2024-08-01-preview"
+
+    ADA_VERSION = "2023-05-15"
+    ADA_API_KEY = "13c72289e9704b4ca63f683df19a7afe"
+    ADA_ENDPOINT = "https://sukoon-chat.openai.azure.com/openai/deployments/text-embedding-ada-002/embeddings?api-version=2023-05-15"

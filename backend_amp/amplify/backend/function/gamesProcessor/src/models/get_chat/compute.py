@@ -1,6 +1,6 @@
 from models.interfaces import ChatInput as Input, Output, Content
-from helpers.openai import AzureOpenAIConfig
 from models.constants import OutputStatus
+from helpers.openai import GPT_Client
 from models.common import Common
 import json
 import re
@@ -11,8 +11,8 @@ class Compute:
         self.input = input
         self.common = Common()
         self.message_history = []
-        self.openai_client_obj = AzureOpenAIConfig()
-        self.openai_client = self.openai_client_obj.get_openai_client()
+        self.openai_client_obj = GPT_Client()
+        self.openai_client = self.openai_client_obj.get_gpt_client()
 
     def get_response(self, message_history: list) -> str:
         response = self.openai_client.chat.completions.create(
