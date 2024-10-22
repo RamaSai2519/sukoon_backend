@@ -536,9 +536,9 @@ class PhoneConfig:
 
 @dataclass
 class User:
-    phoneNumber: str = None
     createdDate: datetime = field(default_factory=datetime.now)
 
+    _id: Optional[str] = None
     name: Optional[str] = None
     city: Optional[str] = None
     email: Optional[str] = None
@@ -550,6 +550,8 @@ class User:
     isBlocked: Optional[bool] = None
     isPaidUser: Optional[bool] = None
     wa_opt_out: Optional[bool] = None
+    phoneNumber: Optional[str] = None
+    expert: Optional[ObjectId] = None
     numberOfGames: Optional[int] = None
     numberOfCalls: Optional[int] = None
     birthDate: Optional[datetime] = None

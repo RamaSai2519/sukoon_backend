@@ -4,6 +4,7 @@ import random
 import hashlib
 import requests
 import dataclasses
+from bson import ObjectId
 from datetime import datetime
 from typing import Union, Tuple
 from models.common import Common
@@ -18,9 +19,18 @@ from models.constants import OutputStatus, application_json_header
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
+        self.query = self.decide_query()
         self.slack_manager = SlackManager()
         self.users_collection = get_user_collection()
         self.referrals_collection = get_user_referral_collection()
+
+    def decide_query(self) -> dict:
+        query = {}
+        if self.input.phoneNumber:
+            query['phoneNumber'] = self.input.phoneNumber
+        elif self.input._id:
+            query['_id'] = ObjectId(self.input._id)
+        return query
 
     def defaults(self, user_data: dict) -> dict:
         user_data['active'] = True
@@ -40,7 +50,7 @@ class Compute:
         return user_data
 
     def pop_immutable_fields(self, user_data: dict) -> dict:
-        fields = ['_id', 'phoneNumber', 'refCode', 'createdDate']
+        fields = ['phoneNumber', 'refCode', 'createdDate']
         for field in fields:
             user_data.pop(field, None)
         return user_data
@@ -63,6 +73,11 @@ class Compute:
         if isinstance(user_data.get('birthDate'), str):
             user_data['birthDate'] = Common.string_to_date(
                 user_data, 'birthDate')
+
+        object_fields = ['_id', 'expert']
+        for field in object_fields:
+            if user_data.get(field) and not isinstance(user_data[field], ObjectId):
+                user_data[field] = ObjectId(user_data[field])
 
         user_data = {k: v for k, v in user_data.items() if v is not None}
         return user_data
@@ -90,8 +105,8 @@ class Compute:
         user = self.users_collection.find_one({'refCode': referral_code})
         return user if user else False
 
-    def validate_phoneNumber(self, phoneNumber: str) -> Union[dict, None]:
-        user = self.users_collection.find_one({'phoneNumber': phoneNumber})
+    def validate_phoneNumber(self) -> Union[dict, None]:
+        user = self.users_collection.find_one(self.query)
         return user if user else None
 
     def validate_referral(self, referred_user_id: str) -> bool:
@@ -106,10 +121,7 @@ class Compute:
             self.referrals_collection.insert_one(referral)
 
     def update_user(self, user_data: dict, prev_user: dict) -> str:
-        self.users_collection.update_one(
-            {'phoneNumber': user_data['phoneNumber']},
-            {'$set': user_data}
-        )
+        self.users_collection.update_one(self.query, {'$set': user_data})
 
         if user_data.get('isPaidUser') == True and prev_user and prev_user.get('isPaidUser') == False:
             payload = {
@@ -158,13 +170,9 @@ class Compute:
             else:
                 if not self.validate_referral(user_data['_id']) and (not prev_user or not prev_user.get('refSource')):
                     user_data['refSource'] = self.input.refCode
-        self.update_user(user_data, prev_user)
+        self.users_collection.update_one(self.query, {'$set': user_data})
 
     def send_insert_message(self, name: str, phone_number: str, profileCompleted: bool):
-        # if profileCompleted == False:
-        # image_link = 'https://sukoon-media.s3.ap-south-1.amazonaws.com/wa_promo_image.jpeg'
-        # payload = {'template_name': 'LEADS',
-        #            'phone_number': phone_number, 'parameters': {'image_link': image_link}}
         if profileCompleted == True:
             payload = {
                 'template_name': 'PROMO_TEMPLATE',
@@ -179,7 +187,7 @@ class Compute:
     def compute(self) -> Output:
         user = self.input
         user_data = dataclasses.asdict(user)
-        prev_user = self.validate_phoneNumber(user_data['phoneNumber'])
+        prev_user = self.validate_phoneNumber()
 
         user_data = self.prep_data(user_data, prev_user)
         if prev_user:

@@ -1,5 +1,6 @@
 import time
 import requests
+import threading
 import numpy as np
 from models.common import Common
 from openai import RateLimitError
@@ -45,7 +46,7 @@ class Compute:
 
         most_similar = max(
             similarities, key=lambda x: x[1]) if similarities else None
-        return most_similar[0] if most_similar and most_similar[1] > 0.85 else None
+        return most_similar[0] if most_similar and most_similar[1] > 0.97 else None
 
     def store_embedding(self, prompt: str, embedding: list, response: dict) -> None:
         document = {"prompt": prompt, "embedding": embedding}
@@ -76,14 +77,39 @@ class Compute:
         expert = response.get('output_details', None)
         return expert
 
+    def update_user(self, user_id: str, expert_id: str) -> None:
+        url = config.URL + '/actions/user'
+        payload = {"_id": user_id, "expert": expert_id}
+        response = requests.post(url, json=payload)
+        print(response.json())
+
+    def new_recommendation(self, prompt: str, embedding: list) -> None:
+        response = self.chat("user", prompt)
+        print(response, 'gpt_response')
+        response_json = self.common.extract_json(response)
+        expert_id = response_json.get("expert_id", None)
+
+        if expert_id:
+            expert = self.get_expert(expert_id)
+            if expert:
+                self.store_embedding(prompt, embedding, response_json)
+                self.update_user(self.input.user_id, expert_id)
+
     def compute(self) -> Output:
         prompt = self.prompter.personas_prompt()
+        if not prompt:
+            return Output(
+                output_details={},
+                output_status=OutputStatus.FAILURE,
+                output_message="User persona not found"
+            )
         embedding = self.compute_embedding(prompt)
         similar_entry = self.get_most_similar_prompt(embedding)
 
         if similar_entry:
             expert_id = similar_entry['expert_id']
             expert = self.get_expert(expert_id)
+            self.update_user(self.input.user_id, expert_id)
 
             if expert:
                 return Output(
@@ -92,21 +118,13 @@ class Compute:
                     output_message="Successfully fetched expert from stored data"
                 )
         else:
-            response = self.chat("user", prompt)
-            print(response, 'gpt_response')
-            response_json = self.common.extract_json(response)
-            expert_id = response_json.get("expert_id", None)
-
-            if expert_id:
-                expert = self.get_expert(expert_id)
-                if expert:
-                    self.store_embedding(prompt, embedding, response_json)
-
-                    return Output(
-                        output_details=expert,
-                        output_status=OutputStatus.SUCCESS,
-                        output_message="Successfully fetched expert"
-                    )
+            threading.Thread(target=self.new_recommendation, args=(
+                prompt, embedding)).start()
+            return Output(
+                output_details={},
+                output_status=OutputStatus.SUCCESS,
+                output_message="Fetching expert from GPT-4"
+            )
 
         return Output(
             output_details={},

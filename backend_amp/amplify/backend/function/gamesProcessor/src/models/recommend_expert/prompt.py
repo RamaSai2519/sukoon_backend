@@ -20,7 +20,7 @@ class Prompt:
         user = Common.clean_dict(user, User)
         user = User(**user)
         persona = user.customerPersona
-        if persona.get("demographics"):
+        if isinstance(persona, dict) and persona.get("demographics"):
             persona["_id"] = str(user._id)
             persona["name"] = user.name
             return persona
@@ -66,6 +66,8 @@ class Prompt:
     def personas_prompt(self) -> str:
         experts_personas = self.get_experts_personas()
         user_persona = self.get_user_persona()
+        if not user_persona:
+            return None
 
         user_persona_str = "**User Persona:**\n"
         user_persona_str += self.format_persona_dict(user_persona)

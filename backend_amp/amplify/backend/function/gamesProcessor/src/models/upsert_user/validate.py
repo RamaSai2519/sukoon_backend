@@ -30,10 +30,10 @@ class Validator:
         return True, ""
 
     def validate_mandatory_fields(self):
-        if not self.input.phoneNumber:
-            return False, f"Phone Number is mandatory"
+        if not self.input.phoneNumber and not self.input._id:
+            return False, f"User Identifier is mandatory"
 
-        if len(self.input.phoneNumber) != 10:
+        if self.input.phoneNumber and len(self.input.phoneNumber) != 10:
             return False, f"Phone Number must be 10 digits"
 
         return True, ""
