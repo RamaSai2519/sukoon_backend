@@ -15,11 +15,11 @@
       "function": {
         "gamesProcessor": {
           "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
-          "s3Key": "amplify-builds/gamesProcessor-454630616d6150476d44-build.zip"
+          "s3Key": "amplify-builds/gamesProcessor-6e77736661696a725377-build.zip"
         },
         "excelUploader": {
           "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
-          "s3Key": "amplify-builds/excelUploader-4e6d376361624a424553-build.zip"
+          "s3Key": "amplify-builds/excelUploader-6d576a3969464e627a68-build.zip"
         },
         "pdfGenerator": {
           "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
@@ -27,12 +27,33 @@
         },
         "scheduler": {
           "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
-          "s3Key": "amplify-builds/scheduler-7235676e4137446b7252-build.zip"
+          "s3Key": "amplify-builds/scheduler-4d377969573349383358-build.zip"
         }
       },
       "api": {
         "sukoonAPI": {},
         "backendamp": {}
+      }
+    }
+  },
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-backendamp-dev-9cc0c-authRole",
+      "UnauthRoleArn": "arn:aws:iam::533267308676:role/amplify-backendamp-dev-9cc0c-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::533267308676:role/amplify-backendamp-dev-9cc0c-authRole",
+      "Region": "ap-south-1",
+      "DeploymentBucketName": "amplify-backendamp-dev-9cc0c-deployment",
+      "UnauthRoleName": "amplify-backendamp-dev-9cc0c-unauthRole",
+      "StackName": "amplify-backendamp-dev-9cc0c",
+      "StackId": "arn:aws:cloudformation:ap-south-1:533267308676:stack/amplify-backendamp-dev-9cc0c/62bac340-8e41-11ef-847f-066fefed7da3",
+      "AmplifyAppId": "d227q70xwaiboi"
+    },
+    "categories": {
+      "function": {
+        "excelUploader": {},
+        "gamesProcessor": {},
+        "pdfGenerator": {},
+        "scheduler": {}
       }
     }
   }
