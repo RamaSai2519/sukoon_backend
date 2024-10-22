@@ -1,8 +1,9 @@
 import json
 import requests
-from configs import CONFIG as CONFIG
+from configs import CONFIG as config
 
-CASHFREE_CONFIG = CONFIG.CASHFREE_API_CREDENTIALS
+CASHFREE_CONFIG = config.CASHFREE_API_CREDENTIALS
+
 
 def get_cashfree_payment_session_id(customer_details_dict, order_details_dict):
 
@@ -35,7 +36,7 @@ def get_cashfree_payment_session_id(customer_details_dict, order_details_dict):
         'x-client-secret': CASHFREE_CONFIG.get("SECRET_KEY")
     }
 
-    print(headers , url)
+    print(headers, url)
 
     response = requests.request("POST", url, headers=headers, data=payload)
 

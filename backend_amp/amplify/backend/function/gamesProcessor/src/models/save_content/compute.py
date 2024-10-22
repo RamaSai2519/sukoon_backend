@@ -1,7 +1,7 @@
 import boto3
 import requests
 from io import BytesIO
-from configs import CONFIG as Config
+from configs import CONFIG as config
 from models.constants import OutputStatus
 from db.content import get_content_posts_collection
 from models.interfaces import Output, SaveContentInput as Input
@@ -13,9 +13,9 @@ class Compute:
         self.collection = get_content_posts_collection()
         self.s3_client = boto3.client(
             "s3",
-            region_name=Config.REGION,
-            aws_access_key_id=Config.ACCESS_KEY,
-            aws_secret_access_key=Config.SECRET_ACCESS_KEY
+            region_name=config.REGION,
+            aws_access_key_id=config.ACCESS_KEY,
+            aws_secret_access_key=config.SECRET_ACCESS_KEY
         )
 
     def prep_data(self) -> dict:

@@ -1,6 +1,6 @@
 from models.interfaces import UploadInput as Input, Output
 from models.constants import OutputStatus
-from configs import CONFIG as Config
+from configs import CONFIG as config
 import boto3
 
 
@@ -8,8 +8,8 @@ class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
         self.s3_client = boto3.client(
-            "s3", region_name=Config.REGION, aws_access_key_id=Config.ACCESS_KEY,
-            aws_secret_access_key=Config.SECRET_ACCESS_KEY
+            "s3", region_name=config.REGION, aws_access_key_id=config.ACCESS_KEY,
+            aws_secret_access_key=config.SECRET_ACCESS_KEY
         )
 
     def compute(self) -> Output:

@@ -1,7 +1,7 @@
 from models.interfaces import PushNotificationInput as Input, Output
 from firebase_admin import credentials, messaging
 from models.constants import OutputStatus
-from configs import CONFIG as CONFIG
+from configs import CONFIG as config
 import firebase_admin
 import os
 

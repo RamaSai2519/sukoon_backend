@@ -4,14 +4,14 @@ from flask import Flask
 from flask_cors import CORS
 from flask_restful import Api
 from services.controller import *
-from configs import CONFIG as Config
+from configs import CONFIG as config
 from flask_jwt_extended import JWTManager
 
 
 app = Flask(__name__)
-app.config['JWT_SECRET_KEY'] = Config.JWT_SECRET_KEY
-app.config['JWT_ACCESS_TOKEN_EXPIRES'] = Config.JWT_ACCESS_TOKEN_EXPIRES
-app.config['JWT_REFRESH_TOKEN_EXPIRES'] = Config.JWT_REFRESH_TOKEN_EXPIRES
+app.config['JWT_SECRET_KEY'] = config.JWT_SECRET_KEY
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = config.JWT_ACCESS_TOKEN_EXPIRES
+app.config['JWT_REFRESH_TOKEN_EXPIRES'] = config.JWT_REFRESH_TOKEN_EXPIRES
 
 api = Api(app)
 JWTManager(app)
@@ -42,7 +42,8 @@ api.add_resource(GetSchedulesService, '/actions/schedules')
 api.add_resource(CreateScheduledJobsService, '/actions/create_scheduled_job')
 api.add_resource(UpdateScheduledJobsService, '/actions/update_scheduled_job')
 
-# Mark7 Routes
+# Mark Routes
+api.add_resource(RecommendExpertService, '/actions/recommend_expert')
 api.add_resource(UpdateExpertScoresService, '/actions/expert_scores')
 
 # Cashfree Routes

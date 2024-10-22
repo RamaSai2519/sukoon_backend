@@ -2,7 +2,7 @@ import requests
 import json
 from models.interfaces import WhtasappMessageInput as Input, Output
 from models.constants import OutputStatus
-from configs import CONFIG as CONFIG
+from configs import CONFIG as config
 from .template_setter import (
     WhatsappNotificationTemplateSetter,
 )
@@ -12,9 +12,8 @@ from datetime import datetime
 
 
 class Compute:
-    def __init__(self,input: Input) -> None:
+    def __init__(self, input: Input) -> None:
         self.input = input
-
 
     def get_user_id_from_number(self, phone_number):
         user_collection = get_user_collection()
@@ -37,7 +36,7 @@ class Compute:
         user_collection.insert_one(message_data)
 
     def send_whatsapp_notification(self, mobile_number, template):
-        variables = CONFIG.WHATSAPP_API
+        variables = config.WHATSAPP_API
         whatsapp_api_url = variables.get("URL")
         auth_token = variables.get("ACCESS_TOKEN")
         headers = {
@@ -85,8 +84,8 @@ class Compute:
             message_id = (response_json.get("messages")[0]).get("id")
             status = "SUCCESS"
         if user_id:
-            self.create_user_notification_message_id(message_id, status, user_id)
-
+            self.create_user_notification_message_id(
+                message_id, status, user_id)
 
         return Output(
             output_details={"response": response.text},

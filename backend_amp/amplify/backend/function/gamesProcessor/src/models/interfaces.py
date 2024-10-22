@@ -149,6 +149,7 @@ class GetCallsInput:
 @dataclass
 class GetExpertsInput:
     internal: Optional[str] = ""
+    expert_id: Optional[str] = None
     phoneNumber: Optional[str] = None
     schedule_status: Optional[str] = None
 
@@ -647,6 +648,11 @@ class UserMeta:
     remarks: Optional[str] = ""
     context: Optional[str] = ""
     userStatus: Optional[str] = ""
+
+
+@dataclass
+class RecommendExpertInput:
+    user_id: str
 
 
 @dataclass

@@ -1,6 +1,6 @@
 from pymongo import MongoClient
 import certifi
-from configs import CONFIG as Config
+from configs import CONFIG as config
 
 
 class Database:
@@ -8,7 +8,7 @@ class Database:
     _client = None
 
     def __init__(self) -> None:
-        self.url = Config.DB_CONFIG.get("connection_url")
+        self.url = config.DB_CONFIG.get("connection_url")
 
     def __new__(cls) -> "Database":
         if cls._instance is None:

@@ -1,13 +1,13 @@
 from models.interfaces import PhotosInput as Input, Output
 from models.constants import OutputStatus
-from configs import CONFIG as Config
+from configs import CONFIG as config
 import requests
 
 
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
-        self.access_key = Config.UNSPLASH_API_KEY
+        self.access_key = config.UNSPLASH_API_KEY
         self.url = "https://api.unsplash.com/search/photos"
 
     def fetch_photos(self) -> dict:
