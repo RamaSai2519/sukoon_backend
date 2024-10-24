@@ -74,7 +74,7 @@ class Compute:
         response = requests.get(url, params=params)
         response = response.json()
         expert = response.get('output_details', None)
-        return expert
+        return expert.get('name', None) if expert else None
 
     def update_user(self, user_id: str, expert_id: str) -> None:
         url = config.URL + '/actions/user'
