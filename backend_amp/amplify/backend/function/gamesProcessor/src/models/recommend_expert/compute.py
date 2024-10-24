@@ -1,6 +1,5 @@
 import time
 import requests
-import threading
 import numpy as np
 from models.common import Common
 from openai import RateLimitError
@@ -94,6 +93,8 @@ class Compute:
             if expert:
                 self.store_embedding(prompt, embedding, response_json)
                 self.update_user(self.input.user_id, expert_id)
+                return expert
+        return 'Expert not found'
 
     def compute(self) -> Output:
         prompt = self.prompter.personas_prompt()
@@ -118,12 +119,12 @@ class Compute:
                     output_message="Successfully fetched expert from stored data"
                 )
         else:
-            threading.Thread(target=self.new_recommendation, args=(
-                prompt, embedding)).start()
+            expert = self.new_recommendation(prompt, embedding)
+
             return Output(
-                output_details={},
+                output_details=expert,
                 output_status=OutputStatus.SUCCESS,
-                output_message="Fetching expert from GPT-4"
+                output_message="Successfully fetched expert from GPT-4"
             )
 
         return Output(
