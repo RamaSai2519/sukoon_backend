@@ -10,9 +10,40 @@ class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
         self.common = Common()
+        self.query = self.prep_query()
         self.excel_helper = ExcelS3Helper()
         self.today_query = Common.get_today_query()
-        self.query = self.common.get_internal_exclude_query(input.internal)
+
+    def prep_query(self) -> dict:
+        query = {}
+        internal_query = self.common.get_internal_exclude_query(
+            self.input.internal)
+
+        if self.input.filter_field == 'expert':
+            filter_query = self.common.get_filter_query(
+                'name', self.input.filter_value)
+            internal_query = self.common.get_internal_exclude_query(
+                self.input.internal, '_id')
+            query = {**filter_query, **internal_query}
+            experts = list(self.common.experts_collection.find(query))
+            expert_ids = [expert['_id'] for expert in experts]
+            return {'expert': {'$in': expert_ids}}
+
+        elif self.input.filter_field == 'user':
+            filter_query = self.common.get_filter_query(
+                'name', self.input.filter_value)
+            users = list(self.common.users_collection.find(filter_query))
+            user_ids = [user['_id'] for user in users]
+            query = {'user': {'$in': user_ids}}
+
+        elif self.input.filter_field == 'conversationScore':
+            query = {self.input.filter_field: int(self.input.filter_value)}
+
+        else:
+            query = self.common.get_filter_query(
+                self.input.filter_field, self.input.filter_value)
+
+        return {**query, **internal_query}
 
     def _total_calls(self) -> int:
         return self.common.calls_collection.count_documents(self.query)
@@ -43,8 +74,8 @@ class Compute:
         prev_time = datetime.strptime(prev_file_time, "%Y-%m-%d-%H-%M-%S")
         time_diff = (self.common.current_time - prev_time).seconds
         if time_diff < 1800:
-            diff_minutes = round((1800 - time_diff) / 60, 2)
-            msg = f" and Next Excel File will be created in {diff_minutes} minutes"
+            diff = round((1800 - time_diff) / 60, 2)
+            msg = f" and Next Excel File will be created in {diff} minutes"
             return prev_url, msg
         else:
             threading.Thread(target=self.create_excel).start()
