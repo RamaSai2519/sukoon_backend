@@ -1,4 +1,5 @@
 import boto3
+import threading
 import pandas as pd
 from io import BytesIO
 from pytz import timezone
@@ -98,5 +99,10 @@ def handler(event, context) -> dict:
     uploader = ExcelS3Helper()
     data = event.get("data", [])
     file_name = event.get("file_name", "default.xlsx")
-    uploader.create_and_upload_excel(file_name, data)
+
+    def create():
+        uploader.create_and_upload_excel(file_name, data)
+
+    threading.Thread(target=create).start()
+
     return {"statusCode": 200, "body": {"data": "File uploaded successfully."}}
