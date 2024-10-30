@@ -1,6 +1,5 @@
 import time
 import requests
-import numpy as np
 from models.common import Common
 from openai import RateLimitError
 from configs import CONFIG as config
@@ -37,10 +36,11 @@ class Compute:
         similarities = []
         for entry in all_embeddings:
             stored_embedding = entry['embedding']
-            similarity = np.dot(embedding, stored_embedding) / (
-                np.linalg.norm(embedding) *
-                np.linalg.norm(stored_embedding)
-            )
+            # similarity = np.dot(embedding, stored_embedding) / (
+            #     np.linalg.norm(embedding) *
+            #     np.linalg.norm(stored_embedding)
+            # )
+            similarity = None
             similarities.append((entry, similarity))
 
         most_similar = max(
