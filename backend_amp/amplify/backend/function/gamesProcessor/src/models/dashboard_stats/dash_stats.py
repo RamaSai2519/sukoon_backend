@@ -32,19 +32,6 @@ class DashboardStats:
 
         return len(total_seconds), sum(total_seconds)
 
-    def _get_successful_scheduled_calls_(self) -> list:
-        query = {**successful_calls_query, **self.exclude_query,
-                 "$or": [{"type": "scheduled"}, {"scheduledId": {"$exists": True}}]}
-        projection = {"duration": 1, "scheduledId": 1, "type": 1, "_id": 0}
-        calls = self.common.get_calls(query, projection, False)
-
-        for call in calls:
-            seconds = Common.duration_str_to_seconds(
-                call["duration"]) if "duration" in call else 0
-            if seconds < 60:
-                calls.remove(call)
-        return calls
-
     def _get_avg_conversation_score_(self) -> float:
         query = {
             **self.exclude_query,
@@ -91,14 +78,6 @@ class DashboardStats:
             if self.total_successful_calls > 0 else 0
         )
 
-    def scheduled_calls_percentage(self) -> float:
-        successful_scheduled_calls = len(
-            self._get_successful_scheduled_calls_())
-        return round(
-            successful_scheduled_calls / self.total_successful_calls * 100
-            if self.total_successful_calls > 0 else 0, 2
-        )
-
     def avg_conversation_score(self) -> float:
         return self._get_avg_conversation_score_()
 
@@ -107,16 +86,3 @@ class DashboardStats:
             self.internal, "_id")
         query = {"status": "online", **exclude_query}
         return self.experts_helper.get_experts(query)
-
-    def _get_successful_scheduled_calls_(self) -> list:
-        query = {**successful_calls_query, **self.exclude_query,
-                 "$or": [{"type": "scheduled"}, {"scheduledId": {"$exists": True}}]}
-        projection = {"duration": 1, "scheduledId": 1, "type": 1, "_id": 0}
-        calls = self.common.get_calls(query, projection, False)
-
-        for call in calls:
-            seconds = Common.duration_str_to_seconds(
-                call["duration"]) if "duration" in call else 0
-            if seconds < 60:
-                calls.remove(call)
-        return calls

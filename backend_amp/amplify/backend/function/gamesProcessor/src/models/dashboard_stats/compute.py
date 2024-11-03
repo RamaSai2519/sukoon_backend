@@ -19,9 +19,9 @@ class Compute:
 
         methods_to_run = [
             "avg_conversation_score", "onlineSarathis",
+            "missed_calls", "today_missed_calls", "average_call_duration",
             "total_calls", "today_calls", "successful_calls", "today_successful_calls",
             "inadequate_calls", "today_inadequate_calls", "failed_calls", "today_failed_calls",
-            "missed_calls", "today_missed_calls", "average_call_duration", "scheduled_calls_percentage",
         ]
 
         with ThreadPoolExecutor() as executor:
@@ -41,8 +41,8 @@ class Compute:
 
         return Output(
             output_details=stats_data,
-            output_status=OutputStatus.SUCCESS,
-            output_message="Dashboard Stats"
+            output_message="Dashboard Stats",
+            output_status=OutputStatus.SUCCESS
         )
 
     def _get_insights(self) -> dict:
