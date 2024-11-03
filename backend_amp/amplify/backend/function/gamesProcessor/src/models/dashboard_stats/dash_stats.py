@@ -67,6 +67,12 @@ class DashboardStats:
     def today_successful_calls(self) -> int:
         return self.calls_collection.count_documents({**successful_calls_query, **self.today_query, **self.exclude_query})
 
+    def inadequate_calls(self) -> int:
+        return self.calls_collection.count_documents({"status": "inadequate", **self.exclude_query})
+
+    def today_inadequate_calls(self) -> int:
+        return self.calls_collection.count_documents({"status": "inadequate", **self.today_query, **self.exclude_query})
+
     def failed_calls(self) -> int:
         return self.calls_collection.count_documents({"status": "failed", **self.exclude_query})
 

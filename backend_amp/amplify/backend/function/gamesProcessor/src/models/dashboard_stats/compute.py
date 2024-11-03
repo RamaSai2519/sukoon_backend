@@ -1,5 +1,3 @@
-import pytz
-from datetime import datetime
 from models.common import Common
 from models.constants import OutputStatus
 from models.dashboard_stats.dash_stats import DashboardStats
@@ -20,10 +18,10 @@ class Compute:
         stats_data = {}
 
         methods_to_run = [
+            "avg_conversation_score", "onlineSarathis",
             "total_calls", "today_calls", "successful_calls", "today_successful_calls",
-            "failed_calls", "today_failed_calls", "missed_calls", "today_missed_calls",
-            "average_call_duration", "scheduled_calls_percentage", "avg_conversation_score",
-            "onlineSarathis"
+            "inadequate_calls", "today_inadequate_calls", "failed_calls", "today_failed_calls",
+            "missed_calls", "today_missed_calls", "average_call_duration", "scheduled_calls_percentage",
         ]
 
         with ThreadPoolExecutor() as executor:
@@ -47,39 +45,31 @@ class Compute:
             output_message="Dashboard Stats"
         )
 
-    def _get_insights(self):
+    def _get_insights(self) -> dict:
         insights = CallInsights(self.exclude_query).get_insights()
+
+        def create_row(key: str, category: str, value_name: str) -> dict:
+            value = insights.get(value_name, "0")
+            return {"key": key, "category": category, "value": value}
+
         successfulCalls = [
-            {"key": "1", "category": "< 15 mins",
-                "value": insights.get("_15min", "0%")},
-            {"key": "2", "category": "15-30 mins",
-                "value": insights.get("_15_30min", "0%")},
-            {"key": "3", "category": "30-45 mins",
-                "value": insights.get("_30_45min", "0%")},
-            {"key": "4", "category": "45-60 mins",
-                "value": insights.get("_45_60min", "0%")},
-            {"key": "5", "category": "> 60 mins",
-                "value": insights.get("_60min_", "0%")},
+            create_row("1", "< 15 mins", "_15min"),
+            create_row("2", "15-30 mins", "_15_30min"),
+            create_row("3", "30-45 mins", "_30_45min"),
+            create_row("4", "45-60 mins", "_45_60min"),
+            create_row("5", "> 60 mins", "_60min_")
         ]
         avgCallDuration = [
-            {"key": "1", "category": "First Call",
-                "value": insights.get("one_call", "0")},
-            {"key": "2", "category": "Second Call",
-                "value": insights.get("two_calls", "0")},
-            {"key": "3", "category": "Repeat Calls",
-                "value": insights.get("repeat_calls", "0")},
-            {"key": "4", "category": "Scheduled Calls",
-                "value": insights.get("scheduled_avg_duration", "0")},
-            {"key": "5", "category": "Organic Calls",
-                "value": insights.get("organic_avg_duration", "0")},
+            create_row("1", "First Call", "one_call"),
+            create_row("2", "Second Call", "two_calls"),
+            create_row("3", "Repeat Calls", "repeat_calls"),
+            create_row("4", "Scheduled Calls", "scheduled_avg_duration"),
+            create_row("5", "Organic Calls", "organic_avg_duration"),
         ]
         otherStats = [
-            {"key": "1", "category": "First Call Split",
-                "value": insights.get("first_calls_split", "0%")},
-            {"key": "2", "category": "Second Call Split",
-                "value": insights.get("second_calls_split", "0%")},
-            {"key": "3", "category": "Repeat Call Split",
-                "value": insights.get("repeat_calls_split", "0%")},
+            create_row("1", "First Call Split", "first_calls_split"),
+            create_row("2", "Second Call Split", "second_calls_split"),
+            create_row("3", "Repeat Call Split", "repeat_calls_split"),
         ]
         insights = {
             "successfulCalls": successfulCalls,
