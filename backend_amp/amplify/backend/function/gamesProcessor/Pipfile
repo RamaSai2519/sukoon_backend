@@ -27,4 +27,4 @@ firebase-admin="6.5.0"
 slack-sdk = "3.33.1"
 
 [requires]
-python_version = "3.12"
+python_version = "3.8"
