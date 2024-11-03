@@ -54,7 +54,7 @@ class Validator:
             )
             return False, "User is busy"
 
-        if user["numberOfCalls"] <= 0:
+        if user["numberOfCalls"] <= 0 and expert.get("type") != "internal":
             self.notifier.send_notification(
                 type_=self.input.type_,
                 user_name=user.get("name", ""),
