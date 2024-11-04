@@ -15,11 +15,11 @@
       "function": {
         "gamesProcessor": {
           "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
-          "s3Key": "amplify-builds/gamesProcessor-6e77736661696a725377-build.zip"
+          "s3Key": "amplify-builds/gamesProcessor-754b714a7632416b3768-build.zip"
         },
         "excelUploader": {
           "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
-          "s3Key": "amplify-builds/excelUploader-6d576a3969464e627a68-build.zip"
+          "s3Key": "amplify-builds/excelUploader-716a6b33685135332b34-build.zip"
         },
         "pdfGenerator": {
           "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
@@ -27,7 +27,7 @@
         },
         "scheduler": {
           "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
-          "s3Key": "amplify-builds/scheduler-4d377969573349383358-build.zip"
+          "s3Key": "amplify-builds/scheduler-7235676e4137446b7252-build.zip"
         }
       },
       "api": {
