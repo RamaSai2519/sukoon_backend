@@ -144,6 +144,8 @@ class GetCallsInput:
     size: Optional[int] = 0
     internal: Optional[str] = ""
     callId: Optional[str] = None
+    filter_field: Optional[str] = None
+    filter_value: Optional[str] = None
 
 
 @dataclass

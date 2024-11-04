@@ -122,6 +122,12 @@ class Common:
         else:
             return 'User Initiated'
 
+    @staticmethod
+    def get_filter_query(filter_field: str, filter_value: str) -> dict:
+        if filter_field and filter_value:
+            return {filter_field: {'$regex': filter_value, '$options': 'i'}}
+        return {}
+
     def get_user_name(self, user_id: ObjectId) -> str:
         users_cache = self.users_cache
         if user_id not in users_cache:
@@ -202,12 +208,15 @@ class Common:
 
         return calls
 
-    def get_internal_exclude_query(self, internal: str = '', field: str = 'expert') -> list:
+    def get_internal_expertids(self) -> list:
         query = {'type': 'internal'}
-        querier = '$in' if internal == 'true' else '$nin'
         projection = {'_id': 1}
         experts = list(self.experts_collection.find(query, projection))
-        internal_expert_ids = [expert.get('_id', '') for expert in experts]
+        return [expert.get('_id', '') for expert in experts]
+
+    def get_internal_exclude_query(self, internal: str = '', field: str = 'expert') -> list:
+        querier = '$in' if internal == 'true' else '$nin'
+        internal_expert_ids = self.get_internal_expertids()
         return {field: {querier: internal_expert_ids}}
 
     def populate_call_meta(self, call: dict) -> dict:
