@@ -9,7 +9,7 @@ from flask_jwt_extended import jwt_required
 from models.save_remark.main import SaveRemark
 from models.upsert_user.main import UpsertUser
 from models.get_club_interests.main import GetInterests
-from models.create_event_user.main import UpsertEventUser
+from models.upsert_event_user.main import UpsertEventUser
 from models.get_engagement_data.main import GetEngagementData
 from models.upsert_phone_config.main import UpsertPhoneConfig
 from models.create_club_interest.main import CreateClubInterest

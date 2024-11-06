@@ -19,7 +19,10 @@ class Compute:
         if self.input.fromToday.lower() == "true":
             currentTime = datetime.now()
             query["validUpto"] = {"$gte": currentTime}
-        return query
+        
+        filter_query = Common.get_filter_query(
+            self.input.filter_field, self.input.filter_value)
+        return {**query, **filter_query}
 
     def fetch_homepage_events(self, query: dict) -> list:
         events = []

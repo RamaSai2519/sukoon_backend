@@ -14,7 +14,8 @@ class Compute:
         if self.input.slug:
             query = {"source": self.input.slug}
         else:
-            query = {}
+            query = Common.get_filter_query(
+                self.input.filter_field, self.input.filter_value)
         return query
 
     def fetch_event_users(self, query: dict) -> list:
