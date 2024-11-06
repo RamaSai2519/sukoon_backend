@@ -11,12 +11,13 @@ class Compute:
         self.event_users_collection = get_event_users_collection()
 
     def prepare_query(self) -> dict:
+        query = {}
         if self.input.slug:
             query = {"source": self.input.slug}
-        else:
-            query = Common.get_filter_query(
+            
+        filter_query = Common.get_filter_query(
                 self.input.filter_field, self.input.filter_value)
-        return query
+        return {**query, **filter_query}
 
     def fetch_event_users(self, query: dict) -> list:
 
