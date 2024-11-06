@@ -137,7 +137,7 @@ class Compute:
             event_user = self.create_event_user(user)
             event_user = self.insert_event_user(
                 event_user, self.event_users_collection)
-            nudge_message = self.send_nudge_message(user)
+            # nudge_message = self.send_nudge_message(user)
             event_message = self.create_message(False, "Event ")
         else:
             event_user = self.prep_data(asdict(self.input), asdict(event_user))
