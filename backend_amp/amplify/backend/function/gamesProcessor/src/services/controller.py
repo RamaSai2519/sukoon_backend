@@ -8,9 +8,9 @@ from services.src.coupon_reward import CouponRewardService
 from services.src.payment import CreatePaymentOrderService
 from services.src.call import CallWebhookService, CallService
 from services.src.admin import AdminFCMService, UploadService, LogsService
-from services.src.content import ChatService, PhotoService, ContentService
 from services.src.push_notification import PushNotificationService, FCMTokenService
 from services.src.authenticate import SendOTPService, ValidateOTPService, AdminAuthService
+from services.src.content import ChatService, PhotoService, ContentService, DallImageService
 from services.src.events import UpsertEventsService, ListEventsService, ListEventUsersService
 from services.src.scheduled_jobs import CreateScheduledJobsService, UpdateScheduledJobsService, GetSchedulesService
 from services.src.expert import ExpertService, ApplicantService, SlotsService, TimingService, CategoryService, RecommendExpertService

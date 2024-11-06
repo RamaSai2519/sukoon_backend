@@ -71,6 +71,7 @@ api.add_resource(EngagementDataService, '/actions/user_engagement')
 api.add_resource(ChatService, '/actions/chat')
 api.add_resource(PhotoService, '/actions/photos')
 api.add_resource(ContentService, '/actions/content')
+api.add_resource(DallImageService, '/actions/dall_image')
 # - Services
 api.add_resource(UploadService, '/actions/upload')
 api.add_resource(TimingService, '/actions/timings')
