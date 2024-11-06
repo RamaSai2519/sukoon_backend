@@ -490,6 +490,8 @@ class GetEventsInput:
     slug: Optional[str] = None
     fromToday: Optional[str] = "false"
     isHomePage: Optional[str] = "false"
+    filter_field: Optional[str] = None
+    filter_value: Optional[str] = None
 
 
 @dataclass
@@ -510,6 +512,8 @@ class GetEventUsersInput:
     page: Optional[int] = None
     size: Optional[int] = None
     slug: Optional[str] = None
+    filter_field: Optional[str] = None
+    filter_value: Optional[str] = None
 
 
 @dataclass

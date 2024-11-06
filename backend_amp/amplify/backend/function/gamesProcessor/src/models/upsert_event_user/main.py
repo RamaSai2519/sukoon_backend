@@ -1,7 +1,7 @@
 import traceback
 from models.constants import OutputStatus
-from models.create_event_user.compute import Compute
-from models.create_event_user.validate import Validator
+from models.upsert_event_user.compute import Compute
+from models.upsert_event_user.validate import Validator
 from models.interfaces import EventUserInput as Input, Output
 
 
