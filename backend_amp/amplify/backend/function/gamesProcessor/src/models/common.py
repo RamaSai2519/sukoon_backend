@@ -55,6 +55,8 @@ class Common:
 
     @staticmethod
     def duration_str_to_seconds(duration: str) -> int:
+        if not duration:
+            return 0
         duration = duration.split(':')
         hours, minutes, seconds = map(int, duration)
         return hours * 3600 + minutes * 60 + seconds
