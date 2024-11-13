@@ -1,8 +1,7 @@
+from db.events import get_event_users_collection, get_events_collection
 from db.calls import get_calls_collection, get_schedules_collection
 from models.constants import calls_exclusion_projection
 from db.referral import get_user_referral_collection
-from models.interfaces import User, EventUser, Call
-from db.events import get_event_users_collection
 from flask_jwt_extended import get_jwt_identity
 from db.experts import get_experts_collections
 from db.calls import get_callsmeta_collection
@@ -19,10 +18,12 @@ import re
 class Common:
     def __init__(self):
         self.users_cache = {}
+        self.images_cache = {}
         self.experts_cache = {}
         self.current_time = datetime.now()
         self.users_collection = get_user_collection()
         self.calls_collection = get_calls_collection()
+        self.events_collection = get_events_collection()
         self.experts_collection = get_experts_collections()
         self.schedules_collection = get_schedules_collection()
         self.callsmeta_collection = get_callsmeta_collection()
@@ -150,6 +151,17 @@ class Common:
             )
         return experts_cache[expert_id]
 
+    def get_expert_image(self, expert_id: ObjectId) -> str:
+        images_cache = self.images_cache
+        if expert_id not in images_cache:
+            expert = self.experts_collection.find_one(
+                {'_id': expert_id}, {'profile': 1})
+            print(expert)
+            images_cache[expert_id] = (
+                expert['profile'] if expert and 'profile' in expert else ''
+            )
+        return images_cache[expert_id]
+
     def format_calls(self, calls: List[Dict], req_names: bool = True) -> list:
         for call in calls:
             if req_names:
@@ -159,6 +171,8 @@ class Common:
                     ObjectId(call.get('user'))) if call.get('user') else 'Unknown'
                 call['expert'] = self.get_expert_name(
                     ObjectId(call.get('expert'))) if call.get('expert') else 'Unknown'
+                call['expert_image'] = self.get_expert_image(
+                    ObjectId(call.get('expert_id'))) if call.get('expert_id') else ''
 
             # Handle call source
             user_requested = call.get('user_requested', None)
@@ -170,7 +184,9 @@ class Common:
         return calls
 
     def get_events_history(self, query: dict) -> list:
-        events = list(get_event_users_collection().find(query))
+        event_slugs = list(get_event_users_collection().distinct('source', query))
+        query = {'slug': {'$in': event_slugs}}
+        events = list(self.events_collection.find(query))
         events = [Common.jsonify(event) for event in events]
         return events
 
