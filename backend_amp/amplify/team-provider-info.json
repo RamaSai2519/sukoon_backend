@@ -31,5 +31,25 @@
         "backendamp": {}
       }
     }
+  },
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-backendamp-dev-bf108-authRole",
+      "UnauthRoleArn": "arn:aws:iam::533267308676:role/amplify-backendamp-dev-bf108-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::533267308676:role/amplify-backendamp-dev-bf108-authRole",
+      "Region": "ap-south-1",
+      "DeploymentBucketName": "amplify-backendamp-dev-bf108-deployment",
+      "UnauthRoleName": "amplify-backendamp-dev-bf108-unauthRole",
+      "StackName": "amplify-backendamp-dev-bf108",
+      "StackId": "arn:aws:cloudformation:ap-south-1:533267308676:stack/amplify-backendamp-dev-bf108/a3c40760-a2dd-11ef-901b-06785b7f7ed7",
+      "AmplifyAppId": "d227q70xwaiboi"
+    },
+    "categories": {
+      "function": {
+        "excelUploader": {},
+        "gamesProcessor": {},
+        "scheduler": {}
+      }
+    }
   }
 }
