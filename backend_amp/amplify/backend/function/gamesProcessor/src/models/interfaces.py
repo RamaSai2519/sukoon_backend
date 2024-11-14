@@ -401,6 +401,7 @@ class PushNotificationInput:
     priority: Optional[str] = field(default="high")
     sound: Optional[str] = field(default="longbell")
     action: str = field(default_factory=lambda: "")
+    app_type: str = field(default_factory=lambda: "expert")
 
 
 @dataclass

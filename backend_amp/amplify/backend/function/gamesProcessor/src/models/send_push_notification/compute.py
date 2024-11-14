@@ -11,8 +11,13 @@ class Compute:
         self.input = input
 
     def initialize_firebase_admin(self) -> None:
-        file_path = os.path.join(os.path.dirname(
-            __file__), 'service-account.json')
+        if self.input.app_type == 'expert':
+            file_path = os.path.join(os.path.dirname(
+                __file__), 'expert-service-account.json')
+        else:
+            file_path = os.path.join(os.path.dirname(
+                __file__), 'user-service-account.json')
+
         if not firebase_admin._apps:
             cred = credentials.Certificate(file_path)
             firebase_admin.initialize_app(cred, {
