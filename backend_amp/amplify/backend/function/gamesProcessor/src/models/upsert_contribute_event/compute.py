@@ -1,37 +1,43 @@
-import dataclasses
+import random
+import string
 from models.common import Common
 from models.constants import OutputStatus
-from db.events import get_events_collection
-from models.interfaces import Event as Input, Output
+from db.events import get_contribute_events_collection
+from models.interfaces import ContributeEvent as Input, Output
 
 
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
         self.common = Common()
-        self.events_collection = get_events_collection()
+        self.events_collection = get_contribute_events_collection()
+        self.existing_slugs = self.events_collection.distinct('slug')
 
-    def prep_data(self, event_data: dict, new_event=True):
-        date_fields = ["validUpto",
-                       "registrationAllowedTill", "startEventDate"]
+    def validate_slug(self, slug: str) -> bool:
+        return True if slug in self.existing_slugs else False
+
+    def generate_slug(self) -> str:
+        while True:
+            slug = ''.join(random.choices(string.ascii_lowercase, k=3))
+            if not self.validate_slug(slug):
+                return slug
+
+    def prep_data(self, event_data: dict, new_event=True) -> dict:
+        date_fields = ["validUpto", "startDate"]
         for field in date_fields:
             event_data[field] = Common.string_to_date(event_data, field)
 
         if new_event:
             event_data["createdAt"] = self.common.current_time
+            event_data["slug"] = self.generate_slug()
         event_data["updatedAt"] = self.common.current_time
         event_data = {k: v for k, v in event_data.items() if v is not None}
         return event_data
 
-    def validate_slug(self, slug: str) -> bool:
-        event = self.events_collection.find_one({"slug": slug})
-        return True if event else False
-
     def compute(self) -> Output:
-        event_data = self.input
-        event_data = dataclasses.asdict(event_data)
+        event_data = self.input.__dict__
 
-        if self.validate_slug(event_data["slug"]):
+        if self.validate_slug(self.input.slug):
             event_data = self.prep_data(event_data, new_event=False)
             self.events_collection.update_one(
                 {"slug": event_data["slug"]},

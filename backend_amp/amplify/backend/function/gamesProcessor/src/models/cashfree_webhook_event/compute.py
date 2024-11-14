@@ -1,9 +1,9 @@
 import json, requests, random
 from datetime import datetime
 from bson import ObjectId
-from models.interfaces import CashfreeWebhookEventInput as Input, Output
 from models.constants import OutputStatus
-from db.event import get_event_configs_collection
+from db.events import get_events_collection
+from models.interfaces import CashfreeWebhookEventInput as Input, Output
 from db.users import get_user_collection, get_user_payment_collection
 
 class Compute:
@@ -37,7 +37,7 @@ class Compute:
         url = "https://6x4j0qxbmk.execute-api.ap-south-1.amazonaws.com/main/actions/send_whatsapp"
 
         if event_id:
-            event_config_collection = get_event_configs_collection()
+            event_config_collection = get_events_collection()
             event = event_config_collection.find_one({"_id": ObjectId(event_id)})
             event_name = event.get("mainTitle")
 

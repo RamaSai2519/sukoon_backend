@@ -36,6 +36,7 @@ api.add_resource(ListEventsService, '/actions/list_events')
 api.add_resource(UpsertEventsService, '/actions/upsert_event')
 api.add_resource(ListEventUsersService, '/actions/list_event_users')
 api.add_resource(UpsertEventUserService, '/actions/upsert_event_user')
+api.add_resource(UpsertContributeEventService, '/actions/upsert_contribute_event')
 
 # Scheduled Jobs Routes
 api.add_resource(GetSchedulesService, '/actions/schedules')

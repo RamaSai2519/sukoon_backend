@@ -1,25 +1,30 @@
+from db.events import get_events_collection, get_contribute_events_collection
 from models.interfaces import GetEventsInput as Input, Output
-from db.events import get_events_collection
 from models.constants import OutputStatus
+from pymongo.collection import Collection
 from models.common import Common
-from datetime import datetime
 
 
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
-        self.offset = int(int(input.page) - 1) * int(input.size)
+        self.common = Common()
         self.projection = {"_id": 0, "lastModifiedBy": 0}
-        self.events_collection = get_events_collection()
+        self.events_collection = self.determine_collection()
         self.event_categories = ["support_groups",
                                  "active_together", "wellness_connect"]
 
+    def determine_collection(self) -> Collection:
+        if self.input.events_type and self.input.events_type.lower() == "contribute":
+            return get_contribute_events_collection()
+        return get_events_collection()
+
     def prepare_query(self) -> dict:
-        query = {}
-        if self.input.fromToday.lower() == "true":
-            currentTime = datetime.now()
+        query = {"isDeleted": False}
+        if self.input.fromToday and self.input.fromToday.lower() == "true":
+            currentTime = self.common.current_time
             query["validUpto"] = {"$gte": currentTime}
-        
+
         filter_query = Common.get_filter_query(
             self.input.filter_field, self.input.filter_value)
         return {**query, **filter_query}
@@ -42,7 +47,7 @@ class Compute:
             events = [Common.jsonify(event)]
         else:
             query = self.prepare_query()
-            if self.input.isHomePage.lower() == "true":
+            if self.input.isHomePage and self.input.isHomePage.lower() == "true":
                 events = self.fetch_homepage_events(query)
             else:
                 cursor = self.events_collection.find(

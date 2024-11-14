@@ -35,6 +35,8 @@ class Common:
 
     @staticmethod
     def jsonify(doc: dict) -> dict:
+        if not doc:
+            return doc
         for field, value in doc.items():
             if isinstance(value, ObjectId):
                 doc[field] = str(value)

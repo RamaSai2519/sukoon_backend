@@ -116,17 +116,6 @@ class WaOptionsInput:
 
 
 @dataclass
-class AdminWaInput:
-    action: str
-    inputs: Optional[dict] = None
-    eventId: Optional[str] = None
-    usersType: Optional[str] = None
-    messageId: Optional[str] = None
-    templateId: Optional[str] = None
-    cities: Optional[List[str]] = None
-
-
-@dataclass
 class GetLeadsInput:
     page: Optional[int] = 0
     size: Optional[int] = 0
@@ -481,14 +470,33 @@ class Event:
     isPremiumUserOnly: Optional[bool] = None
     maxVisitorsAllowed: Optional[int] = None
     startEventDate: Optional[datetime] = None
-    registrationAllowedTill: Optional[str] = None
+    registrationAllowedTill: Optional[datetime] = None
 
+
+@dataclass
+class ContributeEvent:
+    slug: Optional[str] = None
+    name: Optional[str] = None
+    email: Optional[str] = None
+    isPaid: Optional[bool] = None
+    company: Optional[str] = None
+    website: Optional[str] = None
+    stipend: Optional[str] = None
+    highlights: Optional[str] = None
+    isDeleted: Optional[bool] = None
+    phoneNumber: Optional[str] = None
+    description: Optional[str] = None
+    locationType: Optional[str] = None
+    validUpto: Optional[datetime] = None
+    startDate: Optional[datetime] = None
+    
 
 @dataclass
 class GetEventsInput:
     page: Optional[int] = 0
     size: Optional[int] = 0
     slug: Optional[str] = None
+    events_type: Optional[str] = None
     fromToday: Optional[str] = "false"
     isHomePage: Optional[str] = "false"
     filter_field: Optional[str] = None
@@ -714,3 +722,14 @@ class CallInput:
     scheduledId: Optional[str] = None
     user_requested: Optional[bool] = None
     type_: str = field(default_factory=lambda: 'call')
+
+
+@dataclass
+class AdminWaInput:
+    action: str
+    inputs: Optional[dict] = None
+    eventId: Optional[str] = None
+    usersType: Optional[str] = None
+    messageId: Optional[str] = None
+    templateId: Optional[str] = None
+    cities: Optional[List[str]] = None
