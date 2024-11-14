@@ -129,3 +129,6 @@ cython_debug/
 *.DS_Store
 .vscode/launch.json
 backend_amp/amplify/backend/amplify-meta.json
+
+
+*.lock
