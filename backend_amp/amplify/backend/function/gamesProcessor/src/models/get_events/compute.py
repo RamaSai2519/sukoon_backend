@@ -49,6 +49,7 @@ class Compute:
             query = self.prepare_query()
             if self.input.isHomePage and self.input.isHomePage.lower() == "true":
                 events = self.fetch_homepage_events(query)
+                events = [Common.jsonify(event) for event in events]
             else:
                 cursor = self.events_collection.find(
                     query, self.projection).sort("validUpto", 1)
