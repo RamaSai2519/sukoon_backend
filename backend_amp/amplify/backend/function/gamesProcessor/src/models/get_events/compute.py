@@ -20,7 +20,7 @@ class Compute:
         return get_events_collection()
 
     def prepare_query(self) -> dict:
-        query = {"isDeleted": False}
+        query = {"isDeleted": False, "isDeleted": {"$exists": False}}
         if self.input.fromToday and self.input.fromToday.lower() == "true":
             currentTime = self.common.current_time
             query["validUpto"] = {"$gte": currentTime}

@@ -6,7 +6,7 @@ class Validator():
         self.input = input
 
     def validate_input(self):
-        if self.input.formType not in ["event", "sarathi"]:
+        if self.input.formType not in ["event", "sarathi", "ambassador"]:
             return False, "Invalid Form Type"
 
         if len(self.input.phoneNumber) != 10:
