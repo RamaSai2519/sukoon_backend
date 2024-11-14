@@ -70,9 +70,10 @@ class Compute:
             user_data['refCode'] = self.generate_referral_code(
                 user_data['name'], user_data['phoneNumber'])
 
-        if isinstance(user_data.get('birthDate'), str):
-            user_data['birthDate'] = Common.string_to_date(
-                user_data, 'birthDate')
+        date_fields = ['createdDate', 'birthDate']
+        for field in date_fields:
+            if user_data.get(field) and not isinstance(user_data[field], datetime):
+                user_data[field] = Common.string_to_date(user_data, field)
 
         object_fields = ['_id', 'expert']
         for field in object_fields:
