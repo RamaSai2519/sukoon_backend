@@ -27,10 +27,6 @@
     "apibackendampGraphQLAPIKeyOutput": {
       "Type": "String",
       "Default": "apibackendampGraphQLAPIKeyOutput"
-    },
-    "functionpdfGeneratorName": {
-      "Type": "String",
-      "Default": "functionpdfGeneratorName"
     }
   },
   "Conditions": {
@@ -95,9 +91,6 @@
             },
             "API_BACKENDAMP_GRAPHQLAPIKEYOUTPUT": {
               "Ref": "apibackendampGraphQLAPIKeyOutput"
-            },
-            "FUNCTION_PDFGENERATOR_NAME": {
-              "Ref": "functionpdfGeneratorName"
             }
           }
         },
@@ -299,10 +292,6 @@
                       ":",
                       {
                         "Ref": "AWS::AccountId"
-                      },
-                      ":function:",
-                      {
-                        "Ref": "functionpdfGeneratorName"
                       }
                     ]
                   ]

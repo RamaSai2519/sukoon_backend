@@ -50,20 +50,8 @@
           ],
           "category": "api",
           "resourceName": "backendamp"
-        },
-        {
-          "attributes": [
-            "Name"
-          ],
-          "category": "function",
-          "resourceName": "pdfGenerator"
         }
       ],
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
-    "pdfGenerator": {
-      "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },
@@ -114,22 +102,6 @@
         {
           "category": "function",
           "resourceName": "gamesProcessor"
-        }
-      ]
-    },
-    "AMPLIFY_function_pdfGenerator_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "pdfGenerator"
-        }
-      ]
-    },
-    "AMPLIFY_function_pdfGenerator_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "pdfGenerator"
         }
       ]
     },

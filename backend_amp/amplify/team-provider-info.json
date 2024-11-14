@@ -21,10 +21,6 @@
           "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
           "s3Key": "amplify-builds/excelUploader-716a6b33685135332b34-build.zip"
         },
-        "pdfGenerator": {
-          "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
-          "s3Key": "amplify-builds/pdfGenerator-61473533375253706244-build.zip"
-        },
         "scheduler": {
           "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
           "s3Key": "amplify-builds/scheduler-7235676e4137446b7252-build.zip"
