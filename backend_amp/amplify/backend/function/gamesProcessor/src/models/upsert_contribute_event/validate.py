@@ -6,7 +6,7 @@ class Validator:
         self.input = input
 
     def validate_input(self) -> tuple:
-        mandatory_fields = ["name", "description", "validUpto",
+        mandatory_fields = ["name", "description", "validUpto", "image",
                             "locationType", "phoneNumber", "company"]
         if not self.input.slug:
             for field in mandatory_fields:

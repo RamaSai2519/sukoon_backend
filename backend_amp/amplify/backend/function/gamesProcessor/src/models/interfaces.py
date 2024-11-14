@@ -477,6 +477,7 @@ class Event:
 class ContributeEvent:
     slug: Optional[str] = None
     name: Optional[str] = None
+    image: Optional[str] = None
     email: Optional[str] = None
     isPaid: Optional[bool] = None
     company: Optional[str] = None
