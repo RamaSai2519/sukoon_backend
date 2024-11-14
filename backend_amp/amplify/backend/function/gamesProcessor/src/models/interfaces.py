@@ -479,10 +479,10 @@ class ContributeEvent:
     name: Optional[str] = None
     image: Optional[str] = None
     email: Optional[str] = None
-    isPaid: Optional[bool] = None
     company: Optional[str] = None
     website: Optional[str] = None
     stipend: Optional[str] = None
+    isPaid: Optional[bool] = False
     highlights: Optional[str] = None
     isDeleted: Optional[bool] = None
     phoneNumber: Optional[str] = None
