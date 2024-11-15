@@ -41,7 +41,15 @@
     },
     "excelUploader": {
       "build": true,
-      "dependsOn": [],
+      "dependsOn": [
+        {
+          "attributes": [
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "backendamppandas"
+        }
+      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     },

@@ -15,6 +15,10 @@
     },
     "s3Key": {
       "Type": "String"
+    },
+    "functionbackendamppandasArn": {
+      "Type": "String",
+      "Default": "functionbackendamppandasArn"
     }
   },
   "Conditions": {
@@ -79,7 +83,11 @@
           ]
         },
         "Runtime": "python3.8",
-        "Layers": [],
+        "Layers": [
+          {
+            "Ref": "functionbackendamppandasArn"
+          }
+        ],
         "Timeout": 25
       }
     },
