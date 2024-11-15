@@ -10,7 +10,22 @@ class Compute:
         self.input = input
         self.collection = get_contirbute_event_users_collection()
 
+    def validate_interest(self):
+        query = {
+            "slug": self.input.slug,
+            "user_id": ObjectId(self.input.user_id)
+        }
+        interest = self.collection.find_one(query)
+        return True if interest else False
+
     def compute(self) -> Output:
+        if self.validate_interest():
+            return Output(
+                output_status=OutputStatus.FAILURE,
+                output_message="Interest already exists",
+                output_details={}
+            )
+
         club_interest = ContributeInterest(
             slug=self.input.slug,
             user_id=ObjectId(self.input.user_id)
