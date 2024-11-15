@@ -87,9 +87,25 @@ class CreateClubInterestInput:
 
 
 @dataclass
+class CreateContributeInterestInput:
+    slug: str
+    user_id: str
+
+
+@dataclass
 class ClubInterest:
     user_id: str
     isInterested: Optional[bool] = False
+    createdAt: datetime = field(default_factory=datetime.now)
+    updatedAt: datetime = field(default_factory=datetime.now)
+
+    _id: Optional[str] = None
+
+
+@dataclass
+class ContributeInterest:
+    slug: str
+    user_id: str
     createdAt: datetime = field(default_factory=datetime.now)
     updatedAt: datetime = field(default_factory=datetime.now)
 
@@ -490,7 +506,7 @@ class ContributeEvent:
     locationType: Optional[str] = None
     validUpto: Optional[datetime] = None
     startDate: Optional[datetime] = None
-    
+
 
 @dataclass
 class GetEventsInput:

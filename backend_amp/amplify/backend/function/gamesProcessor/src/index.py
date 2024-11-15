@@ -1,4 +1,3 @@
-
 import awsgi
 from flask import Flask
 from flask_cors import CORS
@@ -36,7 +35,8 @@ api.add_resource(ListEventsService, '/actions/list_events')
 api.add_resource(UpsertEventsService, '/actions/upsert_event')
 api.add_resource(ListEventUsersService, '/actions/list_event_users')
 api.add_resource(UpsertEventUserService, '/actions/upsert_event_user')
-api.add_resource(UpsertContributeEventService, '/actions/upsert_contribute_event')
+api.add_resource(UpsertContributeEventService, '/actions/upsert_contribute')
+api.add_resource(CreateContributeInterestService, '/actions/create_interest')
 
 # Scheduled Jobs Routes
 api.add_resource(GetSchedulesService, '/actions/schedules')
