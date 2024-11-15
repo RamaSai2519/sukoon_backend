@@ -26,6 +26,14 @@ def get_contribute_events_collection() -> Collection:
     return contribute_events_collection
 
 
+def get_contirbute_event_users_collection() -> Collection:
+    client = Database().client
+
+    db = client["events"]
+    contribute_event_users_collection = db["contribute_event_users"]
+    return contribute_event_users_collection
+
+
 def get_become_saarthis_collection() -> Collection:
     client = Database().client
 
