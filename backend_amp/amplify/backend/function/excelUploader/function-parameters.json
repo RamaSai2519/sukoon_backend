@@ -1,11 +1,3 @@
 {
-  "lambdaLayers": [
-    {
-      "type": "ProjectLayer",
-      "resourceName": "backendamppandas",
-      "env": "dev",
-      "version": "Always choose latest version",
-      "isLatestVersionSelected": true
-    }
-  ]
+  "lambdaLayers": []
 }

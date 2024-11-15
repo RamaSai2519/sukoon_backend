@@ -46,9 +46,18 @@
     },
     "categories": {
       "function": {
-        "excelUploader": {},
-        "gamesProcessor": {},
-        "scheduler": {}
+        "excelUploader": {
+          "deploymentBucketName": "amplify-backendamp-dev-bf108-deployment",
+          "s3Key": "amplify-builds/excelUploader-4264796e614b36573755-build.zip"
+        },
+        "gamesProcessor": {
+          "deploymentBucketName": "amplify-backendamp-dev-bf108-deployment",
+          "s3Key": "amplify-builds/gamesProcessor-72393368623669437a63-build.zip"
+        },
+        "scheduler": {
+          "deploymentBucketName": "amplify-backendamp-dev-bf108-deployment",
+          "s3Key": "amplify-builds/scheduler-4e616a4d447879393668-build.zip"
+        }
       }
     }
   }
