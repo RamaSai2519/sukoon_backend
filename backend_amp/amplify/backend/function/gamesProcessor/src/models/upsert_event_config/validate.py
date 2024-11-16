@@ -1,11 +1,12 @@
 from models.interfaces import Event as Input
+from flask_jwt_extended import jwt_required
 
 
 class Validator:
     def __init__(self, input: Input) -> None:
         self.input = input
 
-    def validate_mandatory_fields(self):
+    def validate_mandatory_fields(self) -> tuple:
         required_fields = {
             "slug": self.input.slug,
             "repeat": self.input.repeat,
@@ -31,7 +32,17 @@ class Validator:
 
         return True, ""
 
-    def validate_input(self):
+    @jwt_required()
+    def require_jwt(self) -> None:
+        pass
+
+    def validate_input(self) -> tuple:
+        if self.input.isDeleted == True and not self.input.slug:
+            return False, "slug is required to delete"
+        elif self.input.isDeleted == True:
+            self.require_jwt()
+            return True, ""
+
         is_valid, message = self.validate_mandatory_fields()
         if not is_valid:
             return is_valid, message
