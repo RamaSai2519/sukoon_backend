@@ -479,10 +479,12 @@ class Event:
     meeting_id: Optional[str] = None
     prizeMoney: Optional[int] = None
     isAlways: Optional[bool] = False
+    isDeleted: Optional[bool] = False
     meetingLink: Optional[str] = None
     description: Optional[str] = None
     guestSpeaker: Optional[str] = None
     validUpto: Optional[datetime] = None
+    deletedBy: Optional[ObjectId] = None
     isPremiumUserOnly: Optional[bool] = None
     maxVisitorsAllowed: Optional[int] = None
     startEventDate: Optional[datetime] = None
