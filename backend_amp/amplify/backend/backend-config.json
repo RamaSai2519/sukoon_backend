@@ -71,5 +71,55 @@
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     }
+  },
+  "parameters": {
+    "AMPLIFY_function_excelUploader_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "excelUploader"
+        }
+      ]
+    },
+    "AMPLIFY_function_excelUploader_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "excelUploader"
+        }
+      ]
+    },
+    "AMPLIFY_function_gamesProcessor_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "gamesProcessor"
+        }
+      ]
+    },
+    "AMPLIFY_function_gamesProcessor_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "gamesProcessor"
+        }
+      ]
+    },
+    "AMPLIFY_function_scheduler_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "scheduler"
+        }
+      ]
+    },
+    "AMPLIFY_function_scheduler_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "scheduler"
+        }
+      ]
+    }
   }
 }
