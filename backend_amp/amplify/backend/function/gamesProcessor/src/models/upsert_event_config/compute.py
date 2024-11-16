@@ -1,4 +1,5 @@
 import dataclasses
+from bson import ObjectId
 from models.common import Common
 from models.constants import OutputStatus
 from db.events import get_events_collection
@@ -20,6 +21,10 @@ class Compute:
         if new_event:
             event_data["createdAt"] = self.common.current_time
         event_data["updatedAt"] = self.common.current_time
+
+        if self.input.isDeleted == True:
+            event_data["deletedBy"] = ObjectId(self.common.get_identity())
+
         event_data = {k: v for k, v in event_data.items() if v is not None}
         return event_data
 
