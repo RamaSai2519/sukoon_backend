@@ -1,4 +1,5 @@
 import tempfile
+import threading
 from pyppeteer import launch
 from models.common import Common
 from models.constants import OutputStatus
@@ -44,7 +45,9 @@ class Compute:
         html_content = htmlTemplate(self.input)
         file_name = f"{self.input.userId}-{self.input.invoiceNumber}.pdf"
         output_path = f"/tmp/{file_name}"
-        await self.generate_pdf(html_content, output_path)
+        # await self.generate_pdf(html_content, output_path)
+        threading.Thread(target=self.generate_pdf, args=(
+            html_content, output_path)).start()
         file_url = await self.upload_to_s3(output_path, file_name)
 
         return Output(
