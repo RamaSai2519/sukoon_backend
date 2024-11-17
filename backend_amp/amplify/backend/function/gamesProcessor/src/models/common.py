@@ -6,10 +6,12 @@ from flask_jwt_extended import get_jwt_identity
 from db.experts import get_experts_collections
 from db.calls import get_callsmeta_collection
 from db.users import get_user_collection
+from configs import CONFIG as config
 from datetime import datetime, date
 from pymongo.cursor import Cursor
 from typing import List, Dict
 from bson import ObjectId
+import boto3
 import pytz
 import json
 import re
@@ -32,6 +34,15 @@ class Common:
     @staticmethod
     def get_identity() -> str:
         return get_jwt_identity()
+
+    @staticmethod
+    def get_s3_client() -> boto3.client:
+        return boto3.client(
+            "s3",
+            region_name=config.REGION,
+            aws_access_key_id=config.ACCESS_KEY,
+            aws_secret_access_key=config.SECRET_ACCESS_KEY
+        )
 
     @staticmethod
     def jsonify(doc: dict) -> dict:
@@ -186,7 +197,8 @@ class Common:
         return calls
 
     def get_events_history(self, query: dict) -> list:
-        event_slugs = list(get_event_users_collection().distinct('source', query))
+        event_slugs = list(
+            get_event_users_collection().distinct('source', query))
         query = {'slug': {'$in': event_slugs}}
         events = list(self.events_collection.find(query))
         events = [Common.jsonify(event) for event in events]
