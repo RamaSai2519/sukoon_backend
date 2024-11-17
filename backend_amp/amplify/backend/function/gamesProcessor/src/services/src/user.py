@@ -8,13 +8,11 @@ from models.get_leads.main import GetLeads
 from flask_jwt_extended import jwt_required
 from models.save_remark.main import SaveRemark
 from models.upsert_user.main import UpsertUser
-from models.get_club_interests.main import GetInterests
 from models.upsert_event_user.main import UpsertEventUser
 from models.get_engagement_data.main import GetEngagementData
 from models.upsert_phone_config.main import UpsertPhoneConfig
-from models.create_club_interest.main import CreateClubInterest
 from models.upsert_engagement_data.main import UpsertEngagementData
-from models.interfaces import User, GetUsersInput, EventUserInput, GetLeadsInput, SaveRemarkInput, GetEngagementDataInput, UpsertEngagementDataInput, CreateClubInterestInput, GetClubInterestsInput, PhoneConfigInput
+from models.interfaces import User, GetUsersInput, EventUserInput, GetLeadsInput, SaveRemarkInput, GetEngagementDataInput, UpsertEngagementDataInput, PhoneConfigInput
 
 
 class UserService(Resource):
@@ -101,21 +99,3 @@ class EngagementDataService(Resource):
 
         return output
 
-
-class ClubService(Resource):
-
-    def get(self) -> dict:
-        input_params = request.args
-        input = GetClubInterestsInput(**input_params)
-        output = GetInterests(input).process()
-        output = dataclasses.asdict(output)
-
-        return output
-
-    def post(self) -> dict:
-        input = json.loads(request.get_data())
-        input = CreateClubInterestInput(**input)
-        output = CreateClubInterest(input).process()
-        output = dataclasses.asdict(output)
-
-        return output

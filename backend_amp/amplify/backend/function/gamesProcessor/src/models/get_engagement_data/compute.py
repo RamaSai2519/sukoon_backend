@@ -68,8 +68,10 @@ class Compute:
 
     def get_users(self, page: int, size: int) -> list:
         projection = {"customerPersona": 0}
+        query = Common.get_filter_query(
+            self.input.filter_field, self.input.filter_value)
         cursor = self.users_collection.find(
-            {}, projection).sort("createdDate", -1)
+            query, projection).sort("createdDate", -1)
         users = Common.paginate_cursor(cursor, page, size)
         users = self.format_users(list(users))
         return users
