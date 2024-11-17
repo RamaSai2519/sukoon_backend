@@ -13,17 +13,7 @@ class Compute:
         self.bucket_name = "sukoon-media"
         self.client = Common.get_s3_client()
 
-    async def generate_pdf(self, html_content, output_path):
-        with tempfile.TemporaryDirectory() as temp_dir:
-            browser = await launch(userDataDir=temp_dir)
-            page = await browser.newPage()
-            await page.setContent(html_content, waitUntil='networkidle0')
-            await page.pdf({'path': output_path, 'format': 'A4', 'printBackground': True})
-            await browser.close()
-
     async def upload_to_s3(self, file_path: str, file_name: str) -> str:
-        endpoint_url = self.client.meta.endpoint_url
-        file_url = f"{endpoint_url}/{self.bucket_name}/invoices/{file_name}"
         metadata = {"fieldName": "pdf_file"}
 
         with open(file_path, "rb") as file:
@@ -39,16 +29,24 @@ class Compute:
                 }
             )
 
-        return file_url
+    async def generate_pdf(self, html_content: str, output_path: str) -> None:
+        with tempfile.TemporaryDirectory() as temp_dir:
+            browser = await launch(userDataDir=temp_dir)
+            page = await browser.newPage()
+            await page.setContent(html_content, waitUntil='networkidle0')
+            await page.pdf({'path': output_path, 'format': 'A4', 'printBackground': True})
+            await browser.close()
+            await self.upload_to_s3(output_path, output_path.split("/")[-1])
 
     async def compute(self) -> Output:
         html_content = htmlTemplate(self.input)
         file_name = f"{self.input.userId}-{self.input.invoiceNumber}.pdf"
         output_path = f"/tmp/{file_name}"
-        # await self.generate_pdf(html_content, output_path)
+        endpoint_url = self.client.meta.endpoint_url
+        file_url = f"{endpoint_url}/{self.bucket_name}/invoices/{file_name}"
+
         threading.Thread(target=self.generate_pdf, args=(
             html_content, output_path)).start()
-        file_url = await self.upload_to_s3(output_path, file_name)
 
         return Output(
             output_details={"file_url": file_url},
