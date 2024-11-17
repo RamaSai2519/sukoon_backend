@@ -1,3 +1,4 @@
+import tempfile
 from pyppeteer import launch
 from models.common import Common
 from models.constants import OutputStatus
@@ -12,11 +13,12 @@ class Compute:
         self.client = Common.get_s3_client()
 
     async def generate_pdf(self, html_content, output_path):
-        browser = await launch()
-        page = await browser.newPage()
-        await page.setContent(html_content, waitUntil='networkidle0')
-        await page.pdf({'path': output_path, 'format': 'A4', 'printBackground': True})
-        await browser.close()
+        with tempfile.TemporaryDirectory() as temp_dir:
+            browser = await launch(userDataDir=temp_dir)
+            page = await browser.newPage()
+            await page.setContent(html_content, waitUntil='networkidle0')
+            await page.pdf({'path': output_path, 'format': 'A4', 'printBackground': True})
+            await browser.close()
 
     async def upload_to_s3(self, file_path: str, file_name: str) -> str:
         endpoint_url = self.client.meta.endpoint_url
