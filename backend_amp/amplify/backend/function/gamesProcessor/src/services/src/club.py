@@ -1,4 +1,5 @@
 import json
+import asyncio
 import dataclasses
 from flask import request
 from flask_restful import Resource
@@ -6,7 +7,6 @@ from models.get_club_interests.main import GetInterests
 from models.invoice_generator.main import GenerateInvoice
 from models.create_club_interest.main import CreateClubInterest
 from models.interfaces import CreateClubInterestInput, GetClubInterestsInput, InvoiceData
-import asyncio
 
 
 class ClubService(Resource):
