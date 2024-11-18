@@ -72,19 +72,6 @@ class GetEngagementDataInput:
 
 
 @dataclass
-class InvoiceData:
-    userId: str
-    amount: float
-    createdDate: str
-    invoiceNumber: str
-    customerFullName: str
-    sgst: float = field(default_factory=lambda: 76.20)
-    cgst: float = field(default_factory=lambda: 76.20)
-    rate: float = field(default_factory=lambda: 846.62)
-    itemDescription: str = field(default_factory=lambda: 'Club Sukoon Annual Membership')
-
-
-@dataclass
 class GetClubInterestsInput:
     page: Optional[int] = 0
     size: Optional[int] = 0

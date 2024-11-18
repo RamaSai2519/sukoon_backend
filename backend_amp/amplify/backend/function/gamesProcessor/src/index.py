@@ -23,7 +23,6 @@ api.add_resource(CallWebhookService, '/actions/call_webhook')
 
 # CLub Routes
 api.add_resource(ClubService, '/actions/club')
-api.add_resource(InvoiceService, '/actions/invoice')
 
 # Users Routes
 api.add_resource(UserService, '/actions/user')
