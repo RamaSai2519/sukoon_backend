@@ -7,6 +7,13 @@
       "permissions": {
         "setting": "open"
       }
+    },
+    "/pandas/{panda}": {
+      "name": "/pandas/{panda}",
+      "lambdaFunction": "pandas",
+      "permissions": {
+        "setting": "open"
+      }
     }
   }
 }
