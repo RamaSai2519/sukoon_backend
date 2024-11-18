@@ -12,6 +12,11 @@ class Compute:
         self.input = input
         self.admins_collection = get_admins_collection()
 
+    def validate_phoneNumber(self) -> bool:
+        if self.admins_collection.find_one({"phoneNumber": self.input.phoneNumber}):
+            return True
+        return False
+
     def sign_up(self) -> Output:
         if self.validate_phoneNumber():
             return Output(
@@ -77,11 +82,6 @@ class Compute:
             output_status=OutputStatus.SUCCESS,
             output_message="Successfully refreshed token"
         )
-
-    def validate_phoneNumber(self) -> bool:
-        if self.admins_collection.find_one({"phoneNumber": self.input.phoneNumber}):
-            return True
-        return False
 
     def compute(self) -> Output:
         if self.input.action == "register":
