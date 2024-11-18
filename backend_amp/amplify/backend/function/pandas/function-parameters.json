@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "api": {
+      "backendamp": [
+        "Query",
+        "Mutation",
+        "Subscription"
+      ],
+      "sukoonAPI": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    },
+    "storage": {
+      "ScheduledJobs:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}
