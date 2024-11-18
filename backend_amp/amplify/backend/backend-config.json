@@ -27,6 +27,14 @@
           ],
           "category": "function",
           "resourceName": "gamesProcessor"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "pandas"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -47,6 +55,20 @@
             "GraphQLAPIIdOutput",
             "GraphQLAPIEndpointOutput",
             "GraphQLAPIKeyOutput"
+          ],
+          "category": "api",
+          "resourceName": "backendamp"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "pandas": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput"
           ],
           "category": "api",
           "resourceName": "backendamp"

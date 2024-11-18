@@ -26,6 +26,12 @@ export type AmplifyDependentResourcesAttributes = {
       "Name": "string",
       "Region": "string"
     },
+    "pandas": {
+      "Arn": "string",
+      "LambdaExecutionRole": "string",
+      "Name": "string",
+      "Region": "string"
+    },
     "scheduler": {
       "Arn": "string",
       "CloudWatchEventRule": "string",
