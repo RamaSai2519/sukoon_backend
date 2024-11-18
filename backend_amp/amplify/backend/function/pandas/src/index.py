@@ -15,7 +15,7 @@ api = Api(app)
 JWTManager(app)
 CORS(app, supports_credentials=True)
 
-api.add_resource(BulkInsertUsersService, '/actions/bulk_users')
+api.add_resource(BulkInsertUsersService, '/pandas/bulk_users')
 
 
 def handler(event, context):
