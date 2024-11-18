@@ -718,12 +718,14 @@ class AdminAuthInput:
     name: Optional[str] = None
     password: Optional[str] = None
     phoneNumber: Optional[str] = None
+    access_level: Optional[str] = None
 
 
 @dataclass
 class Admin:
     password: str
     phoneNumber: str
+    access_level: str = field(default_factory=lambda: 'basic')
     createdDate: datetime = field(default_factory=datetime.now)
 
     _id: Optional[str] = None
