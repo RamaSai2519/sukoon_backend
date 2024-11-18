@@ -67,6 +67,8 @@ class GetWaHistoryInput:
 class GetEngagementDataInput:
     page: Optional[int] = 0
     size: Optional[int] = 0
+    filter_field: Optional[str] = None
+    filter_value: Optional[str] = None
 
 
 @dataclass

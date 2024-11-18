@@ -21,8 +21,10 @@ CORS(app, supports_credentials=True)
 api.add_resource(CallService, '/actions/call')
 api.add_resource(CallWebhookService, '/actions/call_webhook')
 
-# Users Routes
+# CLub Routes
 api.add_resource(ClubService, '/actions/club')
+
+# Users Routes
 api.add_resource(UserService, '/actions/user')
 api.add_resource(SlotsService, '/actions/slots')
 api.add_resource(ExpertService, '/actions/expert')
