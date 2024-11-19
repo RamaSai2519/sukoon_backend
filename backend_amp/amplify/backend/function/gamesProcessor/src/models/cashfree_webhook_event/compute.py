@@ -80,9 +80,9 @@ class Compute:
         rate = payment_amount/1.18
 
         payload = {
-            "rate": rate,
-            "sgst": rate * .09,
-            "cgst": rate * .09,
+            "rate": round(rate, 2),
+            "sgst": round(rate * .09, 2),
+            "cgst": round(rate * .09, 2),
             "amount": payment_amount,
             "userId": str(self.user_id),
             "invoiceNumber": invoice_number,
@@ -94,9 +94,9 @@ class Compute:
         response = requests.request(
             "POST", url, headers=self.headers, data=json.dumps(payload))
 
-        json_response = response.json()
-        data = json_response.get("data")
-        s3_url = data.get("url")
+        json_response = Output(**response.json())
+        data = json_response.output_details
+        s3_url = data.get("file_url")
         return s3_url, invoice_number
 
     def update_payment_status(self):

@@ -10,7 +10,6 @@ class CashfreeWebhookService(Resource):
 
     def post(self) -> Output:
         input = json.loads(request.get_data())
-        print(input)
         input = CashfreeWebhookEventInput(**input)
         output = CashfreeWebhookEvent(input).process()
         output = dataclasses.asdict(output)
