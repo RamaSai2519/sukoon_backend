@@ -90,7 +90,6 @@ class EngagementDataService(Resource):
 
         return output
 
-    @jwt_required()
     def post(self) -> dict:
         input = json.loads(request.get_data())
         input = UpsertEngagementDataInput(**input)
@@ -98,4 +97,3 @@ class EngagementDataService(Resource):
         output = dataclasses.asdict(output)
 
         return output
-
