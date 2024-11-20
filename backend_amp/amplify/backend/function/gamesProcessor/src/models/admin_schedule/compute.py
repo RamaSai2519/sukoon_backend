@@ -36,7 +36,7 @@ class Compute:
 
     def get_dynamo_schedules(self):
         query = '''
-            query MyQuery($limit: Int = 1000, $nextToken: String) {
+            query MyQuery($limit: Int = 100, $nextToken: String) {
                 listScheduledJobs(limit: $limit, nextToken: $nextToken) {
                     nextToken
                     items {
@@ -52,23 +52,11 @@ class Compute:
             }
         '''
 
-        params = {'limit': 1000}
+        params = {'limit': 100}
         all_items = []
-        next_token = None
-
-        while True:
-            if next_token:
-                params['nextToken'] = next_token
-            else:
-                params.pop('nextToken', None)
-
-            response = call_graphql(
-                query=query, params=params, message='get_scheduled_jobs')
-            all_items.extend(response['listScheduledJobs']['items'])
-
-            next_token = response['listScheduledJobs'].get('nextToken')
-            if not next_token:
-                break
+        response = call_graphql(
+            query=query, params=params, message='get_scheduled_jobs')
+        all_items.extend(response['listScheduledJobs']['items'])
 
         formatted_response = self.format_schedules(all_items)
 
