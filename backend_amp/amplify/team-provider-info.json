@@ -15,7 +15,7 @@
       "function": {
         "gamesProcessor": {
           "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
-          "s3Key": "amplify-builds/gamesProcessor-464d6b687675496d4a5a-build.zip"
+          "s3Key": "amplify-builds/gamesProcessor-5a77456f4d6348596745-build.zip"
         },
         "excelUploader": {
           "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
@@ -25,7 +25,10 @@
           "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
           "s3Key": "amplify-builds/scheduler-4e616a4d447879393668-build.zip"
         },
-        "pandas": {}
+        "pandas": {
+          "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
+          "s3Key": "amplify-builds/pandas-59464779783964365045-build.zip"
+        }
       },
       "api": {
         "sukoonAPI": {},
