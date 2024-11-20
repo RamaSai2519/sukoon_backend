@@ -127,6 +127,22 @@
         }
       ]
     },
+    "AMPLIFY_function_pandas_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pandas"
+        }
+      ]
+    },
+    "AMPLIFY_function_pandas_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "pandas"
+        }
+      ]
+    },
     "AMPLIFY_function_scheduler_deploymentBucketName": {
       "usedBy": [
         {
