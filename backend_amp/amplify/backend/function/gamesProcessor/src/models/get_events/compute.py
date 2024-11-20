@@ -40,6 +40,7 @@ class Compute:
                 events.append(dict(event[0]))
         if len(events) < 3:
             query.pop("category")
+            query["slug"] = {"$nin": [event["slug"] for event in events]}
             cursor = self.events_collection.find(
                 query, self.projection).sort("validUpto", 1).limit(3 - len(events))
             events.extend(list(cursor))
