@@ -1123,3 +1123,27 @@ class WhatsappNotificationTemplates:
                 ]
             }
         }
+
+        self.PARTICIPATION_CERTIFICATE = {
+            "template_name": "PARTICIPATION_CERTIFICATE",
+            "template": {
+                "name": "participation_certificate",
+                "language": {"code": "en"},
+                "components": [
+                    {
+                        "type": "header",
+                        "parameters": [
+                            {"type": "image", "image": {"link": "{image_link}"}}
+                        ]
+                    },
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"},
+                            {"type": "text", "text": "{event_name}"},
+                            {"type": "text", "text": "{custom_text}"}
+                        ]
+                    }
+                ]
+            }
+        }
