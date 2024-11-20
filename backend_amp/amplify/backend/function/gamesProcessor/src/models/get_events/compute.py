@@ -38,6 +38,11 @@ class Compute:
                 query, self.projection).sort("validUpto", 1).limit(1))
             if len(event) > 0:
                 events.append(dict(event[0]))
+        if len(events) < 3:
+            query.pop("category")
+            cursor = self.events_collection.find(
+                query, self.projection).sort("validUpto", 1).limit(3 - len(events))
+            events.extend(list(cursor))
         return events
 
     def compute(self) -> Output:
