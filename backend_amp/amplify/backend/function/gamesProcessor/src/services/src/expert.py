@@ -98,13 +98,3 @@ class CategoryService(Resource):
 
         return output
 
-
-class RecommendExpertService(Resource):
-
-    def post(self) -> dict:
-        input = json.loads(request.get_data())
-        input = RecommendExpertInput(**input)
-        output = RecommendExpert(input).process()
-        output = dataclasses.asdict(output)
-
-        return output

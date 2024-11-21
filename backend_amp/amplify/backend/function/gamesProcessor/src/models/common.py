@@ -169,7 +169,6 @@ class Common:
         if expert_id not in images_cache:
             expert = self.experts_collection.find_one(
                 {'_id': expert_id}, {'profile': 1})
-            print(expert)
             images_cache[expert_id] = (
                 expert['profile'] if expert and 'profile' in expert else ''
             )
