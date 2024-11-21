@@ -1,13 +1,14 @@
 import time
 import requests
-from models.common import Common
+import numpy as np
 from openai import RateLimitError
-from configs import CONFIG as config
-from models.constants import OutputStatus
-from helpers.openai import GPT_Client, ADA_Client
+from shared.models.common import Common
+from shared.configs import CONFIG as config
+from shared.models.constants import OutputStatus
 from models.recommend_expert.prompt import Prompt
-from db.embeddings import get_recommendations_collection
-from models.interfaces import RecommendExpertInput as Input, Output
+from shared.helpers.openai import GPT_Client, ADA_Client
+from shared.db.embeddings import get_recommendations_collection
+from shared.models.interfaces import RecommendExpertInput as Input, Output
 
 
 class Compute:
@@ -36,11 +37,10 @@ class Compute:
         similarities = []
         for entry in all_embeddings:
             stored_embedding = entry['embedding']
-            # similarity = np.dot(embedding, stored_embedding) / (
-            #     np.linalg.norm(embedding) *
-            #     np.linalg.norm(stored_embedding)
-            # )
-            similarity = None
+            similarity = np.dot(embedding, stored_embedding) / (
+                np.linalg.norm(embedding) *
+                np.linalg.norm(stored_embedding)
+            )
             similarities.append((entry, similarity))
 
         most_similar = max(
@@ -80,11 +80,9 @@ class Compute:
         url = config.URL + '/actions/user'
         payload = {"_id": user_id, "expert": expert_id}
         response = requests.post(url, json=payload)
-        print(response.json())
 
     def new_recommendation(self, prompt: str, embedding: list) -> None:
         response = self.chat("user", prompt)
-        print(response, 'gpt_response')
         response_json = self.common.extract_json(response)
         expert_id = response_json.get("expert_id", None)
 

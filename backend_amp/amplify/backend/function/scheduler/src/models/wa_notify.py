@@ -2,9 +2,9 @@ import json
 import requests
 from typing import Tuple
 from bson import ObjectId
-from models.common import Common
-from configs import CONFIG as config
-from models.interfaces import User, Expert
+from shared.models.common import Common
+from shared.configs import CONFIG as config
+from shared.models.interfaces import User, Expert
 from queries.scheduled_job import mark_my_job_as_pending
 
 

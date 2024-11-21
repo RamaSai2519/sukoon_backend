@@ -1,11 +1,11 @@
 import json
 from bson import ObjectId
 from typing import List, Dict
-from models.common import Common
-from db.users import get_user_collection
-from db.experts import get_experts_collections
-from models.constants import extract_json_function_str
-from models.interfaces import RecommendExpertInput as Input, User
+from shared.models.common import Common
+from shared.db.users import get_user_collection
+from shared.db.experts import get_experts_collections
+from shared.models.constants import extract_json_function_str
+from shared.models.interfaces import RecommendExpertInput as Input, User
 
 
 class Prompt:
