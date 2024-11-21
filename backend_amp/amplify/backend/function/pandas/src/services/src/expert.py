@@ -2,8 +2,8 @@ import json
 import dataclasses
 from flask import request
 from flask_restful import Resource
-from shared.models.interfaces import RecommendExpertInput
 from models.recommend_expert.main import RecommendExpert
+from shared.models.interfaces import RecommendExpertInput
 
 
 class RecommendExpertService(Resource):
