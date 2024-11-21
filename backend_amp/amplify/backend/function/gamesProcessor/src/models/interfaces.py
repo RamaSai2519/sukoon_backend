@@ -700,8 +700,7 @@ class UploadInput:
 
 @dataclass
 class GetScheduledJobsInput:
-    limit: Optional[int] = None
-    nextToken: Optional[str] = None
+    isDeleted: str = field(default_factory=lambda: "false")
 
 
 @dataclass
