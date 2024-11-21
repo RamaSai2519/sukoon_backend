@@ -60,6 +60,14 @@ indianLanguages = [
     {'key': 'ur', 'value': 'Urdu'}
 ]
 
+scheduledJobStatuses = [
+    'WAPENDING',
+    'PENDING',
+    'PICKED',
+    'FAILED',
+    'COMPLETED'
+]
+
 extract_json_function_str = r"""```python
 def extract_json(json_str: str) -> dict:
     def clean_json(json_str: str) -> str:

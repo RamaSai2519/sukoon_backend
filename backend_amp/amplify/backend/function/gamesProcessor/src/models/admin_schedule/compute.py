@@ -3,8 +3,8 @@ from bson import ObjectId
 from typing import List, Dict
 from models.common import Common
 from helpers.base import call_graphql
-from models.constants import OutputStatus
 from db.calls import get_schedules_collection
+from models.constants import OutputStatus, scheduledJobStatuses
 from models.interfaces import GetScheduledJobsInput as Input, Output
 
 
@@ -34,29 +34,34 @@ class Compute:
             schedule['source'] = Common.get_call_source(user_requested)
         return {'data': schedules}
 
-    def get_dynamo_schedules(self):
+    def get_dynamo_schedules(self) -> dict:
         query = '''
-            query MyQuery($limit: Int = 100, $nextToken: String) {
-                listScheduledJobs(limit: $limit, nextToken: $nextToken) {
-                    nextToken
-                    items {
-                        id
-                        status
-                        isDeleted
-                        requestMeta
-                        user_requested
-                        scheduledJobTime
-                        scheduledJobStatus
-                    }
+        query MyQuery($limit: Int = 1000, $scheduledJobStatus: ScheduledJobStatus = PENDING, $ne: Boolean = true) {
+            scheduledJobsByStatusAndTime(limit: $limit, sortDirection: DESC, scheduledJobStatus: $scheduledJobStatus, filter: {isDeleted: {ne: $ne}}) {
+                items {
+                    id
+                    status
+                    isDeleted
+                    requestMeta
+                    user_requested
+                    scheduledJobStatus
+                    scheduledJobTime
                 }
             }
+        }
         '''
 
-        params = {'limit': 100}
+        params = {'limit': 100, "ne": True}
         all_items = []
-        response = call_graphql(
-            query=query, params=params, message='get_scheduled_jobs')
-        all_items.extend(response['listScheduledJobs']['items'])
+
+        for status in scheduledJobStatuses:
+            params['scheduledJobStatus'] = status
+            response = call_graphql(
+                query=query, params=params, message='get_scheduled_jobs')
+            if (type(response) == dict):
+                all_items.extend(response['scheduledJobsByStatusAndTime']['items'])
+            else:
+                print(response)
 
         formatted_response = self.format_schedules(all_items)
 
