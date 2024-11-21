@@ -63,13 +63,11 @@ class Compute:
             {"_id": user_id}, {"$set": {"isBusy": True}})
         if user_update.modified_count == 0:
             print("Failed to update user")
-            return False
 
         expert_update = self.experts_collection.update_one(
             {"_id": expert_id}, {"$set": {"isBusy": True}})
         if expert_update.modified_count == 0:
             print("Failed to update expert")
-            return False
 
         call = self.prep_call(user_id, expert_id, call_id)
         call = {k: v for k, v in call.items() if v is not None}
