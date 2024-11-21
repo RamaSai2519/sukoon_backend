@@ -12,7 +12,6 @@ from models.upsert_expert.main import UpsertExpert
 from models.get_applicants.main import GetApplicants
 from models.update_timings.main import UpdateTimings
 from models.create_applicant.main import CreateApplicant
-from models.recommend_expert.main import RecommendExpert
 from models.interfaces import Expert, CategoriesInput, GetExpertsInput, ApplicantInput, GetSlotsInput, GetTimingsInput, UpdateTimingsInput, TimingsRow, GetApplicantsInput, RecommendExpertInput
 
 
