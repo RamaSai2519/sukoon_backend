@@ -1,6 +1,6 @@
-import time
 import os
 import sys
+import time
 from inspect import getsourcefile
 from models.processor_factory import ProcessorsFactory
 

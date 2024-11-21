@@ -5,7 +5,7 @@ from io import BytesIO
 from pytz import timezone
 from datetime import datetime
 from typing import List, Dict
-from configs import CONFIG as Config
+from shared.configs import CONFIG as Config
 
 
 class ExcelS3Helper:

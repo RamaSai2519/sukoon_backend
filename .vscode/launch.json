@@ -2,12 +2,30 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python Debugger: Flask",
+            "name": "Games Processor",
             "type": "debugpy",
             "request": "launch",
             "module": "flask",
             "env": {
                 "FLASK_APP": "backend_amp/amplify/backend/function/gamesProcessor/src/index.py",
+                "FLASK_DEBUG": "1",
+                "ENV": "main"
+            },
+            "args": [
+                "run",
+                "--port",
+                "8080"
+            ],
+            "jinja": true,
+            "autoStartBrowser": false
+        },
+        {
+            "name": "Pandas Processor",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "flask",
+            "env": {
+                "FLASK_APP": "backend_amp/amplify/backend/function/pandas/src/index.py",
                 "FLASK_DEBUG": "1",
                 "ENV": "main"
             },

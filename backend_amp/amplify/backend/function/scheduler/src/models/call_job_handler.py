@@ -1,7 +1,7 @@
 import json
 import requests
-from configs import CONFIG as config
 from models.iprocessor import IProcessor
+from shared.configs import CONFIG as config
 from queries.scheduled_job import update_scheduled_job_status
 
 
