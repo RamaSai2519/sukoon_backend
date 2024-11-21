@@ -36,8 +36,8 @@ class Compute:
 
     def get_dynamo_schedules(self) -> dict:
         query = '''
-        query MyQuery($limit: Int = 1000, $scheduledJobStatus: ScheduledJobStatus = PENDING, $ne: Boolean = true) {
-            scheduledJobsByStatusAndTime(limit: $limit, sortDirection: DESC, scheduledJobStatus: $scheduledJobStatus, filter: {isDeleted: {ne: $ne}}) {
+        query MyQuery($limit: Int = 1000, $scheduledJobStatus: ScheduledJobStatus = PENDING, $attributeExists: Boolean = false) {
+            scheduledJobsByStatusAndTime(limit: $limit, sortDirection: DESC, scheduledJobStatus: $scheduledJobStatus, filter: {isDeleted: {attributeExists: $attributeExists}}) {
                 items {
                     id
                     status
@@ -51,7 +51,8 @@ class Compute:
         }
         '''
 
-        params = {'limit': 100, "ne": True}
+        params = {'limit': 100}
+        params['attributeExists'] = True if self.input.isDeleted == 'true' else False
         all_items = []
 
         for status in scheduledJobStatuses:
@@ -59,7 +60,8 @@ class Compute:
             response = call_graphql(
                 query=query, params=params, message='get_scheduled_jobs')
             if (type(response) == dict):
-                all_items.extend(response['scheduledJobsByStatusAndTime']['items'])
+                all_items.extend(
+                    response['scheduledJobsByStatusAndTime']['items'])
             else:
                 print(response)
 
