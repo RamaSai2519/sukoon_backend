@@ -1,5 +1,5 @@
 from models.interfaces import SendOTPInput as Input, Output
-from models.constants import OutputStatus
+from models.constants import OutputStatus, test_data
 from db.otp import get_otp_collection
 from configs import CONFIG as config
 import requests
@@ -43,6 +43,8 @@ class Compute:
         return "Some error occured while sending OTP via WA. Please try again", OutputStatus.FAILURE
 
     def _generate_and_send_otp(self):
+        if self.input.phone_number == test_data["phone_number"]:
+            return "OTP generated and sent successfully", OutputStatus.SUCCESS
 
         otp_collection = get_otp_collection()
         record = otp_collection.find_one(
