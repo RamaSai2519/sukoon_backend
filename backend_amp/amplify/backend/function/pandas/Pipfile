@@ -6,9 +6,9 @@ verify_ssl = true
 [dev-packages]
 
 [packages]
-pandas = "2.0.3"
 pytz = "2024.2"
 flask = "3.0.2"
+pandas = "2.0.3"
 pymongo = "4.8.0"
 aws-wsgi = "0.2.7"
 urllib3 = "1.26.6"
