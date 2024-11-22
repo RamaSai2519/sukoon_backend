@@ -68,6 +68,11 @@ scheduledJobStatuses = [
     'COMPLETED'
 ]
 
+test_data = {
+    "phone_number": "1111111111",
+    "otp": "1234"
+}
+
 extract_json_function_str = r"""```python
 def extract_json(json_str: str) -> dict:
     def clean_json(json_str: str) -> str:
