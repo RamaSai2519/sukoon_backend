@@ -1,4 +1,4 @@
-from shared.models.interfaces import CreatePaymentOrderInput as Input
+from shared.models.interfaces import GetUserStatusesInput as Input
 
 
 class Validator():

@@ -1,4 +1,4 @@
-from models.interfaces import Event as Input
+from shared.models.interfaces import Event as Input
 from flask_jwt_extended import jwt_required
 
 

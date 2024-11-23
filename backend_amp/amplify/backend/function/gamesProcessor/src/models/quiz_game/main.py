@@ -1,8 +1,9 @@
 import traceback
-from models.interfaces import QuizGameInput as Input, Output
-from models.constants import OutputStatus
+from shared.models.interfaces import QuizGameInput as Input, Output
+from shared.models.constants import OutputStatus
 from models.quiz_game.compute import Compute
 from models.quiz_game.validate import Validator
+
 
 class QuizGame:
     def __init__(self, input: Input) -> None:
@@ -30,7 +31,7 @@ class QuizGame:
             )
 
         return output
-    
+
     def _validate(self, input: Input):
         validation_obj = Validator(input)
         validation_result, error_message = validation_obj.validate_input()

@@ -1,7 +1,7 @@
-from models.interfaces import GetEventUsersInput as Input, Output
-from db.events import get_event_users_collection
-from models.constants import OutputStatus
-from models.common import Common
+from shared.models.interfaces import GetEventUsersInput as Input, Output
+from shared.db.events import get_event_users_collection
+from shared.models.constants import OutputStatus
+from shared.models.common import Common
 
 
 class Compute:
@@ -14,9 +14,9 @@ class Compute:
         query = {}
         if self.input.slug:
             query = {"source": self.input.slug}
-            
+
         filter_query = Common.get_filter_query(
-                self.input.filter_field, self.input.filter_value)
+            self.input.filter_field, self.input.filter_value)
         return {**query, **filter_query}
 
     def fetch_event_users(self, query: dict) -> list:

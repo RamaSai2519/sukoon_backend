@@ -5,7 +5,7 @@ from flask_restful import Resource
 from models.send_otp.main import SendOTP
 from models.admin_auth.main import AdminAuth
 from models.validate_otp.main import ValidateOTP
-from models.interfaces import SendOTPInput, ValidateOTPInput, AdminAuthInput, Output
+from shared.models.interfaces import SendOTPInput, ValidateOTPInput, AdminAuthInput, Output
 
 
 class SendOTPService(Resource):

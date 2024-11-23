@@ -1,4 +1,4 @@
-from models.interfaces import PhotosInput as Input
+from shared.models.interfaces import PhotosInput as Input
 
 
 class Validator:

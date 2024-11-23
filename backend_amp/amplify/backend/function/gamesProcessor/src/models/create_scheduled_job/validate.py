@@ -1,4 +1,4 @@
-from models.interfaces import ScheduledJobInput as Input
+from shared.models.interfaces import ScheduledJobInput as Input
 from datetime import datetime
 
 

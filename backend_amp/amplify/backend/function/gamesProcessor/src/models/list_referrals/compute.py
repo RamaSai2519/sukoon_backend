@@ -1,9 +1,9 @@
-from models.common import Common
-from models.interfaces import Output
-from db.users import get_user_collection
-from models.constants import OutputStatus
+from shared.models.common import Common
+from shared.models.interfaces import Output
+from shared.db.users import get_user_collection
+from shared.models.constants import OutputStatus
 from pymongo.command_cursor import CommandCursor
-from db.referral import get_user_referral_collection
+from shared.db.referral import get_user_referral_collection
 
 
 class Compute:

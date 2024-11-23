@@ -1,4 +1,4 @@
-from models.interfaces import GetContentPostsInput as Input
+from shared.models.interfaces import GetContentPostsInput as Input
 
 
 class Validator:

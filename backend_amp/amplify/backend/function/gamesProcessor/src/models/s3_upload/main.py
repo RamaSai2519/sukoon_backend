@@ -1,8 +1,9 @@
 import traceback
-from models.constants import OutputStatus
+from shared.models.constants import OutputStatus
 from models.s3_upload.compute import Compute
 from models.s3_upload.validate import Validator
-from models.interfaces import UploadInput as Input, Output
+from shared.models.interfaces import UploadInput as Input, Output
+
 
 class S3Upload:
     def __init__(self, input: Input) -> None:
@@ -30,7 +31,7 @@ class S3Upload:
             )
 
         return output
-    
+
     def _validate(self, input: Input):
         validation_obj = Validator(input)
         validation_result, error_message = validation_obj.validate_input()

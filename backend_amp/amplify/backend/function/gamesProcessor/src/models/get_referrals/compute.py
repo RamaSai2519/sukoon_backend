@@ -1,10 +1,10 @@
 from bson import ObjectId
-from helpers.users import UsersHelper
-from models.common import Common
-from db.users import get_user_collection
-from models.constants import OutputStatus
-from db.referral import get_user_referral_collection
-from models.interfaces import GetReferralsInput as Input, Output
+from shared.helpers.users import UsersHelper
+from shared.models.common import Common
+from shared.db.users import get_user_collection
+from shared.models.constants import OutputStatus
+from shared.db.referral import get_user_referral_collection
+from shared.models.interfaces import GetReferralsInput as Input, Output
 
 
 class Compute:

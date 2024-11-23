@@ -1,4 +1,4 @@
-from models.interfaces import CouponRewardInput as Input
+from shared.models.interfaces import CouponRewardInput as Input
 from models.enum import GameType
 
 
@@ -8,6 +8,3 @@ class Validator():
 
     def validate_input(self):
         return True, ""
-    
-
-    

@@ -1,4 +1,4 @@
-from models.interfaces import GetTimingsInput as Input
+from shared.models.interfaces import GetTimingsInput as Input
 from bson import ObjectId
 
 

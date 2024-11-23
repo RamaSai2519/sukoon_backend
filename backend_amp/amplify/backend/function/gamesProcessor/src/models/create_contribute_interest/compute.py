@@ -1,7 +1,7 @@
-from models.interfaces import CreateContributeInterestInput as Input, Output, ContributeInterest
-from db.events import get_contirbute_event_users_collection
-from models.constants import OutputStatus
-from models.common import Common
+from shared.models.interfaces import CreateContributeInterestInput as Input, Output, ContributeInterest
+from shared.db.events import get_contirbute_event_users_collection
+from shared.models.constants import OutputStatus
+from shared.models.common import Common
 from bson import ObjectId
 
 

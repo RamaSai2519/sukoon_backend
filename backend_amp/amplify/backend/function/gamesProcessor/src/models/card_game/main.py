@@ -1,8 +1,9 @@
 import traceback
-from models.interfaces import CardGameInput as Input, Output
-from models.constants import OutputStatus
+from shared.models.interfaces import CardGameInput as Input, Output
+from shared.models.constants import OutputStatus
 from models.card_game.compute import Compute
 from models.card_game.validate import Validator
+
 
 class CardGame:
     def __init__(self, input: Input) -> None:
@@ -18,8 +19,6 @@ class CardGame:
                 output_status=OutputStatus.FAILURE,
                 output_message=f"INVALID_INPUT. {error_message}",
             )
-        
-        
 
         try:
             output = self._compute(input)
@@ -30,10 +29,9 @@ class CardGame:
                 output_status=OutputStatus.FAILURE,
                 output_message=f"{e}",
             )
-            
 
         return output
-    
+
     def _validate(self, input: Input):
         validation_obj = Validator(input)
         validation_result, error_message = validation_obj.validate_input()

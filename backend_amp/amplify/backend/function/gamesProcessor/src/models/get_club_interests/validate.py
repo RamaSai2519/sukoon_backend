@@ -1,4 +1,4 @@
-from models.interfaces import GetClubInterestsInput as Input
+from shared.models.interfaces import GetClubInterestsInput as Input
 
 
 class Validator():

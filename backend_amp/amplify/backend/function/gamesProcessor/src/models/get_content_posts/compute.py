@@ -1,7 +1,7 @@
-from models.common import Common
-from models.constants import OutputStatus
-from db.content import get_content_posts_collection
-from models.interfaces import GetContentPostsInput as Input, Output
+from shared.models.common import Common
+from shared.models.constants import OutputStatus
+from shared.db.content import get_content_posts_collection
+from shared.models.interfaces import GetContentPostsInput as Input, Output
 
 
 class Compute:

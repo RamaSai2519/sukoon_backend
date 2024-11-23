@@ -1,9 +1,9 @@
-from models.common import Common
-from db.users import get_user_collection
-from models.constants import OutputStatus
-from db.events import get_events_collection
-from db.whatsapp import get_whatsapp_templates_collection
-from models.interfaces import WaOptionsInput as Input, Output
+from shared.models.common import Common
+from shared.db.users import get_user_collection
+from shared.models.constants import OutputStatus
+from shared.db.events import get_events_collection
+from shared.db.whatsapp import get_whatsapp_templates_collection
+from shared.models.interfaces import WaOptionsInput as Input, Output
 
 
 class Compute:

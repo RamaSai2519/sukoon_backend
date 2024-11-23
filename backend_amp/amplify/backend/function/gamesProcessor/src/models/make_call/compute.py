@@ -5,13 +5,13 @@ from bson import ObjectId
 from datetime import datetime
 from dataclasses import asdict
 from typing import Tuple, Dict
-from db.users import get_user_collection
-from db.calls import get_calls_collection
-from models.constants import OutputStatus
-from db.experts import get_experts_collections
+from shared.db.users import get_user_collection
+from shared.db.calls import get_calls_collection
+from shared.models.constants import OutputStatus
+from shared.db.experts import get_experts_collections
 from models.make_call.slack import SlackNotifier
 from models.make_call.notifications import Notifications
-from models.interfaces import CallInput as Input, Output, Call
+from shared.models.interfaces import CallInput as Input, Output, Call
 
 
 class Compute:

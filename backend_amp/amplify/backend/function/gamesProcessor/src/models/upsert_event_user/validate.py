@@ -1,4 +1,4 @@
-from models.interfaces import EventUserInput as Input
+from shared.models.interfaces import EventUserInput as Input
 
 
 class Validator():

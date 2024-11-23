@@ -1,7 +1,7 @@
-from models.common import Common
-from models.constants import OutputStatus
-from models.interfaces import GetLeadsInput as Input, Output
-from db.users import get_user_collection, get_meta_collection
+from shared.models.common import Common
+from shared.models.constants import OutputStatus
+from shared.models.interfaces import GetLeadsInput as Input, Output
+from shared.db.users import get_user_collection, get_meta_collection
 
 
 class Compute:

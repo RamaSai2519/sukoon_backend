@@ -1,11 +1,11 @@
 from typing import Union
 from bson import ObjectId
-from models.common import Common
-from db.users import get_user_collection
+from shared.models.common import Common
+from shared.db.users import get_user_collection
 from pymongo.collection import Collection
-from models.constants import OutputStatus
-from models.interfaces import Output, SaveRemarkInput as Input
-from db.events import get_event_users_collection, get_become_saarthis_collection
+from shared.models.constants import OutputStatus
+from shared.models.interfaces import Output, SaveRemarkInput as Input
+from shared.db.events import get_event_users_collection, get_become_saarthis_collection
 
 
 class Compute:

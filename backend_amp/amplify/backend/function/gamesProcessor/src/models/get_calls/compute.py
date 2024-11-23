@@ -1,9 +1,9 @@
 import threading
 from datetime import datetime
-from models.common import Common
-from helpers.excel import ExcelS3Helper
-from models.constants import OutputStatus
-from models.interfaces import GetCallsInput as Input, Output
+from shared.models.common import Common
+from shared.helpers.excel import ExcelS3Helper
+from shared.models.constants import OutputStatus
+from shared.models.interfaces import GetCallsInput as Input, Output
 
 
 class Compute:

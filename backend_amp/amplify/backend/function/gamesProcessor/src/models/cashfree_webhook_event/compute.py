@@ -3,10 +3,10 @@ import requests
 import random
 from datetime import datetime
 from bson import ObjectId
-from db.events import get_events_collection
-from models.constants import OutputStatus, application_json_header
-from db.users import get_user_collection, get_user_payment_collection
-from models.interfaces import CashfreeWebhookEventInput as Input, Output
+from shared.db.events import get_events_collection
+from shared.models.constants import OutputStatus, application_json_header
+from shared.db.users import get_user_collection, get_user_payment_collection
+from shared.models.interfaces import CashfreeWebhookEventInput as Input, Output
 
 
 class Compute:

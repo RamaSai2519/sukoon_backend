@@ -7,7 +7,7 @@ from models.get_event_users.main import ListEventUsers
 from models.upsert_event_config.main import UpsertEvent
 from models.upsert_contribute_event.main import UpsertContributeEvent
 from models.create_contribute_interest.main import CreateContributeInterest
-from models.interfaces import Event, GetEventsInput, GetEventUsersInput, ContributeEvent, CreateContributeInterestInput, Output
+from shared.models.interfaces import Event, GetEventsInput, GetEventUsersInput, ContributeEvent, CreateContributeInterestInput, Output
 
 
 class UpsertEventsService(Resource):

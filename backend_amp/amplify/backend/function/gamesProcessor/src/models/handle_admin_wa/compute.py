@@ -1,11 +1,11 @@
 import threading
 from bson import ObjectId
-from db.users import get_user_collection
+from shared.db.users import get_user_collection
 from pymongo.collection import Collection
-from models.constants import OutputStatus
+from shared.models.constants import OutputStatus
 from models.handle_admin_wa.helper import Helper
-from models.interfaces import AdminWaInput as Input, Output
-from db.events import get_event_users_collection, get_events_collection
+from shared.models.interfaces import AdminWaInput as Input, Output
+from shared.db.events import get_event_users_collection, get_events_collection
 
 
 class Compute:

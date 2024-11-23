@@ -1,7 +1,7 @@
 import json
 import dataclasses
 from flask import request
-from models.common import Common
+from shared.models.common import Common
 from flask_restful import Resource
 from models.get_slots.main import GetSlots
 from flask_jwt_extended import jwt_required
@@ -12,7 +12,7 @@ from models.upsert_expert.main import UpsertExpert
 from models.get_applicants.main import GetApplicants
 from models.update_timings.main import UpdateTimings
 from models.create_applicant.main import CreateApplicant
-from models.interfaces import Expert, CategoriesInput, GetExpertsInput, ApplicantInput, GetSlotsInput, GetTimingsInput, UpdateTimingsInput, TimingsRow, GetApplicantsInput, RecommendExpertInput
+from shared.models.interfaces import Expert, CategoriesInput, GetExpertsInput, ApplicantInput, GetSlotsInput, GetTimingsInput, UpdateTimingsInput, TimingsRow, GetApplicantsInput, RecommendExpertInput
 
 
 class ExpertService(Resource):
@@ -96,4 +96,3 @@ class CategoryService(Resource):
         output = dataclasses.asdict(output)
 
         return output
-

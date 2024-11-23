@@ -1,6 +1,6 @@
 import traceback
-from models.interfaces import Output
-from models.constants import OutputStatus
+from shared.models.interfaces import Output
+from shared.models.constants import OutputStatus
 from models.list_referrals.compute import Compute
 
 

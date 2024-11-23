@@ -5,7 +5,7 @@ from flask import request
 from models.admin_schedule.main import AdminSchedules
 from models.create_scheduled_job.main import CreateScheduledJob
 from models.update_scheduled_job.main import UpdateScheduledJob
-from models.interfaces import ScheduledJobInput, GetScheduledJobsInput
+from shared.models.interfaces import ScheduledJobInput, GetScheduledJobsInput
 
 
 class CreateScheduledJobsService(Resource):

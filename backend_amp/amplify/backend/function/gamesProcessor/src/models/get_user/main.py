@@ -1,8 +1,8 @@
 import traceback
-from models.constants import OutputStatus
+from shared.models.constants import OutputStatus
 from models.get_user.compute import Compute
 from models.get_user.validate import Validator
-from models.interfaces import GetUsersInput as Input, Output
+from shared.models.interfaces import GetUsersInput as Input, Output
 
 
 class GetUser:

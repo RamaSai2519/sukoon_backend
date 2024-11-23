@@ -7,7 +7,7 @@ from models.get_photos.main import Photos
 from models.save_content.main import SaveContent
 from models.generate_image.main import GenerateImage
 from models.get_content_posts.main import GetContentPosts
-from models.interfaces import ChatInput, SaveContentInput, PhotosInput, Output, Content, ContentPhoto, GetContentPostsInput
+from shared.models.interfaces import ChatInput, SaveContentInput, PhotosInput, Output, Content, ContentPhoto, GetContentPostsInput
 
 
 class ChatService(Resource):
@@ -55,7 +55,7 @@ class ContentService(Resource):
 
 
 class DallImageService(Resource):
-    
+
     def get(self) -> Output:
         input_params = request.args
         input = ChatInput(**input_params)

@@ -3,7 +3,7 @@ from flask import Flask
 from flask_cors import CORS
 from flask_restful import Api
 from services.controller import *
-from configs import CONFIG as config
+from shared.configs import CONFIG as config
 from flask_jwt_extended import JWTManager
 
 
@@ -69,6 +69,7 @@ api.add_resource(LeadsService, '/actions/leads')
 api.add_resource(RemarkService, '/actions/remarks')
 api.add_resource(WhatsappHistoryService, '/actions/wa_history')
 api.add_resource(EngagementDataService, '/actions/user_engagement')
+api.add_resource(UserStatusOptionsService, '/actions/user_status_options')
 # - Content
 api.add_resource(ChatService, '/actions/chat')
 api.add_resource(PhotoService, '/actions/photos')

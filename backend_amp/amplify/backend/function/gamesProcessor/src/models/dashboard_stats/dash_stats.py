@@ -1,8 +1,8 @@
 from typing import Tuple
-from models.common import Common
-from helpers.experts import ExpertsHelper
-from db.calls import get_calls_collection
-from models.constants import successful_calls_query
+from shared.models.common import Common
+from shared.helpers.experts import ExpertsHelper
+from shared.db.calls import get_calls_collection
+from shared.models.constants import successful_calls_query
 
 
 class DashboardStats:

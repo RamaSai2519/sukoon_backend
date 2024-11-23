@@ -1,4 +1,4 @@
-from models.interfaces import GetGameConfigInput as Input
+from shared.models.interfaces import GetGameConfigInput as Input
 from models.enum import GameType
 
 
@@ -12,6 +12,3 @@ class Validator():
         if game_type not in GameType.__members__:
             return False, "Game Type is wrong"
         return True, ""
-    
-
-    

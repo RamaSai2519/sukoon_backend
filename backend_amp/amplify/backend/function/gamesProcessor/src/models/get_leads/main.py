@@ -1,7 +1,7 @@
-from models.constants import OutputStatus
+from shared.models.constants import OutputStatus
 from models.get_leads.compute import Compute
 from models.get_leads.validate import Validator
-from models.interfaces import GetLeadsInput as Input, Output
+from shared.models.interfaces import GetLeadsInput as Input, Output
 
 
 class GetLeads:

@@ -1,7 +1,7 @@
-from models.interfaces import ApplicantInput as Input, Output
-from db.events import get_become_saarthis_collection
-from models.constants import OutputStatus
-from models.common import Common
+from shared.models.interfaces import ApplicantInput as Input, Output
+from shared.db.events import get_become_saarthis_collection
+from shared.models.constants import OutputStatus
+from shared.models.common import Common
 from dataclasses import asdict
 
 

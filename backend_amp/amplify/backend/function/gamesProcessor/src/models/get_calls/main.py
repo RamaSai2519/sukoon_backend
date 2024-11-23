@@ -1,8 +1,9 @@
 import traceback
-from models.constants import OutputStatus
+from shared.models.constants import OutputStatus
 from models.get_calls.compute import Compute
 from models.get_calls.validate import Validator
-from models.interfaces import GetCallsInput as Input, Output
+from shared.models.interfaces import GetCallsInput as Input, Output
+
 
 class GetCalls:
     def __init__(self, input: Input) -> None:
@@ -30,7 +31,7 @@ class GetCalls:
             )
 
         return output
-    
+
     def _validate(self, input: Input):
         validation_obj = Validator(input)
         validation_result, error_message = validation_obj.validate_input()

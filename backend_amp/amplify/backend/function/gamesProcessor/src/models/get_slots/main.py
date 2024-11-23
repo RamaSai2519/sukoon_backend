@@ -1,8 +1,8 @@
 import traceback
-from models.constants import OutputStatus
+from shared.models.constants import OutputStatus
 from models.get_slots.compute import Compute
 from models.get_slots.validate import Validator
-from models.interfaces import GetSlotsInput as Input, Output
+from shared.models.interfaces import GetSlotsInput as Input, Output
 
 
 class GetSlots:
@@ -31,7 +31,7 @@ class GetSlots:
             )
 
         return output
-    
+
     def _validate(self, input: Input):
         validation_obj = Validator(input)
         validation_result, error_message = validation_obj.validate_input()

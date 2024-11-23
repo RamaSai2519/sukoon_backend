@@ -3,11 +3,11 @@ import dataclasses
 from typing import Union
 from bson import ObjectId
 from datetime import datetime
-from models.common import Common
-from models.constants import OutputStatus
+from shared.models.common import Common
+from shared.models.constants import OutputStatus
 from models.upsert_expert.slack import SlackManager
-from models.interfaces import Expert as Input, Output
-from db.experts import get_experts_collections, get_timings_collection, get_categories_collection, get_expertlogs_collection
+from shared.models.interfaces import Expert as Input, Output
+from shared.db.experts import get_experts_collections, get_timings_collection, get_categories_collection, get_expertlogs_collection
 
 
 class Compute:
@@ -62,7 +62,8 @@ class Compute:
             {"name": {"$in": categories}}))
         if not categories:
             return expert_data
-        expert_data["categories"] = [str(category["_id"]) for category in categories]
+        expert_data["categories"] = [
+            str(category["_id"]) for category in categories]
         return expert_data
 
     def insert_blank_timings(self, expert_id) -> dict:

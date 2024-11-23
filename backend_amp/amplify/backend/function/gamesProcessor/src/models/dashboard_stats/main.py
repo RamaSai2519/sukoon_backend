@@ -1,8 +1,8 @@
 import traceback
-from models.constants import OutputStatus
+from shared.models.constants import OutputStatus
 from models.dashboard_stats.compute import Compute
 from models.dashboard_stats.validate import Validator
-from models.interfaces import DashboardStatsInput as Input, Output
+from shared.models.interfaces import DashboardStatsInput as Input, Output
 
 
 class DashboardStats:

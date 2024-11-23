@@ -1,8 +1,8 @@
 import traceback
-from models.constants import OutputStatus
+from shared.models.constants import OutputStatus
 from models.get_experts.compute import Compute
 from models.get_experts.validate import Validator
-from models.interfaces import GetExpertsInput as Input, Output
+from shared.models.interfaces import GetExpertsInput as Input, Output
 
 
 class ListExperts:

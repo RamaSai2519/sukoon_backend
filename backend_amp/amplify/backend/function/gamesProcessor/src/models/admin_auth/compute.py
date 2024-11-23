@@ -1,9 +1,9 @@
 import bcrypt
-from models.common import Common
-from models.constants import OutputStatus
-from db.users import get_admins_collection
+from shared.models.common import Common
+from shared.models.constants import OutputStatus
+from shared.db.users import get_admins_collection
 from flask_jwt_extended import jwt_required
-from models.interfaces import AdminAuthInput as Input, Admin, Output
+from shared.models.interfaces import AdminAuthInput as Input, Admin, Output
 from flask_jwt_extended import create_access_token, create_refresh_token, get_jwt_identity
 
 
