@@ -1,6 +1,6 @@
 from shared.models.interfaces import ScheduledJobInput as Input, Output
-from shared.models.constants import OutputStatus
 from db_queries.mutations.scheduled_job import create_scheduled_job
+from shared.models.constants import OutputStatus
 
 
 class Compute:
