@@ -1,6 +1,6 @@
-from models.interfaces import PhotosInput as Input, Output
-from models.constants import OutputStatus
-from configs import CONFIG as config
+from shared.models.interfaces import PhotosInput as Input, Output
+from shared.models.constants import OutputStatus
+from shared.configs import CONFIG as config
 import requests
 
 

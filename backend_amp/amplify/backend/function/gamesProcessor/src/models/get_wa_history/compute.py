@@ -1,10 +1,10 @@
 from bson import ObjectId
-from models.common import Common
+from shared.models.common import Common
 from pymongo.collection import Collection
-from models.constants import OutputStatus
-from db.experts import get_experts_collections
-from models.interfaces import GetWaHistoryInput as Input, Output
-from db.users import get_user_webhook_messages_collection, get_user_whatsapp_feedback_collection, get_user_collection
+from shared.models.constants import OutputStatus
+from shared.db.experts import get_experts_collections
+from shared.models.interfaces import GetWaHistoryInput as Input, Output
+from shared.db.users import get_user_webhook_messages_collection, get_user_whatsapp_feedback_collection, get_user_collection
 
 
 class Compute:

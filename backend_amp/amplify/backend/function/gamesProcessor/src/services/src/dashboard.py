@@ -4,7 +4,7 @@ from flask import request
 from flask_restful import Resource
 from flask_jwt_extended import jwt_required
 from models.dashboard_stats.main import DashboardStats
-from models.interfaces import DashboardStatsInput, Output
+from shared.models.interfaces import DashboardStatsInput, Output
 
 
 class DashboardStatsService(Resource):

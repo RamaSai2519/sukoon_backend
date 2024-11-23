@@ -1,9 +1,9 @@
 from bson import ObjectId
-from models.common import Common
-from models.constants import OutputStatus
+from shared.models.common import Common
+from shared.models.constants import OutputStatus
 from flask_jwt_extended import jwt_required
-from db.experts import get_categories_collection
-from models.interfaces import CategoriesInput as Input, Output, Category
+from shared.db.experts import get_categories_collection
+from shared.models.interfaces import CategoriesInput as Input, Output, Category
 
 
 class Compute:

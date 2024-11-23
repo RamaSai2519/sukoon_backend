@@ -1,4 +1,4 @@
-from models.interfaces import WaOptionsInput as Input
+from shared.models.interfaces import WaOptionsInput as Input
 
 
 class Validator:

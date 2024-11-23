@@ -1,9 +1,9 @@
 import json
 import requests
-from configs import CONFIG as config
-from models.constants import OutputStatus
-from db.calls import get_callsmeta_collection
-from models.interfaces import UpdateScoresInput as Input, Output
+from shared.configs import CONFIG as config
+from shared.models.constants import OutputStatus
+from shared.db.calls import get_callsmeta_collection
+from shared.models.interfaces import UpdateScoresInput as Input, Output
 from models.update_expert_scores.average_scores import CalcAverageScores, AverageScoresObject
 
 

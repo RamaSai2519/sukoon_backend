@@ -1,13 +1,13 @@
 import requests
 import json
-from models.interfaces import WhtasappMessageInput as Input, Output
-from models.constants import OutputStatus
-from configs import CONFIG as config
+from shared.models.interfaces import WhtasappMessageInput as Input, Output
+from shared.models.constants import OutputStatus
+from shared.configs import CONFIG as config
 from .template_setter import (
     WhatsappNotificationTemplateSetter,
 )
 from http import HTTPStatus
-from db.users import get_user_collection, get_user_notification_collection
+from shared.db.users import get_user_collection, get_user_notification_collection
 from datetime import datetime
 
 

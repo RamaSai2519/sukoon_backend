@@ -1,11 +1,11 @@
-from models.interfaces import UpdateFCMTokenInput as Input, Output
-from models.constants import OutputStatus
-from db.users import get_user_fcm_token_collection
+from shared.models.interfaces import UpdateFCMTokenInput as Input, Output
+from shared.models.constants import OutputStatus
+from shared.db.users import get_user_fcm_token_collection
+
 
 class Compute:
-    def __init__(self,input: Input) -> None:
+    def __init__(self, input: Input) -> None:
         self.input = input
-
 
     def _update_fcm_token(self, user_id, fcm_token) -> None:
 
@@ -17,9 +17,8 @@ class Compute:
         }
         user_fcm_token_collection.insert_one(user_fcm_token_data)
 
-
     def compute(self):
-        
+
         self._update_fcm_token(self.input.user_id, self.input.fcm_token)
 
         return Output(

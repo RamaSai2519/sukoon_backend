@@ -1,4 +1,4 @@
-from models.interfaces import DashboardStatsInput as Input
+from shared.models.interfaces import DashboardStatsInput as Input
 
 
 class Validator():

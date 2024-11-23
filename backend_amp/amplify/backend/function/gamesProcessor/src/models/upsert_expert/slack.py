@@ -2,7 +2,7 @@ import pytz
 from datetime import datetime
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
-from configs import CONFIG as config
+from shared.configs import CONFIG as config
 
 
 class SlackManager:

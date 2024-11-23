@@ -1,8 +1,8 @@
 import traceback
-from models.constants import OutputStatus
+from shared.models.constants import OutputStatus
 from models.get_timings.compute import Compute
-from models.get_timings.validate import Validator   
-from models.interfaces import GetTimingsInput as Input, Output
+from models.get_timings.validate import Validator
+from shared.models.interfaces import GetTimingsInput as Input, Output
 
 
 class GetTimings:

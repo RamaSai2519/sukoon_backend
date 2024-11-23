@@ -1,11 +1,11 @@
-from models.interfaces import CreateNonRegisteredUserInput as Input, Output
-from models.constants import OutputStatus
+from shared.models.interfaces import CreateNonRegisteredUserInput as Input, Output
+from shared.models.constants import OutputStatus
 from db_queries.mutations.user import create_non_registered_user
 
-class Compute:
-    def __init__(self,input: Input) -> None:
-        self.input = input
 
+class Compute:
+    def __init__(self, input: Input) -> None:
+        self.input = input
 
     def compute(self):
 

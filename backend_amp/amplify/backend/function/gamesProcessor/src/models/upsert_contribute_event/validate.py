@@ -1,4 +1,4 @@
-from models.interfaces import ContributeEvent as Input
+from shared.models.interfaces import ContributeEvent as Input
 
 
 class Validator:

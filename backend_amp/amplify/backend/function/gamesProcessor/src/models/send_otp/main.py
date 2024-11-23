@@ -1,8 +1,9 @@
 import traceback
-from models.interfaces import SendOTPInput as Input, Output
-from models.constants import OutputStatus
+from shared.models.interfaces import SendOTPInput as Input, Output
+from shared.models.constants import OutputStatus
 from models.send_otp.compute import Compute
 from models.send_otp.validate import Validator
+
 
 class SendOTP:
     def __init__(self, input: Input) -> None:
@@ -30,7 +31,7 @@ class SendOTP:
             )
 
         return output
-    
+
     def _validate(self, input: Input):
         validation_obj = Validator(input)
         validation_result, error_message = validation_obj.validate_input()

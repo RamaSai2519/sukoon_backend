@@ -1,11 +1,11 @@
-from models.interfaces import UpdateGamePlayInput as Input, Output
-from models.constants import OutputStatus
-from db.users import get_user_game_plays_collection
+from shared.models.interfaces import UpdateGamePlayInput as Input, Output
+from shared.models.constants import OutputStatus
+from shared.db.users import get_user_game_plays_collection
+
 
 class Compute:
-    def __init__(self,input: Input) -> None:
+    def __init__(self, input: Input) -> None:
         self.input = input
-
 
     def _update_game_play(self, user_id, opponent_id, user_score, opponent_score, reward_amount) -> dict:
 
@@ -23,11 +23,12 @@ class Compute:
 
         user_game_play_collection.insert_one(user_game_play_data)
 
-
     def compute(self):
-        
-        self._update_game_play(self.input.user_id, self.input.saarthi_id, self.input.user_score, self.input.saarthi_score, self.input.reward_amount)
-        self._update_game_play(self.input.saarthi_id, self.input.user_id, self.input.saarthi_score, self.input.user_score, 0)
+
+        self._update_game_play(self.input.user_id, self.input.saarthi_id,
+                               self.input.user_score, self.input.saarthi_score, self.input.reward_amount)
+        self._update_game_play(self.input.saarthi_id, self.input.user_id,
+                               self.input.saarthi_score, self.input.user_score, 0)
 
         return Output(
             output_details="",

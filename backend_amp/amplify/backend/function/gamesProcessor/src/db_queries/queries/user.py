@@ -1,4 +1,5 @@
-from helpers.base import call_graphql
+from shared.helpers.base import call_graphql
+
 
 def fetch_user_by_mobile_number(mobile_number):
 
@@ -18,4 +19,4 @@ def fetch_user_by_mobile_number(mobile_number):
         }
     """
     params = {"mobileNumber": mobile_number}
-    return call_graphql(query=query , params=params, message="fetch_user_by_mobile_number").get("userByMobileNumber")
+    return call_graphql(query=query, params=params, message="fetch_user_by_mobile_number").get("userByMobileNumber")

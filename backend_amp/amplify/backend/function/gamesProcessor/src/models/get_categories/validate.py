@@ -1,4 +1,4 @@
-from models.interfaces import CategoriesInput as Input
+from shared.models.interfaces import CategoriesInput as Input
 
 
 class Validator():

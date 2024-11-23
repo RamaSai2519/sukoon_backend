@@ -1,9 +1,9 @@
-from models.common import Common
-from models.constants import OutputStatus
+from shared.models.common import Common
+from shared.models.constants import OutputStatus
 from models.dashboard_stats.dash_stats import DashboardStats
 from models.dashboard_stats.call_insights import CallInsights
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from models.interfaces import DashboardStatsInput as Input, Output
+from shared.models.interfaces import DashboardStatsInput as Input, Output
 
 
 class Compute:
@@ -11,10 +11,12 @@ class Compute:
         self.input = input
         self.common = Common()
         self.today_query = Common.get_today_query()
-        self.exclude_query = self.common.get_internal_exclude_query(input.internal)
+        self.exclude_query = self.common.get_internal_exclude_query(
+            input.internal)
 
     def get_dashboard_stats(self) -> Output:
-        stats = DashboardStats(self.today_query, self.exclude_query, self.input.internal)
+        stats = DashboardStats(
+            self.today_query, self.exclude_query, self.input.internal)
         stats_data = {}
 
         methods_to_run = [

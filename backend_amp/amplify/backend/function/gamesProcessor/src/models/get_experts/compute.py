@@ -1,8 +1,8 @@
-from models.interfaces import GetExpertsInput as Input, Output
-from db.calls import get_schedules_collection
-from models.constants import OutputStatus
-from helpers.experts import ExpertsHelper
-from models.common import Common
+from shared.models.interfaces import GetExpertsInput as Input, Output
+from shared.db.calls import get_schedules_collection
+from shared.models.constants import OutputStatus
+from shared.helpers.experts import ExpertsHelper
+from shared.models.common import Common
 from bson import ObjectId
 
 

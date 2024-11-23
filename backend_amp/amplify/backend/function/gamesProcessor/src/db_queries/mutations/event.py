@@ -1,4 +1,4 @@
-from helpers.base import call_graphql
+from shared.helpers.base import call_graphql
 
 
 def update_event(event_data):
@@ -11,7 +11,7 @@ def update_event(event_data):
         }
     """
     params = {"input": event_data}
-    return call_graphql(query=query , params=params, message="update_event")
+    return call_graphql(query=query, params=params, message="update_event")
 
 
 def create_event(event_data):
@@ -24,5 +24,4 @@ def create_event(event_data):
         }
     """
     params = {"input": event_data}
-    return call_graphql(query=query , params=params, message="create_event")
-
+    return call_graphql(query=query, params=params, message="create_event")

@@ -1,4 +1,4 @@
-from models.interfaces import GetSlotsInput as Input
+from shared.models.interfaces import GetSlotsInput as Input
 from datetime import datetime
 from bson import ObjectId
 

@@ -1,8 +1,8 @@
 import traceback
-from models.constants import OutputStatus
+from shared.models.constants import OutputStatus
 from models.upsert_phone_config.compute import Compute
 from models.upsert_phone_config.validate import Validator
-from models.interfaces import PhoneConfigInput as Input, Output
+from shared.models.interfaces import PhoneConfigInput as Input, Output
 
 
 class UpsertPhoneConfig:

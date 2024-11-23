@@ -1,8 +1,9 @@
 import traceback
-from models.constants import OutputStatus
+from shared.models.constants import OutputStatus
 from models.save_fcm_token.compute import Compute
 from models.save_fcm_token.validate import Validator
-from models.interfaces import SaveFCMTokenInput as Input, Output
+from shared.models.interfaces import SaveFCMTokenInput as Input, Output
+
 
 class SaveAdminFCMToken:
     def __init__(self, input: Input) -> None:
@@ -30,7 +31,7 @@ class SaveAdminFCMToken:
             )
 
         return output
-    
+
     def _validate(self, input: Input):
         validation_obj = Validator(input)
         validation_result, error_message = validation_obj.validate_input()

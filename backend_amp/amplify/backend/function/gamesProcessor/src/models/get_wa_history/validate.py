@@ -1,4 +1,4 @@
-from models.interfaces import GetWaHistoryInput as Input
+from shared.models.interfaces import GetWaHistoryInput as Input
 
 
 class Validator():

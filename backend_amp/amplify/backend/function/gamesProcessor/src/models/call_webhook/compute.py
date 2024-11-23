@@ -2,14 +2,14 @@ import json
 import requests
 import threading
 from typing import Union
-from models.common import Common
-from configs import CONFIG as config
-from db.calls import get_calls_collection
-from db.experts import get_experts_collections
-from db.users import get_user_collection, get_user_notification_collection
+from shared.models.common import Common
+from shared.configs import CONFIG as config
+from shared.db.calls import get_calls_collection
+from shared.db.experts import get_experts_collections
+from shared.db.users import get_user_collection, get_user_notification_collection
 from db_queries.mutations.scheduled_job import update_scheduled_job_status
-from models.constants import OutputStatus, application_json_header, CallStatus
-from models.interfaces import WebhookInput as Input, Call, Output, User, Expert
+from shared.models.constants import OutputStatus, application_json_header, CallStatus
+from shared.models.interfaces import WebhookInput as Input, Call, Output, User, Expert
 
 
 class Compute:
@@ -21,7 +21,8 @@ class Compute:
         self.url = config.URL + '/actions/send_whatsapp'
         self.experts_collection = get_experts_collections()
         self.user_notifications_collection = get_user_notification_collection()
-        self.duration_secs = self.common.duration_str_to_seconds(input.call_duration)
+        self.duration_secs = self.common.duration_str_to_seconds(
+            input.call_duration)
 
         self.status, self.failed_reason = self.determine_failed_reason_and_status()
 

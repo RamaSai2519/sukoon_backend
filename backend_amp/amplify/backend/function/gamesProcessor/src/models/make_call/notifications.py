@@ -1,8 +1,8 @@
-from models.constants import application_json_header
-from models.interfaces import CallInput as Input
-from db.calls import get_calls_collection
-from configs import CONFIG as config
-from models.common import Common
+from shared.models.constants import application_json_header
+from shared.models.interfaces import CallInput as Input
+from shared.db.calls import get_calls_collection
+from shared.configs import CONFIG as config
+from shared.models.common import Common
 from datetime import datetime
 from bson import ObjectId
 import requests
@@ -24,7 +24,7 @@ class Notifications:
             "token": expert.get("fcmToken", ""),
             "type_": self.input.type_,
             "sound": "longbell",
-            "priority" :"high",
+            "priority": "high",
             "user_id": str(user.get("_id", "")),
             "image_url": "https://sukoonunlimited.com/_next/image?url=%2Fplay.jpg&w=3840&q=75",
             "sarathi_id": str(expert.get("_id", ""))
@@ -39,7 +39,8 @@ class Notifications:
     def send_wa_notification(self, user: dict, expert: dict) -> str:
         url = self.url + "/actions/send_whatsapp"
         birth_date: datetime = user.get("birthDate", None)
-        birth_date = birth_date.strftime("%d %B, %Y") if birth_date else "Not provided"
+        birth_date = birth_date.strftime(
+            "%d %B, %Y") if birth_date else "Not provided"
         premium = "Yes" if user.get("isPaidUser", False) else "No"
 
         payload = json.dumps({

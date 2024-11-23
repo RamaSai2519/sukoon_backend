@@ -1,4 +1,4 @@
-from models.interfaces import SaveRemarkInput as Input
+from shared.models.interfaces import SaveRemarkInput as Input
 
 
 class Validator:

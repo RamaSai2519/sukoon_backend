@@ -1,7 +1,7 @@
-from models.interfaces import ChatInput as Input, Output, Content
-from models.constants import OutputStatus
-from helpers.openai import GPT_Client
-from models.common import Common
+from shared.models.interfaces import ChatInput as Input, Output, Content
+from shared.models.constants import OutputStatus
+from shared.helpers.openai import GPT_Client
+from shared.models.common import Common
 import json
 import re
 

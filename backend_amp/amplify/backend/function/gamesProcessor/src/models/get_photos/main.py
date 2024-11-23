@@ -1,8 +1,8 @@
 import traceback
-from models.constants import OutputStatus
+from shared.models.constants import OutputStatus
 from models.get_photos.compute import Compute
 from models.get_photos.validate import Validator
-from models.interfaces import PhotosInput as Input, Output
+from shared.models.interfaces import PhotosInput as Input, Output
 
 
 class Photos:

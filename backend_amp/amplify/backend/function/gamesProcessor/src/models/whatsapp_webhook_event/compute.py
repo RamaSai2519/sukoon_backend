@@ -2,11 +2,11 @@ import json
 import requests
 from bson import ObjectId
 from datetime import datetime
-from models.constants import OutputStatus
-from db.calls import get_calls_collection
+from shared.models.constants import OutputStatus
+from shared.db.calls import get_calls_collection
 from models.whatsapp_webhook_event.slack import WASlackNotifier
-from models.interfaces import WhatsappWebhookEventInput as Input, Output, WASlackNotifierInput
-from db.users import get_user_collection, get_user_webhook_messages_collection, get_user_notification_collection, get_user_whatsapp_feedback_collection, get_user_notification_collection
+from shared.models.interfaces import WhatsappWebhookEventInput as Input, Output, WASlackNotifierInput
+from shared.db.users import get_user_collection, get_user_webhook_messages_collection, get_user_notification_collection, get_user_whatsapp_feedback_collection, get_user_notification_collection
 
 FIX_CALL_BODY = ["Speak with same Sarathi"]
 SCHEDULE_REMINDER_BODY = ["I am available",

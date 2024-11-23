@@ -1,6 +1,6 @@
 import traceback
-from models.interfaces import ScheduledJobInput as Input, Output
-from models.constants import OutputStatus
+from shared.models.interfaces import ScheduledJobInput as Input, Output
+from shared.models.constants import OutputStatus
 from models.create_scheduled_job.compute import Compute
 from models.create_scheduled_job.validate import Validator
 

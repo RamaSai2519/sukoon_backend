@@ -1,10 +1,10 @@
 from bson import ObjectId
 from datetime import datetime
 from dataclasses import asdict
-from models.common import Common
-from models.constants import OutputStatus
-from db.users import get_phone_configs_collection
-from models.interfaces import PhoneConfigInput as Input, Output, PhoneConfig
+from shared.models.common import Common
+from shared.models.constants import OutputStatus
+from shared.db.users import get_phone_configs_collection
+from shared.models.interfaces import PhoneConfigInput as Input, Output, PhoneConfig
 
 
 class Compute:

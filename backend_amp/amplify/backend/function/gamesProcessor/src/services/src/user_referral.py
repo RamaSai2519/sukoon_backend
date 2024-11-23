@@ -3,7 +3,7 @@ import dataclasses
 from flask import request
 from flask_restful import Resource
 from models.get_referrals.main import GetUserReferrals
-from models.interfaces import Output, GetReferralsInput
+from shared.models.interfaces import Output, GetReferralsInput
 from models.list_referrals.main import ListUserReferrals
 
 

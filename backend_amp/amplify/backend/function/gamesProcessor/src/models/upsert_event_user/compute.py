@@ -1,10 +1,10 @@
-from models.interfaces import EventUserInput as Input, User, EventUser, Output, UserMeta, Event
-from db.events import get_event_users_collection, get_events_collection
-from models.constants import OutputStatus, application_json_header
-from db.users import get_user_collection, get_meta_collection
+from shared.models.interfaces import EventUserInput as Input, User, EventUser, Output, UserMeta, Event
+from shared.db.events import get_event_users_collection, get_events_collection
+from shared.models.constants import OutputStatus, application_json_header
+from shared.db.users import get_user_collection, get_meta_collection
 from pymongo.collection import Collection
-from configs import CONFIG as config
-from models.common import Common
+from shared.configs import CONFIG as config
+from shared.models.common import Common
 from dataclasses import asdict
 from datetime import datetime
 from bson import ObjectId

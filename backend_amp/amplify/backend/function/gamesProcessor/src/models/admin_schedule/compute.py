@@ -1,11 +1,11 @@
 import json
 from bson import ObjectId
 from typing import List, Dict
-from models.common import Common
-from helpers.base import call_graphql
-from db.calls import get_schedules_collection
-from models.constants import OutputStatus, scheduledJobStatuses
-from models.interfaces import GetScheduledJobsInput as Input, Output
+from shared.models.common import Common
+from shared.helpers.base import call_graphql
+from shared.db.calls import get_schedules_collection
+from shared.models.constants import OutputStatus, scheduledJobStatuses
+from shared.models.interfaces import GetScheduledJobsInput as Input, Output
 
 
 class Compute:

@@ -1,5 +1,5 @@
-from db.experts import get_experts_collections, get_timings_collection
-from db.calls import get_schedules_collection
+from shared.db.experts import get_experts_collections, get_timings_collection
+from shared.db.calls import get_schedules_collection
 from datetime import datetime, timedelta
 from bson import ObjectId
 import pytz
@@ -118,7 +118,8 @@ class Slot:
         current_time = start_time
         while current_time + timedelta(minutes=duration) <= end_time:
             end_slot_time = current_time + timedelta(minutes=duration)
-            slots.append(f"{current_time.strftime('%H:%M')} - {end_slot_time.strftime('%H:%M')}")
+            slots.append(
+                f"{current_time.strftime('%H:%M')} - {end_slot_time.strftime('%H:%M')}")
             current_time = end_slot_time
 
         return slots

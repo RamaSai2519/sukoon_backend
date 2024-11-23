@@ -1,13 +1,13 @@
 from bson import ObjectId
-from models.interfaces import CouponRewardInput as Input, Output
-from models.constants import OutputStatus
-from db.users import get_user_collection
+from shared.models.interfaces import CouponRewardInput as Input, Output
+from shared.models.constants import OutputStatus
+from shared.db.users import get_user_collection
 import random
 
+
 class Compute:
-    def __init__(self,input: Input) -> None:
+    def __init__(self, input: Input) -> None:
         self.input = input
- 
 
     def _get_reward_amount(self) -> dict:
         user_collection = get_user_collection()
@@ -49,7 +49,7 @@ class Compute:
         reward_amount = self._get_reward_amount()
 
         return Output(
-            output_details= {"reward_amount": reward_amount},
+            output_details={"reward_amount": reward_amount},
             output_status=OutputStatus.SUCCESS,
             output_message="Successfully fetched reward amount"
         )

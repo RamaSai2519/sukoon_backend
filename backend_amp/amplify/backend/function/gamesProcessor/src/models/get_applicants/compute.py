@@ -1,7 +1,7 @@
-from models.interfaces import GetApplicantsInput as Input, Output
-from models.constants import OutputStatus, indianLanguages
-from db.events import get_become_saarthis_collection
-from models.common import Common
+from shared.models.interfaces import GetApplicantsInput as Input, Output
+from shared.models.constants import OutputStatus, indianLanguages
+from shared.db.events import get_become_saarthis_collection
+from shared.models.common import Common
 
 
 class Compute:

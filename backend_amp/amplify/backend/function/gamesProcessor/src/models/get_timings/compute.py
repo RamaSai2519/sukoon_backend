@@ -1,8 +1,8 @@
 from bson import ObjectId
-from models.common import Common
-from models.constants import OutputStatus
-from db.experts import get_timings_collection
-from models.interfaces import GetTimingsInput as Input, Output
+from shared.models.common import Common
+from shared.models.constants import OutputStatus
+from shared.db.experts import get_timings_collection
+from shared.models.interfaces import GetTimingsInput as Input, Output
 
 
 class Compute:

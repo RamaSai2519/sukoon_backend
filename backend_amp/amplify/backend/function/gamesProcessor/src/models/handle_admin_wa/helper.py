@@ -1,6 +1,6 @@
-from db.whatsapp import get_whatsapp_templates_collection, get_whatsapp_temp_collection
-from models.constants import application_json_header
-from configs import CONFIG as config
+from shared.db.whatsapp import get_whatsapp_templates_collection, get_whatsapp_temp_collection
+from shared.models.constants import application_json_header
+from shared.configs import CONFIG as config
 from bson.objectid import ObjectId
 from datetime import datetime
 import requests

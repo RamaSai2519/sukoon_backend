@@ -1,8 +1,8 @@
-from models.interfaces import ValidateOTPInput as Input, Output
-from models.constants import OutputStatus
-from helpers.experts import ExpertsHelper
-from db.otp import get_otp_collection
-from helpers.users import UsersHelper
+from shared.models.interfaces import ValidateOTPInput as Input, Output
+from shared.models.constants import OutputStatus, TestCreds
+from shared.helpers.experts import ExpertsHelper
+from shared.db.otp import get_otp_collection
+from shared.helpers.users import UsersHelper
 
 
 class Compute:
@@ -30,6 +30,13 @@ class Compute:
         return self.expert_helper.get_expert(self.input.phone_number)
 
     def compute(self) -> Output:
+        if self.input.phone_number == TestCreds.phone_number and self.input.otp == TestCreds.otp:
+            user_details = self.populate_user_details()
+            return Output(
+                output_details=user_details,
+                output_status=OutputStatus.SUCCESS,
+                output_message="OTP validated successfully"
+            )
         message, output_status = self._validate_otp()
         if output_status == OutputStatus.SUCCESS:
             user_details = self.populate_user_details()

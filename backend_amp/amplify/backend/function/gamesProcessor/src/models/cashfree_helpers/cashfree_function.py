@@ -1,6 +1,6 @@
 import json
 import requests
-from configs import CONFIG as config
+from shared.configs import CONFIG as config
 
 CASHFREE_CONFIG = config.CASHFREE_API_CREDENTIALS
 

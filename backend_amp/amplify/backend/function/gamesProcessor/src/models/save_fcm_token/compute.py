@@ -1,7 +1,7 @@
-from models.interfaces import SaveFCMTokenInput as Input, Output
-from db.admins import get_fcm_token_collection
-from models.constants import OutputStatus
-from models.common import Common
+from shared.models.interfaces import SaveFCMTokenInput as Input, Output
+from shared.db.admins import get_fcm_token_collection
+from shared.models.constants import OutputStatus
+from shared.models.common import Common
 from bson import ObjectId
 
 

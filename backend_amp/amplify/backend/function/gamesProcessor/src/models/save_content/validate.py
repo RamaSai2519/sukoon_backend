@@ -1,4 +1,4 @@
-from models.interfaces import SaveContentInput as Input
+from shared.models.interfaces import SaveContentInput as Input
 
 
 class Validator:

@@ -1,8 +1,9 @@
 import traceback
-from models.interfaces import CashfreeWebhookEventInput as Input, Output
-from models.constants import OutputStatus
+from shared.models.interfaces import CashfreeWebhookEventInput as Input, Output
+from shared.models.constants import OutputStatus
 from models.cashfree_webhook_event.compute import Compute
 from models.cashfree_webhook_event.validate import Validator
+
 
 class CashfreeWebhookEvent:
     def __init__(self, input: Input) -> None:
@@ -30,7 +31,7 @@ class CashfreeWebhookEvent:
             )
 
         return output
-    
+
     def _validate(self, input: Input):
         validation_obj = Validator(input)
         validation_result, error_message = validation_obj.validate_input()

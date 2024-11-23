@@ -1,8 +1,8 @@
 import traceback
-from models.constants import OutputStatus
+from shared.models.constants import OutputStatus
 from models.upsert_event_user.compute import Compute
 from models.upsert_event_user.validate import Validator
-from models.interfaces import EventUserInput as Input, Output
+from shared.models.interfaces import EventUserInput as Input, Output
 
 
 class UpsertEventUser:

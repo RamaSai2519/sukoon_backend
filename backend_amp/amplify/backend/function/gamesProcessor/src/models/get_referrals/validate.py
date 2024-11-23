@@ -1,4 +1,4 @@
-from models.interfaces import GetReferralsInput as Input
+from shared.models.interfaces import GetReferralsInput as Input
 
 
 class Validator:

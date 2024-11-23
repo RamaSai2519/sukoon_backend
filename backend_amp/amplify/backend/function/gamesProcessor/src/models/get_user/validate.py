@@ -1,5 +1,5 @@
-from models.interfaces import GetUsersInput as Input
-from models.constants import CallStatus
+from shared.models.interfaces import GetUsersInput as Input
+from shared.models.constants import CallStatus
 
 
 class Validator():

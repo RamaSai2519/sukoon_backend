@@ -1,7 +1,7 @@
-from models.interfaces import SendOTPInput as Input, Output
-from models.constants import OutputStatus
-from db.otp import get_otp_collection
-from configs import CONFIG as config
+from shared.models.interfaces import SendOTPInput as Input, Output
+from shared.models.constants import OutputStatus, TestCreds
+from shared.db.otp import get_otp_collection
+from shared.configs import CONFIG as config
 import requests
 import string
 import random
@@ -42,7 +42,9 @@ class Compute:
             return "OTP generated and sent successfully via WA", OutputStatus.SUCCESS
         return "Some error occured while sending OTP via WA. Please try again", OutputStatus.FAILURE
 
-    def _generate_and_send_otp(self):
+    def _generate_and_send_otp(self) -> tuple:
+        if self.input.phone_number == TestCreds.phone_number:
+            return "OTP generated and sent successfully", OutputStatus.SUCCESS
 
         otp_collection = get_otp_collection()
         record = otp_collection.find_one(

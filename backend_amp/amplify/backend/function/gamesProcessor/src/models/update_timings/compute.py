@@ -1,9 +1,9 @@
 from bson import ObjectId
-from models.common import Common
+from shared.models.common import Common
 from pymongo.results import UpdateResult
-from models.constants import OutputStatus
-from db.experts import get_timings_collection
-from models.interfaces import UpdateTimingsInput as Input, Output
+from shared.models.constants import OutputStatus
+from shared.db.experts import get_timings_collection
+from shared.models.interfaces import UpdateTimingsInput as Input, Output
 
 
 class Compute:

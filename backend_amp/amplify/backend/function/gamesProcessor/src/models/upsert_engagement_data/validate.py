@@ -1,6 +1,6 @@
 from bson import ObjectId
-from db.users import get_user_collection
-from models.interfaces import UpsertEngagementDataInput as Input
+from shared.db.users import get_user_collection
+from shared.models.interfaces import UpsertEngagementDataInput as Input
 
 
 class Validator:

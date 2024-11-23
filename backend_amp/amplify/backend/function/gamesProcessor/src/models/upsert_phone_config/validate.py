@@ -1,4 +1,4 @@
-from models.interfaces import PhoneConfigInput as Input
+from shared.models.interfaces import PhoneConfigInput as Input
 
 
 class Validator:
