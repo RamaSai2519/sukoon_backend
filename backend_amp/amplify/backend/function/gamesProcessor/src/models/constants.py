@@ -10,6 +10,11 @@ class CallStatus:
     INADEQUATE = 'inadequate'
 
 
+class TestCreds:
+    phone_number = "1111111111"
+    otp = "1234"
+
+
 calls_exclusion_projection = {
     'user': 1,
     'callId': 1,
@@ -67,11 +72,6 @@ scheduledJobStatuses = [
     'FAILED',
     'COMPLETED'
 ]
-
-test_data = {
-    "phone_number": "1111111111",
-    "otp": "1234"
-}
 
 extract_json_function_str = r"""```python
 def extract_json(json_str: str) -> dict:

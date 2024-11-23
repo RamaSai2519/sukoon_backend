@@ -699,6 +699,11 @@ class UploadInput:
 
 
 @dataclass
+class BulkUploadInput:
+    file_url: str
+
+
+@dataclass
 class GetScheduledJobsInput:
     isDeleted: str = field(default_factory=lambda: "false")
 
