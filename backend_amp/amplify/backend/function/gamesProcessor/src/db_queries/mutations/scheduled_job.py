@@ -1,4 +1,4 @@
-from helpers.base import call_graphql
+from shared.helpers.base import call_graphql
 
 
 def create_scheduled_job(request_meta, status, job_time, job_type, user_requested=None) -> None:

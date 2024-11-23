@@ -1,8 +1,8 @@
 import traceback
-from models.constants import OutputStatus
+from shared.models.constants import OutputStatus
 from models.generate_image.compute import Compute
 from models.generate_image.validate import Validator
-from models.interfaces import ChatInput as Input, Output
+from shared.models.interfaces import ChatInput as Input, Output
 
 
 class GenerateImage:

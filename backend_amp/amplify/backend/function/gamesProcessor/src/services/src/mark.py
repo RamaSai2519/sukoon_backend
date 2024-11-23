@@ -2,7 +2,7 @@ import json
 import dataclasses
 from flask import request
 from flask_restful import Resource
-from models.interfaces import UpdateScoresInput
+from shared.models.interfaces import UpdateScoresInput
 from models.update_expert_scores.main import UpdateExpertScores
 
 

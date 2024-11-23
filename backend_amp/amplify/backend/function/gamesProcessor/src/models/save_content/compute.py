@@ -1,10 +1,10 @@
 import boto3
 import requests
 from io import BytesIO
-from configs import CONFIG as config
-from models.constants import OutputStatus
-from db.content import get_content_posts_collection
-from models.interfaces import Output, SaveContentInput as Input
+from shared.configs import CONFIG as config
+from shared.models.constants import OutputStatus
+from shared.db.content import get_content_posts_collection
+from shared.models.interfaces import Output, SaveContentInput as Input
 
 
 class Compute:

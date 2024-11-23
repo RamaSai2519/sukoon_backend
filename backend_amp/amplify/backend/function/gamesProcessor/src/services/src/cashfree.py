@@ -2,7 +2,7 @@ import json
 import dataclasses
 from flask_restful import Resource
 from flask import request
-from models.interfaces import CashfreeWebhookEventInput ,Output
+from shared.models.interfaces import CashfreeWebhookEventInput, Output
 from models.cashfree_webhook_event.main import CashfreeWebhookEvent
 
 

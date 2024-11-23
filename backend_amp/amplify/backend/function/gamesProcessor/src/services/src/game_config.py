@@ -2,7 +2,7 @@ import json
 import dataclasses
 from flask_restful import Resource
 from flask import request
-from models.interfaces import GetGameConfigInput, UpdateGameConfigInput, Output
+from shared.models.interfaces import GetGameConfigInput, UpdateGameConfigInput, Output
 from models.get_game_config.main import GetGameConfig
 from models.update_game_config.main import UpdateGameConfig
 
@@ -15,7 +15,7 @@ class GameConfigService(Resource):
         output = dataclasses.asdict(output)
 
         return output
-    
+
     def post(self) -> Output:
         input = json.loads(request.get_data())
         input = UpdateGameConfigInput(**input)
@@ -23,6 +23,3 @@ class GameConfigService(Resource):
         output = dataclasses.asdict(output)
 
         return output
-    
-
-

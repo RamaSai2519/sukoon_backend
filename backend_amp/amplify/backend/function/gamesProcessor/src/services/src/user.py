@@ -1,7 +1,7 @@
 import json
 import dataclasses
 from flask import request
-from models.common import Common
+from shared.models.common import Common
 from flask_restful import Resource
 from models.get_user.main import GetUser
 from models.get_leads.main import GetLeads
@@ -12,7 +12,7 @@ from models.upsert_event_user.main import UpsertEventUser
 from models.get_engagement_data.main import GetEngagementData
 from models.upsert_phone_config.main import UpsertPhoneConfig
 from models.upsert_engagement_data.main import UpsertEngagementData
-from models.interfaces import User, GetUsersInput, EventUserInput, GetLeadsInput, SaveRemarkInput, GetEngagementDataInput, UpsertEngagementDataInput, PhoneConfigInput
+from shared.models.interfaces import User, GetUsersInput, EventUserInput, GetLeadsInput, SaveRemarkInput, GetEngagementDataInput, UpsertEngagementDataInput, PhoneConfigInput
 
 
 class UserService(Resource):

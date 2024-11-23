@@ -1,4 +1,5 @@
-from helpers.base import call_graphql
+from shared.helpers.base import call_graphql
+
 
 def create_non_registered_user(mobile_number):
 
@@ -10,7 +11,7 @@ def create_non_registered_user(mobile_number):
         }
     """
     params = {"mobileNumber": mobile_number}
-    return call_graphql(query=query , params=params, message="create_non_registered_user")
+    return call_graphql(query=query, params=params, message="create_non_registered_user")
 
 
 def update_user(user_data):
@@ -23,6 +24,4 @@ def update_user(user_data):
         }
     """
     params = {"input": user_data}
-    return call_graphql(query=query , params=params, message="update_user")
-
-
+    return call_graphql(query=query, params=params, message="update_user")

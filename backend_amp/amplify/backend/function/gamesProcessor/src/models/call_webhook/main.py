@@ -1,7 +1,7 @@
-from models.constants import OutputStatus
+from shared.models.constants import OutputStatus
 from models.call_webhook.compute import Compute
 from models.call_webhook.validate import Validator
-from models.interfaces import WebhookInput as Input, Output
+from shared.models.interfaces import WebhookInput as Input, Output
 
 
 class CallWebhook:

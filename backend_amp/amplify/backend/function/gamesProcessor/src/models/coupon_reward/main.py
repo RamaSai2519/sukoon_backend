@@ -1,8 +1,9 @@
 import traceback
-from models.interfaces import CouponRewardInput as Input, Output
-from models.constants import OutputStatus
+from shared.models.interfaces import CouponRewardInput as Input, Output
+from shared.models.constants import OutputStatus
 from models.coupon_reward.compute import Compute
 from models.coupon_reward.validate import Validator
+
 
 class CouponReward:
     def __init__(self, input: Input) -> None:
@@ -30,7 +31,7 @@ class CouponReward:
             )
 
         return output
-    
+
     def _validate(self, input: Input):
         validation_obj = Validator(input)
         validation_result, error_message = validation_obj.validate_input()

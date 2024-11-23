@@ -1,4 +1,4 @@
-from models.interfaces import AdminAuthInput as Input
+from shared.models.interfaces import AdminAuthInput as Input
 
 
 class Validator():

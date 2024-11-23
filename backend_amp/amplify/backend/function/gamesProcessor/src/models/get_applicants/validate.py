@@ -1,4 +1,4 @@
-from models.interfaces import GetApplicantsInput as Input
+from shared.models.interfaces import GetApplicantsInput as Input
 
 
 class Validator():

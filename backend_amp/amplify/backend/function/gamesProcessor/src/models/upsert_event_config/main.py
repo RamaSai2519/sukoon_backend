@@ -1,6 +1,6 @@
 import traceback
-from models.constants import OutputStatus
-from models.interfaces import Event as Input, Output
+from shared.models.constants import OutputStatus
+from shared.models.interfaces import Event as Input, Output
 from models.upsert_event_config.compute import Compute
 from models.upsert_event_config.validate import Validator
 

@@ -1,4 +1,4 @@
-from models.interfaces import GetEngagementDataInput as Input
+from shared.models.interfaces import GetEngagementDataInput as Input
 
 
 class Validator:

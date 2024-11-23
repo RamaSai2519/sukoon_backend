@@ -1,8 +1,8 @@
 import traceback
-from models.constants import OutputStatus
+from shared.models.constants import OutputStatus
 from models.save_content.compute import Compute
 from models.save_content.validate import Validator
-from models.interfaces import SaveContentInput as Input, Output
+from shared.models.interfaces import SaveContentInput as Input, Output
 
 
 class SaveContent:

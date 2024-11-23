@@ -1,4 +1,4 @@
-from models.interfaces import SaveFCMTokenInput as Input
+from shared.models.interfaces import SaveFCMTokenInput as Input
 
 
 class Validator():

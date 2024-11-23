@@ -1,8 +1,8 @@
 import traceback
-from models.constants import OutputStatus
+from shared.models.constants import OutputStatus
 from models.create_applicant.compute import Compute
 from models.create_applicant.validate import Validator
-from models.interfaces import ApplicantInput as Input, Output
+from shared.models.interfaces import ApplicantInput as Input, Output
 
 
 class CreateApplicant:

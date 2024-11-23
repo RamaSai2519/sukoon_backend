@@ -1,5 +1,5 @@
-from models.constants import OutputStatus
-from models.interfaces import GetSlotsInput as Input, Output
+from shared.models.constants import OutputStatus
+from shared.models.interfaces import GetSlotsInput as Input, Output
 from models.get_slots.slot import Slot
 
 

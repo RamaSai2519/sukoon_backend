@@ -1,5 +1,5 @@
 from bson import ObjectId
-from models.interfaces import CreateContributeInterestInput as Input
+from shared.models.interfaces import CreateContributeInterestInput as Input
 
 
 class Validator():

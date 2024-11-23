@@ -1,5 +1,5 @@
-from models.common import Common
-from models.constants import successful_calls_query
+from shared.models.common import Common
+from shared.models.constants import successful_calls_query
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 

@@ -8,7 +8,7 @@ from models.handle_admin_wa.main import AdminWhatsapp
 from models.send_whatsapp_message.main import SendWhatsappMessage
 from models.whatsapp_webhook_event.main import WhatsappWebhookEvent
 from models.verify_whatsapp_webhook.main import VerifyWhatsappWebhook
-from models.interfaces import WhtasappMessageInput, GetWhatsappWebhookInput, WhatsappWebhookEventInput, GetWaHistoryInput, WaOptionsInput, AdminWaInput
+from shared.models.interfaces import WhtasappMessageInput, GetWhatsappWebhookInput, WhatsappWebhookEventInput, GetWaHistoryInput, WaOptionsInput, AdminWaInput
 
 
 class WhatsappMessageService(Resource):

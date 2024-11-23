@@ -1,8 +1,8 @@
 import traceback
-from models.constants import OutputStatus
+from shared.models.constants import OutputStatus
 from models.upsert_expert.compute import Compute
 from models.upsert_expert.validate import Validator
-from models.interfaces import Expert as Input, Output
+from shared.models.interfaces import Expert as Input, Output
 
 
 class UpsertExpert:

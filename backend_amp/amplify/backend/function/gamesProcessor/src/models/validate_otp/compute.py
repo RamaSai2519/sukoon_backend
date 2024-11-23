@@ -1,8 +1,8 @@
-from models.interfaces import ValidateOTPInput as Input, Output
-from models.constants import OutputStatus, TestCreds
-from helpers.experts import ExpertsHelper
-from db.otp import get_otp_collection
-from helpers.users import UsersHelper
+from shared.models.interfaces import ValidateOTPInput as Input, Output
+from shared.models.constants import OutputStatus, TestCreds
+from shared.helpers.experts import ExpertsHelper
+from shared.db.otp import get_otp_collection
+from shared.helpers.users import UsersHelper
 
 
 class Compute:

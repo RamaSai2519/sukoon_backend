@@ -1,4 +1,4 @@
-from models.interfaces import UploadInput as Input
+from shared.models.interfaces import UploadInput as Input
 
 
 class Validator():

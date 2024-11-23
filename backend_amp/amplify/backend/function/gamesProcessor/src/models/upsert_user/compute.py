@@ -7,13 +7,13 @@ import dataclasses
 from bson import ObjectId
 from datetime import datetime
 from typing import Union, Tuple
-from models.common import Common
-from configs import CONFIG as config
-from db.users import get_user_collection
+from shared.models.common import Common
+from shared.configs import CONFIG as config
+from shared.db.users import get_user_collection
 from models.upsert_user.slack import SlackManager
-from models.interfaces import User as Input, Output
-from db.referral import get_user_referral_collection
-from models.constants import OutputStatus, application_json_header
+from shared.models.interfaces import User as Input, Output
+from shared.db.referral import get_user_referral_collection
+from shared.models.constants import OutputStatus, application_json_header
 
 
 class Compute:

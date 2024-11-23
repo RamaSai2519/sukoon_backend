@@ -1,4 +1,4 @@
-from models.interfaces import GetScheduledJobsInput as Input
+from shared.models.interfaces import GetScheduledJobsInput as Input
 
 
 class Validator():

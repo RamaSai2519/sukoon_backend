@@ -1,8 +1,8 @@
-from db.events import get_events_collection, get_contribute_events_collection
-from models.interfaces import GetEventsInput as Input, Output
-from models.constants import OutputStatus
+from shared.db.events import get_events_collection, get_contribute_events_collection
+from shared.models.interfaces import GetEventsInput as Input, Output
+from shared.models.constants import OutputStatus
 from pymongo.collection import Collection
-from models.common import Common
+from shared.models.common import Common
 
 
 class Compute:

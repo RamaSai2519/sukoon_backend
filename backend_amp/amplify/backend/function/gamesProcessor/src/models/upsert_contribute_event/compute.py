@@ -1,9 +1,9 @@
 import random
 import string
-from models.common import Common
-from models.constants import OutputStatus
-from db.events import get_contribute_events_collection
-from models.interfaces import ContributeEvent as Input, Output
+from shared.models.common import Common
+from shared.models.constants import OutputStatus
+from shared.db.events import get_contribute_events_collection
+from shared.models.interfaces import ContributeEvent as Input, Output
 
 
 class Compute:

@@ -1,4 +1,4 @@
-from models.interfaces import GetWhatsappWebhookInput as Input
+from shared.models.interfaces import GetWhatsappWebhookInput as Input
 
 
 class Validator():
@@ -7,6 +7,3 @@ class Validator():
 
     def validate_input(self):
         return True, ""
-    
-
-    

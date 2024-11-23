@@ -1,7 +1,7 @@
 from bson import ObjectId
-from db.users import get_user_collection
-from db.experts import get_experts_collections
-from models.interfaces import CallInput as Input
+from shared.db.users import get_user_collection
+from shared.db.experts import get_experts_collections
+from shared.models.interfaces import CallInput as Input
 from models.make_call.slack import SlackNotifier
 
 

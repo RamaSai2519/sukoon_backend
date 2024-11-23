@@ -1,8 +1,8 @@
 import traceback
-from models.constants import OutputStatus
+from shared.models.constants import OutputStatus
 from models.save_remark.compute import Compute
 from models.save_remark.validate import Validator
-from models.interfaces import SaveRemarkInput as Input, Output
+from shared.models.interfaces import SaveRemarkInput as Input, Output
 
 
 class SaveRemark:

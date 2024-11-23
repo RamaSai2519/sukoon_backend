@@ -1,8 +1,8 @@
 import traceback
-from models.constants import OutputStatus
+from shared.models.constants import OutputStatus
 from models.get_chat.compute import Compute
 from models.get_chat.validate import Validator
-from models.interfaces import ChatInput as Input, Output
+from shared.models.interfaces import ChatInput as Input, Output
 
 
 class Chat:

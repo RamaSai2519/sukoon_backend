@@ -1,8 +1,8 @@
 from bson import ObjectId
 from pymongo.collection import Collection
-from models.constants import OutputStatus, meta_fields
-from db.users import get_user_collection, get_meta_collection
-from models.interfaces import UpsertEngagementDataInput as Input, Output
+from shared.models.constants import OutputStatus, meta_fields
+from shared.db.users import get_user_collection, get_meta_collection
+from shared.models.interfaces import UpsertEngagementDataInput as Input, Output
 
 
 class Compute:

@@ -1,7 +1,7 @@
-from models.interfaces import GetUsersInput as Input, Output
-from models.constants import OutputStatus
-from helpers.users import UsersHelper
-from models.common import Common
+from shared.models.interfaces import GetUsersInput as Input, Output
+from shared.models.constants import OutputStatus
+from shared.helpers.users import UsersHelper
+from shared.models.common import Common
 
 
 class Compute:

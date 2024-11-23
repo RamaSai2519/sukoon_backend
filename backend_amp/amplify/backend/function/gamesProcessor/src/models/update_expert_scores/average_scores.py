@@ -1,9 +1,9 @@
 import json
 import requests
 from typing import List, Dict
-from configs import CONFIG as config
-from db.calls import get_callsmeta_collection, get_calls_collection
-from models.interfaces import UpdateScoresInput as Input, AverageScores, AverageScoresObject
+from shared.configs import CONFIG as config
+from shared.db.calls import get_callsmeta_collection, get_calls_collection
+from shared.models.interfaces import UpdateScoresInput as Input, AverageScores, AverageScoresObject
 
 
 class CalcAverageScores:
@@ -51,7 +51,8 @@ class CalcAverageScores:
         for field in self.score_fields + [self.main_field]:
             total_sum = sum(expert_scores[field])
             total = total_scores[field]
-            average_scores[field] = round(total_sum / total, 2) if total != 0 else 0
+            average_scores[field] = round(
+                total_sum / total, 2) if total != 0 else 0
 
         return average_scores
 
@@ -64,7 +65,7 @@ class CalcAverageScores:
 
     def get_payload(self, average_scores: AverageScores, score: float) -> dict:
         return json.dumps({"phoneNumber": self.input.expert_number,
-                **average_scores.__dict__, "score": score})
+                           **average_scores.__dict__, "score": score})
 
     def update_expert_scores(self, average_scores: AverageScores, score: float) -> str:
         payload = self.get_payload(average_scores, score)

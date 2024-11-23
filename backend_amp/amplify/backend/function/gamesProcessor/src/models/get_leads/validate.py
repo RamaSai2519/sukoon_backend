@@ -1,6 +1,6 @@
 from dataclasses import fields
 from typing import get_origin, get_args, Optional, Union
-from models.interfaces import GetLeadsInput as Input, User
+from shared.models.interfaces import GetLeadsInput as Input, User
 
 
 class Validator:

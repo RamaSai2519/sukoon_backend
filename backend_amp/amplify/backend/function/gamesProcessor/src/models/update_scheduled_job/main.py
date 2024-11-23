@@ -1,8 +1,8 @@
 import traceback
-from models.constants import OutputStatus
+from shared.models.constants import OutputStatus
 from models.update_scheduled_job.compute import Compute
 from models.update_scheduled_job.validate import Validator
-from models.interfaces import ScheduledJobInput as Input, Output
+from shared.models.interfaces import ScheduledJobInput as Input, Output
 
 
 class UpdateScheduledJob:
@@ -19,7 +19,7 @@ class UpdateScheduledJob:
                 output_status=OutputStatus.FAILURE,
                 output_message=f"INVALID_INPUT. {error_message}",
             )
-        
+
         try:
             output = self._compute(input)
         except Exception as e:

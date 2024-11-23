@@ -1,7 +1,8 @@
 import json
 from openai import AzureOpenAI
-from models.constants import OutputStatus
-from models.interfaces import ChatInput as Input, Output
+from shared.models.constants import OutputStatus
+from shared.models.interfaces import ChatInput as Input, Output
+
 
 class Compute:
     def __init__(self, input: Input) -> None:

@@ -1,13 +1,13 @@
 import threading
 from typing import List, Dict
 from datetime import datetime
-from models.common import Common
-from helpers.excel import ExcelS3Helper
-from db.calls import get_calls_collection
-from models.constants import successful_calls_query
-from models.constants import OutputStatus, meta_fields
-from db.users import get_user_collection, get_meta_collection
-from models.interfaces import GetEngagementDataInput as Input, Output
+from shared.models.common import Common
+from shared.helpers.excel import ExcelS3Helper
+from shared.db.calls import get_calls_collection
+from shared.models.constants import successful_calls_query
+from shared.models.constants import OutputStatus, meta_fields
+from shared.db.users import get_user_collection, get_meta_collection
+from shared.models.interfaces import GetEngagementDataInput as Input, Output
 
 
 class Compute:

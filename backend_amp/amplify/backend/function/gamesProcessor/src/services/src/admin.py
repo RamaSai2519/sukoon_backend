@@ -6,7 +6,7 @@ from models.s3_upload.main import S3Upload
 from flask_jwt_extended import jwt_required
 from models.get_error_logs.main import GetLogs
 from models.save_fcm_token.main import SaveAdminFCMToken
-from models.interfaces import SaveFCMTokenInput, UploadInput, GetErrorLogsInput
+from shared.models.interfaces import SaveFCMTokenInput, UploadInput, GetErrorLogsInput
 
 
 class AdminFCMService(Resource):

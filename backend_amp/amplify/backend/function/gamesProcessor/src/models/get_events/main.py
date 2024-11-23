@@ -1,8 +1,8 @@
 import traceback
-from models.constants import OutputStatus
+from shared.models.constants import OutputStatus
 from models.get_events.compute import Compute
 from models.get_events.validate import Validator
-from models.interfaces import GetEventsInput as Input, Output
+from shared.models.interfaces import GetEventsInput as Input, Output
 
 
 class ListEvents:

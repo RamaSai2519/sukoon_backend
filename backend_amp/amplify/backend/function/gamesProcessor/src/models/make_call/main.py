@@ -1,8 +1,8 @@
 import traceback
-from models.constants import OutputStatus
+from shared.models.constants import OutputStatus
 from models.make_call.compute import Compute
 from models.make_call.validate import Validator
-from models.interfaces import CallInput as Input, Output
+from shared.models.interfaces import CallInput as Input, Output
 
 
 class MakeCall:
@@ -19,7 +19,7 @@ class MakeCall:
                 output_status=OutputStatus.FAILURE,
                 output_message=f"INVALID_INPUT: {error_message}"
             )
-        
+
         try:
             output = self._compute(input)
         except Exception as e:
@@ -29,9 +29,8 @@ class MakeCall:
                 output_status=OutputStatus.FAILURE,
                 output_message=f"ERROR: {str(e)}"
             )
-        
-        return output
 
+        return output
 
     def _validate(self, input: Input):
         validation_obj = Validator(input)

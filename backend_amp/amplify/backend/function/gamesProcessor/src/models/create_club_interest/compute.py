@@ -1,7 +1,7 @@
-from db.users import get_club_interests_collection, get_user_collection
-from models.interfaces import CreateClubInterestInput as Input, Output, ClubInterest
-from models.constants import OutputStatus
-from models.common import Common
+from shared.db.users import get_club_interests_collection, get_user_collection
+from shared.models.interfaces import CreateClubInterestInput as Input, Output, ClubInterest
+from shared.models.constants import OutputStatus
+from shared.models.common import Common
 
 
 class Compute:

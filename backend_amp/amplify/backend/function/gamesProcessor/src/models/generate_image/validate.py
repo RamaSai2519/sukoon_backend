@@ -1,4 +1,4 @@
-from models.interfaces import ChatInput as Input
+from shared.models.interfaces import ChatInput as Input
 
 
 class Validator:

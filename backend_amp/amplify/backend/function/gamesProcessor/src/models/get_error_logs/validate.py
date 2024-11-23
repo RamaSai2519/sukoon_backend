@@ -1,4 +1,4 @@
-from models.interfaces import GetErrorLogsInput as Input
+from shared.models.interfaces import GetErrorLogsInput as Input
 
 
 class Validator():

@@ -1,8 +1,8 @@
 import traceback
-from models.constants import OutputStatus
+from shared.models.constants import OutputStatus
 from models.get_content_posts.compute import Compute
 from models.get_content_posts.validate import Validator
-from models.interfaces import GetContentPostsInput as Input, Output
+from shared.models.interfaces import GetContentPostsInput as Input, Output
 
 
 class GetContentPosts:

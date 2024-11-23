@@ -1,7 +1,7 @@
-from models.interfaces import SendOTPInput as Input, Output
-from models.constants import OutputStatus, TestCreds
-from db.otp import get_otp_collection
-from configs import CONFIG as config
+from shared.models.interfaces import SendOTPInput as Input, Output
+from shared.models.constants import OutputStatus, TestCreds
+from shared.db.otp import get_otp_collection
+from shared.configs import CONFIG as config
 import requests
 import string
 import random

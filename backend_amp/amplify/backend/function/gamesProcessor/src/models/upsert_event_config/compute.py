@@ -1,9 +1,9 @@
 import dataclasses
 from bson import ObjectId
-from models.common import Common
-from models.constants import OutputStatus
-from db.events import get_events_collection
-from models.interfaces import Event as Input, Output
+from shared.models.common import Common
+from shared.models.constants import OutputStatus
+from shared.db.events import get_events_collection
+from shared.models.interfaces import Event as Input, Output
 
 
 class Compute:

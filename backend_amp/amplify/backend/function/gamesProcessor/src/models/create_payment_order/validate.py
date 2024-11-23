@@ -1,4 +1,4 @@
-from models.interfaces import CreatePaymentOrderInput as Input
+from shared.models.interfaces import CreatePaymentOrderInput as Input
 
 
 class Validator():
@@ -8,6 +8,3 @@ class Validator():
     def validate_input(self):
 
         return True, ""
-    
-
-    

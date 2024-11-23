@@ -1,4 +1,4 @@
-from models.interfaces import SendOTPInput as Input
+from shared.models.interfaces import SendOTPInput as Input
 
 
 class Validator():
@@ -8,10 +8,6 @@ class Validator():
     def validate_input(self):
         phone_number = self.input.phone_number
 
-        
         if len(phone_number) != 10:
             return False, "INVALID PHONE NUMBER"
         return True, ""
-    
-
-    
