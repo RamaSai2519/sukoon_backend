@@ -83,6 +83,7 @@ class Compute:
         response = requests.post(url, json=payload)
 
     def new_recommendation(self, prompt: str, embedding: list) -> None:
+        print('New recommendation')
         response = self.chat("user", prompt)
         response_json = self.common.extract_json(response)
         expert_id = response_json.get("expert_id", None)
@@ -123,7 +124,7 @@ class Compute:
                              args=(prompt, embedding)).start()
 
             return Output(
-                output_details=expert,
+                output_details={},
                 output_status=OutputStatus.SUCCESS,
                 output_message="Fetching expert from GPT-4"
             )
