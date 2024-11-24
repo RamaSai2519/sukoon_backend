@@ -1,5 +1,6 @@
 import time
 import requests
+import threading
 import numpy as np
 from openai import RateLimitError
 from shared.models.common import Common
@@ -117,12 +118,14 @@ class Compute:
                     output_message="Successfully fetched expert from stored data"
                 )
         else:
-            expert = self.new_recommendation(prompt, embedding)
+            # expert = self.new_recommendation(prompt, embedding)
+            threading.Thread(target=self.new_recommendation,
+                             args=(prompt, embedding)).start()
 
             return Output(
                 output_details=expert,
                 output_status=OutputStatus.SUCCESS,
-                output_message="Successfully fetched expert from GPT-4"
+                output_message="Fetching expert from GPT-4"
             )
 
         return Output(
