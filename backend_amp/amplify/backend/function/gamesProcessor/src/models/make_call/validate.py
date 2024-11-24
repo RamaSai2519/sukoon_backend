@@ -1,25 +1,34 @@
 from bson import ObjectId
-from shared.db.users import get_user_collection
+from models.make_call.slack import SlackNotifier
 from shared.db.experts import get_experts_collections
 from shared.models.interfaces import CallInput as Input
-from models.make_call.slack import SlackNotifier
+from shared.models.constants import not_interested_statuses
+from shared.db.users import get_user_collection, get_meta_collection
 
 
 class Validator:
     def __init__(self, input: Input) -> None:
         self.input = input
         self.notifier = SlackNotifier()
+        self.meta_collection = get_meta_collection()
         self.users_collection = get_user_collection()
         self.experts_collection = get_experts_collections()
+
+    def get_users(self, user_id: ObjectId, expert_id: ObjectId) -> tuple:
+        user = self.users_collection.find_one({"_id": user_id})
+        user_meta = self.meta_collection.find_one({"user": user_id})
+        expert = self.experts_collection.find_one({"_id": expert_id})
+
+        return user, user_meta, expert
 
     def validate_input(self):
         if self.input.type_ not in ["call", "scheduled"]:
             return False, "Invalid type"
 
-        user, expert = self.get_users(
+        user, user_meta, expert = self.get_users(
             ObjectId(self.input.user_id), ObjectId(self.input.expert_id))
 
-        user_validation = self.validate_user(user, expert)
+        user_validation = self.validate_user(user, user_meta, expert)
         if not user_validation[0]:
             return user_validation
 
@@ -32,13 +41,7 @@ class Validator:
 
         return True, ""
 
-    def get_users(self, user_id: ObjectId, expert_id: ObjectId) -> tuple:
-        user = self.users_collection.find_one({"_id": user_id})
-        expert = self.experts_collection.find_one({"_id": expert_id})
-
-        return user, expert
-
-    def validate_user(self, user: dict, expert: dict) -> tuple:
+    def validate_user(self, user: dict, user_meta: dict, expert: dict) -> tuple:
         if not user:
             return False, "User not found"
 
@@ -53,6 +56,9 @@ class Validator:
                 status="user_busy",
             )
             return False, "User is busy"
+
+        if user_meta and user_meta.get("userStatus") in not_interested_statuses:
+            return False, "User is not interested"
 
         conditions = [
             user.get("isPaidUser") is False,
