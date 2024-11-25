@@ -1,8 +1,9 @@
 import json
-import requests
 import random
-from datetime import datetime
+import requests
 from bson import ObjectId
+from datetime import datetime
+from shared.configs import CONFIG as config
 from shared.db.events import get_events_collection
 from shared.models.constants import OutputStatus, application_json_header
 from shared.db.users import get_user_collection, get_user_payment_collection
@@ -76,7 +77,7 @@ class Compute:
         customer_name = customer_details.get("customer_name")
         invoice_number = str(random.randint(1000, 9999))
 
-        url = "https://mark.sukoonunlimited.com/invoice"
+        url = config.MARK_URL + "/quart/invoice"
         rate = payment_amount/1.18
 
         payload = {
