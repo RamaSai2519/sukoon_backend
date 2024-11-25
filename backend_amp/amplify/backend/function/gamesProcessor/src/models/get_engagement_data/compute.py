@@ -4,6 +4,7 @@ from datetime import datetime
 from shared.models.common import Common
 from shared.helpers.excel import ExcelS3Helper
 from shared.db.calls import get_calls_collection
+from shared.db.admins import get_error_logs_collection
 from shared.models.constants import successful_calls_query
 from shared.models.constants import OutputStatus, meta_fields
 from shared.db.users import get_user_collection, get_meta_collection
@@ -21,6 +22,7 @@ class Compute:
         self.meta_collection = get_meta_collection()
         self.users_collection = get_user_collection()
         self.calls_collection = get_calls_collection()
+        self.logs_collection = get_error_logs_collection()
 
     def populate_meta_data(self, user: dict, query: dict) -> dict:
         meta_data: dict = self.meta_collection.find_one(query)
@@ -77,9 +79,15 @@ class Compute:
         return users
 
     def create_excel(self) -> str:
+        data_type = "engagement"
+        query = {"data_type": data_type}
+        doc = self.logs_collection.find_one(query)
+        if doc and doc.get("status") == "started":
+            return "Already in Progress"
+
         time_string = self.common.current_time.strftime("%Y-%m-%d-%H-%M-%S")
         filename = f"engagement_data_{time_string}.xlsx"
-        self.excel_helper.invoke_excel_helper(filename)
+        self.excel_helper.invoke_excel_helper(filename, data_type)
 
     def excel_url(self) -> str:
         prev_url = self.excel_helper.get_latest_file_url("engagement_data_")
@@ -91,7 +99,8 @@ class Compute:
         time_diff = (self.common.current_time - prev_time).seconds
         if time_diff < 1800:
             diff_minutes = round((1800 - time_diff) / 60, 2)
-            msg = f" and Next Excel File will be created in {diff_minutes} minutes"
+            msg = f" and Next Excel File will be created in {
+                diff_minutes} minutes"
             return prev_url, msg
         else:
             threading.Thread(target=self.create_excel).start()
