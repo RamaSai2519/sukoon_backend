@@ -6,8 +6,8 @@ from shared.models.common import Common
 from shared.configs import CONFIG as config
 from shared.db.calls import get_calls_collection
 from shared.db.experts import get_experts_collections
-from shared.db.users import get_user_collection, get_user_notification_collection
 from db_queries.mutations.scheduled_job import update_scheduled_job_status
+from shared.db.users import get_user_collection, get_user_notification_collection
 from shared.models.constants import OutputStatus, application_json_header, CallStatus
 from shared.models.interfaces import WebhookInput as Input, Call, Output, User, Expert
 
@@ -161,7 +161,7 @@ class Compute:
         callId = self.input.call_uuid.replace('_0', '')
         payload = {'callId': callId}
         requests.request(
-            'POST', config.MARK_URL + '/process', headers=application_json_header, data=json.dumps(payload))
+            'POST', config.MARK_URL + '/flask/process', data=json.dumps(payload))
 
     def compute(self) -> Output:
         callId = self.input.call_uuid.replace('_0', '')

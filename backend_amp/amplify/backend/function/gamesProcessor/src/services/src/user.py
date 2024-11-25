@@ -1,8 +1,8 @@
 import json
 import dataclasses
 from flask import request
-from shared.models.common import Common
 from flask_restful import Resource
+from shared.models.common import Common
 from models.get_user.main import GetUser
 from models.get_leads.main import GetLeads
 from flask_jwt_extended import jwt_required
