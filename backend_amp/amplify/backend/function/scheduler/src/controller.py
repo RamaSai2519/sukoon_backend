@@ -33,7 +33,7 @@ def process(job):
         response = handler.process_scheduled_job()
         print(f"response: {response}")
         finish = time.perf_counter()
-        total_time_taken = round(finish - start, 2) * 1000  # in millisecond
+        total_time_taken = round(finish - start, 2) * 1000
         print(f"response: {response}")
         print(f"total_time_taken: {total_time_taken}")
 
