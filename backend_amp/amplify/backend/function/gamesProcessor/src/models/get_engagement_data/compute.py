@@ -77,10 +77,9 @@ class Compute:
         return users
 
     def create_excel(self) -> str:
-        users = self.get_users(0, 0)
         time_string = self.common.current_time.strftime("%Y-%m-%d-%H-%M-%S")
         filename = f"engagement_data_{time_string}.xlsx"
-        self.excel_helper.invoke_excel_helper(users, filename)
+        self.excel_helper.invoke_excel_helper(filename)
 
     def excel_url(self) -> str:
         prev_url = self.excel_helper.get_latest_file_url("engagement_data_")
