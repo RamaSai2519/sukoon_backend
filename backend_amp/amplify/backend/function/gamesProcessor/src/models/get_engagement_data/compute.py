@@ -98,9 +98,8 @@ class Compute:
         prev_time = datetime.strptime(prev_file_time, "%Y-%m-%d-%H-%M-%S")
         time_diff = (self.common.current_time - prev_time).seconds
         if time_diff < 1800:
-            diff_minutes = round((1800 - time_diff) / 60, 2)
-            msg = f" and Next Excel File will be created in {
-                diff_minutes} minutes"
+            diff = round((1800 - time_diff) / 60, 2)
+            msg = f" and Next Excel File will be created in {diff} minutes"
             return prev_url, msg
         else:
             threading.Thread(target=self.create_excel).start()
