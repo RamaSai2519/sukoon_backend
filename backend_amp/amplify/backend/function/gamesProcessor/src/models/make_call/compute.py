@@ -128,7 +128,7 @@ class Compute:
             )
 
         return Output(
-            output_details={},
+            output_details={'call_id': call_id},
             output_status=OutputStatus.SUCCESS,
             output_message="Call initiated with callid: " +
             call_id + message + fcm_response + wa_response
