@@ -63,7 +63,7 @@ class Compute:
         calls = self.common.get_calls(query=self.query)
         time_string = self.common.current_time.strftime("%Y-%m-%d-%H-%M-%S")
         file_name = f"calls_data_{time_string}.xlsx"
-        self.excel_helper.invoke_excel_helper(calls, file_name)
+        # self.excel_helper.invoke_excel_helper(calls, file_name)
 
     def excel_url(self) -> str:
         prev_url = self.excel_helper.get_latest_file_url("engagement_data_")
