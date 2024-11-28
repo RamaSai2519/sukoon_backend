@@ -5,15 +5,17 @@ from bson import ObjectId
 from datetime import datetime
 from shared.configs import CONFIG as config
 from shared.db.events import get_events_collection
-from shared.models.constants import OutputStatus, application_json_header
 from shared.db.users import get_user_collection, get_user_payment_collection
 from shared.models.interfaces import CashfreeWebhookEventInput as Input, Output
+from shared.models.constants import OutputStatus, application_json_header, CLUB_MEMBERSHIP
 
 
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
         self.headers = application_json_header
+        self.events_collection = get_events_collection()
+        self.payments_collection = get_user_payment_collection()
 
     def get_user_id_from_number(self):
         customer_details = self.payment_data.get("customer_details")
@@ -38,11 +40,10 @@ class Compute:
         customer_details = self.payment_data.get("customer_details")
         phone_number = customer_details.get("customer_phone")
 
-        url = "https://6x4j0qxbmk.execute-api.ap-south-1.amazonaws.com/main/actions/send_whatsapp"
+        url = config.URL + "/actions/send_whatsapp"
 
         if event_id:
-            event_config_collection = get_events_collection()
-            event = event_config_collection.find_one(
+            event = self.events_collection.find_one(
                 {"_id": ObjectId(event_id)})
             event_name = event.get("mainTitle")
 
@@ -64,15 +65,13 @@ class Compute:
                     "document_link": invoice_s3_url
                 }
             })
-        headers = {
-            'Content-Type': 'application/json'
-        }
+        headers = application_json_header
 
         response = requests.request("POST", url, headers=headers, data=payload)
 
         print(response.text)
 
-    def get_invoice_s3_url(self, payment_amount):
+    def generate_invoice(self, payment_amount, payment_type):
         customer_details = self.payment_data.get("customer_details")
         customer_name = customer_details.get("customer_name")
         invoice_number = str(random.randint(1000, 9999))
@@ -88,7 +87,7 @@ class Compute:
             "userId": str(self.user_id),
             "invoiceNumber": invoice_number,
             "customerFullName": customer_name,
-            "itemDescription": "Club Sukoon Annual Membership",
+            "itemDescription": payment_type,
             "createdDate": datetime.today().strftime('%Y-%m-%d')
         }
 
@@ -100,6 +99,15 @@ class Compute:
         s3_url = data.get("file_url")
         return s3_url, invoice_number
 
+    def get_payment_type(self, event_id: str):
+        if event_id == "club":
+            return CLUB_MEMBERSHIP
+        event = self.events_collection.find_one({"_id": ObjectId(event_id)})
+        if not event:
+            return None
+        event_name = event.get("mainTitle")
+        return event_name
+
     def update_payment_status(self):
 
         order_details = self.payment_data.get("order")
@@ -109,31 +117,31 @@ class Compute:
         payment_status = payment_details.get("payment_status")
         invoice_number = "invoice not generated"
         invoice_s3_url = ""
-        payment_collection = get_user_payment_collection()
-        payment = payment_collection.find_one({"order_id": order_id})
+        payment = self.payments_collection.find_one({"order_id": order_id})
         event_id = payment.get("event_id")
+        payment_type = self.get_payment_type(event_id)
 
         if payment_status == "SUCCESS":
-            invoice_s3_url, invoice_number = self.get_invoice_s3_url(
-                payment_amount)
+            invoice_s3_url, invoice_number = self.generate_invoice(
+                payment_amount, payment_type)
             self.send_invoice_to_the_user(invoice_s3_url, event_id)
 
         if not payment:
             return None, ""
         payment_id = payment.get("_id")
-        payment_collection.update_one(
+        self.payments_collection.update_one(
             {"_id": ObjectId(payment_id)},
             {"$set": {"payment_status": payment_status,
                       "invoice_number": invoice_number, "invoice_link": invoice_s3_url}},
         )
-        return True, payment_status, int(payment_amount)
+        return payment_status, payment_type
 
-    def compute(self):
+    def compute(self) -> Output:
 
         self.payment_data = self.input.data
         self.user_id = self.get_user_id_from_number()
-        response, payment_status, payment_amount = self.update_payment_status()
-        if payment_status == "SUCCESS" and payment_amount == 999:
+        payment_status, payment_type = self.update_payment_status()
+        if payment_status == "SUCCESS" and payment_type == CLUB_MEMBERSHIP:
             self.update_user_membership_status()
 
         return Output(
