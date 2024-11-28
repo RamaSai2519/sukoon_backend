@@ -44,12 +44,12 @@ class Compute:
 
         if event_id:
             event = self.events_collection.find_one(
-                {"_id": ObjectId(event_id)})
+                {"slug": event_id})
             event_name = event.get("mainTitle")
 
             payload = json.dumps({
                 "phone_number": phone_number,
-                "template_name": "EVENT_INVOICE",
+                "template_name": "EVENT_INVOICE_GENERIC",
                 "parameters": {
                     "event_name": event_name,
                     "document_link": invoice_s3_url
@@ -87,7 +87,7 @@ class Compute:
             "userId": str(self.user_id),
             "invoiceNumber": invoice_number,
             "customerFullName": customer_name,
-            "itemDescription": payment_type,
+            "itemDescription": payment_type or "Event Payment",
             "createdDate": datetime.today().strftime('%Y-%m-%d')
         }
 
@@ -102,7 +102,8 @@ class Compute:
     def get_payment_type(self, event_id: str):
         if event_id == "club":
             return CLUB_MEMBERSHIP
-        event = self.events_collection.find_one({"_id": ObjectId(event_id)})
+        print(event_id, "event_id")
+        event = self.events_collection.find_one({"slug": event_id})
         if not event:
             return None
         event_name = event.get("mainTitle")
