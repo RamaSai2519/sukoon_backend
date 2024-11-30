@@ -1170,3 +1170,29 @@ class WhatsappNotificationTemplates:
                 ]
             }
         }
+
+        self.PARTNER_POST_SUBSCRIPTION = {
+            "template_name": "PARTNER_POST_SUBSCRIPTION",
+            "template": {
+                "name": "partner_post_subscription",
+                "language": {"code": "en"},
+                "components": [
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"},
+                            {"type": "text", "text": "{offer_title}"},
+                            {"type": "text", "text": "{website_url}"},
+                            {"type": "text", "text": "{expiry_date}"},
+                            {"type": "text", "text": "{phone_number}"},
+                        ]
+                    },
+                    {
+                        "type": "button",
+                        "index": "0",
+                        "sub_type": "url",
+                        "parameters": [{"type": "text", "text": "{website_url}"}],
+                    },
+                ]
+            }
+        }

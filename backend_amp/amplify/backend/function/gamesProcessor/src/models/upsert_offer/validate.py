@@ -5,7 +5,7 @@ class Validator:
     def __init__(self, input: Input) -> None:
         self.input = input
 
-    def validate_flat_discount(self):
+    def validate_flat_discount(self) -> tuple:
         try:
             int(self.input.flatDiscount)
         except ValueError:
@@ -16,7 +16,7 @@ class Validator:
 
         return True, ''
 
-    def validate_percentage_discount(self):
+    def validate_percentage_discount(self) -> tuple:
         try:
             float(self.input.discountPercentage)
         except ValueError:
@@ -42,7 +42,7 @@ class Validator:
 
         return True, ''
 
-    def validate_input(self):
+    def validate_input(self) -> tuple:
         if self.input.offer_type not in ['code', 'partner']:
             return False, 'offer_type should be either "code" or "partner"'
 
