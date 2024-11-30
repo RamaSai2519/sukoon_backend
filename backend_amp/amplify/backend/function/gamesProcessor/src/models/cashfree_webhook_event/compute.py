@@ -7,7 +7,7 @@ from shared.configs import CONFIG as config
 from shared.db.events import get_events_collection
 from shared.db.users import get_user_collection, get_user_payment_collection
 from shared.models.interfaces import CashfreeWebhookEventInput as Input, Output
-from shared.models.constants import OutputStatus, application_json_header, CLUB_MEMBERSHIP
+from shared.models.constants import OutputStatus, application_json_header, ConstantStrings
 
 
 class Compute:
@@ -101,7 +101,7 @@ class Compute:
 
     def get_payment_type(self, event_id: str):
         if event_id == "club":
-            return CLUB_MEMBERSHIP
+            return ConstantStrings.CLUB_MEMBERSHIP
         print(event_id, "event_id")
         event = self.events_collection.find_one({"slug": event_id})
         if not event:
@@ -142,7 +142,7 @@ class Compute:
         self.payment_data = self.input.data
         self.user_id = self.get_user_id_from_number()
         payment_status, payment_type = self.update_payment_status()
-        if payment_status == "SUCCESS" and payment_type == CLUB_MEMBERSHIP:
+        if payment_status == "SUCCESS" and payment_type == ConstantStrings.CLUB_MEMBERSHIP:
             self.update_user_membership_status()
 
         return Output(
