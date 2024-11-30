@@ -132,7 +132,8 @@ class Compute:
     def update_user_meta(self, code: str) -> dict:
         payload = {
             "user_id": str(self.user_id),
-            "couponCode": code
+            "couponCode": code,
+            "redeemed": True
         }
         url = config.URL + "/actions/redeem_offer"
         response = requests.post(url, json=payload)
