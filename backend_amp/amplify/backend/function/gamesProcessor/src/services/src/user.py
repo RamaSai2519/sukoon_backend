@@ -8,12 +8,13 @@ from models.get_leads.main import GetLeads
 from flask_jwt_extended import jwt_required
 from models.save_remark.main import SaveRemark
 from models.upsert_user.main import UpsertUser
+from models.redeem_offer.main import RedeemOffer
 from models.upsert_event_user.main import UpsertEventUser
 from models.get_engagement_data.main import GetEngagementData
 from models.upsert_phone_config.main import UpsertPhoneConfig
 from models.upsert_engagement_data.main import UpsertEngagementData
 from models.get_user_status_options.main import GetUserStatusOptions
-from shared.models.interfaces import User, GetUsersInput, EventUserInput, GetLeadsInput, SaveRemarkInput, GetEngagementDataInput, UpsertEngagementDataInput, PhoneConfigInput, GetUserStatusesInput
+from shared.models.interfaces import User, GetUsersInput, EventUserInput, GetLeadsInput, SaveRemarkInput, GetEngagementDataInput, UpsertEngagementDataInput, PhoneConfigInput, GetUserStatusesInput, RedeemOfferInput
 
 
 class UserService(Resource):
@@ -106,6 +107,17 @@ class UserStatusOptionsService(Resource):
         input_params = request.args
         input = GetUserStatusesInput(**input_params)
         output = GetUserStatusOptions(input).process()
+        output = dataclasses.asdict(output)
+
+        return output
+
+
+class RedeemOfferService(Resource):
+
+    def post(self) -> dict:
+        input = json.loads(request.get_data())
+        input = RedeemOfferInput(**input)
+        output = RedeemOffer(input).process()
         output = dataclasses.asdict(output)
 
         return output

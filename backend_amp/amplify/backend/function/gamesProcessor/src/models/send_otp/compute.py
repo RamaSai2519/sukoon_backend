@@ -27,17 +27,13 @@ class Compute:
 
     def send_otp_via_whatsapp(self, phone_number, otp):
         template_name = "SIGN_IN_OTP"
-        response = requests.post(
-            url="https://6x4j0qxbmk.execute-api.ap-south-1.amazonaws.com/main/actions/send_whatsapp",
-            headers={"Content-Type": "application/json"},
-            json={
-                "template_name": template_name,
-                "phone_number": phone_number,
-                "parameters": {
-                    "otp": otp
-                }
-            }
-        )
+        url = config.URL + "/actions/send_whatsapp"
+        payload = {
+            "template_name": template_name,
+            "phone_number": phone_number,
+            "parameters": {"otp": otp}
+        }
+        response = requests.post(url, json=payload)
         if response.status_code == 200:
             return "OTP generated and sent successfully via WA", OutputStatus.SUCCESS
         return "Some error occured while sending OTP via WA. Please try again", OutputStatus.FAILURE
