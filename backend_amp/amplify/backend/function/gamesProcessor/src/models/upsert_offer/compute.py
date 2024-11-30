@@ -24,9 +24,9 @@ class Compute:
             if key not in new_data or new_data[key] is None or new_data[key] == "" or new_data[key] == []:
                 new_data[key] = value
 
-        if self.DISCOUNT_PERCENTAGE in new_data:
+        if self.input.discountPercentage:
             new_data.pop(self.FLAT_DISCOUNT, None)
-        elif self.FLAT_DISCOUNT in new_data:
+        elif self.input.flatDiscount:
             new_data.pop(self.DISCOUNT_PERCENTAGE, None)
 
         return new_data
