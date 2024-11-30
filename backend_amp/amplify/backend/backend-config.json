@@ -42,12 +42,6 @@
     }
   },
   "function": {
-    "excelUploader": {
-      "build": true,
-      "dependsOn": [],
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
     "gamesProcessor": {
       "build": true,
       "dependsOn": [
@@ -96,22 +90,6 @@
     }
   },
   "parameters": {
-    "AMPLIFY_function_excelUploader_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "excelUploader"
-        }
-      ]
-    },
-    "AMPLIFY_function_excelUploader_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "excelUploader"
-        }
-      ]
-    },
     "AMPLIFY_function_gamesProcessor_deploymentBucketName": {
       "usedBy": [
         {
