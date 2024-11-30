@@ -11,7 +11,8 @@ from shared.models.interfaces import RedeemOfferInput as Input, Output
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
-        self.redeemed_offers = []
+        self.present_codes = []
+        self.claimed_offers = []
         self.meta_collection = get_meta_collection()
         self.users_collection = get_user_collection()
         self.offers_collection = get_offers_collection()
@@ -29,17 +30,29 @@ class Compute:
             doc = query
             _id = self.meta_collection.insert_one(doc).inserted_id
             doc["_id"] = ObjectId(_id)
-        self.redeemed_offers = doc.get("redeemed_offers", [])
+        self.claimed_offers = doc.get("claimed_offers", [])
         return doc
 
     def prep_data(self, data: dict) -> dict:
-        self.redeemed_offers.append(self.input.couponCode)
-        data["redeemed_offers"] = self.redeemed_offers
+        doc = {"code": self.input.couponCode, "redeemed": self.input.redeemed}
+        if self.input.couponCode in self.present_codes:
+            self.claimed_offers = [
+                offer for offer in self.claimed_offers
+                if offer.get("code") != self.input.couponCode
+            ]
+
+        self.claimed_offers.append(doc)
+        print(self.claimed_offers, "after_2")
+        data["claimed_offers"] = self.claimed_offers
         return data
 
     def validate_offer(self) -> tuple:
-        if self.input.couponCode in self.redeemed_offers:
-            return False, "Offer already redeemed"
+        self.present_codes = [offer.get("code")
+                              for offer in self.claimed_offers]
+        if self.input.couponCode in self.present_codes:
+            for offer in self.claimed_offers:
+                if offer.get("redeemed") == self.input.redeemed and offer.get("code") == self.input.couponCode:
+                    return False, "Offer already redeemed"
 
         return True, ""
 
@@ -51,7 +64,7 @@ class Compute:
         query = {"couponCode": self.input.couponCode}
         return self.offers_collection.find_one(query)
 
-    def send_whatsapp(self):
+    def send_whatsapp(self) -> tuple:
         url = config.URL + '/actions/send_whatsapp'
         user = self.get_user()
         offer = self.get_offer()
@@ -92,12 +105,14 @@ class Compute:
                 output_message=error_message
             )
 
-        wa_status, wa_message = self.send_whatsapp()
-        if not wa_status:
-            return Output(
-                output_status=OutputStatus.FAILURE,
-                output_message=wa_message
-            )
+        wa_message = "Not notified via WA"
+        if not self.input.redeemed:
+            wa_status, wa_message = self.send_whatsapp()
+            if not wa_status:
+                return Output(
+                    output_status=OutputStatus.FAILURE,
+                    output_message=wa_message
+                )
 
         new_data = self.prep_data(user_meta)
         self.update_user_meta(new_data)
