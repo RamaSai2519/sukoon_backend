@@ -17,4 +17,4 @@ from services.src.scheduled_jobs import CreateScheduledJobsService, UpdateSchedu
 from services.src.whatsapp import WhatsappMessageService, WhatsappWebhookService, WhatsappWebhookEvent, WhatsappHistoryService, AdminWhatsappService
 from services.src.game import QuizGameService, CardGameService, ScoreUpdaterService, CalculateWinnerService, GameHistoryService, BytePlusTokenService
 from services.src.events import UpsertEventsService, ListEventsService, ListEventUsersService, UpsertContributeEventService, CreateContributeInterestService
-from services.src.user import UpsertEventUserService, UserService, LeadsService, RemarkService, EngagementDataService, PhoneConfigService, UserStatusOptionsService
+from services.src.user import UpsertEventUserService, UserService, LeadsService, RemarkService, EngagementDataService, PhoneConfigService, UserStatusOptionsService, RedeemOfferService

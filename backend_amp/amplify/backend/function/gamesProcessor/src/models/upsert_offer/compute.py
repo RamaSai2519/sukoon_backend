@@ -13,12 +13,6 @@ class Compute:
         self.FLAT_DISCOUNT = ConstantStrings.FLAT_DISCOUNT
         self.DISCOUNT_PERCENTAGE = ConstantStrings.DISCOUNT_PERCENTAGE
 
-    def pop_immutable_fields(self, new_data: dict) -> dict:
-        fields = ["_id"]
-        for field in fields:
-            new_data.pop(field, None)
-        return new_data
-
     def merge_old_data(self, new_data: dict, old_data: dict) -> dict:
         for key, value in old_data.items():
             if key not in new_data or new_data[key] is None or new_data[key] == "" or new_data[key] == []:
@@ -48,7 +42,6 @@ class Compute:
     def prep_data(self, new_data: dict, old_data: dict = None) -> dict:
         new_data = {k: v for k, v in new_data.items() if v is not None}
         if old_data:
-            new_data = self.pop_immutable_fields(new_data)
             new_data = self.merge_old_data(new_data, old_data)
         else:
             new_data = self.set_defaults(new_data)
@@ -57,13 +50,16 @@ class Compute:
             new_data["validTill"] = Common.string_to_date(
                 new_data, "validTill")
 
-        float_fields = [self.DISCOUNT_PERCENTAGE, self.FLAT_DISCOUNT]
+        float_fields = [self.DISCOUNT_PERCENTAGE,
+                        self.FLAT_DISCOUNT, "actual_price"]
         for field in float_fields:
             if field in new_data:
                 new_data[field] = float(new_data[field])
 
         new_data[self.COUPON_CODE] = str(new_data[self.COUPON_CODE]).upper()
-        new_data = self.calculate_final_price(new_data)
+
+        if self.input.offer_type == "code":
+            new_data = self.calculate_final_price(new_data)
 
         return new_data
 
