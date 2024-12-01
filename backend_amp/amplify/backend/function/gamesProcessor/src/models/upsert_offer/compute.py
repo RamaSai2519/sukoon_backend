@@ -50,7 +50,8 @@ class Compute:
             new_data["validTill"] = Common.string_to_date(
                 new_data, "validTill")
 
-        float_fields = [self.DISCOUNT_PERCENTAGE, self.FLAT_DISCOUNT]
+        float_fields = [self.DISCOUNT_PERCENTAGE,
+                        self.FLAT_DISCOUNT, "actual_price"]
         for field in float_fields:
             if field in new_data:
                 new_data[field] = float(new_data[field])
