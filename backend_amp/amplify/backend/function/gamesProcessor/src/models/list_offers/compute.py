@@ -17,7 +17,7 @@ class Compute:
         query["validTill"] = {"$gte": Common.get_current_time()}
 
         if self.input.include_expired == "true":
-            query.pop("validTill", None)
+            query["validTill"] = {"$lte": Common.get_current_time()}
 
         return query
 
