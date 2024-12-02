@@ -1,19 +1,28 @@
+from shared.db.events import get_event_users_collection, get_contirbute_event_users_collection
 from shared.models.interfaces import GetEventUsersInput as Input, Output
-from shared.db.events import get_event_users_collection
 from shared.models.constants import OutputStatus
+from pymongo.collection import Collection
 from shared.models.common import Common
+from typing import Tuple
 
 
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
         self.projection = {"_id": 0}
-        self.event_users_collection = get_event_users_collection()
+        self.event_users_collection, self.contribute = self.determine_collection()
+
+    def determine_collection(self) -> Tuple[Collection, bool]:
+        if self.input.events_type and self.input.events_type.lower() == "contribute":
+            return get_contirbute_event_users_collection(), True
+        return get_event_users_collection(), False
 
     def prepare_query(self) -> dict:
         query = {}
         if self.input.slug:
             query = {"source": self.input.slug}
+            if self.contribute:
+                query = {"slug": self.input.slug}
 
         filter_query = Common.get_filter_query(
             self.input.filter_field, self.input.filter_value)
