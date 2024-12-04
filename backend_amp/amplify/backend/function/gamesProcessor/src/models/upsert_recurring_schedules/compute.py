@@ -41,11 +41,15 @@ class Compute:
             new_data = self.prep_data(self.input.__dict__, old_data)
             self.reschedules_collection.update_one(
                 {"_id": ObjectId(self.input._id)}, {"$set": new_data})
-            return Output(output_details=Common.jsonify(new_data),
-                          output_message="Recurring schedule updated successfully")
+            return Output(
+                output_details=Common.jsonify(new_data),
+                output_message="Recurring schedule updated successfully"
+            )
         else:
             new_data = self.prep_data(self.input.__dict__)
             new_data['created_at'] = datetime.now()
             self.reschedules_collection.insert_one(new_data)
-            return Output(output_details=Common.jsonify(new_data),
-                          output_message="Recurring schedule created successfully")
+            return Output(
+                output_details=Common.jsonify(new_data),
+                output_message="Recurring schedule created successfully"
+            )
