@@ -1,7 +1,6 @@
 import json
 import requests
 from typing import Tuple
-from bson import ObjectId
 from shared.models.common import Common
 from shared.configs import CONFIG as config
 from shared.helpers.users import UsersHelper
@@ -55,7 +54,8 @@ class WAHandler:
         try:
             response = self.invoke_whatsapp_api()
         except Exception as error:
-            print(f"error in executing wa notification for job {self.job_id} with error {error}")
+            print(f"error in executing wa notification for job {
+                  self.job_id} with error {error}")
             response = None
         mark_my_job_as_pending(self.job_id)
 
