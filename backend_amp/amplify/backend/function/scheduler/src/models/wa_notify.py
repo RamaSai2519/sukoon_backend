@@ -23,7 +23,12 @@ class WAHandler:
         expertId = self.request_meta.get('expertId')
 
         user = self.users_helper.get_user(user_id=userId)
+        user = Common.clean_dict(user, User)
+        user = User(**user)
+
         expert = self.experts_helper.get_expert(expert_id=expertId)
+        expert = Common.clean_dict(expert, Expert)
+        expert = Expert(**expert)
 
         return user, expert
 
@@ -54,7 +59,8 @@ class WAHandler:
         try:
             response = self.invoke_whatsapp_api()
         except Exception as error:
-            print(f"error in executing wa notification for job {self.job_id} with error {error}")
+            print(f"error in executing wa notification for job {
+                  self.job_id} with error {error}")
             response = None
         mark_my_job_as_pending(self.job_id)
 
