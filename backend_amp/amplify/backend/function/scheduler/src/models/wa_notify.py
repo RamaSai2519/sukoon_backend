@@ -1,9 +1,10 @@
 import json
 import requests
 from typing import Tuple
-from bson import ObjectId
 from shared.models.common import Common
 from shared.configs import CONFIG as config
+from shared.helpers.users import UsersHelper
+from shared.helpers.experts import ExpertsHelper
 from shared.models.interfaces import User, Expert
 from queries.scheduled_job import mark_my_job_as_pending
 
@@ -13,14 +14,21 @@ class WAHandler:
         self.url = config.URL
         self.common = Common()
         self.job_id = job.get('id', '')
+        self.users_helper = UsersHelper()
+        self.experts_helper = ExpertsHelper()
         self.request_meta = json.loads(job.get('requestMeta')) or {}
 
     def get_participants(self) -> Tuple[User, Expert]:
         userId = self.request_meta.get('userId')
         expertId = self.request_meta.get('expertId')
 
-        user = self.common.get_user(ObjectId(userId))
-        expert = self.common.get_expert(ObjectId(expertId))
+        user = self.users_helper.get_user(user_id=userId)
+        user = Common.clean_dict(user, User)
+        user = User(**user)
+
+        expert = self.experts_helper.get_expert(expert_id=expertId)
+        expert = Common.clean_dict(expert, Expert)
+        expert = Expert(**expert)
 
         return user, expert
 
