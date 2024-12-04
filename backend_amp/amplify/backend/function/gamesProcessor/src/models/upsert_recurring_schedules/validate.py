@@ -1,5 +1,5 @@
 from shared.models.interfaces import UpsertRecurringSchedulesInput as Input
-from shared.models.constants import TimeFormats
+from shared.models.constants import TimeFormats, re_frequencies
 from datetime import datetime
 from bson import ObjectId
 
@@ -12,7 +12,7 @@ class Validator:
         try:
             ObjectId(self.input.user_id)
             ObjectId(self.input.expert_id)
-        except Exception as e:
+        except Exception:
             return False, "Invalid user_id or expert_id"
         return True, ""
 
@@ -34,8 +34,7 @@ class Validator:
         return True, ""
 
     def validate_frequency(self) -> tuple:
-        frequencies = ['weekly', 'monthly', 'biweekly']
-        if self.input.frequency not in frequencies:
+        if self.input.frequency not in re_frequencies:
             return False, "Invalid type"
         return True, ""
 
