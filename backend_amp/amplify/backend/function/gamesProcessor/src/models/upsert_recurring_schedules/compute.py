@@ -1,8 +1,8 @@
 from bson import ObjectId
 from datetime import datetime
 from shared.models.common import Common
+from shared.models.constants import TimeFormats
 from shared.db.schedules import get_reschedules_collection
-from shared.models.constants import OutputStatus, TimeFormats
 from shared.models.interfaces import UpsertRecurringSchedulesInput as Input, Output
 
 
@@ -12,26 +12,23 @@ class Compute:
         self.reschedules_collection = get_reschedules_collection()
 
     def prep_data(self, new_data: dict, old_data: dict = None) -> dict:
+        new_data.pop('_id', None)
         if old_data:
             mutable_fields = ['job_expiry', 'job_time',
                               'job_type', 'frequency', 'days']
-            for field, value in new_data.items():
+            for field, value in old_data.items():
                 if field in mutable_fields:
-                    old_data[field] = value
+                    new_data[field] = value
 
-        if isinstance(old_data.get('job_time'), str):
-            old_data['job_time'] = datetime.strptime(
-                old_data['job_time'], TimeFormats.HOURS_24_FORMAT)
-
-        if isinstance(old_data.get('job_expiry'), str):
-            old_data['job_expiry'] = datetime.strptime(
-                old_data['job_expiry'], TimeFormats.ANTD_TIME_FORMAT)
+        if isinstance(new_data.get('job_expiry'), str):
+            new_data['job_expiry'] = datetime.strptime(
+                new_data['job_expiry'], TimeFormats.ANTD_TIME_FORMAT)
 
         object_fields = ['user_id', 'expert_id']
         for field in object_fields:
-            if isinstance(old_data.get(field), str):
-                old_data[field] = ObjectId(old_data[field])
-        return old_data
+            if isinstance(new_data.get(field), str):
+                new_data[field] = ObjectId(new_data[field])
+        return new_data
 
     def get_old_data(self) -> dict:
         query = {"_id": ObjectId(self.input._id)}
