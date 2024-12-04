@@ -1,9 +1,11 @@
 from shared.db.schedules import get_reschedules_collection
 from shared.db.experts import get_experts_collections
+from shared.models.constants import TimeFormats
 from shared.configs import CONFIG as config
 from shared.models.interfaces import Output
 from datetime import datetime
 from bson import ObjectId
+import requests
 
 
 class Compute:
@@ -40,7 +42,21 @@ class Compute:
         )
 
     def execute_job(self, job):
-        pass
+        job_time = job["job_time"]
+        time = datetime.strptime(job_time, TimeFormats.HOURS_24_FORMAT)
+        time = time.replace(year=self.now_time.year,
+                            month=self.now_time.month, day=self.now_time.day)
+        payload = {
+            'status': 'WAPENDING',
+            'request_meta': {
+                'expertId': job['expert_id'],
+                'userId': job['user_id'],
+                'job_time': time.strftime(TimeFormats.AWS_TIME_FORMAT),
+                'user_requested': job['user_requested']
+            }
+        }
+        response = requests.post(self.url, json=payload)
+        print(response.text)
 
     def compute(self) -> Output:
         reschedules = self.get_reschedules()
