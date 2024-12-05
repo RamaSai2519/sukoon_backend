@@ -14,15 +14,34 @@ from models.get_engagement_data.main import GetEngagementData
 from models.upsert_phone_config.main import UpsertPhoneConfig
 from models.upsert_engagement_data.main import UpsertEngagementData
 from models.get_user_status_options.main import GetUserStatusOptions
-from shared.models.interfaces import User, GetUsersInput, EventUserInput, GetLeadsInput, SaveRemarkInput, GetEngagementDataInput, UpsertEngagementDataInput, PhoneConfigInput, GetUserStatusesInput, RedeemOfferInput
+from shared.models.interfaces import User, GetUsersInput, EventUserInput, GetLeadsInput, SaveRemarkInput, GetEngagementDataInput, UpsertEngagementDataInput, PhoneConfigInput, GetUserStatusesInput, RedeemOfferInput, Demographics, Psychographics, Persona
 
 
 class UserService(Resource):
 
+    def prepare_data(self, input: dict) -> dict:
+        if input.get('customerPersona'):
+            demographics = input.get(
+                'customerPersona', {}).get('demographics', {})
+            psychographics = input.get(
+                'customerPersona', {}).get('psychographics', {})
+            demographics = Common.clean_dict(demographics, Demographics)
+            psychographics = Common.clean_dict(psychographics, Psychographics)
+            input['customerPersona']['demographics'] = Demographics(
+                **demographics)
+            input['customerPersona']['psychographics'] = Psychographics(
+                **psychographics)
+
+            persona = input.get('customerPersona', {})
+            persona = Common.clean_dict(persona, Persona)
+            input['customerPersona'] = Persona(**persona)
+        input = Common.clean_dict(input, User)
+
+        return User(**input)
+
     def post(self) -> dict:
         input = json.loads(request.get_data())
-        input = Common.clean_dict(input, User)
-        input = User(**input)
+        input = self.prepare_data(input)
         output = UpsertUser(input).process()
         output = dataclasses.asdict(output)
 
