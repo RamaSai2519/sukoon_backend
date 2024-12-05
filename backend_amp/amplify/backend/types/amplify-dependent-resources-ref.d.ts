@@ -12,6 +12,9 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "function": {
+    "backendamppandas": {
+      "Arn": "string"
+    },
     "excelUploader": {
       "Arn": "string",
       "LambdaExecutionRole": "string",
