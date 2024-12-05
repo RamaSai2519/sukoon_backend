@@ -3,8 +3,8 @@ from flask import Flask
 from flask_cors import CORS
 from flask_restful import Api
 from services.controller import *
-from shared.configs import CONFIG as config
 from flask_jwt_extended import JWTManager
+from shared.configs import CONFIG as config
 
 
 app = Flask(__name__)
@@ -43,6 +43,7 @@ api.add_resource(CreateContributeInterestService, '/actions/create_interest')
 
 # Scheduled Jobs Routes
 api.add_resource(GetSchedulesService, '/actions/schedules')
+api.add_resource(UpsertReSchedulesService, '/actions/upsert_reschedules')
 api.add_resource(CreateScheduledJobsService, '/actions/create_scheduled_job')
 api.add_resource(UpdateScheduledJobsService, '/actions/update_scheduled_job')
 
