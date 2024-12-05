@@ -23,6 +23,7 @@ class Compute:
         expert_data["active"] = True
         expert_data["isBusy"] = False
         expert_data["categories"] = []
+        expert_data["highlights"] = []
         expert_data["type"] = "saarthi"
         expert_data["isDeleted"] = False
         expert_data["status"] = "offline"
