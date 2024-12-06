@@ -2,6 +2,7 @@ import uuid
 from bson import ObjectId
 from http import HTTPStatus
 from datetime import datetime
+from shared.models.common import Common
 from shared.models.constants import OutputStatus
 from shared.db.users import get_user_collection, get_user_payment_collection
 from shared.models.interfaces import CreatePaymentOrderInput as Input, Output
@@ -38,6 +39,7 @@ class Compute:
 
         order_details_dict = {
             "user_id": self.input.user_id,
+            "pay_type": self.input.pay_type,
             "event_id": self.input.event_id,
             "created_at": datetime.now(),
             "order_id": order_details_dict.get("order_id"),
@@ -73,7 +75,8 @@ class Compute:
         self.create_payment_object_in_db(order_details_dict)
 
         return Output(
-            output_details={"payment_session_id": payment_session_id, },
+            output_details={"payment_session_id": payment_session_id,
+                            "order": Common.jsonify(order_details_dict)},
             output_status=OutputStatus.SUCCESS,
             output_message="Successfully created the payment session id"
         )

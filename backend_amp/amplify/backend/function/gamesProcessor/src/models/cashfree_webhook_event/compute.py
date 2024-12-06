@@ -92,14 +92,15 @@ class Compute:
         s3_url = data.get("file_url")
         return s3_url, invoice_number
 
-    def get_payment_type(self, event_id: str) -> tuple:
-        if event_id == "club":
-            return None, "club"
-        event = self.events_collection.find_one({"slug": event_id})
-        if not event:
-            return None, "code"
-        event_name = event.get("mainTitle")
-        return event_name, "event"
+    def get_payment_type(self, event_id: str, pay_type: str) -> tuple:
+        if pay_type == "event":
+            event = self.events_collection.find_one({"slug": event_id})
+            if not event:
+                return None, "event"
+            event_name = event.get("mainTitle")
+            return event_name, "event"
+        else:
+            return None, pay_type
 
     def update_payment_status(self):
 
@@ -112,7 +113,8 @@ class Compute:
         invoice_s3_url = ""
         payment = self.payments_collection.find_one({"order_id": order_id})
         event_id = payment.get("event_id")
-        event_name, pay_type = self.get_payment_type(event_id)
+        pay_type = payment.get("pay_type", "club")
+        event_name, pay_type = self.get_payment_type(event_id, pay_type)
 
         if payment_status == "SUCCESS":
             invoice_s3_url, invoice_number = self.generate_invoice(
