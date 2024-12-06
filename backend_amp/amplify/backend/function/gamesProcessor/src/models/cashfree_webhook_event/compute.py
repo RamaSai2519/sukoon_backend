@@ -42,7 +42,6 @@ class Compute:
 
         url = config.URL + "/actions/send_whatsapp"
         if event_name:
-            print("Event name is present")
             payload = json.dumps({
                 "phone_number": phone_number,
                 "template_name": "EVENT_INVOICE_GENERIC",
@@ -99,12 +98,12 @@ class Compute:
         return event.get("mainTitle")
 
     def determine_description(self, pay_type: str, event_id: str):
+        if pay_type == "event":
+            return self.get_event_name(event_id)
         for pay in pay_types:
             if pay.get("type") == pay_type:
-                if pay_type == "event":
-                    return self.get_event_name(event_id)
                 return pay.get("desc")
-            return "Invoice"
+        return "Invoice"
 
     def update_payment_status(self):
 
