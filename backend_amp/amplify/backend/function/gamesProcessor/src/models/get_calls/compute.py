@@ -62,7 +62,6 @@ class Compute:
     def excel_url(self) -> str:
         prev_url = self.excel_helper.get_latest_file_url("engagement_data_")
         if not prev_url:
-            threading.Thread(target=self.create_excel).start()
             return "", "Creating Excel File Now..."
         prev_file_time = prev_url.split("_")[-1].split(".")[0]
         prev_time = datetime.strptime(prev_file_time, "%Y-%m-%d-%H-%M-%S")
@@ -72,7 +71,6 @@ class Compute:
             msg = f" and Next Excel File will be created in {diff} minutes"
             return prev_url, msg
         else:
-            threading.Thread(target=self.create_excel).start()
             return prev_url, " and Creating Excel File Now..."
 
     def _get_calls_list(self) -> dict:
