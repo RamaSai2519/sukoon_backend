@@ -14,8 +14,8 @@ class Compute:
     def prep_data(self, new_data: dict, old_data: dict = None) -> dict:
         new_data.pop('_id', None)
         if old_data:
-            mutable_fields = ['job_expiry', 'job_time',
-                              'job_type', 'frequency', 'days']
+            mutable_fields = ['job_expiry', 'job_time', 'job_type',
+                              'frequency', 'week_days', 'month_days']
             for field, value in old_data.items():
                 if field in mutable_fields:
                     new_data[field] = value
@@ -28,6 +28,16 @@ class Compute:
         for field in object_fields:
             if isinstance(new_data.get(field), str):
                 new_data[field] = ObjectId(new_data[field])
+
+        if new_data.get('week_days'):
+            new_data['week_days'] = list(
+                map(lambda x: x.lower(), new_data['week_days']))
+
+        if new_data.get('month_days'):
+            new_data['month_days'] = list(
+                map(int, new_data['month_days']))
+
+        new_data = Common.filter_none_values(new_data)
         return new_data
 
     def get_old_data(self) -> dict:
