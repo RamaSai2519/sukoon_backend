@@ -2,6 +2,7 @@ import json
 import requests
 import threading
 from typing import Union
+from bson import ObjectId
 from shared.models.common import Common
 from shared.configs import CONFIG as config
 from shared.db.calls import get_calls_collection
@@ -117,8 +118,12 @@ class Compute:
     def update_schedule(self, call: Call) -> str:
         if call.scheduledId:
             status_str = self.status + ', ' + self.failed_reason
-            update_scheduled_job_status(call.scheduledId, status_str)
-            self.common.update_schedule_status(call.scheduledId, status_str)
+            try:
+                update_scheduled_job_status(call.scheduledId, status_str)
+            except Exception as e:
+                print('Error updating scheduled job status: ', e)
+            self.common.update_schedule_status(
+                ObjectId(call.scheduledId), status_str)
             return 'Scheduled job updated, '
         return 'Scheduled job not updated, '
 
