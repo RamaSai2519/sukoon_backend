@@ -8,9 +8,9 @@ class RecurringSchedules:
     def __init__(self) -> None:
         pass
 
-    def process(self) -> Output:
+    def process(self, time: str) -> Output:
         try:
-            output = self._compute()
+            output = self._compute(time)
         except Exception as e:
             print(traceback.format_exc())
             output = Output(
@@ -21,8 +21,8 @@ class RecurringSchedules:
 
         return output
 
-    def _compute(self) -> Output:
-        computation_obj = Compute()
+    def _compute(self, time: str) -> Output:
+        computation_obj = Compute(time)
         output = computation_obj.compute()
 
         return output

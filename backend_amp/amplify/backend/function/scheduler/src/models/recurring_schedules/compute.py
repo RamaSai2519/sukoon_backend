@@ -3,16 +3,17 @@ from shared.db.schedules import get_reschedules_collection
 from shared.db.experts import get_experts_collections
 from shared.models.constants import TimeFormats
 from shared.configs import CONFIG as config
+from datetime import datetime, timedelta
 from shared.models.common import Common
-from datetime import datetime
 from bson import ObjectId
 import requests
+import pytz
 
 
 class Compute:
-    def __init__(self) -> None:
+    def __init__(self, time: str) -> None:
+        self.now_time = datetime.strptime(time, TimeFormats.AWS_TIME_FORMAT)
         self.url = config.URL + '/actions/schedules'
-        self.now_time = datetime.now()
         self.collection = get_reschedules_collection()
         self.experts_collection = get_experts_collections()
         self.now_day = self.now_time.strftime('%A').lower()
@@ -40,13 +41,17 @@ class Compute:
             {'_id': job_id},
             {'$set': {'last_triggered': self.now_time}}
         )
+        pass
 
     def execute_job(self, job: RecurringSchedule):
-        job_time = job.job_time
-        time = datetime.strptime(job_time, TimeFormats.HOURS_24_FORMAT)
-        time = time.replace(year=self.now_time.year,
-                            month=self.now_time.month, day=self.now_time.day)
+        job_hour = int(job.job_time.split(':')[0])
+        job_minute = int(job.job_time.split(':')[1])
+
+        time = self.now_time.replace(
+            hour=job_hour, minute=job_minute, day=self.now_time.day + 1)
+        time = time - timedelta(hours=5, minutes=30)
         status = 'PENDING'
+        print(f"Job time: {time}, Current time: {self.now_time}")
         if self.now_time > time:
             print(f"Skipping job {job._id} as it is too late to schedule")
             return
