@@ -11,14 +11,16 @@ class Compute:
         self.input = input
         self.reschedules_collection = get_reschedules_collection()
 
+    def pop_immutable_fields(self, new_data: dict) -> dict:
+        fields = ["_id", "created_at", "user_id", "expert_id"]
+        for field in fields:
+            new_data.pop(field, None)
+        return new_data
+
     def prep_data(self, new_data: dict, old_data: dict = None) -> dict:
-        new_data.pop('_id', None)
         if old_data:
-            mutable_fields = ['job_expiry', 'job_time', 'job_type',
-                              'frequency', 'week_days', 'month_days']
-            for field, value in old_data.items():
-                if field in mutable_fields:
-                    new_data[field] = value
+            new_data = self.pop_immutable_fields(new_data)
+            new_data = {**old_data, **new_data}
 
         if isinstance(new_data.get('job_expiry'), str):
             new_data['job_expiry'] = datetime.strptime(
@@ -37,20 +39,20 @@ class Compute:
             new_data['month_days'] = list(
                 map(int, new_data['month_days']))
 
+        new_data.pop('_id', None)
         new_data = Common.filter_none_values(new_data)
         return new_data
 
-    def get_old_data(self) -> dict:
-        query = {"_id": ObjectId(self.input._id)}
-        old_data = self.reschedules_collection.find_one(query)
-        return old_data
+    def get_old_data(self, query: dict) -> dict:
+        return self.reschedules_collection.find_one(query)
 
     def compute(self) -> Output:
         if self.input._id:
-            old_data = self.get_old_data()
+            query = {"_id": ObjectId(self.input._id)}
+            old_data = self.get_old_data(query)
             new_data = self.prep_data(self.input.__dict__, old_data)
-            self.reschedules_collection.update_one(
-                {"_id": ObjectId(self.input._id)}, {"$set": new_data})
+            update = {"$set": new_data}
+            self.reschedules_collection.update_one(query, update)
             return Output(
                 output_details=Common.jsonify(new_data),
                 output_message="Recurring schedule updated successfully"
