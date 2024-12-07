@@ -13,10 +13,19 @@ import pytz
 class Compute:
     def __init__(self, time: str) -> None:
         self.now_time = datetime.strptime(time, TimeFormats.AWS_TIME_FORMAT)
+        self.now_week_day = self.get_week_day()
+        self.now_month_day = self.get_month_day()
         self.url = config.URL + '/actions/schedules'
         self.collection = get_reschedules_collection()
         self.experts_collection = get_experts_collections()
-        self.now_day = self.now_time.strftime('%A').lower()
+
+    def get_week_day(self) -> str:
+        time = self.now_time + timedelta(hours=5, minutes=30)
+        return time.strftime('%A').lower()
+
+    def get_month_day(self) -> int:
+        time = self.now_time + timedelta(hours=5, minutes=30)
+        return time.day
 
     def get_reschedules(self) -> list:
         last_triggered_lt = {'$lt': self.now_time.replace(
@@ -86,17 +95,23 @@ class Compute:
             job = Common.clean_dict(job, RecurringSchedule)
             job = RecurringSchedule(**job)
 
+            print(f"Checking job {str(job._id)}")
+            print(f"Job frequency: {job.frequency}\n\n")
             if job.frequency == 'daily':
                 self.execute_job(job)
                 jobs_executed += 1
                 self.mark_as_triggered(job._id)
             elif job.frequency == 'weekly':
-                if self.now_day.lower() in job.week_days:
+                print(f"Job week days: {job.week_days}")
+                print(f"Current week day: {self.now_week_day}\n\n")
+                if self.now_week_day in job.week_days:
                     self.execute_job(job)
                     jobs_executed += 1
                     self.mark_as_triggered(job._id)
             elif job.frequency == 'monthly':
-                if self.now_time.day in job.month_days:
+                print(f"Job month days: {job.month_days}")
+                print(f"Current month day: {self.now_month_day}\n\n")
+                if self.now_month_day in job.month_days:
                     self.execute_job(job)
                     jobs_executed += 1
                     self.mark_as_triggered(job._id)
