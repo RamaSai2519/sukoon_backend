@@ -13,6 +13,8 @@ class Compute:
         query = {}
         if not self.input.expired == 'true':
             query['job_expiry'] = {'$gt': self.common.get_current_time()}
+        else:
+            query['job_expiry'] = {'$lt': self.common.get_current_time()}
 
         if self.input.filter_field == 'expert':
             filter_query = self.common.get_filter_query(
