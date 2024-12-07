@@ -44,8 +44,6 @@ api.add_resource(CreateContributeInterestService, '/actions/create_interest')
 # Scheduled Jobs Routes
 api.add_resource(SchedulesService, '/actions/schedules')
 api.add_resource(ReSchedulesService, '/actions/reschedules')
-api.add_resource(CreateScheduledJobsService, '/actions/create_scheduled_job')
-api.add_resource(UpdateScheduledJobsService, '/actions/update_scheduled_job')
 
 # Mark Routes
 api.add_resource(UpdateExpertScoresService, '/actions/expert_scores')
