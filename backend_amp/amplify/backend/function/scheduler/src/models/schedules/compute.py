@@ -6,7 +6,6 @@ from shared.models.interfaces import Output, Schedule
 from shared.configs import CONFIG as config
 from datetime import datetime, timedelta
 from shared.models.common import Common
-from bson import ObjectId
 
 
 class Compute:
