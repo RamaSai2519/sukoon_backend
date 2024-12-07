@@ -118,6 +118,7 @@ class Compute:
         if call.scheduledId:
             status_str = self.status + ', ' + self.failed_reason
             update_scheduled_job_status(call.scheduledId, status_str)
+            self.common.update_schedule_status(call.scheduledId, status_str)
             return 'Scheduled job updated, '
         return 'Scheduled job not updated, '
 
