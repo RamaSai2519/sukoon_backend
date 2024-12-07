@@ -25,17 +25,31 @@ class Validator:
             return False, "Invalid time format"
         return True, ""
 
-    def validate_days(self) -> tuple:
-        days = ['monday', 'tuesday', 'wednesday',
-                'thursday', 'friday', 'saturday', 'sunday']
-        for day in self.input.days:
-            if day not in days:
-                return False, f"Invalid day: {day}"
-        return True, ""
-
     def validate_frequency(self) -> tuple:
         if self.input.frequency not in re_frequencies:
             return False, "Invalid type"
+
+        if self.input.frequency == 'weekly' and (not self.input.week_days or self.input.month_days):
+            return False, "Week days required for weekly frequency"
+
+        if self.input.frequency == 'monthly' and (not self.input.month_days or self.input.week_days):
+            return False, "Month days required for monthly frequency"
+
+        if self.input.frequency == 'daily' and (self.input.week_days or self.input.month_days):
+            return False, "Week days and month days not required for daily frequency"
+
+        if self.input.week_days:
+            days = ['monday', 'tuesday', 'wednesday',
+                    'thursday', 'friday', 'saturday', 'sunday']
+            for day in self.input.week_days:
+                if day not in days:
+                    return False, f"Invalid day: {day}"
+
+        if self.input.month_days:
+            for day in self.input.month_days:
+                if day < 1 or day > 31:
+                    return False, f"Invalid day: {day}"
+
         return True, ""
 
     def validate_type(self) -> tuple:
@@ -45,7 +59,7 @@ class Validator:
         return True, ""
 
     def validate_input(self) -> tuple:
-        for func in [self.validate_ids, self.validate_times, self.validate_days, self.validate_frequency, self.validate_type]:
+        for func in [self.validate_ids, self.validate_frequency, self.validate_times, self.validate_type]:
             valid, message = func()
             if not valid:
                 return False, message
