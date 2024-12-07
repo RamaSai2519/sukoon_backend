@@ -41,4 +41,4 @@ class Compute:
         if self.now_time > self.target_time:
             messages = self.job()
             return Output(output_details=messages, output_status="SUCCESS", output_message="Job executed successfully")
-        return Output(output_status="FAILURE", output_message="Job not executed as it is not time yet")
+        return Output(output_status="FAILURE", output_message="Job not executed as it is not time yet or they were already triggered")

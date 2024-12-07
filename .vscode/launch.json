@@ -2,6 +2,16 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "Scheduler",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "backend_amp/amplify/backend/function/scheduler/src/index.py",
+            "console": "integratedTerminal",
+            "env": {
+                "ENV": "local"
+            }
+        },
+        {
             "name": "Games Processor",
             "type": "debugpy",
             "request": "launch",
@@ -9,7 +19,7 @@
             "env": {
                 "FLASK_APP": "backend_amp/amplify/backend/function/gamesProcessor/src/index.py",
                 "FLASK_DEBUG": "1",
-                "ENV": "main"
+                "ENV": "local"
             },
             "args": [
                 "run",
@@ -27,7 +37,7 @@
             "env": {
                 "FLASK_APP": "backend_amp/amplify/backend/function/pandas/src/index.py",
                 "FLASK_DEBUG": "1",
-                "ENV": "main"
+                "ENV": "local"
             },
             "args": [
                 "run",

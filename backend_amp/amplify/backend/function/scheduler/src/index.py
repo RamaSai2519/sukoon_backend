@@ -3,8 +3,10 @@ import controller
 from models.wa_notify import WAHandler
 from shared.models.common import Common
 from datetime import datetime, timedelta
+from models.schedules.main import Schedules
 from shared.models.constants import TimeFormats
 from models.experts_status_job.main import StatusJob
+from models.recurring_schedules.main import RecurringSchedules
 from queries.scheduled_job import get_pending_scheduled_jobs, mark_my_job_as_picked, get_schedules_near_time
 
 
@@ -56,7 +58,6 @@ def handle_wa_notifications(time_str: str) -> None:
 
         response = get_schedules_near_time(params)
         hit += 1
-        print(f"{hit}Response: {response}")
         all_jobs.extend(response['scheduledJobsByStatusAndTime']['items'])
 
         next_token = response['scheduledJobsByStatusAndTime'].get('nextToken')
@@ -72,7 +73,17 @@ def handle_other_jobs(time: str) -> None:
     # Experts Status Update
     status_job = StatusJob()
     output = status_job.process()
-    print(f"Status Job Output: {output}\n")
+    print(f"Experts Status Job Output: {output}\n")
+
+    # Recurring Schedules
+    reschedules = RecurringSchedules()
+    output = reschedules.process()
+    print(f"Recurring Schedules Output: {output}\n")
+
+    # Schedules
+    schedules = Schedules()
+    output = schedules.process()
+    print(f"Schedules Output: {output}\n")
 
     # WA Notifications
     handle_wa_notifications(time)
@@ -100,7 +111,6 @@ def handler(event, context):
             )["scheduledJobsByStatusAndTime"]
 
             jobs = data["items"]
-            print(jobs)
             for job in jobs:
                 try:
                     if job.get("scheduledJobType"):
