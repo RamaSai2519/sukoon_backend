@@ -77,7 +77,7 @@ def handle_other_jobs(time: str) -> None:
 
     # Recurring Schedules
     reschedules = RecurringSchedules()
-    output = reschedules.process()
+    output = reschedules.process(time)
     print(f"Recurring Schedules Output: {output}\n")
 
     # Schedules
@@ -135,5 +135,6 @@ def handler(event, context):
 if __name__ == "__main__":
     common = Common()
     time = common.current_time
+    print(f"Current Time: {time}")
     time_str = time.strftime(TimeFormats.AWS_TIME_FORMAT)
     handler({"time": time_str}, None)
