@@ -1,3 +1,4 @@
+from bson import ObjectId
 from shared.models.common import Common
 from shared.db.schedules import get_reschedules_collection
 from shared.models.interfaces import GetReSchedulesInput as Input, Output, RecurringSchedule
@@ -11,6 +12,10 @@ class Compute:
 
     def prep_query(self) -> dict:
         query = {}
+        if self.input._id:
+            query['_id'] = ObjectId(self.input._id)
+            return query
+
         if not self.input.expired == 'true':
             query['job_expiry'] = {'$gt': self.common.get_current_time()}
         else:
@@ -54,7 +59,6 @@ class Compute:
 
     def compute(self) -> Output:
         query = self.prep_query()
-        print(query)
         cursor = self.collection.find(query).sort('job_expiry', 1)
         cursor = Common.paginate_cursor(cursor, int(
             self.input.page), int(self.input.size))
