@@ -6,5 +6,8 @@ class Validator():
         self.input = input
 
     def validate_input(self):
+        pay_types = ["sarathiBal", "expertBal", "club", "code"]
+        if self.input.pay_type and self.input.pay_type not in pay_types:
+            return False, "Invalid payment type"
 
         return True, ""
