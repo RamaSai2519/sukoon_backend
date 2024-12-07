@@ -7,7 +7,6 @@ from datetime import datetime, timedelta
 from shared.models.common import Common
 from bson import ObjectId
 import requests
-import pytz
 
 
 class Compute:
