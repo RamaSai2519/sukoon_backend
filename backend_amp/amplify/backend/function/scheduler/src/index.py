@@ -55,7 +55,7 @@ def handler(event, context):
 
 if __name__ == "__main__":
     common = Common()
-    time = common.current_time
+    time = common.get_current_utc_time()
     print(f"Current Time: {time}")
     time_str = time.strftime(TimeFormats.AWS_TIME_FORMAT)
     handler({"time": time_str}, None)
