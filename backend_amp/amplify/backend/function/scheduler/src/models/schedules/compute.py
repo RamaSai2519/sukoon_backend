@@ -64,6 +64,10 @@ class Compute:
             job = Common.clean_dict(job, Schedule)
             job = Schedule(**job)
 
+            print(f"Executing Job: {job._id}")
+            print(f"Current Time: {self.now_time}")
+            print(f"Job Time: {job.job_time}")
+
             self.execute_jobs(job)
             jobs_executed += 1
 
