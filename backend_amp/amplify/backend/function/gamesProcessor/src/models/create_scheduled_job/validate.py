@@ -38,7 +38,7 @@ class Validator:
     def validate_user(self) -> tuple:
         user_meta = self.get_meta()
         if not user_meta:
-            return False, "User not found"
+            return True, ""
 
         if user_meta.get("userStatus") in not_interested_statuses:
             return False, "User is not interested"
