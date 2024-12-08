@@ -26,10 +26,9 @@ fetch_error = "error in getting scheduled job for time {time} and status {status
 
 def handler(event, context):
     try:
-        print(f"Event: {event}")
-        print(f"Context: {context} \n")
-
+        print(f"Context: {context}")
         time = event["time"]
+        print(f"Event Time: {time}")
         status = "PENDING"
 
         # Experts Status Job

@@ -38,6 +38,8 @@ class Compute:
         return messages
 
     def compute(self) -> list:
+        print(f"Current Time: {self.now_time}")
+        print(f"Target Time: {self.target_time}")
         if self.now_time > self.target_time:
             messages = self.job()
             return Output(output_details=messages, output_status="SUCCESS", output_message="Job executed successfully")
