@@ -71,7 +71,6 @@ api.add_resource(WhatsappHistoryService, '/actions/wa_history')
 api.add_resource(EngagementDataService, '/actions/user_engagement')
 api.add_resource(UserStatusOptionsService, '/actions/user_status_options')
 # - Content
-api.add_resource(ChatService, '/actions/chat')
 api.add_resource(PhotoService, '/actions/photos')
 api.add_resource(ContentService, '/actions/content')
 api.add_resource(DallImageService, '/actions/dall_image')

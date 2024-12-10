@@ -15,6 +15,7 @@ api = Api(app)
 JWTManager(app)
 CORS(app, supports_credentials=True)
 
+api.add_resource(ChatService, '/pandas/chat')
 api.add_resource(BulkInsertUsersService, '/pandas/bulk_users')
 api.add_resource(RecommendExpertService, '/pandas/recommend_expert')
 
