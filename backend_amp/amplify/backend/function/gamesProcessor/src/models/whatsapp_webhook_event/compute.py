@@ -2,6 +2,8 @@ import json
 import requests
 from bson import ObjectId
 from datetime import datetime
+from shared.models.common import Common
+from shared.configs import CONFIG as config
 from shared.models.constants import OutputStatus
 from shared.db.calls import get_calls_collection
 from models.whatsapp_webhook_event.slack import WASlackNotifier
@@ -36,12 +38,24 @@ class Compute:
 
         print(response.text)
 
-    def get_user_id_from_number(self, phone_number):
+    def create_lead(self, phone_number: str) -> Output:
+        url = config.URL + "/actions/user"
+        payoad = {"phoneNumber": phone_number, "refSource": "wa_webhook"}
+        response = requests.post(url, json=payoad)
+        print(response.text, "response")
+        output = response.json()
+        output = Common.clean_dict(output, Output)
+        output = Output(**output)
+        return output
+
+    def get_user_id_from_number(self, phone_number: str):
         phone_number = phone_number[2:]
         user_collection = get_user_collection()
         user = user_collection.find_one({"phoneNumber": phone_number})
         if not user:
-            return None, None, None
+            response = self.create_lead(phone_number)
+            user_id = response.output_details.get("_id", None)
+            return user_id, "", ""
         user_id = user.get("_id", None)
         source = user.get("source", "")
         name = user.get("name", "")
@@ -58,6 +72,7 @@ class Compute:
         message_data = {
             "body": body,
             "userId": user_id,
+            "phoneNumber": from_number,
             "createdAt": datetime.now()
         }
         user_webhook_messages_collection = get_user_webhook_messages_collection()
@@ -71,7 +86,6 @@ class Compute:
             "sarathiId": sarathi_id,
             "callId": call_id,
             "createdAt": datetime.now()
-
         }
         user_whatsapp_feedback_collection.insert_one(message_data)
 
@@ -142,7 +156,7 @@ class Compute:
             print(f"An error occurred: {e}")
         return context_id, screen_0_recommend_0
 
-    def compute(self):
+    def compute(self) -> Output:
 
         body, from_number = self._get_message_body_and_phone_number_from_message()
         if not body:
