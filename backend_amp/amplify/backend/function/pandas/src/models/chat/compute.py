@@ -44,7 +44,7 @@ class Compute:
 
     def save_history(self) -> None:
         query = {'phoneNumber': self.input.phoneNumber,
-                 'createdAt': {'$gte': self.now_date}, 'context': self.input.context}
+                 'createdAt': self.now_date, 'context': self.input.context}
         update = {'$set': {'history': self.message_history}}
         if self.history_id:
             self.histories_collection.update_one(
@@ -54,14 +54,15 @@ class Compute:
             self.histories_collection.insert_one(query)
 
     def get_gpt_response(self, format: dict = None) -> str:
-        response = GPT_Client().get_gpt_client()
+        client_obj = GPT_Client()
+        client = client_obj.get_gpt_client()
         while True:
             try:
                 if format:
-                    response = response.beta.chat.completions.parse(
+                    response = client.beta.chat.completions.parse(
                         model='gpt-4-turbo', messages=self.message_history, response_format=format)
                 else:
-                    response = response.chat.completions.create(
+                    response = client.chat.completions.create(
                         model='gpt-4-turbo', messages=self.message_history)
                 break
             except RateLimitError:
@@ -77,8 +78,7 @@ class Compute:
             response = self.get_gpt_response(self.input.res_format)
         else:
             embedding = self.embedder.get_embedding(self.input.prompt)
-            similar_entry = self.embedder.get_most_similar_prompt(
-                embedding, self.input.context)
+            similar_entry = self.embedder.get_most_similar_prompt(embedding)
             if similar_entry:
                 response = similar_entry['response']
             else:
