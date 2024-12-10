@@ -133,16 +133,6 @@ class Compute:
             print(f'An error occurred: {e}')
         return context_id, screen_0_recommend_0
 
-    def welcome_to_sukoon(self, phoneNumber: str) -> None:
-        parameters = {}
-        self._send_whatsapp_message(
-            parameters, phoneNumber, template_name='WELCOME_TO_SUKOON')  # CHANGE TEMPLATE NAME
-
-    def nudge_to_register(self, phoneNumber: str) -> None:
-        parameters = {}
-        self._send_whatsapp_message(
-            parameters, phoneNumber, template_name='NUDGE_TO_REGISTER')  # CHANGE TEMPLATE NAME
-
     def chat(self, phoneNumber: str) -> None:
         pass
 
@@ -178,9 +168,11 @@ class Compute:
         user_type = 'user' if user.get('profileCompleted') == True else 'lead'
         if not user_id:
             user_id = self.create_lead(phoneNumber)
-            self.welcome_to_sukoon(phoneNumber)
+            self._send_whatsapp_message(
+                {}, phoneNumber, template_name='WELCOME_TO_SUKOON')
         elif user_type == 'lead':
-            self.nudge_to_register(phoneNumber)
+            self._send_whatsapp_message(
+                {}, phoneNumber, template_name='NUDGE_TO_REGISTER')
         else:
             self.chat(phoneNumber)
 
