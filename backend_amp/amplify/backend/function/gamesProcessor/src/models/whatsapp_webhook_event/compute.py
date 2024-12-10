@@ -41,7 +41,7 @@ class Compute:
         user_collection = get_user_collection()
         user = user_collection.find_one({"phoneNumber": phone_number})
         if not user:
-            return None, "",""
+            return None, None, None
         user_id = user.get("_id", None)
         source = user.get("source", "")
         name = user.get("name", "")
@@ -159,18 +159,14 @@ class Compute:
                         screen_0_recommend_0, user_id, sarathi_id, call_id)
             else:
                 message_id, status = self._get_status_and_message_id_value()
-                if message_id and status:       
+                if message_id and status:
                     self.update_user_notification_status(message_id, status)
 
         if body:
             user_id, source, name = self.get_user_id_from_number(from_number)
-            if not user_id:
-                self.create_user_webhook_message_id(
-                body, "USER_NOT_PRESENT", from_number, "USER_NAME_NOT_PRESENT")
-            else:    
-                phone_number = from_number[2:]
-                self.create_user_webhook_message_id(
-                    body, user_id, from_number, name)
+            phone_number = from_number[2:]
+            self.create_user_webhook_message_id(
+                body, user_id, from_number, name)
 
             if user_id:
                 if body in COMMON_CALL_REPLY_BODY:
