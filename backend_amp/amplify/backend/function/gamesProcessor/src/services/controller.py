@@ -10,9 +10,9 @@ from services.src.call import CallWebhookService, CallService
 from services.src.admin import AdminFCMService, UploadService, LogsService
 from services.src.scheduled_jobs import ReSchedulesService, SchedulesService
 from services.src.user_referral import UserReferralService, UpsertOfferService
-from services.src.content import PhotoService, ContentService, DallImageService
 from services.src.push_notification import PushNotificationService, FCMTokenService
 from services.src.authenticate import SendOTPService, ValidateOTPService, AdminAuthService
+from services.src.content import ChatService, PhotoService, ContentService, DallImageService
 from services.src.expert import ExpertService, ApplicantService, SlotsService, TimingService, CategoryService
 from services.src.whatsapp import WhatsappMessageService, WhatsappWebhookService, WhatsappWebhookEvent, WhatsappHistoryService, AdminWhatsappService
 from services.src.game import QuizGameService, CardGameService, ScoreUpdaterService, CalculateWinnerService, GameHistoryService, BytePlusTokenService
