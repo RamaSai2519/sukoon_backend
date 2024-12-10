@@ -1,8 +1,10 @@
 import json
 import requests
 from shared.models.common import Common
+from datetime import datetime, timedelta
 from shared.models.interfaces import Output
 from shared.configs import CONFIG as config
+from shared.models.constants import TimeFormats
 
 
 class ChatHelper:
@@ -35,16 +37,25 @@ class ChatHelper:
         events = []
 
         for event in data:
+            eventStartDateTime = event.get(
+                'startEventDate', event.get('validUpto'))
+            if eventStartDateTime:
+                eventStartDateTime = datetime.strptime(
+                    eventStartDateTime, TimeFormats.ANTD_TIME_FORMAT)
+                eventStartDateTime += timedelta(hours=5, minutes=30)
+                eventStartDateTime = eventStartDateTime.strftime(
+                    '%Y-%m-%d %H:%M:%S')
 
             events.append({
                 'mainTitle': event.get('mainTitle', ''),
                 'subTitle': event.get('subTitle', ''),
                 'hostedBy': event.get('hostedBy', ''),
                 'guestSpeaker': event.get('guestSpeaker', ''),
-                'eventStartDateTime': event.get('startEventDate', event.get('validUpto')),
+                'eventStartDateTime': eventStartDateTime,
                 'eventType': event.get('eventType', 'online'),
                 'prizeMoney': event.get('prizeMoney', None),
                 'eventPrice': event.get('eventPrice', 'Free'),
+                'eventRegistrationLink': f'https://sukoonunlimited.com/{event.get("slug", "")}'
             })
 
         return json.dumps(events)
@@ -93,7 +104,7 @@ class ChatHelper:
         You can also check the upcoming events in the platform. Here are the list of upcoming events:
         {self.upcoming_events()}
 
-        NOTE: You are not to disclose the exact list of sarathis or the upcoming events to the user. You are only to provide the details of the sarathis and the events when asked by the user. 
+        NOTE: You are not to disclose the exact list of sarathis or the upcoming events to the user. You are only to provide the details of the sarathis and the events when asked by the user.
         And you will only describe them briefly and answer further queries if asked by the user.
         You will not share entire list at once, but share few events by relevance of time and few sarathis by their personas.
 
