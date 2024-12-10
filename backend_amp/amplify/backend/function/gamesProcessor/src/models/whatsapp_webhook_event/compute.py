@@ -55,6 +55,7 @@ class Compute:
         if not user:
             response = self.create_lead(phone_number)
             user_id = response.output_details.get("_id", None)
+            user_id = ObjectId(user_id)
             return user_id, "", ""
         user_id = user.get("_id", None)
         source = user.get("source", "")
