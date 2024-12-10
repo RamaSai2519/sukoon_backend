@@ -41,7 +41,7 @@ class Compute:
         user_collection = get_user_collection()
         user = user_collection.find_one({"phoneNumber": phone_number})
         if not user:
-            return None, ""
+            return None, "",""
         user_id = user.get("_id", None)
         source = user.get("source", "")
         name = user.get("name", "")
