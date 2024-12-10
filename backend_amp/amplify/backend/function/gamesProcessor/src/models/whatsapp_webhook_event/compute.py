@@ -42,23 +42,25 @@ class Compute:
         user = user_collection.find_one({"phoneNumber": phone_number})
         if not user:
             return None, ""
-        user_id = user.get("_id")
+        user_id = user.get("_id", None)
         source = user.get("source", "")
         name = user.get("name", "")
 
         return user_id, source, name
 
     def create_user_webhook_message_id(self, body, user_id, from_number, name):
-        user_webhook_messages_collection = get_user_webhook_messages_collection()
+        slack_notifier = WASlackNotifier(
+            from_number=from_number, name=name, body=body)
+        slack_notifier.send_notification()
+        if not user_id:
+            return
+
         message_data = {
             "body": body,
             "userId": user_id,
             "createdAt": datetime.now()
         }
-        slack_notifier = WASlackNotifier(
-            from_number=from_number, name=name, body=body)
-        slack_notifier.send_notification()
-
+        user_webhook_messages_collection = get_user_webhook_messages_collection()
         user_webhook_messages_collection.insert_one(message_data)
 
     def _create_user_feedback_message(self, body, user_id, sarathi_id, call_id):
@@ -163,6 +165,8 @@ class Compute:
         if body:
             user_id, source, name = self.get_user_id_from_number(from_number)
             phone_number = from_number[2:]
+            self.create_user_webhook_message_id(
+                body, user_id, from_number, name)
 
             if user_id:
                 if body in COMMON_CALL_REPLY_BODY:
@@ -189,9 +193,6 @@ class Compute:
                     else:
                         self._send_whatsapp_message(
                             parameters, phone_number, template_name="REGISTERED_USER_QUERY")
-
-                self.create_user_webhook_message_id(
-                    body, user_id, from_number, name)
 
             else:
                 if body in COMMON_CALL_REPLY_BODY:
