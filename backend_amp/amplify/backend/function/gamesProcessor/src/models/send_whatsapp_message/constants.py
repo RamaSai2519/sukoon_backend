@@ -1196,3 +1196,19 @@ class WhatsappNotificationTemplates:
                 ]
             }
         }
+
+        self.WELCOME_TO_SUKOON = {
+            "template_name": "WELCOME_TO_SUKOON",
+            "template": {
+                "name": "welcome_to_sukoon",
+                "language": {"code": "en"},
+                "components": [
+                    {
+                        "type": "button",
+                        "index": "0",
+                        "sub_type": "url",
+                        "parameters": [{"type": "text", "text": "{website_url}"}],
+                    },
+                ]
+            }
+        }

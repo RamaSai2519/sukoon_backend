@@ -6,6 +6,7 @@ from shared.models.common import Common
 from shared.configs import CONFIG as config
 from shared.models.constants import OutputStatus
 from models.whatsapp_webhook_event.slack import WASlackNotifier
+from models.whatsapp_webhook_event.chat_helper import ChatHelper
 from shared.models.interfaces import WhatsappWebhookEventInput as Input, Output
 from shared.db.users import get_user_collection, get_user_webhook_messages_collection, get_user_notification_collection, get_user_whatsapp_feedback_collection, get_user_notification_collection
 
@@ -13,30 +14,23 @@ from shared.db.users import get_user_collection, get_user_webhook_messages_colle
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
+        self.chat_helper = ChatHelper()
 
     def _send_whatsapp_message(self, parameters, phoneNumber, template_name) -> None:
-        url = 'https://6x4j0qxbmk.execute-api.ap-south-1.amazonaws.com/main/actions/send_whatsapp'
-
-        payload = json.dumps({
+        url = config.URL + '/actions/send_whatsapp'
+        payload = {
             'phoneNumber': phoneNumber,
             'template_name': template_name,
             'parameters': parameters
-        })
-
-        headers = {
-            'Content-Type': 'application/json'
         }
-        print(payload)
-        response = requests.request('POST', url, headers=headers, data=payload)
-
+        response = requests.post(url, json=payload)
         print(response.text)
 
     def create_lead(self, phoneNumber: str) -> Output:
         url = config.URL + '/actions/user'
         payoad = {'phoneNumber': phoneNumber, 'refSource': 'wa_webhook'}
         response = requests.post(url, json=payoad)
-        output = Common.clean_dict(response.json(), Output)
-        user_id = Output(**output).output_details.get('_id', None)
+        user_id = Output(**response.json()).output_details.get('_id', None)
         return ObjectId(user_id)
 
     def get_user_id_from_number(self, phoneNumber: str) -> dict:
@@ -133,8 +127,32 @@ class Compute:
             print(f'An error occurred: {e}')
         return context_id, screen_0_recommend_0
 
-    def chat(self, phoneNumber: str) -> None:
-        pass
+    def chat(self, phoneNumber: str, body: str) -> str:
+        url = config.MARK_URL + '/flask/chat'
+        payload = {
+            'phoneNumber': phoneNumber, 'prompt': body,
+            'context': self.chat_helper.context,
+            'system_message': self.chat_helper.get_system_message(phoneNumber)
+        }
+        response = requests.post(url, json=payload)
+        response = Output(**response.json()).output_details.get('response')
+
+        return response
+
+    def send_reply(self, from_number: str, text: str) -> requests.Response:
+        url = config.WHATSAPP_API['URL']
+        payload = {
+            'messaging_product': 'whatsapp',
+            'to': from_number,
+            'text': {
+                'body': text.replace('**', '*')
+            }
+        }
+        token = config.WHATSAPP_API['ACCESS_TOKEN']
+        headers = {'Authorization': f'Bearer {token}'}
+        response = requests.post(url, headers=headers, json=payload)
+
+        return response
 
     def compute(self) -> Output:
         body, from_number = self._get_message_body_and_phoneNumber_from_message()
@@ -165,16 +183,12 @@ class Compute:
         user = self.get_user_id_from_number(phoneNumber)
         user_id = user.get('_id', None) if user else None
         name = user.get('name', 'Unknown') if user else 'Unknown'
-        user_type = 'user' if user.get('profileCompleted') == True else 'lead'
         if not user_id:
             user_id = self.create_lead(phoneNumber)
-            self._send_whatsapp_message(
-                {}, phoneNumber, template_name='WELCOME_TO_SUKOON')
-        elif user_type == 'lead':
-            self._send_whatsapp_message(
-                {}, phoneNumber, template_name='NUDGE_TO_REGISTER')
-        else:
-            self.chat(phoneNumber)
+
+        gpt_response = self.chat(phoneNumber, body)
+        reply_response = self.send_reply(from_number, gpt_response)
+        print(reply_response.text)
 
         self.create_user_webhook_message_id(body, user_id, from_number, name)
 
