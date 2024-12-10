@@ -71,8 +71,4 @@ class Compute:
             leads = self.get_leads(leads_query)
             output_data["data"] = leads
 
-        return Output(
-            output_details=output_data,
-            output_status=OutputStatus.SUCCESS,
-            output_message=""
-        )
+        return Output(output_details=output_data)
