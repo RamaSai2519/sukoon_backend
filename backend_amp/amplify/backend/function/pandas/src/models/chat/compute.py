@@ -1,4 +1,4 @@
-from shared.models.interfaces import ChatInput as Input, Output, Content
+from shared.models.interfaces import ChatInput as Input, Output
 from shared.models.constants import OutputStatus
 from shared.helpers.openai import GPT_Client
 from shared.models.common import Common
@@ -14,14 +14,15 @@ class Compute:
         self.openai_client_obj = GPT_Client()
         self.openai_client = self.openai_client_obj.get_gpt_client()
 
+    def determine_history(self) -> list:
+        pass
+        
+
     def get_response(self, message_history: list) -> str:
         response = self.openai_client.chat.completions.create(
             model="gpt-4-turbo",
             messages=message_history
         ).choices[0]
-        # Print raw response for debugging
-        print("Raw response from OpenAI:")
-        print(response)
         return response.message.content
 
     def get_system_message(self) -> str:
