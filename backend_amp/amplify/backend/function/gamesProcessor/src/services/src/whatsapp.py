@@ -37,7 +37,7 @@ class WhatsappWebhookService(Resource):
 
     def post(self) -> dict:
         input = json.loads(request.get_data())
-        print(input)
+        print(input, "whatsapp_webhook")
         input = WhatsappWebhookEventInput(**input)
         output = WhatsappWebhookEvent(input).process()
         output = dataclasses.asdict(output)
