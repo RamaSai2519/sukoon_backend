@@ -5,65 +5,40 @@ from datetime import datetime
 from shared.models.common import Common
 from shared.configs import CONFIG as config
 from shared.models.constants import OutputStatus
-from shared.db.calls import get_calls_collection
 from models.whatsapp_webhook_event.slack import WASlackNotifier
-from shared.models.interfaces import WhatsappWebhookEventInput as Input, Output, WASlackNotifierInput
+from models.whatsapp_webhook_event.chat_helper import ChatHelper
+from shared.models.interfaces import WhatsappWebhookEventInput as Input, Output
 from shared.db.users import get_user_collection, get_user_webhook_messages_collection, get_user_notification_collection, get_user_whatsapp_feedback_collection, get_user_notification_collection
-
-FIX_CALL_BODY = ["Speak with same Sarathi"]
-SCHEDULE_REMINDER_BODY = ["I am available",
-                          "Reschedule the call", "Cancel the call"]
-COMMON_CALL_REPLY_BODY = ["Connect with Sarathis", "Connect with Experts",
-                          "I want something else", "Speak to another Sarathi"]
 
 
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
+        self.chat_helper = ChatHelper()
 
-    def _send_whatsapp_message(self, parameters, phone_number, template_name):
-        url = "https://6x4j0qxbmk.execute-api.ap-south-1.amazonaws.com/main/actions/send_whatsapp"
-
-        payload = json.dumps({
-            "phone_number": phone_number,
-            "template_name": template_name,
-            "parameters": parameters
-        })
-
-        headers = {
-            'Content-Type': 'application/json'
+    def _send_whatsapp_message(self, parameters, phoneNumber, template_name) -> None:
+        url = config.URL + '/actions/send_whatsapp'
+        payload = {
+            'phoneNumber': phoneNumber,
+            'template_name': template_name,
+            'parameters': parameters
         }
-        print(payload)
-        response = requests.request("POST", url, headers=headers, data=payload)
-
+        response = requests.post(url, json=payload)
         print(response.text)
 
-    def create_lead(self, phone_number: str) -> Output:
-        url = config.URL + "/actions/user"
-        payoad = {"phoneNumber": phone_number, "refSource": "wa_webhook"}
+    def create_lead(self, phoneNumber: str) -> Output:
+        url = config.URL + '/actions/user'
+        payoad = {'phoneNumber': phoneNumber, 'refSource': 'wa_webhook'}
         response = requests.post(url, json=payoad)
-        print(response.text, "response")
-        output = response.json()
-        output = Common.clean_dict(output, Output)
-        output = Output(**output)
-        return output
+        user_id = Output(**response.json()).output_details.get('_id', None)
+        return ObjectId(user_id)
 
-    def get_user_id_from_number(self, phone_number: str):
-        phone_number = phone_number[2:]
+    def get_user_id_from_number(self, phoneNumber: str) -> dict:
         user_collection = get_user_collection()
-        user = user_collection.find_one({"phoneNumber": phone_number})
-        if not user:
-            response = self.create_lead(phone_number)
-            user_id = response.output_details.get("_id", None)
-            user_id = ObjectId(user_id)
-            return user_id, "", ""
-        user_id = user.get("_id", None)
-        source = user.get("source", "")
-        name = user.get("name", "")
+        user = user_collection.find_one({'phoneNumber': phoneNumber})
+        return user
 
-        return user_id, source, name
-
-    def create_user_webhook_message_id(self, body, user_id, from_number, name):
+    def create_user_webhook_message_id(self, body, user_id, from_number, name) -> None:
         slack_notifier = WASlackNotifier(
             from_number=from_number, name=name, body=body)
         slack_notifier.send_notification()
@@ -71,26 +46,26 @@ class Compute:
             return
 
         message_data = {
-            "body": body,
-            "userId": user_id,
-            "phoneNumber": from_number,
-            "createdAt": datetime.now()
+            'body': body,
+            'userId': user_id,
+            'phoneNumber': from_number,
+            'createdAt': datetime.now()
         }
         user_webhook_messages_collection = get_user_webhook_messages_collection()
         user_webhook_messages_collection.insert_one(message_data)
 
-    def _create_user_feedback_message(self, body, user_id, sarathi_id, call_id):
+    def _create_user_feedback_message(self, body, user_id, sarathi_id, call_id) -> None:
         user_whatsapp_feedback_collection = get_user_whatsapp_feedback_collection()
         message_data = {
-            "body": body,
-            "userId": user_id,
-            "sarathiId": sarathi_id,
-            "callId": call_id,
-            "createdAt": datetime.now()
+            'body': body,
+            'userId': user_id,
+            'sarathiId': sarathi_id,
+            'callId': call_id,
+            'createdAt': datetime.now()
         }
         user_whatsapp_feedback_collection.insert_one(message_data)
 
-    def _get_message_body_and_phone_number_from_message(self):
+    def _get_message_body_and_phoneNumber_from_message(self) -> tuple:
         body = from_number = None
         for entry in self.input.entry:
             for change in entry.get('changes', []):
@@ -102,7 +77,7 @@ class Compute:
                         body = message.get('button', {}).get('text')
         return body, from_number
 
-    def _get_status_and_message_id_value(self):
+    def _get_status_and_message_id_value(self) -> tuple:
         message_id = status = None
         for entry in self.input.entry:
             for change in entry.get('changes', []):
@@ -110,26 +85,23 @@ class Compute:
                 for status in value.get('statuses', []):
                     message_id = status.get('id')
                     status_value = status.get('status')
-                    # Process or collect the message_id and status_value as needed
-                    print(f"ID: {message_id}, Status: {status_value}")
         return message_id, status_value
 
-    def update_user_notification_status(self, message_id, status):
+    def update_user_notification_status(self, message_id, status) -> None:
         user_notification_collection = get_user_notification_collection()
         notification = user_notification_collection.find_one(
-            {"messageId": message_id})
+            {'messageId': message_id})
         if notification:
-            notification_id = notification.get("_id")
+            notification_id = notification.get('_id')
             user_notification_collection.update_one(
-                {"_id": ObjectId(notification_id)},
-                {"$set": {"notification_status": status}},
+                {'_id': ObjectId(notification_id)},
+                {'$set': {'notification_status': status}},
             )
 
-    def _get_feedback_values(self):
+    def _get_feedback_values(self) -> tuple:
         context_id = None
         screen_0_recommend_0 = None
 
-        # Loop through the entries
         try:
             for entry in self.input.entry:
                 for change in entry.get('changes', []):
@@ -142,34 +114,58 @@ class Compute:
                         nfm_reply = interactive.get('nfm_reply', {})
                         response_json = nfm_reply.get('response_json', '{}')
 
-                        # Attempt to parse the response_json
                         try:
                             response_data = json.loads(response_json)
                             screen_0_recommend_0 = response_data.get(
                                 'screen_0_recommend_0', None)
                         except json.JSONDecodeError:
-                            print("Error decoding JSON response.")
+                            print('Error decoding JSON response.')
 
-                        # Break after finding the first valid entry
                         if context_id and screen_0_recommend_0:
                             break
         except Exception as e:
-            print(f"An error occurred: {e}")
+            print(f'An error occurred: {e}')
         return context_id, screen_0_recommend_0
 
-    def compute(self) -> Output:
+    def chat(self, phoneNumber: str, body: str) -> str:
+        url = config.MARK_URL + '/flask/chat'
+        payload = {
+            'phoneNumber': phoneNumber, 'prompt': body,
+            'context': self.chat_helper.context,
+            'system_message': self.chat_helper.get_system_message(phoneNumber)
+        }
+        response = requests.post(url, json=payload)
+        response = Output(**response.json()).output_details.get('response')
 
-        body, from_number = self._get_message_body_and_phone_number_from_message()
+        return response
+
+    def send_reply(self, from_number: str, text: str) -> requests.Response:
+        url = config.WHATSAPP_API['URL']
+        payload = {
+            'messaging_product': 'whatsapp',
+            'to': from_number,
+            'text': {
+                'body': text.replace('**', '*')
+            }
+        }
+        token = config.WHATSAPP_API['ACCESS_TOKEN']
+        headers = {'Authorization': f'Bearer {token}'}
+        response = requests.post(url, headers=headers, json=payload)
+
+        return response
+
+    def compute(self) -> Output:
+        body, from_number = self._get_message_body_and_phoneNumber_from_message()
         if not body:
             context_id, screen_0_recommend_0 = self._get_feedback_values()
             if screen_0_recommend_0:
                 message = get_user_notification_collection().find_one(
-                    {"messageId": context_id})
+                    {'messageId': context_id})
                 if message:
-                    request_meta = json.loads(message.get("requestMeta", ""))
-                    sarathi_id = request_meta.get("sarathiId", "")
-                    user_id = request_meta.get("userId", "")
-                    call_id = request_meta.get("callId", "")
+                    request_meta = json.loads(message.get('requestMeta', ''))
+                    sarathi_id = request_meta.get('sarathiId', '')
+                    user_id = request_meta.get('userId', '')
+                    call_id = request_meta.get('callId', '')
                     self._create_user_feedback_message(
                         screen_0_recommend_0, user_id, sarathi_id, call_id)
             else:
@@ -177,51 +173,27 @@ class Compute:
                 if message_id and status:
                     self.update_user_notification_status(message_id, status)
 
-        if body:
-            user_id, source, name = self.get_user_id_from_number(from_number)
-            phone_number = from_number[2:]
-            self.create_user_webhook_message_id(
-                body, user_id, from_number, name)
+            return Output(
+                output_details={'body': body, 'from_number': from_number},
+                output_status=OutputStatus.SUCCESS,
+                output_message='Successfully received message'
+            )
 
-            if user_id:
-                if body in COMMON_CALL_REPLY_BODY:
-                    parameters = {"mobile_number": "9110673203"}
-                    self._send_whatsapp_message(
-                        parameters, phone_number, template_name="COMMON_CALL_REPLY")
+        phoneNumber = from_number[2:]
+        user = self.get_user_id_from_number(phoneNumber)
+        user_id = user.get('_id', None) if user else None
+        name = user.get('name', 'Unknown') if user else 'Unknown'
+        if not user_id:
+            user_id = self.create_lead(phoneNumber)
 
-                elif body in FIX_CALL_BODY:
-                    parameters = {}
-                    self._send_whatsapp_message(
-                        parameters, phone_number, template_name="FIX_TIME_REPLY")
+        gpt_response = self.chat(phoneNumber, body)
+        reply_response = self.send_reply(from_number, gpt_response)
+        print(reply_response.text)
 
-                elif body in SCHEDULE_REMINDER_BODY:
-                    print("Replied to Schedule Reminder:", body)
-
-                else:
-                    parameters = {}
-                    user_calls = get_calls_collection(
-                    ).count_documents({"user": user_id})
-                    if user_calls == 0 and source == "Events":
-                        self._send_whatsapp_message(
-                            parameters, phone_number, template_name="REGISTERED_USER_ONLY_EVENT_ACTIVE")
-
-                    else:
-                        self._send_whatsapp_message(
-                            parameters, phone_number, template_name="REGISTERED_USER_QUERY")
-
-            else:
-                if body in COMMON_CALL_REPLY_BODY:
-                    parameters = {"mobile_number": "9110673203"}
-                    self._send_whatsapp_message(
-                        parameters, phone_number, template_name="COMMON_CALL_REPLY")
-
-                else:
-                    parameters = {}
-                    self._send_whatsapp_message(
-                        parameters, phone_number, template_name="NON_REGISTERED_USER_QUERY")
+        self.create_user_webhook_message_id(body, user_id, from_number, name)
 
         return Output(
-            output_details={"body": body, "from_number": from_number},
+            output_details={'body': body, 'from_number': from_number},
             output_status=OutputStatus.SUCCESS,
-            output_message="Successfully received message"
+            output_message='Successfully received message'
         )
