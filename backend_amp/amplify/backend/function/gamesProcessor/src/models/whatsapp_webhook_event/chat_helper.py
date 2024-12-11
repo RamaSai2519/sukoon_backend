@@ -111,7 +111,8 @@ class ChatHelper:
         And here are the details of the user:
         {self.get_user_details(phoneNumber)}
 
-        If the user is a 'lead', nudge them once to the following link to complete registration, you can ignore this if the user is already registered, make sure to share this link once at the beginning of the conversation and once at the end of the conversation:
+        If the user is a 'lead', nudge them once to the following link to complete registration, make sure to share this link once at the beginning of the conversation and once at the end of the conversation, 
+        you can ignore this if the user is already registered:
         https://sukoonunlimited.com/
 
         Here are some important links that you can share with the user when needed:
