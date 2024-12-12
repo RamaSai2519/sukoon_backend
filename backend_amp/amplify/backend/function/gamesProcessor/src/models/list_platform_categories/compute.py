@@ -14,7 +14,8 @@ class Compute:
             'category_id': {'$in': [category['_id'] for category in categories]}
         }
         collection = get_platform_sub_categories_collection()
-        sub_categories = collection.find(query)
+        sub_categories = list(collection.find(query))
+
 
         for category in categories:
             category['sub_categories'] = [
