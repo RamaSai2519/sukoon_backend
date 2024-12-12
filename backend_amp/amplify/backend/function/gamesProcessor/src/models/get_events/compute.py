@@ -3,6 +3,7 @@ from shared.models.interfaces import GetEventsInput as Input, Output
 from shared.models.constants import OutputStatus
 from pymongo.collection import Collection
 from shared.models.common import Common
+from bson import ObjectId
 
 
 class Compute:
@@ -25,6 +26,9 @@ class Compute:
         if self.input.fromToday and self.input.fromToday.lower() == "true":
             currentTime = self.common.current_time
             query["validUpto"] = {"$gte": currentTime}
+
+        if self.input.filter_field == "sub_category":
+            self.input.filter_value = ObjectId(self.input.filter_value)
 
         filter_query = Common.get_filter_query(
             self.input.filter_field, self.input.filter_value)
