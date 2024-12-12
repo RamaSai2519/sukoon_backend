@@ -33,6 +33,12 @@ class Compute:
         if not category_id:
             category_id = self.create_category()
 
+        if self.input.icon:
+            self.collection.update_one(
+                {'_id': category_id},
+                {'$set': {'icon': self.input.icon}}
+            )
+
         output = {'category_id': category_id}
 
         if self.input.sub_category:
