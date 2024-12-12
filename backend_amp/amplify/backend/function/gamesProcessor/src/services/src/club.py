@@ -1,5 +1,4 @@
 import json
-import asyncio
 import dataclasses
 from flask import request
 from flask_restful import Resource
