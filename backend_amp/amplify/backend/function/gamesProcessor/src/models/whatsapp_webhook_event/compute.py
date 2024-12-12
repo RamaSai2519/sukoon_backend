@@ -2,11 +2,9 @@ import json
 import requests
 from bson import ObjectId
 from datetime import datetime
-from shared.models.common import Common
 from shared.configs import CONFIG as config
 from shared.models.constants import OutputStatus
 from models.whatsapp_webhook_event.slack import WASlackNotifier
-from models.whatsapp_webhook_event.chat_helper import ChatHelper
 from shared.models.interfaces import WhatsappWebhookEventInput as Input, Output
 from shared.db.users import get_user_collection, get_user_webhook_messages_collection, get_user_notification_collection, get_user_whatsapp_feedback_collection, get_user_notification_collection
 
@@ -14,7 +12,6 @@ from shared.db.users import get_user_collection, get_user_webhook_messages_colle
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
-        self.chat_helper = ChatHelper()
 
     def _send_whatsapp_message(self, parameters, phoneNumber, template_name) -> None:
         url = config.URL + '/actions/send_whatsapp'
@@ -39,9 +36,10 @@ class Compute:
         return user
 
     def create_user_webhook_message_id(self, body, user_id, from_number, name) -> None:
-        slack_notifier = WASlackNotifier(
-            from_number=from_number, name=name, body=body)
-        slack_notifier.send_notification()
+        if from_number not in ['919398036558']:
+            slack_notifier = WASlackNotifier(
+                from_number=from_number, name=name, body=body)
+            slack_notifier.send_notification()
         if not user_id:
             return
 
@@ -131,11 +129,9 @@ class Compute:
         url = config.MARK_URL + '/flask/chat'
         payload = {
             'phoneNumber': phoneNumber, 'prompt': body,
-            'context': self.chat_helper.context,
-            'system_message': self.chat_helper.get_system_message(phoneNumber)
+            'context': 'wa_webhook'
         }
         response = requests.post(url, json=payload)
-        print(response.text, 'chat')
         response = Output(**response.json())
         reply = response.output_details.get('response')
 
@@ -191,7 +187,7 @@ class Compute:
 
         gpt_response = self.chat(phoneNumber, body)
         reply_response = self.send_reply(from_number, gpt_response)
-        print(reply_response.text)
+        print(reply_response.text, 'reply_response')
 
         self.create_user_webhook_message_id(body, user_id, from_number, name)
 
