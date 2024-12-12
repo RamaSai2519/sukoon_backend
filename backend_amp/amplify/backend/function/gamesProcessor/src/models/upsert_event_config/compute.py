@@ -25,6 +25,9 @@ class Compute:
         if self.input.isDeleted == True:
             event_data["deletedBy"] = ObjectId(self.common.get_identity())
 
+        if "sub_category" in event_data and isinstance(event_data["sub_category"], str):
+            event_data["sub_category"] = ObjectId(event_data["sub_category"])
+
         event_data = {k: v for k, v in event_data.items() if v is not None}
         return event_data
 

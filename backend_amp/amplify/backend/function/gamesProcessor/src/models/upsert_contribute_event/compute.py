@@ -1,5 +1,6 @@
 import random
 import string
+from bson import ObjectId
 from shared.models.common import Common
 from shared.models.constants import OutputStatus
 from shared.db.events import get_contribute_events_collection
@@ -26,6 +27,9 @@ class Compute:
         date_fields = ["validUpto", "startDate"]
         for field in date_fields:
             event_data[field] = Common.string_to_date(event_data, field)
+
+        if "sub_category" in event_data and isinstance(event_data["sub_category"], str):
+            event_data["sub_category"] = ObjectId(event_data["sub_category"])
 
         if new_event:
             event_data["createdAt"] = self.common.current_time
