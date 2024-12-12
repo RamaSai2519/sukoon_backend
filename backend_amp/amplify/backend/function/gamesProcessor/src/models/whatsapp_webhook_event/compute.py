@@ -135,9 +135,11 @@ class Compute:
             'system_message': self.chat_helper.get_system_message(phoneNumber)
         }
         response = requests.post(url, json=payload)
-        response = Output(**response.json()).output_details.get('response')
+        print(response.text, 'chat')
+        response = Output(**response.json())
+        reply = response.output_details.get('response')
 
-        return response
+        return reply
 
     def send_reply(self, from_number: str, text: str) -> requests.Response:
         url = config.WHATSAPP_API['URL']
@@ -151,6 +153,7 @@ class Compute:
         token = config.WHATSAPP_API['ACCESS_TOKEN']
         headers = {'Authorization': f'Bearer {token}'}
         response = requests.post(url, headers=headers, json=payload)
+        print(response.text, 'reply')
 
         return response
 

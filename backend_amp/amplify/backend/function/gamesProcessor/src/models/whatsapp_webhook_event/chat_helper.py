@@ -70,8 +70,13 @@ class ChatHelper:
         return {
             'name': user.get('name', ''),
             'persona': user.get('customerPersona', ''),
-            'type': 'user' if user.get('profileCompleted') == True else 'lead'
+            'user_registered': True if user.get('profileCompleted') == True else False
         }
+
+    def get_current_time(self) -> str:
+        current_time = Common.get_current_utc_time()
+        current_time += timedelta(hours=5, minutes=30)
+        return current_time.strftime('%Y-%m-%d %H:%M:%S')
 
     def get_system_message(self, phoneNumber: str) -> str:
         # CHANGE: Added the user's phone number to the system message
@@ -95,6 +100,8 @@ class ChatHelper:
         scope, direct users to Sukoon Unlimited’s support team for further assistance. Always prioritize user well-being and promote the company’s mission to make
         senior lives happier and more connected.
 
+        Current Local Time: {Common.get_current_utc_time().strftime('%Y-%m-%d %H:%M:%S')}
+
         You will be provided with the list of available sarathis and you can recommend or show the list to the user if needed.
         Or can also recommend a sarathi based on the user query and the sarathi's personas.
 
@@ -110,10 +117,7 @@ class ChatHelper:
 
         And here are the details of the user:
         {self.get_user_details(phoneNumber)}
-
-        If the user is a 'lead', nudge them once to the following link to complete registration, make sure to share this link once at the beginning of the conversation and once at the end of the conversation, 
-        you can ignore this if the user is already registered:
-        https://sukoonunlimited.com/
+        If user is not registered, you can guide them to register on the platform and complete their profile.
 
         Here are some important links that you can share with the user when needed:
         This is the URL of the platform: https://sukoonunlimited.com/
