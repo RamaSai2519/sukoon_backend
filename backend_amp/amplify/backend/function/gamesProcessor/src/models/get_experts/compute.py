@@ -15,15 +15,6 @@ class Compute:
         self.schedules_collection = get_schedules_collection()
         self.categories_collection = get_categories_collection()
 
-    # def populate_schedules(self, expert: dict) -> dict:
-    #     query = {"expert": ObjectId(
-    #         expert["_id"]), "status": self.input.schedule_status}
-    #     expert[f"{self.input.schedule_status}_schedules"] = self.common.get_schedules(
-    #         query)
-    #     query = {"expert": ObjectId(expert["_id"])}
-    #     expert["schedule_counts"] = self.common.get_schedules_counts(query)
-    #     return expert
-
     def compute(self) -> Output:
         if self.input.phoneNumber is not None or self.input.expert_id is not None:
             experts = self.helper.get_expert(
@@ -47,8 +38,15 @@ class Compute:
                 filter_query = {'categories': {'$in': cat_ids}}
                 query = {**filter_query, **query}
             else:
-                filter_query = self.common.get_filter_query(
-                    self.input.filter_field, self.input.filter_value)
+                if self.input.filter_field == "sub_category":
+                    category_ids = self.input.filter_value.split(",")
+                    category_ids = [ObjectId(v.strip()) for v in category_ids]
+                    self.input.filter_value = category_ids
+                    filter_query = {"sub_category": {
+                        "$in": self.input.filter_value}}
+                else:
+                    filter_query = self.common.get_filter_query(
+                        self.input.filter_field, self.input.filter_value)
                 query = {**filter_query, **query}
 
             query = {**query, **exclude_deleted_query}
