@@ -3,6 +3,7 @@ from shared.models.interfaces import GetEventsInput as Input, Output
 from shared.models.constants import OutputStatus
 from pymongo.collection import Collection
 from shared.models.common import Common
+from bson import ObjectId
 
 
 class Compute:
@@ -26,8 +27,15 @@ class Compute:
             currentTime = self.common.current_time
             query["validUpto"] = {"$gte": currentTime}
 
-        filter_query = Common.get_filter_query(
-            self.input.filter_field, self.input.filter_value)
+        if self.input.filter_field == "sub_category":
+            category_ids = self.input.filter_value.split(",")
+            category_ids = [ObjectId(v.strip()) for v in category_ids]
+            self.input.filter_value = category_ids
+            filter_query = {"sub_category": {"$in": self.input.filter_value}}
+        else:
+            filter_query = Common.get_filter_query(
+                self.input.filter_field, self.input.filter_value)
+
         return {**query, **filter_query}
 
     def fetch_homepage_events(self, query: dict) -> list:
