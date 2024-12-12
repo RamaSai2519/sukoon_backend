@@ -39,9 +39,14 @@ class Compute:
                 query = {**filter_query, **query}
             else:
                 if self.input.filter_field == "sub_category":
-                    self.input.filter_value = ObjectId(self.input.filter_value)
-                filter_query = self.common.get_filter_query(
-                    self.input.filter_field, self.input.filter_value)
+                    category_ids = self.input.filter_value.split(",")
+                    category_ids = [ObjectId(v.strip()) for v in category_ids]
+                    self.input.filter_value = category_ids
+                    filter_query = {"sub_category": {
+                        "$in": self.input.filter_value}}
+                else:
+                    filter_query = self.common.get_filter_query(
+                        self.input.filter_field, self.input.filter_value)
                 query = {**filter_query, **query}
 
             query = {**query, **exclude_deleted_query}

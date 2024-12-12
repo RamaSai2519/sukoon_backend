@@ -28,10 +28,14 @@ class Compute:
             query["validUpto"] = {"$gte": currentTime}
 
         if self.input.filter_field == "sub_category":
-            self.input.filter_value = ObjectId(self.input.filter_value)
+            category_ids = self.input.filter_value.split(",")
+            category_ids = [ObjectId(v.strip()) for v in category_ids]
+            self.input.filter_value = category_ids
+            filter_query = {"sub_category": {"$in": self.input.filter_value}}
+        else:
+            filter_query = Common.get_filter_query(
+                self.input.filter_field, self.input.filter_value)
 
-        filter_query = Common.get_filter_query(
-            self.input.filter_field, self.input.filter_value)
         return {**query, **filter_query}
 
     def fetch_homepage_events(self, query: dict) -> list:
