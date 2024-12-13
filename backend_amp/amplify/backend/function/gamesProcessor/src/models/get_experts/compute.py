@@ -25,8 +25,6 @@ class Compute:
                     output_status=OutputStatus.FAILURE,
                     output_message="Expert not found"
                 )
-            # if self.input.schedule_status is not None:
-            #     experts = self.populate_schedules(experts)
         else:
             query = self.common.get_internal_exclude_query(
                 self.input.internal, "_id")
@@ -50,7 +48,8 @@ class Compute:
                 query = {**filter_query, **query}
 
             query = {**query, **exclude_deleted_query}
-            experts = self.helper.get_experts(query)
+            experts = self.helper.get_experts(
+                query, int(self.input.size), int(self.input.page))
 
         return Output(
             output_details=experts,
