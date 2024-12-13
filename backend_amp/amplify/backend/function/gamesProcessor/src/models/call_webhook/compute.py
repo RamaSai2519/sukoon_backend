@@ -169,6 +169,20 @@ class Compute:
         requests.request(
             'POST', config.MARK_URL + '/flask/process', data=json.dumps(payload))
 
+    def notify_missed_user(self, user: User) -> str:
+        if not user:
+            return 'User not found'
+        payload = {
+            'template_name': 'MISSED_CALL',
+            'phone_number': user.phoneNumber,
+            'parameters': {'user_name': user.name or user.phoneNumber}
+        }
+        response = requests.request(
+            'POST', self.url, headers=application_json_header, data=json.dumps(payload))
+        message = 'Missed call message sent' if response.status_code == 200 else 'Missed call message not sent'
+        print(message)
+        return message
+
     def compute(self) -> Output:
         callId = self.input.call_uuid.replace('_0', '')
         call = self.find_call(callId)
@@ -188,6 +202,9 @@ class Compute:
         expert_message = self.update_expert(call)
         user_message = self.update_user(call, expert, user)
         feedback_message = 'Feedback message not sent'
+
+        if call.status in ['missed', 'inadequate']:
+            self.notify_missed_user(user)
 
         feedback_message = self.send_feedback_message(call, expert, user)
         promo_message = self.send_promo_message(call, expert, user)

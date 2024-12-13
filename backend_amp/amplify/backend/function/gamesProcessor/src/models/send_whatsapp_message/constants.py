@@ -1212,3 +1212,19 @@ class WhatsappNotificationTemplates:
                 ]
             }
         }
+
+        self.MISSED_CALL = {
+            "template_name": "MISSED_CALL",
+            "template": {
+                "name": "missed_call",
+                "language": {"code": "en"},
+                "components": [
+                    {
+                        "type": "body",
+                        "parameters": [
+                            {"type": "text", "text": "{user_name}"}
+                        ]
+                    }
+                ]
+            }
+        }
