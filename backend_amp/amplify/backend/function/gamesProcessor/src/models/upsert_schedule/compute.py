@@ -50,14 +50,15 @@ class Compute:
         return conflict is not None
 
     def compute(self) -> Output:
-        self.input.expert_id = ObjectId(self.input.expert_id)
-        self.input.job_time = datetime.strptime(
-            self.input.job_time, TimeFormats.AWS_TIME_FORMAT)
-        if self.check_expert_availability(self.input.expert_id, self.input.job_time):
-            return Output(
-                output_status=OutputStatus.FAILURE,
-                output_message="Expert is not available at this time"
-            )
+        if self.input.expert_id:
+            self.input.expert_id = ObjectId(self.input.expert_id)
+            self.input.job_time = datetime.strptime(
+                self.input.job_time, TimeFormats.AWS_TIME_FORMAT)
+            if self.check_expert_availability(self.input.expert_id, self.input.job_time):
+                return Output(
+                    output_status=OutputStatus.FAILURE,
+                    output_message="Expert is not available at this time"
+                )
 
         if self.input._id:
             old_data = self.get_old_data()
