@@ -1213,18 +1213,18 @@ class WhatsappNotificationTemplates:
             }
         }
 
-        self.MISSED_CALL = {
-            "template_name": "MISSED_CALL",
+        self.SARATHI_MISSED_CALL = {
+            "template_name": "SARATHI_MISSED_CALL",
             "template": {
-                "name": "missed_call",
+                "name": "sarathi_missed_call",
+                "language": {"code": "en"}
+            }
+        }
+
+        self.MISSED_INTERNAL_CALL = {
+            "template_name": "MISSED_INTERNAL_CALL",
+            "template": {
+                "name": "missed_internal_call",
                 "language": {"code": "en"},
-                "components": [
-                    {
-                        "type": "body",
-                        "parameters": [
-                            {"type": "text", "text": "{user_name}"}
-                        ]
-                    }
-                ]
             }
         }
