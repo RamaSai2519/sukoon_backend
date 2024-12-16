@@ -17,7 +17,7 @@ class Compute:
         self.experts_collection = get_experts_collections()
 
     def get_lower_time_str(self) -> tuple:
-        upper_bound = self.now_time + timedelta(minutes=30)
+        upper_bound = self.now_time + timedelta(minutes=15)
         lower_bound = upper_bound - timedelta(minutes=5)
 
         return upper_bound, lower_bound
