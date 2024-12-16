@@ -86,9 +86,13 @@ class Compute:
         response = requests.request(
             "POST", url, headers=self.headers, data=json.dumps(payload))
 
-        json_response = Output(**response.json())
-        data = json_response.output_details
-        s3_url = data.get("file_url")
+        if "output_details" in response.json():
+            json_response = Output(**response.json())
+            data = json_response.output_details
+            s3_url = data.get("file_url")
+        else:
+            file_name = f"{self.user_id}-{invoice_number}.pdf"
+            s3_url = "https://s3.ap-south-1.amazonaws.com/sukoon-media/invoices/" + file_name
         return s3_url, invoice_number
 
     def get_event_name(self, event_id: str) -> str:
