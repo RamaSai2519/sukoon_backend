@@ -1,8 +1,8 @@
 from bson import ObjectId
-from datetime import datetime
+from datetime import datetime, timedelta
 from shared.models.common import Common
-from shared.models.constants import TimeFormats
 from shared.db.schedules import get_schedules_collection
+from shared.models.constants import TimeFormats, OutputStatus
 from shared.models.interfaces import UpsertScheduleInput as Input, Output
 
 
@@ -28,10 +28,6 @@ class Compute:
             if isinstance(new_data.get(field), str):
                 new_data[field] = ObjectId(new_data[field])
 
-        if isinstance(new_data.get('job_time'), str):
-            new_data['job_time'] = datetime.strptime(
-                new_data['job_time'], TimeFormats.AWS_TIME_FORMAT)
-
         new_data = Common.filter_none_values(new_data)
         return new_data
 
@@ -40,7 +36,29 @@ class Compute:
         old_data = self.schedules_collection.find_one(query)
         return old_data
 
+    def check_expert_availability(self, expert_id: ObjectId, job_time: datetime) -> bool:
+        time_window = 15 * 60
+        start_time = job_time - timedelta(seconds=time_window)
+        end_time = job_time + timedelta(seconds=time_window)
+
+        query = {
+            "expert_id": expert_id,
+            "isDeleted": {"$ne": True},
+            "job_time": {"$gte": start_time, "$lte": end_time}
+        }
+        conflict = self.schedules_collection.find_one(query)
+        return conflict is not None
+
     def compute(self) -> Output:
+        self.input.expert_id = ObjectId(self.input.expert_id)
+        self.input.job_time = datetime.strptime(
+            self.input.job_time, TimeFormats.AWS_TIME_FORMAT)
+        if self.check_expert_availability(self.input.expert_id, self.input.job_time):
+            return Output(
+                output_status=OutputStatus.FAILURE,
+                output_message="Expert is not available at this time"
+            )
+
         if self.input._id:
             old_data = self.get_old_data()
             new_data = self.prep_data(self.input.__dict__, old_data)
