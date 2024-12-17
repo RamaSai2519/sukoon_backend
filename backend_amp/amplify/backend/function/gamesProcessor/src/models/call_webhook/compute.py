@@ -174,10 +174,18 @@ class Compute:
             return 'User not found'
         payload = {
             'template_name': 'SARATHI_MISSED_CALL' if expert.type != 'internal' else 'MISSED_INTERNAL_CALL',
-            'phone_number': user.phoneNumber, "parameters": {}
+            'phone_number': user.phoneNumber, 'parameters': {}
         }
         response = requests.post(self.url, json=payload)
         message = 'Missed call message sent' if response.status_code == 200 else 'Missed call message not sent'
+        print(message)
+        return message
+
+    def notify_failed_expert(self, expert: Expert) -> str:
+        payload = {'template_name': 'SARATHI_MISSED_CALL',
+                   'phone_number': expert.phoneNumber, "parameters": {}}
+        response = requests.post(self.url, json=payload)
+        message = 'Failed call message sent' if response.status_code == 200 else 'Failed call message not sent'
         print(message)
         return message
 
@@ -203,6 +211,9 @@ class Compute:
 
         if call.status in ['missed']:
             self.notify_missed_user(user, expert)
+
+        if call.status == 'failed':
+            self.notify_failed_expert(expert)
 
         feedback_message = self.send_feedback_message(call, expert, user)
         promo_message = self.send_promo_message(call, expert, user)
