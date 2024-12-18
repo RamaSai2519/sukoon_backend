@@ -7,7 +7,6 @@ from shared.models.common import Common
 from shared.configs import CONFIG as config
 from shared.db.calls import get_calls_collection
 from shared.db.experts import get_experts_collections
-from db_queries.mutations.scheduled_job import update_scheduled_job_status
 from shared.db.users import get_user_collection, get_user_notification_collection
 from shared.models.constants import OutputStatus, application_json_header, CallStatus
 from shared.models.interfaces import WebhookInput as Input, Call, Output, User, Expert
@@ -118,10 +117,6 @@ class Compute:
     def update_schedule(self, call: Call) -> str:
         if call.scheduledId:
             status_str = self.status + ', ' + self.failed_reason
-            try:
-                update_scheduled_job_status(call.scheduledId, status_str)
-            except Exception as e:
-                print('Error updating scheduled job status: ', e)
             self.common.update_schedule_status(
                 ObjectId(call.scheduledId), status_str)
             return 'Scheduled job updated, '
