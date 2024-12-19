@@ -48,6 +48,9 @@ class Compute:
                 query = {**filter_query, **query}
 
             query = {**query, **exclude_deleted_query}
+            if self.input.platform.lower() == 'public' or not self.input.platform:
+                query['active'] = True
+
             experts = self.helper.get_experts(
                 query, int(self.input.size), int(self.input.page))
 
