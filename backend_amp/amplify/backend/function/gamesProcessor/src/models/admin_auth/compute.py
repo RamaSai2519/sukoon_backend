@@ -46,9 +46,15 @@ class Compute:
         )
 
     def sign_in(self) -> Output:
-        admin_data = Admin(
-            **dict(self.admins_collection.find_one({"phoneNumber": self.input.phoneNumber}))
-        )
+        admin = self.admins_collection.find_one(
+            {"phoneNumber": self.input.phoneNumber})
+        if not admin:
+            return Output(
+                output_details=self.input.__dict__,
+                output_status=OutputStatus.FAILURE,
+                output_message="Bad Credentials"
+            )
+        admin_data = Admin(**admin)
 
         if not admin_data or not bcrypt.checkpw(self.input.password.encode("utf-8"), admin_data.password.encode("utf-8")):
             return Output(

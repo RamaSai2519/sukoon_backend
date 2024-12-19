@@ -48,7 +48,7 @@ class Compute:
                 query = {**filter_query, **query}
 
             query = {**query, **exclude_deleted_query}
-            if self.input.platform.lower() == 'public' or not self.input.platform:
+            if not self.input.platform or self.input.platform.lower() == 'public':
                 query['active'] = True
 
             experts = self.helper.get_experts(
