@@ -1,8 +1,8 @@
 import json
 import dataclasses
 from flask import request
-from shared.models.common import Common
 from flask_restful import Resource
+from shared.models.common import Common
 from models.get_slots.main import GetSlots
 from flask_jwt_extended import jwt_required
 from models.get_timings.main import GetTimings
@@ -28,6 +28,7 @@ class ExpertService(Resource):
 
     def get(self) -> dict:
         input_params = request.args
+        input = Common.clean_dict(input_params, GetExpertsInput)
         input = GetExpertsInput(**input_params)
         output = ListExperts(input).process()
         output = dataclasses.asdict(output)
