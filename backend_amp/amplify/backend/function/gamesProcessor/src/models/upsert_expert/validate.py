@@ -28,12 +28,12 @@ class Validator:
                 if value is not None and not (isinstance(value, int) or isinstance(value, float)):
                     return False, f"Field {field} must be an integer"
 
-        list_fields = ["categories", "highlights", "sub_category"]
-        for field in list_fields:
-            if hasattr(self.input, field):
-                value = getattr(self.input, field)
-                if value is not None and not isinstance(value, list):
-                    return False, f"Field {field} must be a list"
+        # list_fields = ["categories", "highlights", "sub_category"]
+        # for field in list_fields:
+        #     if hasattr(self.input, field):
+        #         value = getattr(self.input, field)
+        #         if value is not None and not isinstance(value, list):
+        #             return False, f"Field {field} must be a list"
 
         return True, ""
 

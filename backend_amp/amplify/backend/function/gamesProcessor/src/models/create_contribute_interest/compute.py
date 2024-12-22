@@ -10,7 +10,7 @@ class Compute:
         self.input = input
         self.collection = get_contirbute_event_users_collection()
 
-    def validate_interest(self):
+    def validate_interest(self) -> bool:
         query = {
             "slug": self.input.slug,
             "user_id": ObjectId(self.input.user_id)
