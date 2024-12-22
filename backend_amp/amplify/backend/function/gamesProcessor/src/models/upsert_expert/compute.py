@@ -51,8 +51,12 @@ class Compute:
         else:
             expert_data = self.set_defaults(expert_data)
 
-        if "sub_category" in expert_data and isinstance(expert_data["sub_category"], str):
-            expert_data["sub_category"] = ObjectId(expert_data["sub_category"])
+        if "sub_category" in expert_data:
+            if isinstance(expert_data["sub_category"], list):
+                expert_data["sub_category"] = [
+                    ObjectId(item) if isinstance(item, str) else item
+                    for item in expert_data["sub_category"]
+                ]
 
         expert_data = self.populate_categories(expert_data)
         return expert_data
