@@ -13,15 +13,17 @@ from shared.models.constants import OutputStatus, application_json_header, pay_t
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
+        self.event = None
+        self.phoneNumber = None
         self.headers = application_json_header
         self.events_collection = get_events_collection()
         self.payments_collection = get_user_payment_collection()
 
     def get_user_id_from_number(self) -> str:
         customer_details = self.payment_data.get("customer_details")
-        phone_number = customer_details.get("customer_phone")
+        self.phoneNumber = customer_details.get("customer_phone")
         user_collection = get_user_collection()
-        user = user_collection.find_one({"phoneNumber": phone_number})
+        user = user_collection.find_one({"phoneNumber": self.phoneNumber})
         if not user:
             return None
         user_id = user.get("_id")
@@ -61,7 +63,7 @@ class Compute:
         headers = self.headers
         response = requests.request("POST", url, headers=headers, data=payload)
 
-        print(response.text)
+        print(response.text, "invoice_response_cashfree")
 
     def generate_invoice(self, payment_amount: int, description: str) -> tuple:
         customer_details = self.payment_data.get("customer_details")
@@ -95,21 +97,58 @@ class Compute:
             s3_url = "https://s3.ap-south-1.amazonaws.com/sukoon-media/invoices/" + file_name
         return s3_url, invoice_number
 
-    def get_event_name(self, event_id: str) -> str:
+    def get_event(self, event_id: str) -> dict:
         event = self.events_collection.find_one({"slug": event_id})
         if not event:
             return None
-        return event.get("mainTitle")
+        return event
 
     def determine_description(self, pay_type: str, event_id: str):
         if pay_type == "event":
-            return self.get_event_name(event_id)
+            self.event = self.get_event(event_id)
+            return self.event.get("mainTitle")
         for pay in pay_types:
             if pay.get("type") == pay_type:
                 return pay.get("desc")
         return "Invoice"
 
-    def update_payment_status(self):
+    def register_user_for_event(self, event_id: str):
+        url = config.URL + "/actions/upsert_event_user"
+        payload = {'phoneNumber': self.phoneNumber,
+                   'isUserPaid': True, 'source': event_id}
+        response = requests.post(url, json=payload)
+        response_dict = response.json()
+        message = "User not registered for event"
+        if "output_status" in response_dict and response_dict.get("output_status") == "SUCCESS":
+            message = "User registered for event"
+        return message
+
+    def send_event_details(self):
+        url = config.URL + "/actions/send_whatsapp"
+        payload = {
+            'phone_number': self.phoneNumber,
+            'template_name': 'EVENT_REGISTRATION_CONFIRMATION',
+            'parameters': {
+                'user_name': self.payment_data.get("customer_details").get("customer_name"),
+                'topic_name': self.event.get("mainTitle"),
+                'date_and_time': self.event.get("startEventDate", "").strftime('%d %b %Y %H:%M'),
+                'custom_text': self.event.get("subTitle"),
+                'speakers_name': self.event.get("guestSpeaker"),
+                'event_name': self.event.get("mainTitle"),
+                'image_link': self.event.get("imageUrl"),
+                'webinar_link': self.event.get("meetingLink"),
+                'phone_number': "+918660610840",
+                'whatsapp_community_link': "https://sukoonunlimited.com/wa-join-community"
+            }
+        }
+        response = requests.post(url, json=payload)
+        response_dict = response.json()
+        if "output_status" in response_dict and response_dict.get("output_status") == "SUCCESS":
+            return "Event details sent"
+        print(response_dict)
+        return "Event details not sent"
+
+    def update_payment_status(self) -> tuple:
 
         order_details = self.payment_data.get("order")
         order_id = order_details.get("order_id")
@@ -131,6 +170,10 @@ class Compute:
                 payment_amount, description)
             if pay_type == "event":
                 self.send_invoice_to_the_user(invoice_s3_url, description)
+                register_message = self.register_user_for_event(event_id)
+                print(register_message, "register_message_cashfree")
+                event_wa_message = self.send_event_details()
+                print(event_wa_message, "event_wa_message_cashfree")
             else:
                 if pay_type in ['code', 'club']:
                     self.update_user_membership_status()
