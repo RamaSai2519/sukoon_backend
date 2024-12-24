@@ -14,7 +14,7 @@ class Validator:
 
     def validate_field_types(self):
         bool_fields = ["active", "isBusy", "profileCompleted",
-                       "wa_opt_out", "isBlocked", "isPaidUser"]
+                       "wa_opt_out", "isPaidUser"]
         for field in bool_fields:
             if hasattr(self.input, field):
                 value = getattr(self.input, field)
