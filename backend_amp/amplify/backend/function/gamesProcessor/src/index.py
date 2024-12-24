@@ -21,7 +21,7 @@ CORS(app, supports_credentials=True)
 api.add_resource(CallService, '/actions/call')
 api.add_resource(CallWebhookService, '/actions/call_webhook')
 
-# CLub Routes
+# Club Routes
 api.add_resource(ClubService, '/actions/club')
 
 # Users Routes
@@ -47,6 +47,7 @@ api.add_resource(ReSchedulesService, '/actions/reschedules')
 
 # Mark Routes
 api.add_resource(UpdateExpertScoresService, '/actions/expert_scores')
+api.add_resource(SystemPromptsService, '/actions/system_prompts')
 
 # Cashfree Routes
 api.add_resource(CashfreeWebhookService, '/actions/cashfree_webhook')
