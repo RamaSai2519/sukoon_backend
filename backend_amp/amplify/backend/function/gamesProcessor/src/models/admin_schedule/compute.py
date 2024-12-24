@@ -47,6 +47,9 @@ class Compute:
             user_ids = [user['_id'] for user in users]
             return {'user_id': {'$in': user_ids}, **query}
 
+        elif self.input.filter_field in ['user_id', 'expert_id']:
+            return {self.input.filter_field: ObjectId(self.input.filter_value), **query}
+
         else:
             filter_query = self.common.get_filter_query(
                 self.input.filter_field, self.input.filter_value)
