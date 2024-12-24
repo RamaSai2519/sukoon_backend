@@ -29,7 +29,7 @@ class Compute:
 
     def get_default(self) -> dict:
         user = User(
-            isBusy=False, active=True, isPaidUser=False, numberOfCalls=3, numberOfGames=0, profileCompleted=False, isBlocked=False
+            isBusy=False, active=True, isPaidUser=False, numberOfCalls=3, numberOfGames=0, profileCompleted=False
         ).__dict__
         user = {k: v for k, v in user.items() if v is not None}
         return user
