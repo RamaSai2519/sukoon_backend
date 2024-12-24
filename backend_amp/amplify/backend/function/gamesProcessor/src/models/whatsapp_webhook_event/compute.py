@@ -126,7 +126,8 @@ class Compute:
         return context_id, screen_0_recommend_0
 
     def chat(self, phoneNumber: str, body: str) -> str:
-        url = config.MARK_URL + '/flask/chat'
+        # url = config.MARK_URL + '/flask/chat'
+        url = config.ARK_URL + '/ark'
         payload = {
             'phoneNumber': phoneNumber, 'prompt': body,
             'context': 'wa_webhook'

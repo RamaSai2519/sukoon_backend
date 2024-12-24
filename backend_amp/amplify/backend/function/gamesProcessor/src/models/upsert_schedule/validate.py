@@ -15,7 +15,7 @@ class Validator:
         query = {"user": user_id}
         return self.meta_collection.find_one(query)
 
-    def validate_mandatory_fields(self):
+    def validate_mandatory_fields(self) -> tuple:
         mandatory_fields = ['job_time', 'job_type', 'initiatedBy',
                             'status', 'user_id', 'expert_id']
         for field in mandatory_fields:
@@ -23,7 +23,7 @@ class Validator:
                 return False, f"{field.replace('_', ' ').capitalize()} is mandatory"
         return True, ""
 
-    def validate_job_time_and_status(self):
+    def validate_job_time_and_status(self) -> tuple:
         try:
             datetime.strptime(self.input.job_time, '%Y-%m-%dT%H:%M:%SZ')
         except ValueError:
@@ -44,7 +44,7 @@ class Validator:
 
         return True, ""
 
-    def validate_ids(self):
+    def validate_ids(self) -> tuple:
         try:
             ObjectId(self.input.user_id)
             ObjectId(self.input.expert_id)
@@ -53,7 +53,7 @@ class Validator:
 
         return True, ""
 
-    def validate_input(self):
+    def validate_input(self) -> tuple:
         if self.input.isDeleted and self.input._id:
             return True, ""
 
