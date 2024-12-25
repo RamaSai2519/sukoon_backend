@@ -28,6 +28,7 @@ class Compute:
             if isinstance(new_data.get(field), str):
                 new_data[field] = ObjectId(new_data[field])
 
+        new_data['isDeleted'] = False
         new_data = Common.filter_none_values(new_data)
         return new_data
 
