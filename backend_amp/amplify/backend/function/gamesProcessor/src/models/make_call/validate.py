@@ -21,7 +21,7 @@ class Validator:
 
         return user, user_meta, expert
 
-    def validate_input(self):
+    def validate_input(self) -> tuple:
         if self.input.type_ not in ["call", "scheduled"]:
             return False, "Invalid type"
 
@@ -45,10 +45,10 @@ class Validator:
         if not user:
             return False, "User not found"
 
-        if user["active"] is False:
+        if user.get("isActive") is False:
             return False, "User is inactive"
 
-        if user["isBusy"]:
+        if user.get("isBusy") is True:
             self.notifier.send_notification(
                 type_=self.input.type_,
                 user_name=user.get("name", ""),
@@ -81,7 +81,7 @@ class Validator:
         if not expert:
             return False, "Expert not found"
 
-        if expert["status"] == "offline":
+        if expert.get("status") == "offline":
             self.notifier.send_notification(
                 type_=self.input.type_,
                 user_name=user.get("name", ""),
@@ -90,7 +90,7 @@ class Validator:
             )
             return False, "Expert is offline"
 
-        if expert["isBusy"]:
+        if expert.get("isBusy") is True:
             self.notifier.send_notification(
                 type_=self.input.type_,
                 user_name=user.get("name", ""),

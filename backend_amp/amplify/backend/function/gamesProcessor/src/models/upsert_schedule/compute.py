@@ -29,6 +29,7 @@ class Compute:
                 new_data[field] = ObjectId(new_data[field])
 
         new_data = Common.filter_none_values(new_data)
+        new_data['isDeleted'] = False
         return new_data
 
     def get_old_data(self) -> dict:
