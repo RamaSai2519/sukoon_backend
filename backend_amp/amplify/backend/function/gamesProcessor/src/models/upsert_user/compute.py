@@ -73,7 +73,7 @@ class Compute:
             if user_data.get(field) and not isinstance(user_data[field], ObjectId):
                 user_data[field] = ObjectId(user_data[field])
 
-        user_data = Common.filter_none_values(user_data)
+        user_data = {k: v for k, v in user_data.items() if v is not None}
         return user_data
 
     def send_wa_message(self, payload: dict) -> None:

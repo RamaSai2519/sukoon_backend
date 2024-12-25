@@ -48,6 +48,7 @@ api.add_resource(ReSchedulesService, '/actions/reschedules')
 # Mark Routes
 api.add_resource(UpdateExpertScoresService, '/actions/expert_scores')
 api.add_resource(SystemPromptsService, '/actions/system_prompts')
+api.add_resource(HistoriesService, '/actions/histories')
 
 # Cashfree Routes
 api.add_resource(CashfreeWebhookService, '/actions/cashfree_webhook')
