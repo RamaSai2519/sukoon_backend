@@ -84,26 +84,6 @@ class Compute:
         event = Common.clean_dict(event, Event)
         return Event(**event) if event else None
 
-    def send_nudge_message(self, user: User) -> str:
-        event = self.find_event()
-        if not event:
-            return "Event not found"
-        payload = {
-            "template_name": "POST_EVENT_REGISTRATION",
-            "phone_number": self.input.phoneNumber,
-            "request_meta": json.dumps({"event_name": event.mainTitle}),
-            "parameters": {
-                "user_name": user.name or user.phoneNumber,
-                "event_name": event.mainTitle,
-                "date_time": event.startEventDate.strftime("%d-%m-%Y %H:%M") or event.validUpto.strftime("%d-%m-%Y %H:%M"),
-                "zoom_link": event.meetingLink or "Will be shared soon",
-            }
-        }
-        response = requests.request(
-            "POST", self.wa_url, headers=application_json_header, data=json.dumps(payload))
-        message = "Nudge message sent" if response.status_code == 200 else "Nudge message not sent"
-        return message
-
     def pop_immutable_fields(self, data: dict) -> dict:
         fields = ["_id", "phoneNumber", "createdAt"]
         for field in fields:
@@ -137,7 +117,6 @@ class Compute:
             event_user = self.create_event_user(user)
             event_user = self.insert_event_user(
                 event_user, self.event_users_collection)
-            # nudge_message = self.send_nudge_message(user)
             event_message = self.create_message(False, "Event ")
         else:
             event_user = self.prep_data(asdict(self.input), asdict(event_user))
