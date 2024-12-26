@@ -35,6 +35,7 @@ class Compute:
     def defaults(self, user_data: dict) -> dict:
         user_data['active'] = True
         user_data['isBusy'] = False
+        user_data['isBlocked'] = False
         user_data['isPaidUser'] = False
         user_data['wa_opt_out'] = False
         user_data['numberOfGames'] = 0
