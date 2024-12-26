@@ -28,8 +28,12 @@ class Compute:
         for field in date_fields:
             event_data[field] = Common.string_to_date(event_data, field)
 
-        if "sub_category" in event_data and isinstance(event_data["sub_category"], str):
-            event_data["sub_category"] = ObjectId(event_data["sub_category"])
+        if "sub_category" in event_data:
+            if isinstance(event_data["sub_category"], list):
+                event_data["sub_category"] = [
+                    ObjectId(item) if isinstance(item, str) else item
+                    for item in event_data["sub_category"]
+                ]
 
         if new_event:
             event_data["createdAt"] = self.common.current_time
