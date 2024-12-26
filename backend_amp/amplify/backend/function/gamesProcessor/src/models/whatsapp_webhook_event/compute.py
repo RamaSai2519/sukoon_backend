@@ -126,7 +126,6 @@ class Compute:
         return context_id, screen_0_recommend_0
 
     def chat(self, phoneNumber: str, body: str) -> str:
-        # url = config.MARK_URL + '/flask/chat'
         url = config.ARK_URL + '/ark'
         payload = {
             'phoneNumber': phoneNumber, 'prompt': body,
@@ -186,9 +185,10 @@ class Compute:
         if not user_id:
             user_id = self.create_lead(phoneNumber)
 
-        gpt_response = self.chat(phoneNumber, body)
-        reply_response = self.send_reply(from_number, gpt_response)
-        print(reply_response.text, 'reply_response')
+        if not user.get('isBlocked', False):
+            gpt_response = self.chat(phoneNumber, body)
+            reply_response = self.send_reply(from_number, gpt_response)
+            print(reply_response.text, 'reply_response')
 
         self.create_user_webhook_message_id(body, user_id, from_number, name)
 
