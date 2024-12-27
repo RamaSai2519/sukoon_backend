@@ -34,7 +34,7 @@ class Compute:
         if self.input.filter_field == '_id':
             query['_id'] = ObjectId(self.input.filter_value)
 
-        cursor = self.histories_collection.find(query).sort('_id', -1)
+        cursor = self.histories_collection.find(query).sort('updatedAt', -1)
         paginated_cursor = Common.paginate_cursor(
             cursor, int(self.input.page), int(self.input.size))
         histories = list(paginated_cursor)
