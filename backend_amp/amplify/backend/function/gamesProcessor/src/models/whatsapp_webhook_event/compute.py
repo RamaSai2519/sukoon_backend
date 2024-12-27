@@ -153,6 +153,18 @@ class Compute:
 
         return response
 
+    def handle_static_replies(self, user: dict, body: str) -> str:
+        stop_promotions = 'stop promotions'
+        if stop_promotions in body.lower().strip():
+            user_collection = get_user_collection()
+            user_collection.update_one(
+                {'_id': user.get('_id')},
+                {'$set': {'wa_opt_out': True}}
+            )
+            return 'You have successfully unsubscribed from promotions.'
+        else:
+            return None
+
     def compute(self) -> Output:
         body, from_number = self._get_message_body_and_phoneNumber_from_message()
         if not body:
@@ -186,8 +198,12 @@ class Compute:
             user_id = self.create_lead(phoneNumber)
 
         if not user.get('isBlocked', False):
-            gpt_response = self.chat(phoneNumber, body)
-            reply_response = self.send_reply(from_number, gpt_response)
+            static_reply = self.handle_static_replies(user, body)
+            if static_reply:
+                reply_response = self.send_reply(from_number, static_reply)
+            else:
+                gpt_response = self.chat(phoneNumber, body)
+                reply_response = self.send_reply(from_number, gpt_response)
             print(reply_response.text, 'reply_response')
 
         self.create_user_webhook_message_id(body, user_id, from_number, name)
