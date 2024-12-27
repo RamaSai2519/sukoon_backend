@@ -15,13 +15,12 @@ class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
 
-    def get_user_id_from_number(self, phone_number):
+    def get_user(self, phone_number):
         user_collection = get_user_collection()
         user = user_collection.find_one({"phoneNumber": phone_number})
         if not user:
             return None
-        user_id = user.get("_id")
-        return user_id
+        return user
 
     def create_user_notification_message_id(self, message_id, status, user_id):
         user_collection = get_user_notification_collection()
@@ -58,8 +57,17 @@ class Compute:
         )
         return response
 
-    def compute(self):
-        user_id = self.get_user_id_from_number(self.input.phone_number)
+    def compute(self) -> Output:
+        user = self.get_user(self.input.phone_number)
+        if user:
+            user_wa = user.get('wa_opt_out', False)
+            if user_wa:
+                return Output(
+                    output_details={},
+                    output_status=OutputStatus.SUCCESS,
+                    output_message="User has opted out of whatsapp notifications"
+                )
+        user_id = user.get('_id', None) if user else None
 
         parameters = self.input.parameters
         for key, value in parameters.items():
