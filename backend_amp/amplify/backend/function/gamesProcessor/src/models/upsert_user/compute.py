@@ -57,8 +57,11 @@ class Compute:
             user_data = self.defaults(user_data)
         user_data.pop('refCode', None)
 
-        user_data['profileCompleted'] = bool(
-            user_data.get('name') and user_data.get('birthDate'))
+        user_data['profileCompleted'] = True
+        man_fields = ['birthDate', 'city', 'name']
+        for field in man_fields:
+            if field not in user_data or field in ['', None]:
+                user_data['profileCompleted'] = False
 
         if user_data.get('profileCompleted') and (not prev_user or not prev_user.get('refCode')):
             user_data['refCode'] = self.generate_referral_code(
