@@ -28,7 +28,7 @@ class Compute:
         print(response.text)
 
     def determine_refSource(self, body: str) -> str:
-        query = {'message': body.lower().strip()}
+        query = {'message': body.strip()}
         ref = self.refs_collection.find_one(query)
         return ref.get('source', 'wa_webhook') if ref else 'wa_webhook'
 
