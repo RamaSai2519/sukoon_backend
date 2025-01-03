@@ -4,14 +4,18 @@ from bson import ObjectId
 from datetime import datetime
 from shared.configs import CONFIG as config
 from shared.models.constants import OutputStatus
+from shared.db.whatsapp import get_wa_refs_collection
 from models.whatsapp_webhook_event.slack import WASlackNotifier
 from shared.models.interfaces import WhatsappWebhookEventInput as Input, Output
-from shared.db.users import get_user_collection, get_user_webhook_messages_collection, get_user_notification_collection, get_user_whatsapp_feedback_collection, get_user_notification_collection
+from shared.db.users import get_user_collection, get_user_webhook_messages_collection, get_user_notification_collection, get_user_whatsapp_feedback_collection
 
 
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
+        self.users_collection = get_user_collection()
+        self.refs_collection = get_wa_refs_collection()
+        self.notifications_collection = get_user_notification_collection()
 
     def _send_whatsapp_message(self, parameters, phoneNumber, template_name) -> None:
         url = config.URL + '/actions/send_whatsapp'
@@ -23,16 +27,21 @@ class Compute:
         response = requests.post(url, json=payload)
         print(response.text)
 
-    def create_lead(self, phoneNumber: str) -> Output:
+    def determine_refSource(self, body: str) -> str:
+        query = {'message': body.lower().strip()}
+        ref = self.refs_collection.find_one(query)
+        return ref.get('source', 'wa_webhook') if ref else 'wa_webhook'
+
+    def create_lead(self, phoneNumber: str, refSource: str) -> Output:
         url = config.URL + '/actions/user'
-        payoad = {'phoneNumber': phoneNumber, 'refSource': 'wa_webhook'}
+        payoad = {'phoneNumber': phoneNumber, 'refSource': refSource}
         response = requests.post(url, json=payoad)
         user_id = Output(**response.json()).output_details.get('_id', None)
         return ObjectId(user_id)
 
     def get_user_id_from_number(self, phoneNumber: str) -> dict:
-        user_collection = get_user_collection()
-        user = user_collection.find_one({'phoneNumber': phoneNumber})
+        query = {'phoneNumber': phoneNumber}
+        user = self.users_collection.find_one(query)
         return user
 
     def create_user_webhook_message_id(self, body, user_id, from_number, name) -> None:
@@ -86,12 +95,11 @@ class Compute:
         return message_id, status_value
 
     def update_user_notification_status(self, message_id, status) -> None:
-        user_notification_collection = get_user_notification_collection()
-        notification = user_notification_collection.find_one(
+        notification = self.notifications_collection.find_one(
             {'messageId': message_id})
         if notification:
             notification_id = notification.get('_id')
-            user_notification_collection.update_one(
+            self.notifications_collection.update_one(
                 {'_id': ObjectId(notification_id)},
                 {'$set': {'notification_status': status}},
             )
@@ -156,11 +164,9 @@ class Compute:
     def handle_static_replies(self, user: dict, body: str) -> str:
         stop_promotions = 'stop promotions'
         if stop_promotions in body.lower().strip():
-            user_collection = get_user_collection()
-            user_collection.update_one(
-                {'_id': user.get('_id')},
-                {'$set': {'wa_opt_out': True}}
-            )
+            query = {'_id': user.get('_id')}
+            projection = {'$set': {'wa_opt_out': True}}
+            self.users_collection.update_one(query, projection)
             return 'You have successfully unsubscribed from promotions.'
         else:
             return None
@@ -170,8 +176,8 @@ class Compute:
         if not body:
             context_id, screen_0_recommend_0 = self._get_feedback_values()
             if screen_0_recommend_0:
-                message = get_user_notification_collection().find_one(
-                    {'messageId': context_id})
+                query = {'messageId': context_id}
+                message = self.notifications_collection.find_one(query)
                 if message:
                     request_meta = json.loads(message.get('requestMeta', ''))
                     sarathi_id = request_meta.get('sarathiId', '')
@@ -195,7 +201,8 @@ class Compute:
         user_id = user.get('_id', None) if user else None
         name = user.get('name', 'Unknown') if user else 'Unknown'
         if not user_id:
-            user_id = self.create_lead(phoneNumber)
+            refSource = self.determine_refSource(body)
+            user_id = self.create_lead(phoneNumber, refSource)
 
         if not user.get('isBlocked', False):
             static_reply = self.handle_static_replies(user, body)
