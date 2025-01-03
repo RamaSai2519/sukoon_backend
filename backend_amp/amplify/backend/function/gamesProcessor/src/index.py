@@ -1,10 +1,11 @@
 import awsgi
-from flask import Flask
 from flask_cors import CORS
 from flask_restful import Api
 from services.controller import *
+from flask import Flask, Response
 from flask_jwt_extended import JWTManager
 from shared.configs import CONFIG as config
+from uniservices.after_request import Handler
 
 
 app = Flask(__name__)
@@ -104,7 +105,12 @@ api.add_resource(CouponRewardService, '/actions/coupon_reward')
 api.add_resource(CalculateWinnerService, '/actions/calculate_winner')
 
 
-def handler(event, context):
+@app.after_request
+def handle_after_request(response: Response) -> Response:
+    return Handler(response).handle_after_request()
+
+
+def handler(event, context) -> dict:
     print(event)
     return awsgi.response(app, event, context)
 
