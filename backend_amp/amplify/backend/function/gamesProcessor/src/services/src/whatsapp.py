@@ -2,13 +2,15 @@ import json
 import dataclasses
 from flask import request
 from flask_restful import Resource
+from models.get_wa_refs.main import GetWaRefs
 from models.get_wa_options.main import WaOptions
+from models.upsert_wa_ref.main import UpsertWaRef
 from models.get_wa_history.main import GetWaHistory
 from models.handle_admin_wa.main import AdminWhatsapp
 from models.send_whatsapp_message.main import SendWhatsappMessage
 from models.whatsapp_webhook_event.main import WhatsappWebhookEvent
 from models.verify_whatsapp_webhook.main import VerifyWhatsappWebhook
-from shared.models.interfaces import WhtasappMessageInput, GetWhatsappWebhookInput, WhatsappWebhookEventInput, GetWaHistoryInput, WaOptionsInput, AdminWaInput
+from shared.models.interfaces import WhtasappMessageInput, GetWhatsappWebhookInput, WhatsappWebhookEventInput, GetWaHistoryInput, WaOptionsInput, AdminWaInput, UpsertWaRefInput, GetWaRefsInput
 
 
 class WhatsappMessageService(Resource):
@@ -70,6 +72,25 @@ class AdminWhatsappService(Resource):
         input = json.loads(request.get_data())
         input = AdminWaInput(**input)
         output = AdminWhatsapp(input).process()
+        output = dataclasses.asdict(output)
+
+        return output
+
+
+class WhatsappRefService(Resource):
+
+    def post(self) -> dict:
+        input = json.loads(request.get_data())
+        input = UpsertWaRefInput(**input)
+        output = UpsertWaRef(input).process()
+        output = dataclasses.asdict(output)
+
+        return output
+
+    def get(self) -> dict:
+        input_params = request.args
+        input = GetWaRefsInput(**input_params)
+        output = GetWaRefs(input).process()
         output = dataclasses.asdict(output)
 
         return output
