@@ -55,6 +55,7 @@ api.add_resource(CashfreeWebhookService, '/actions/cashfree_webhook')
 api.add_resource(CreatePaymentOrderService, '/actions/create_payment_order')
 
 # WhatsApp Routes
+api.add_resource(WhatsappRefService, '/actions/wa_ref')
 api.add_resource(WhatsappWebhookService, '/actions/webhooks')
 api.add_resource(WhatsappMessageService, '/actions/send_whatsapp')
 
