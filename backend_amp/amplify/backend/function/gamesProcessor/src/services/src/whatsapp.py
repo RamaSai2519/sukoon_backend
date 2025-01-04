@@ -9,11 +9,12 @@ from shared.models.constants import OutputStatus
 from models.upsert_wa_ref.main import UpsertWaRef
 from models.get_wa_history.main import GetWaHistory
 from models.handle_admin_wa.main import AdminWhatsapp
+from models.get_wa_templates.main import GetWaTemplates
 from models.upsert_wa_templates.main import UpsertWaTemplates
 from models.send_whatsapp_message.main import SendWhatsappMessage
 from models.whatsapp_webhook_event.main import WhatsappWebhookEvent
 from models.verify_whatsapp_webhook.main import VerifyWhatsappWebhook
-from shared.models.interfaces import WhtasappMessageInput, GetWhatsappWebhookInput, WhatsappWebhookEventInput, GetWaHistoryInput, WaOptionsInput, AdminWaInput, UpsertWaRefInput, GetWaRefsInput, Output
+from shared.models.interfaces import WhtasappMessageInput, GetWhatsappWebhookInput, WhatsappWebhookEventInput, GetWaHistoryInput, WaOptionsInput, AdminWaInput, UpsertWaRefInput, GetWaRefsInput, Output, GetWaTemplatesInput
 
 
 class WhatsappMessageService(Resource):
@@ -149,6 +150,14 @@ class WhatsappTemplateService(Resource):
                 output_message=f'Invalid value passed: {str(e).lower()}'
             ).__dict__
         output = UpsertWaTemplates(input).process()
+        output = dataclasses.asdict(output)
+
+        return output
+
+    def get(self) -> dict:
+        input_params = request.args
+        input = GetWaTemplatesInput(**input_params)
+        output = GetWaTemplates(input).process()
         output = dataclasses.asdict(output)
 
         return output
