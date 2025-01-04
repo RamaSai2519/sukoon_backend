@@ -4,6 +4,7 @@ from models.handle_call_job.main import CallJobHandler
 from models.handle_call_job.wa_notify import WAHandler
 from shared.db.experts import get_experts_collections
 from models.handle_wa_job.main import WAJobHandler
+from shared.db.misc import get_counters_collection
 from shared.configs import CONFIG as config
 from shared.models.common import Common
 from datetime import timedelta
@@ -17,6 +18,7 @@ class Compute:
         self.collection = get_schedules_collection()
         self.now_time = Common.get_current_utc_time()
         self.experts_collection = get_experts_collections()
+        self.counters_collection = get_counters_collection()
 
     def get_lower_time_str(self) -> tuple:
         upper_bound = self.now_time + timedelta(minutes=15)
@@ -72,6 +74,28 @@ class Compute:
                 job = Common.clean_dict(job, Schedule)
                 job = Schedule(**job)
             elif job['job_type'] == "WA":
+                query = {'name': 'wa_schedules'}
+                doc = self.counters_collection.find_one(query)
+                if not doc:
+                    doc = {
+                        'name': 'wa_schedules',
+                        'max_count': 200,
+                        'current_count': 0,
+                        'date': self.now_time.strftime("%Y-%m-%d")
+                    }
+                    self.counters_collection.insert_one(doc)
+                max_count = doc['max_count']
+                current_count = doc['current_count']
+                date = doc['date']
+                if date != self.now_time.strftime("%Y-%m-%d"):
+                    doc['date'] = self.now_time.strftime("%Y-%m-%d")
+                    doc['current_count'] = 0
+                    self.counters_collection.update_one(query, {"$set": doc})
+                    current_count = 0
+                if current_count >= max_count:
+                    continue
+                doc['current_count'] += 1
+                self.counters_collection.update_one(query, {"$set": doc})
                 job = Common.clean_dict(job, WASchedule)
                 payload = job['payload']
                 payload = Common.clean_dict(payload, WhtasappMessageInput)
