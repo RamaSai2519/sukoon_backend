@@ -17,8 +17,32 @@ class Compute:
         self.common = Common()
         self.collection = get_schedules_collection()
         self.now_time = Common.get_current_utc_time()
+        self.counter_query = {'name': 'wa_schedules'}
         self.experts_collection = get_experts_collections()
         self.counters_collection = get_counters_collection()
+
+    def check_wa_counter(self) -> tuple:
+        query = self.counter_query
+        doc = self.counters_collection.find_one(query)
+        if not doc:
+            doc = {
+                'name': 'wa_schedules',
+                'max_count': 200,
+                'current_count': 0,
+                'date': self.now_time.strftime("%Y-%m-%d")
+            }
+            self.counters_collection.insert_one(doc)
+        max_count = doc['max_count']
+        current_count = doc['current_count']
+        date = doc['date']
+        if date != self.now_time.strftime("%Y-%m-%d"):
+            doc['date'] = self.now_time.strftime("%Y-%m-%d")
+            doc['current_count'] = 0
+            self.counters_collection.update_one(query, {"$set": doc})
+            current_count = 0
+        if current_count < max_count:
+            return True, doc
+        return False, doc
 
     def get_lower_time_str(self) -> tuple:
         upper_bound = self.now_time + timedelta(minutes=15)
@@ -43,6 +67,9 @@ class Compute:
             "job_time": {"$lt": self.now_time},
             "status": "PENDING"
         }
+        allowed, doc = self.check_wa_counter()
+        if not allowed:
+            query['job_type'] = "CALL"
 
         schedules = self.collection.find(query)
         return list(schedules)
@@ -74,27 +101,11 @@ class Compute:
                 job = Common.clean_dict(job, Schedule)
                 job = Schedule(**job)
             elif job['job_type'] == "WA":
-                query = {'name': 'wa_schedules'}
-                doc = self.counters_collection.find_one(query)
-                if not doc:
-                    doc = {
-                        'name': 'wa_schedules',
-                        'max_count': 200,
-                        'current_count': 0,
-                        'date': self.now_time.strftime("%Y-%m-%d")
-                    }
-                    self.counters_collection.insert_one(doc)
-                max_count = doc['max_count']
-                current_count = doc['current_count']
-                date = doc['date']
-                if date != self.now_time.strftime("%Y-%m-%d"):
-                    doc['date'] = self.now_time.strftime("%Y-%m-%d")
-                    doc['current_count'] = 0
-                    self.counters_collection.update_one(query, {"$set": doc})
-                    current_count = 0
-                if current_count >= max_count:
+                allowed, doc = self.check_wa_counter()
+                if not allowed:
                     continue
                 doc['current_count'] += 1
+                query = self.counter_query
                 self.counters_collection.update_one(query, {"$set": doc})
                 job = Common.clean_dict(job, WASchedule)
                 payload = job['payload']
