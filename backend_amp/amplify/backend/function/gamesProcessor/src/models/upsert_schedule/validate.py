@@ -1,4 +1,4 @@
-from shared.models.interfaces import UpsertScheduleInput as Input
+from shared.models.interfaces import UpsertScheduleInput as Input, WhtasappMessageInput
 from shared.models.constants import not_interested_statuses
 from shared.db.users import get_meta_collection
 from datetime import datetime
@@ -17,7 +17,12 @@ class Validator:
 
     def validate_mandatory_fields(self) -> tuple:
         mandatory_fields = ['job_time', 'job_type', 'initiatedBy',
-                            'status', 'user_id', 'expert_id']
+                            'status']
+        if self.input.job_type == 'WA':
+            mandatory_fields.append('payload')
+        elif self.input.job_type == 'CALL':
+            mandatory_fields.append('user_id')
+            mandatory_fields.append('expert_id')
         for field in mandatory_fields:
             if not getattr(self.input, field):
                 return False, f"{field.replace('_', ' ').capitalize()} is mandatory"
@@ -53,12 +58,26 @@ class Validator:
 
         return True, ""
 
+    def validate_payload(self) -> tuple:
+        try:
+            WhtasappMessageInput(**self.input.payload)
+        except Exception:
+            return False, "Invalid payload"
+
+        return True, ""
+
     def validate_input(self) -> tuple:
         if self.input.isDeleted and self.input._id:
             return True, ""
 
-        funcs = [self.validate_mandatory_fields, self.validate_ids,
-                 self.validate_job_time_and_status, self.validate_user]
+        funcs = [self.validate_mandatory_fields,
+                 self.validate_job_time_and_status]
+        if self.input.job_type == 'CALL':
+            funcs.append(self.validate_user)
+            funcs.append(self.validate_ids)
+        elif self.input.job_type == 'WA':
+            funcs.append(self.validate_payload)
+
         for func in funcs:
             is_valid, message = func()
             if not is_valid:
