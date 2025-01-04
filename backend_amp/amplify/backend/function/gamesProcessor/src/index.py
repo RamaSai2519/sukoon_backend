@@ -58,6 +58,7 @@ api.add_resource(CreatePaymentOrderService, '/actions/create_payment_order')
 # WhatsApp Routes
 api.add_resource(WhatsappRefService, '/actions/wa_ref')
 api.add_resource(WhatsappWebhookService, '/actions/webhooks')
+api.add_resource(WhatsappTemplateService, '/actions/wa_template')
 api.add_resource(WhatsappMessageService, '/actions/send_whatsapp')
 
 # OTP Routes

@@ -1,9 +1,10 @@
-from .constants import WhatsappNotificationTemplates
+from shared.db.whatsapp import get_whatsapp_templates_collection
 
 
 class WhatsappNotificationTemplateSetter:
     def __init__(self) -> None:
         self._template = {}
+        self.collection = get_whatsapp_templates_collection()
 
     @property
     def template(self):
@@ -13,7 +14,10 @@ class WhatsappNotificationTemplateSetter:
     def template(self, data):
         parameters, template_type = data
 
-        template = getattr(WhatsappNotificationTemplates(), template_type)
+        query = {"template_name": template_type}
+        template = self.collection.find_one(query)
+        if not template:
+            raise Exception("Template not found")
         temp_template = template["template"]
         components = temp_template.get("components", []) or []
         for component in components:
