@@ -14,7 +14,16 @@ class Compute:
         doc = asdict(self.input)
         doc = Common.convert_enums_to_values(doc)
         doc = Common.filter_none_values(doc)
+
+        query = {"template_name": self.input.template_name}
+        template = self.collection.find_one_and_update(
+            filter=query,
+            update={"$set": doc},
+            upsert=True,
+            return_document=True
+        )
+
         return Output(
-            output_details=doc,
-            output_message="Successfully upserted whatsapp template",
+            output_details=Common.jsonify(template),
+            output_message="Successfully upserted whatsapp template"
         )
