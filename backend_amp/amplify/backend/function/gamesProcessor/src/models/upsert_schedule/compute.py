@@ -28,8 +28,11 @@ class Compute:
             if isinstance(new_data.get(field), str):
                 new_data[field] = ObjectId(new_data[field])
 
+        if isinstance(new_data.get('job_time'), str):
+            new_data['job_time'] = datetime.strptime(
+                new_data['job_time'], TimeFormats.AWS_TIME_FORMAT)
+
         new_data = Common.filter_none_values(new_data)
-        new_data['isDeleted'] = False
         return new_data
 
     def get_old_data(self) -> dict:
