@@ -31,6 +31,7 @@ class Compute:
 
     def prep_query(self) -> dict:
         query = {'isDeleted': True if self.input.isDeleted == 'true' else False}
+        query['job_type'] = 'CALL'
         if self.input.pending == 'true':
             query['status'] = {'$in': ['PENDING', 'WAPENDING']}
         if self.input.filter_field == 'expert':
