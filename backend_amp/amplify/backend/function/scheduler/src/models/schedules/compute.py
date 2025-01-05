@@ -9,6 +9,7 @@ from shared.configs import CONFIG as config
 from shared.models.common import Common
 from datetime import timedelta
 from typing import Union
+import time
 
 
 class Compute:
@@ -112,6 +113,7 @@ class Compute:
                 payload = Common.clean_dict(payload, WhtasappMessageInput)
                 job['payload'] = WhtasappMessageInput(**payload)
                 job = WASchedule(**job)
+                time.sleep(1)
 
             print(f"Executing Job: {job._id}")
             print(f"Current Time: {self.now_time}")
