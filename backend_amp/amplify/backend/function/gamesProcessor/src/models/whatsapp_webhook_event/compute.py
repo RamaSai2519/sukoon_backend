@@ -1,5 +1,6 @@
 import json
 import requests
+import threading
 from bson import ObjectId
 from datetime import datetime
 from shared.configs import CONFIG as config
@@ -137,13 +138,10 @@ class Compute:
         url = config.ARK_URL + '/ark'
         payload = {
             'phoneNumber': phoneNumber, 'prompt': body,
-            'context': 'wa_webhook'
+            'context': 'wa_webhook', 'send_reply': True
         }
-        response = requests.post(url, json=payload)
-        response = Output(**response.json())
-        reply = response.output_details.get('response')
-
-        return reply
+        requests.post(url, json=payload)
+        print('ARK will respond to the user.')
 
     def send_reply(self, from_number: str, text: str) -> requests.Response:
         url = config.WHATSAPP_API['URL']
@@ -208,10 +206,10 @@ class Compute:
             static_reply = self.handle_static_replies(user, body)
             if static_reply:
                 reply_response = self.send_reply(from_number, static_reply)
+                print(reply_response.text, 'reply_response')
             else:
-                gpt_response = self.chat(phoneNumber, body)
-                reply_response = self.send_reply(from_number, gpt_response)
-            print(reply_response.text, 'reply_response')
+                threading.Thread(target=self.chat, args=(
+                    phoneNumber, body)).start()
 
         self.create_user_webhook_message_id(body, user_id, from_number, name)
 
