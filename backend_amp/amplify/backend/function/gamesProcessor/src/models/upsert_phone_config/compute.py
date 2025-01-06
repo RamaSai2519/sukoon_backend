@@ -1,5 +1,4 @@
 from bson import ObjectId
-from datetime import datetime
 from dataclasses import asdict
 from shared.models.common import Common
 from shared.models.constants import OutputStatus
@@ -13,7 +12,7 @@ class Compute:
         self.configs_collection = get_phone_configs_collection()
 
     def pop_immutable_fields(self, new_data: dict) -> dict:
-        fields = ["_id", "user_id", "createdDate"]
+        fields = ["_id", "user_id", "createdAt", "source"]
         for field in fields:
             new_data.pop(field, None)
         return new_data
@@ -25,7 +24,7 @@ class Compute:
         return new_data
 
     def set_defaults(self, new_data: dict) -> dict:
-        new_data["createdDate"] = datetime.now()
+        new_data["createdAt"] = Common.get_current_utc_time()
         return new_data
 
     def prep_data(self, new_data: dict, old_data: dict = None) -> dict:
