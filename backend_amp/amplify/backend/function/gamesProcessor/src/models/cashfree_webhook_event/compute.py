@@ -4,9 +4,9 @@ import requests
 from bson import ObjectId
 from datetime import datetime
 from shared.configs import CONFIG as config
-from shared.db.events import get_events_collection
 from shared.db.users import get_user_collection, get_user_payment_collection
 from shared.models.interfaces import CashfreeWebhookEventInput as Input, Output
+from shared.db.events import get_events_collection, get_contribute_events_collection
 from shared.models.constants import OutputStatus, application_json_header, pay_types
 
 
@@ -18,6 +18,7 @@ class Compute:
         self.headers = application_json_header
         self.events_collection = get_events_collection()
         self.payments_collection = get_user_payment_collection()
+        self.contribute_events_collection = get_contribute_events_collection()
 
     def get_user_id_from_number(self) -> str:
         customer_details = self.payment_data.get("customer_details")
@@ -100,7 +101,10 @@ class Compute:
     def get_event(self, event_id: str) -> dict:
         event = self.events_collection.find_one({"slug": event_id})
         if not event:
-            return None
+            event = self.contribute_events_collection.find_one(
+                {"slug": event_id})
+            if not event:
+                return None
         return event
 
     def determine_description(self, pay_type: str, event_id: str):
@@ -123,7 +127,7 @@ class Compute:
             message = "User registered for event"
         return message
 
-    def send_event_details(self):
+    def send_event_details(self) -> str:
         url = config.URL + "/actions/send_whatsapp"
         payload = {
             'phone_number': self.phoneNumber,

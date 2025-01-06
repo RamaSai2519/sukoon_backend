@@ -23,10 +23,6 @@ class Compute:
                 new_data[key] = value
         return new_data
 
-    def set_defaults(self, new_data: dict) -> dict:
-        new_data["createdAt"] = Common.get_current_utc_time()
-        return new_data
-
     def prep_data(self, new_data: dict, old_data: dict = None) -> dict:
         new_data = {k: v for k, v in new_data.items() if v is not None}
         if old_data:
@@ -34,7 +30,7 @@ class Compute:
             new_data = self.merge_old_data(new_data, old_data)
             new_data["updatedAt"] = Common.get_current_utc_time()
         else:
-            new_data = self.set_defaults(new_data)
+            new_data["createdAt"] = Common.get_current_utc_time()
             new_data["user_id"] = ObjectId(self.input.user_id)
         return new_data
 
