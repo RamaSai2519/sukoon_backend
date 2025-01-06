@@ -1,6 +1,5 @@
-from shared.db.events import get_events_collection, get_contribute_events_collection
+from shared.db.events import get_events_collection, get_contribute_events_collection, get_event_users_collection, get_contirbute_event_users_collection
 from shared.models.interfaces import GetEventsInput as Input, Output
-from shared.db.events import get_event_users_collection
 from shared.models.constants import OutputStatus
 from pymongo.collection import Collection
 from shared.models.common import Common
@@ -14,6 +13,7 @@ class Compute:
         self.projection = {"_id": 0, "lastModifiedBy": 0}
         self.events_collection = self.determine_collection()
         self.event_users_collection = get_event_users_collection()
+        self.contirbute_event_users_collection = get_contirbute_event_users_collection()
         self.event_categories = ["support_groups",
                                  "active_together", "wellness_connect"]
 
@@ -57,13 +57,18 @@ class Compute:
         return events
 
     def mark_registered_events(self, events: list) -> list:
-        query = {'phoneNumber': self.input.phoneNumber}
-        slugs = self.event_users_collection.distinct('slug', query)
+        if self.input.events_type and self.input.events_type.lower() == "contribute":
+            query = {'user_id': ObjectId(self.input.user_id)}
+            collection = self.contirbute_event_users_collection
+            slug_field = 'slug'
+        else:
+            query = {'phoneNumber': self.input.phoneNumber}
+            collection = self.event_users_collection
+            slug_field = 'source'
+
+        slugs = collection.distinct(slug_field, query)
         for event in events:
-            if event['slug'] in slugs:
-                event['isRegistered'] = True
-            else:
-                event['isRegistered'] = False
+            event['isRegistered'] = event['slug'] in slugs
         return events
 
     def compute(self) -> Output:
