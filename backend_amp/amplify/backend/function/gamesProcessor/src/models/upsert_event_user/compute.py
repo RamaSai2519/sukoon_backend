@@ -107,13 +107,13 @@ class Compute:
             'template_name': 'EVENT_REGISTRATION_CONFIRMATION',
             'parameters': {
                 'user_name': user.name,
-                'topic_name': self.event.get("mainTitle"),
-                'date_and_time': self.event.get("startEventDate", "").strftime('%d %b %Y %H:%M'),
-                'custom_text': self.event.get("subTitle"),
-                'speakers_name': self.event.get("guestSpeaker"),
-                'event_name': self.event.get("mainTitle"),
-                'image_link': self.event.get("imageUrl"),
-                'webinar_link': self.event.get("meetingLink"),
+                'topic_name': event.get("mainTitle"),
+                'date_and_time': event.get("startEventDate", "").strftime('%d %b %Y %H:%M'),
+                'custom_text': event.get("subTitle"),
+                'speakers_name': event.get("guestSpeaker"),
+                'event_name': event.get("mainTitle"),
+                'image_link': event.get("imageUrl"),
+                'webinar_link': event.get("meetingLink"),
                 'phone_number': "+918660610840",
                 'whatsapp_community_link': "https://sukoonunlimited.com/wa-join-community"
             }
@@ -145,6 +145,7 @@ class Compute:
                 event_user, self.event_users_collection)
             event_message = self.create_message(False, "Event ")
             event = self.find_event()
+
             if event.isPremiumUserOnly == False:
                 confirmation_message = self.send_confirmation(user, event)
         else:
