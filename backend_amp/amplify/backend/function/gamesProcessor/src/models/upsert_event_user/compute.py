@@ -100,6 +100,31 @@ class Compute:
                 old_data[field] = Common.string_to_date(old_data, field)
         return old_data
 
+    def send_confirmation(self, user: User, event: Event) -> str:
+        url = config.URL + "/actions/send_whatsapp"
+        payload = {
+            'phone_number': user.phoneNumber,
+            'template_name': 'EVENT_REGISTRATION_CONFIRMATION',
+            'parameters': {
+                'user_name': user.name,
+                'topic_name': self.event.get("mainTitle"),
+                'date_and_time': self.event.get("startEventDate", "").strftime('%d %b %Y %H:%M'),
+                'custom_text': self.event.get("subTitle"),
+                'speakers_name': self.event.get("guestSpeaker"),
+                'event_name': self.event.get("mainTitle"),
+                'image_link': self.event.get("imageUrl"),
+                'webinar_link': self.event.get("meetingLink"),
+                'phone_number': "+918660610840",
+                'whatsapp_community_link': "https://sukoonunlimited.com/wa-join-community"
+            }
+        }
+        response = requests.post(url, json=payload)
+        response_dict = response.json()
+        if "output_status" in response_dict and response_dict.get("output_status") == "SUCCESS":
+            return "Event details sent"
+        print(response_dict)
+        return "Event details not sent"
+
     def compute(self) -> Output:
         user = self.find_user(self.input.phoneNumber)
         user_message = self.create_message(True)
@@ -113,11 +138,15 @@ class Compute:
             self.input.phoneNumber, self.input.source)
         event_message = self.create_message(True, "Event ")
         nudge_message = ""
+        confirmation_message = ""
         if not event_user:
             event_user = self.create_event_user(user)
             event_user = self.insert_event_user(
                 event_user, self.event_users_collection)
             event_message = self.create_message(False, "Event ")
+            event = self.find_event()
+            if event.isPremiumUserOnly == False:
+                confirmation_message = self.send_confirmation(user, event)
         else:
             event_user = self.prep_data(asdict(self.input), asdict(event_user))
             self.event_users_collection.update_one(
@@ -132,5 +161,5 @@ class Compute:
         return Output(
             output_details=Common.jsonify(event_user.__dict__),
             output_status=OutputStatus.SUCCESS,
-            output_message=f'{user_message}. {event_message}. {nudge_message}.'
+            output_message=f'{user_message}. {event_message}. {nudge_message}. {confirmation_message}'
         )

@@ -4,9 +4,9 @@ import requests
 from bson import ObjectId
 from datetime import datetime
 from shared.configs import CONFIG as config
-from shared.db.events import get_events_collection
 from shared.db.users import get_user_collection, get_user_payment_collection
 from shared.models.interfaces import CashfreeWebhookEventInput as Input, Output
+from shared.db.events import get_events_collection, get_contribute_events_collection
 from shared.models.constants import OutputStatus, application_json_header, pay_types
 
 
@@ -18,6 +18,7 @@ class Compute:
         self.headers = application_json_header
         self.events_collection = get_events_collection()
         self.payments_collection = get_user_payment_collection()
+        self.contribute_events_collection = get_contribute_events_collection()
 
     def get_user_id_from_number(self) -> str:
         customer_details = self.payment_data.get("customer_details")
@@ -100,7 +101,10 @@ class Compute:
     def get_event(self, event_id: str) -> dict:
         event = self.events_collection.find_one({"slug": event_id})
         if not event:
-            return None
+            event = self.contribute_events_collection.find_one(
+                {"slug": event_id})
+            if not event:
+                return None
         return event
 
     def determine_description(self, pay_type: str, event_id: str):
@@ -127,12 +131,18 @@ class Compute:
         url = config.URL + "/actions/send_whatsapp"
         payload = {
             'phone_number': self.phoneNumber,
-            'template_name': 'POST_EVENT_REGISTRATION',
+            'template_name': 'EVENT_REGISTRATION_CONFIRMATION',
             'parameters': {
                 'user_name': self.payment_data.get("customer_details").get("customer_name"),
+                'topic_name': self.event.get("mainTitle"),
                 'date_and_time': self.event.get("startEventDate", "").strftime('%d %b %Y %H:%M'),
+                'custom_text': self.event.get("subTitle"),
+                'speakers_name': self.event.get("guestSpeaker"),
                 'event_name': self.event.get("mainTitle"),
-                'zoom_link': self.event.get("meetingLink")
+                'image_link': self.event.get("imageUrl"),
+                'webinar_link': self.event.get("meetingLink"),
+                'phone_number': "+918660610840",
+                'whatsapp_community_link': "https://sukoonunlimited.com/wa-join-community"
             }
         }
         response = requests.post(url, json=payload)
