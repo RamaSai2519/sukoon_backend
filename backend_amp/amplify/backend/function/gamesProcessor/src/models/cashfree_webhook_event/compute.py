@@ -123,22 +123,16 @@ class Compute:
             message = "User registered for event"
         return message
 
-    def send_event_details(self):
+    def send_event_details(self) -> str:
         url = config.URL + "/actions/send_whatsapp"
         payload = {
             'phone_number': self.phoneNumber,
-            'template_name': 'EVENT_REGISTRATION_CONFIRMATION',
+            'template_name': 'POST_EVENT_REGISTRATION',
             'parameters': {
                 'user_name': self.payment_data.get("customer_details").get("customer_name"),
-                'topic_name': self.event.get("mainTitle"),
                 'date_and_time': self.event.get("startEventDate", "").strftime('%d %b %Y %H:%M'),
-                'custom_text': self.event.get("subTitle"),
-                'speakers_name': self.event.get("guestSpeaker"),
                 'event_name': self.event.get("mainTitle"),
-                'image_link': self.event.get("imageUrl"),
-                'webinar_link': self.event.get("meetingLink"),
-                'phone_number': "+918660610840",
-                'whatsapp_community_link': "https://sukoonunlimited.com/wa-join-community"
+                'zoom_link': self.event.get("meetingLink")
             }
         }
         response = requests.post(url, json=payload)
