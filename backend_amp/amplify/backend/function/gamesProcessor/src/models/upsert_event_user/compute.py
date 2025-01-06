@@ -145,7 +145,7 @@ class Compute:
                 event_user, self.event_users_collection)
             event_message = self.create_message(False, "Event ")
             event = self.find_event()
-            
+
             if event.isPremiumUserOnly == False:
                 confirmation_message = self.send_confirmation(user, event)
         else:
@@ -162,6 +162,5 @@ class Compute:
         return Output(
             output_details=Common.jsonify(event_user.__dict__),
             output_status=OutputStatus.SUCCESS,
-            output_message=f'{user_message}. {event_message}. {
-                nudge_message}. {confirmation_message}'
+            output_message=f'{user_message}. {event_message}. {nudge_message}. {confirmation_message}'
         )
