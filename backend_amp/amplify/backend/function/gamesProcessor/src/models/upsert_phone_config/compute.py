@@ -32,6 +32,7 @@ class Compute:
         if old_data:
             new_data = self.pop_immutable_fields(new_data)
             new_data = self.merge_old_data(new_data, old_data)
+            new_data["updatedAt"] = Common.get_current_utc_time()
         else:
             new_data = self.set_defaults(new_data)
             new_data["user_id"] = ObjectId(self.input.user_id)
