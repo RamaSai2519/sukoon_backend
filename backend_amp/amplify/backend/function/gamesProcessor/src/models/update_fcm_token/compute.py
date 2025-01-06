@@ -1,6 +1,7 @@
 from shared.models.interfaces import UpdateFCMTokenInput as Input, Output
-from shared.models.constants import OutputStatus
 from shared.db.users import get_user_fcm_token_collection
+from shared.models.constants import OutputStatus
+from shared.models.common import Common
 
 
 class Compute:
@@ -14,6 +15,7 @@ class Compute:
         user_fcm_token_data = {
             "userId": user_id,
             "fcmToken": fcm_token,
+            "createdAt": Common.get_current_utc_time(),
         }
         user_fcm_token_collection.insert_one(user_fcm_token_data)
 
