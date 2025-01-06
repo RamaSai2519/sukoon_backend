@@ -90,7 +90,7 @@ class Compute:
                 events = list(paginated_cursor)
                 events = [Common.jsonify(event) for event in events]
 
-        if self.input.phoneNumber:
+        if self.input.phoneNumber or self.input.user_id:
             events = self.mark_registered_events(events)
 
         total_events = self.events_collection.count_documents(query)
