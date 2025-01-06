@@ -1,5 +1,6 @@
 from shared.db.events import get_events_collection, get_contribute_events_collection
 from shared.models.interfaces import GetEventsInput as Input, Output
+from shared.db.events import get_event_users_collection
 from shared.models.constants import OutputStatus
 from pymongo.collection import Collection
 from shared.models.common import Common
@@ -12,6 +13,7 @@ class Compute:
         self.common = Common()
         self.projection = {"_id": 0, "lastModifiedBy": 0}
         self.events_collection = self.determine_collection()
+        self.event_users_collection = get_event_users_collection()
         self.event_categories = ["support_groups",
                                  "active_together", "wellness_connect"]
 
@@ -54,6 +56,16 @@ class Compute:
             events.extend(list(cursor))
         return events
 
+    def mark_registered_events(self, events: list) -> list:
+        query = {'phoneNumber': self.input.phoneNumber}
+        slugs = self.event_users_collection.distinct('slug', query)
+        for event in events:
+            if event['slug'] in slugs:
+                event['isRegistered'] = True
+            else:
+                event['isRegistered'] = False
+        return events
+
     def compute(self) -> Output:
         if self.input.slug is not None:
             query = {"slug": self.input.slug}
@@ -72,6 +84,9 @@ class Compute:
                     cursor, int(self.input.page), int(self.input.size))
                 events = list(paginated_cursor)
                 events = [Common.jsonify(event) for event in events]
+
+        if self.input.phoneNumber:
+            events = self.mark_registered_events(events)
 
         total_events = self.events_collection.count_documents(query)
 
