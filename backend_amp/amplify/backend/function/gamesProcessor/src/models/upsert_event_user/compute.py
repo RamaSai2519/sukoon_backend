@@ -107,13 +107,13 @@ class Compute:
             'template_name': 'EVENT_REGISTRATION_CONFIRMATION',
             'parameters': {
                 'user_name': user.name,
-                'topic_name': event.get("mainTitle"),
-                'date_and_time': event.get("startEventDate", "").strftime('%d %b %Y %H:%M'),
-                'custom_text': event.get("subTitle"),
-                'speakers_name': event.get("guestSpeaker"),
-                'event_name': event.get("mainTitle"),
-                'image_link': event.get("imageUrl"),
-                'webinar_link': event.get("meetingLink"),
+                'topic_name': event.mainTitle,
+                'date_and_time': event.startEventDate.strftime('%d %b %Y %H:%M'),
+                'custom_text': event.subTitle,
+                'speakers_name': event.guestSpeaker,
+                'event_name': event.mainTitle,
+                'image_link': event.imageUrl,
+                'webinar_link': event.meetingLink,
                 'phone_number': "+918660610840",
                 'whatsapp_community_link': "https://sukoonunlimited.com/wa-join-community"
             }
