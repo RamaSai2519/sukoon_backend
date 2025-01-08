@@ -122,7 +122,6 @@ class Compute:
         response_dict = response.json()
         if "output_status" in response_dict and response_dict.get("output_status") == "SUCCESS":
             return "Event details sent"
-        print(response_dict)
         return "Event details not sent"
 
     def compute(self) -> Output:
@@ -148,6 +147,8 @@ class Compute:
 
             if event.isPremiumUserOnly == False:
                 confirmation_message = self.send_confirmation(user, event)
+            elif event.isPremiumUserOnly == True and user.isPaidUser == True:
+                confirmation_message = self.send_confirmation(user, event)
         else:
             event_user = self.prep_data(asdict(self.input), asdict(event_user))
             self.event_users_collection.update_one(
@@ -159,8 +160,11 @@ class Compute:
 
         event_user = self.find_event_user(
             self.input.phoneNumber, self.input.source)
+        messages = [user_message, event_message,
+                    nudge_message, confirmation_message]
+        f_message = ". ".join([msg for msg in messages if msg])
         return Output(
             output_details=Common.jsonify(event_user.__dict__),
             output_status=OutputStatus.SUCCESS,
-            output_message=f'{user_message}. {event_message}. {nudge_message}. {confirmation_message}'
+            output_message=f_message
         )
