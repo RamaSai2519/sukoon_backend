@@ -83,18 +83,19 @@ class Compute:
             mobile_number, final_template
         )
         message_id = ""
-        status = "FAILED"
+        status = OutputStatus.FAILURE
 
         if response.status_code == HTTPStatus.OK.value:
             response_json = json.loads(response._content)
             message_id = (response_json.get("messages")[0]).get("id")
-            status = "SUCCESS"
+            status = OutputStatus.SUCCESS
         if user_id:
             self.create_user_notification_message_id(
                 message_id, status, user_id)
 
+        print(status, response.text)
         return Output(
             output_details={"response": response.text},
-            output_status=OutputStatus.SUCCESS,
+            output_status=status,
             output_message="Successfully sent whatsapp message"
         )
