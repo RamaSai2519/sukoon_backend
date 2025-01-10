@@ -64,8 +64,10 @@ class Compute:
                 user_data['profileCompleted'] = False
 
         if user_data.get('profileCompleted') and (not prev_user or not prev_user.get('refCode')):
-            user_data['refCode'] = self.generate_referral_code(
-                user_data['name'], user_data['phoneNumber'])
+            user_name = user_data.get('name', '') or ''
+            user_number = user_data.get('phoneNumber')
+            ref_code = self.generate_referral_code(user_name, user_number)
+            user_data['refCode'] = ref_code
 
         date_fields = ['createdDate', 'birthDate']
         for field in date_fields:
