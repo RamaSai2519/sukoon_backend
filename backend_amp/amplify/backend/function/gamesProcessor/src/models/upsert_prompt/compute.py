@@ -16,45 +16,37 @@ class Compute:
             query = {"context": self.input.context}
             doc = self.prompt_proposals_collection.find_one(query)
             if doc:
-                prompt = self.system_prompts_collection.update_one(
-                    query, {
-                        "$set": {
-                            "content": doc.get(
-                                "content", self.input.content)
-                        }
-                    }
+                content = doc.get("content", self.input.content)
+                prompt = self.system_prompts_collection.find_one_and_update(
+                    filter={"context": self.input.context},
+                    update={"$set": {"content": content}},
+                    upsert=True,
+                    return_document=True
+                )
+
+                if self.input.context == 'ark_main':
+                    now_date = Common.get_current_utc_time()
+                    now_date = now_date.strftime('%Y-%m-%d')
+                    query = {'createdAt': now_date}
+                    update = {'$set': {'history.0.content': self.input.content}}
+                    self.histories_collection.update_many(query, update)
+
+                self.prompt_proposals_collection.update_one(
+                    query, {"$set": {"approved": True}})
+                return Output(
+                    output_details=Common.jsonify(prompt),
+                    output_status=OutputStatus.SUCCESS,
+                    output_message="Successfully approved prompt"
                 )
             else:
-                prompt = self.system_prompts_collection.insert_one(
-                    {
-                        "context": self.input.context,
-                        "content": self.input.content
-                    }
+                return Output(
+                    output_status=OutputStatus.FAILURE,
+                    output_message="Prompt Proposal not found",
                 )
-
-            # prompt = self.system_prompts_collection.find_one_and_update(
-            #     filter={"context": self.input.context},
-            #     update={"$set": {"content": self.input.content}},
-            #     upsert=True,
-            #     return_document=True
-            # )
-
-            # if self.input.context == 'ark_main':
-            #     now_date = Common.get_current_utc_time()
-            #     now_date = now_date.strftime('%Y-%m-%d')
-            #     query = {'createdAt': now_date}
-            #     update = {'$set': {'history.0.content': self.input.content}}
-            #     self.histories_collection.update_many(query, update)
-
-            return Output(
-                output_details=Common.jsonify(prompt),
-                output_status=OutputStatus.SUCCESS,
-                output_message="Successfully upserted prompt"
-            )
 
         prompt = self.prompt_proposals_collection.find_one_and_update(
             filter={"context": self.input.context},
-            update={"$set": {"content": self.input.content}},
+            update={"$set": {"content": self.input.content, "approved": False}},
             upsert=True,
             return_document=True
         )
@@ -62,5 +54,5 @@ class Compute:
         return Output(
             output_details=Common.jsonify(prompt),
             output_status=OutputStatus.SUCCESS,
-            output_message="Successfully upserted prompt"
+            output_message="Successfully proposed prompt"
         )
