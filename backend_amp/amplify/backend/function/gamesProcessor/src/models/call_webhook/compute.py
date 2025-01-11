@@ -189,7 +189,6 @@ class Compute:
         call = self.find_call(callId)
         if not call:
             return Output(
-                output_details={},
                 output_status=OutputStatus.FAILURE,
                 output_message=f'Call not found with callId: {callId}'
             )
