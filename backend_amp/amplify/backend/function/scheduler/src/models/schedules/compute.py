@@ -46,7 +46,7 @@ class Compute:
         return False, doc
 
     def get_lower_time_str(self) -> tuple:
-        upper_bound = self.now_time + timedelta(minutes=15)
+        upper_bound = self.now_time + timedelta(minutes=30)
         lower_bound = upper_bound - timedelta(minutes=5)
 
         return upper_bound, lower_bound
