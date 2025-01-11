@@ -29,10 +29,10 @@ class Compute:
             'phone_number': phoneNumber,
             'template_name': 'CONTRIBUTE_UTILITY_USER_RESPONSE',
             'parameters': {
-                'user_name': user_name,
+                'user_name': user_name.split(' ')[0],
                 'event_name': event.get('name', 'Not Available'),
-                'role': '',
-                'address': event.get('company', 'Not Available'),
+                'role': event.get('description', 'Contact the below number').replace('#', ''),
+                'address': event.get('company', 'Contact the below number'),
                 'phone_number': event.get('phoneNumber', 'Not Available'),
             }
         }
