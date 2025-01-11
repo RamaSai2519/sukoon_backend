@@ -25,17 +25,20 @@ class Compute:
 
     def send_details(self, user_name: str, phoneNumber: str, event: dict) -> dict:
         url = config.URL + "/actions/send_whatsapp"
+        role: str = event.get('description', 'Contact the below number')
         payload = {
             'phone_number': phoneNumber,
-            'template_name': 'CONTRIBUTE_UTILITY_USER_RESPONSE',
+            'template_name': 'CONTRIBUTE_UTILITY_USER_RESPONSE_PROD',
             'parameters': {
-                'user_name': user_name.split(' ')[0],
-                'event_name': event.get('name', 'Not Available'),
-                'role': event.get('description', 'Contact the below number').replace('#', ''),
-                'address': event.get('company', 'Contact the below number'),
-                'phone_number': event.get('phoneNumber', 'Not Available'),
+                'user_name': user_name.split(' ')[0].strip(),
+                'event_name': event.get('name', 'Not Available').strip(),
+                'role': Common.truncate_string((role.replace('#', '')), 80).strip(),
+                'address': event.get('company', 'Contact the below number').strip(),
+                'phone_number': str(event.get('phoneNumber', 'Not Available')).strip(),
             }
         }
+        print(payload, '__contribute_message_payload__')
+        print(url, '__contribute_message_url__')
         response = requests.post(url, json=payload)
         output = response.json()
         failure_message = '[contribute_message] Failed to send details'
