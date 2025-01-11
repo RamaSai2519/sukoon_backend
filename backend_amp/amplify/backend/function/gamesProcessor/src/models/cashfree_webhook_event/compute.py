@@ -2,12 +2,12 @@ import json
 import random
 import requests
 from bson import ObjectId
-from datetime import datetime
+from datetime import datetime, timedelta
 from shared.configs import CONFIG as config
 from shared.db.users import get_user_collection, get_user_payment_collection
 from shared.models.interfaces import CashfreeWebhookEventInput as Input, Output
 from shared.db.events import get_events_collection, get_contribute_events_collection
-from shared.models.constants import OutputStatus, application_json_header, pay_types
+from shared.models.constants import OutputStatus, application_json_header, pay_types, TimeFormats
 
 
 class Compute:
@@ -129,13 +129,15 @@ class Compute:
 
     def send_event_details(self) -> str:
         url = config.URL + "/actions/send_whatsapp"
+        event_date = self.event.get("startEventDate")
+        event_date = event_date + timedelta(hours=5, minutes=30)
         payload = {
             'phone_number': self.phoneNumber,
             'template_name': 'EVENT_REGISTRATION_CONFIRMATION',
             'parameters': {
                 'user_name': self.payment_data.get("customer_details").get("customer_name"),
                 'topic_name': self.event.get("mainTitle"),
-                'date_and_time': self.event.get("startEventDate", "").strftime('%d %b %Y %H:%M'),
+                'date_and_time': event_date.strftime(TimeFormats.USER_TIME_FORMAT),
                 'custom_text': self.event.get("subTitle"),
                 'speakers_name': self.event.get("guestSpeaker"),
                 'event_name': self.event.get("mainTitle"),
