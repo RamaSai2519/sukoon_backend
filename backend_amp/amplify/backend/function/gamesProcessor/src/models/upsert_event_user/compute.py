@@ -122,7 +122,7 @@ class Compute:
         response_dict = response.json()
         if "output_status" in response_dict and response_dict.get("output_status") == "SUCCESS":
             return "Event details sent"
-        return "Event details not sent"
+        return "[event_message] Event details not sent"
 
     def compute(self) -> Output:
         user = self.find_user(self.input.phoneNumber)
@@ -163,6 +163,8 @@ class Compute:
         messages = [user_message, event_message,
                     nudge_message, confirmation_message]
         f_message = ". ".join([msg for msg in messages if msg])
+        print(f_message)
+
         return Output(
             output_details=Common.jsonify(event_user.__dict__),
             output_status=OutputStatus.SUCCESS,

@@ -38,7 +38,7 @@ class Compute:
         }
         response = requests.post(url, json=payload)
         output = response.json()
-        failure_message = 'Failed to send details'
+        failure_message = '[contribute_message] Failed to send details'
         if 'output_status' not in output:
             return failure_message
         if output['output_status'] == OutputStatus.SUCCESS:
@@ -90,6 +90,7 @@ class Compute:
         user_number = user['phoneNumber']
         user_name = user.get('name', 'User')
         message = self.send_details(user_name, user_number, event)
+        print(message)
 
         return Output(
             output_message="Interest created successfully. " + message,
