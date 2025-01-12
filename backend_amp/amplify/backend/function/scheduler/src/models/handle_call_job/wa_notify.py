@@ -47,7 +47,7 @@ class WAHandler:
             }
         }
         response = requests.post(url, json=payload)
-        print(response.text)
+        print(response.text, '__user_scheduler_notification__')
 
         return response.text
 
@@ -65,7 +65,7 @@ class WAHandler:
             }
         }
         response = requests.post(url, json=payload)
-        print(response.text)
+        print(response.text, '__expert_scheduler_notification__')
 
         return response.text
 
