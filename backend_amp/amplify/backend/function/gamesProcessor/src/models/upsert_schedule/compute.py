@@ -70,19 +70,18 @@ class Compute:
         user = self.users_collection.find_one(query, projection)
         return user, expert
 
-    def notify_expert(self, url: str, user: dict, expert: dict):
+    def notify_expert(self, url: str, user: dict, expert: dict, difference: int):
         birth_date: datetime = user.get("birthDate", None)
         birth_date = birth_date.strftime(
             "%d %B, %Y") if birth_date else "Not provided"
-        premium = "Yes" if user.get("isPaidUser", False) else "No"
         payload = {
-            "template_name": "CALL_NOTIFICATION",
+            "template_name": "SARATHI_NOTIFICATION_FOR_USER_CALL_PRODUCTION",
             "parameters": {
                 "last_expert": self.common.get_last_expert_name(self.input.user_id),
                 "user_name": user.get("name", "Not provided"),
                 "city": user.get("city", "Not provided"),
                 "birth_date": birth_date,
-                "premium": premium
+                "minutes": int(difference / 60)
             }
         }
         payload['phone_number'] = expert["phoneNumber"]
@@ -107,7 +106,7 @@ class Compute:
     def notify_parties(self, difference: int):
         url = config.URL + '/actions/send_whatsapp'
         user, expert = self.get_parties()
-        self.notify_expert(url, user, expert)
+        self.notify_expert(url, user, expert, difference)
         self.notify_user(url, user, expert, difference)
 
     def compute(self) -> Output:
