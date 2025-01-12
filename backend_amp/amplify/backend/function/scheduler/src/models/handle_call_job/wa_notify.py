@@ -1,9 +1,12 @@
 import json
+import pytz
 import requests
 from typing import Tuple
+from datetime import datetime
 from shared.models.common import Common
 from shared.configs import CONFIG as config
 from shared.helpers.users import UsersHelper
+from shared.models.constants import TimeFormats
 from shared.helpers.experts import ExpertsHelper
 from shared.db.schedules import get_schedules_collection
 from shared.models.interfaces import User, Expert, Schedule, Output
@@ -37,14 +40,20 @@ class WAHandler:
         user, expert = self.get_participants()
         user_name = user.name or user.phoneNumber
         expert_name = expert.name or expert.phoneNumber
-        names = {'user_name': user_name, 'expert_name': expert_name}
+        job_time = datetime.strptime(
+            self.job.job_time, TimeFormats.AWS_TIME_FORMAT)
+        job_time = job_time.replace(tzinfo=pytz.utc)
+        difference_seconds = (
+                job_time - Common.get_current_utc_time()).total_seconds()
         payload = {
-            'template_name': 'SCHEDULE_REMINDER',
+            'template_name': 'SCHEDULE_REMINDER_MINUTE_PROD',
             'phone_number': user.phoneNumber,
-            'request_meta': json.dumps(names),
-            'parameters': names
+            'parameters': {
+                'expert_name': user_name,
+                'user_name': expert_name,
+                'minutes': int(difference_seconds / 60)
+            }
         }
-
         response = requests.post(url, json=payload)
         print(response.text)
 
