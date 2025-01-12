@@ -11,8 +11,10 @@ from models.get_categories.main import Categories
 from models.upsert_expert.main import UpsertExpert
 from models.get_applicants.main import GetApplicants
 from models.update_timings.main import UpdateTimings
+from models.get_agents_meta.main import GetAgentsMeta
 from models.create_applicant.main import CreateApplicant
-from shared.models.interfaces import Expert, CategoriesInput, GetExpertsInput, ApplicantInput, GetSlotsInput, GetTimingsInput, UpdateTimingsInput, TimingsRow, GetApplicantsInput, RecommendExpertInput
+from models.upsert_agent_meta.main import UpsertAgentMeta
+from shared.models.interfaces import Expert, CategoriesInput, GetExpertsInput, ApplicantInput, GetSlotsInput, GetTimingsInput, UpdateTimingsInput, TimingsRow, GetApplicantsInput, UpsertAgentMetaInput, GetAgentsMetaInput
 
 
 class ExpertService(Resource):
@@ -94,6 +96,25 @@ class CategoryService(Resource):
         input = json.loads(request.get_data())
         input = CategoriesInput(**input)
         output = Categories(input).process()
+        output = dataclasses.asdict(output)
+
+        return output
+
+
+class AgentMetaService(Resource):
+
+    def post(self) -> dict:
+        input = json.loads(request.get_data())
+        input = UpsertAgentMetaInput(**input)
+        output = UpsertAgentMeta(input).process()
+        output = dataclasses.asdict(output)
+
+        return output
+
+    def get(self) -> dict:
+        input_params = request.args
+        input = GetAgentsMetaInput(**input_params)
+        output = GetAgentsMeta(input).process()
         output = dataclasses.asdict(output)
 
         return output
