@@ -38,6 +38,29 @@ class Compute:
         user_ids = collection.distinct(distinct_field, query)
         return user_ids
 
+    def handle_number_of_calls(self, user_ids: list) -> list:
+        call_counts = {}
+        query = {'user': {'$in': user_ids}}
+        if self.input.call_status:
+            query['status'] = self.input.call_status
+        calls = self.calls_collection.find(query)
+        for user_id in user_ids:
+            call_counts[user_id] = 0
+
+        for call in calls:
+            user_id = call['user']
+            if user_id in call_counts:
+                call_counts[user_id] += 1
+
+        call_count_map = {}
+        for user_id, count in call_counts.items():
+            if count not in call_count_map:
+                call_count_map[count] = []
+            if user_id not in call_count_map[count]:
+                call_count_map[count].append(user_id)
+
+        return call_count_map.get(int(self.input.number_of_calls), [])
+
     def compute(self) -> Output:
         query = {}
         if self.input.phoneNumber is not None or self.input.user_id is not None:
@@ -65,6 +88,9 @@ class Compute:
                         self.events_collection, 'updatedAt', 'userId')
                     user_ids = list(set(call_user_ids + event_user_ids))
 
+            if self.input.number_of_calls:
+                user_ids = self.handle_number_of_calls(user_ids)
+
             query = Common.get_filter_query(
                 self.input.filter_field, self.input.filter_value)
             object_id_fields = ['_id', 'lastModifiedBy']
@@ -86,7 +112,7 @@ class Compute:
             bool_fields = ['isDeleted', 'profileCompleted', 'isPaidUser',
                            'wa_opt_out', 'isBlocked', 'isBusy', 'active']
             if self.input.filter_field in bool_fields:
-                query[self.input.filter_field] = 'true' if self.input.filter_value == 'true' else 'false'
+                query[self.input.filter_field] = True if self.input.filter_value == 'true' else False
 
             if self.input.joined_from and self.input.joined_till:
                 query['createdDate'] = {
