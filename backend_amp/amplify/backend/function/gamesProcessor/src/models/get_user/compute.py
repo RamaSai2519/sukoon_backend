@@ -39,8 +39,10 @@ class Compute:
         return user_ids
 
     def handle_number_of_calls(self, user_ids: list) -> list:
+        query = {}
         call_counts = {}
-        query = {'user': {'$in': user_ids}}
+        if user_ids != []:
+            query['user'] = {'$in': user_ids}
         if self.input.call_status:
             query['status'] = self.input.call_status
         calls = self.calls_collection.find(query)
@@ -51,6 +53,8 @@ class Compute:
             user_id = call['user']
             if user_id in call_counts:
                 call_counts[user_id] += 1
+            else:
+                call_counts[user_id] = 1
 
         call_count_map = {}
         for user_id, count in call_counts.items():
