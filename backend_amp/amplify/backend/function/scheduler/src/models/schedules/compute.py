@@ -46,8 +46,8 @@ class Compute:
         return False, doc
 
     def get_lower_time_str(self) -> tuple:
-        upper_bound = self.now_time + timedelta(minutes=30)
-        lower_bound = upper_bound - timedelta(minutes=5)
+        upper_bound = self.now_time + timedelta(minutes=35)
+        lower_bound = upper_bound - timedelta(minutes=10)
 
         return upper_bound, lower_bound
 
@@ -59,6 +59,7 @@ class Compute:
             "job_time": {"$gte": lower_bound, "$lt": upper_bound}
         }
 
+        print(query, '__wa_query__')
         schedules = self.collection.find(query)
         return list(schedules)
 
@@ -94,6 +95,7 @@ class Compute:
     def compute(self) -> Output:
         p_schedules = self.get_pending_schedules()
         wp_schedules = self.get_wapending_schedules()
+        print(wp_schedules, '__wa_schedules__')
         schedules = p_schedules + wp_schedules
         jobs_executed = 0
 

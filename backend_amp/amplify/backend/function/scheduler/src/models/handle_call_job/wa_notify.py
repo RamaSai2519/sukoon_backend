@@ -76,7 +76,10 @@ class WAHandler:
         job_time: datetime = self.job.job_time.replace(tzinfo=pytz.utc)
         difference_seconds = (
             job_time - Common.get_current_utc_time()).total_seconds()
-        birth_date: datetime = user.birthDate
+        birth_date = user.birthDate
+        if isinstance(birth_date, str):
+            birth_date = datetime.strptime(
+                birth_date, TimeFormats.ANTD_TIME_FORMAT)
         birth_date = birth_date.strftime(
             "%d %B, %Y") if birth_date else "Not provided"
         try:
