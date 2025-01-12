@@ -73,9 +73,7 @@ class WAHandler:
         user, expert = self.get_participants()
         user_name = user.name or user.phoneNumber
         expert_name = expert.name or expert.phoneNumber
-        job_time = datetime.strptime(
-            self.job.job_time, TimeFormats.AWS_TIME_FORMAT)
-        job_time = job_time.replace(tzinfo=pytz.utc)
+        job_time: datetime = self.job.job_time.replace(tzinfo=pytz.utc)
         difference_seconds = (
             job_time - Common.get_current_utc_time()).total_seconds()
         birth_date: datetime = user.birthDate
