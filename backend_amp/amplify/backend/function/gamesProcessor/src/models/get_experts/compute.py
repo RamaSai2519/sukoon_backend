@@ -21,7 +21,6 @@ class Compute:
                 self.input.phoneNumber, self.input.expert_id)
             if not experts:
                 return Output(
-                    output_details={},
                     output_status=OutputStatus.FAILURE,
                     output_message="Expert not found"
                 )
@@ -56,6 +55,5 @@ class Compute:
 
         return Output(
             output_details=experts,
-            output_status=OutputStatus.SUCCESS,
             output_message="Successfully fetched expert(s)"
         )

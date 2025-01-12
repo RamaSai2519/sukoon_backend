@@ -4,8 +4,8 @@ from shared.configs import CONFIG as config
 from models.make_call.slack import SlackNotifier
 from shared.db.experts import get_experts_collections
 from shared.models.interfaces import CallInput as Input
-from shared.models.constants import not_interested_statuses
 from shared.db.users import get_user_collection, get_meta_collection
+from shared.models.constants import not_interested_statuses, non_sarathi_types
 
 
 class Validator:
@@ -64,8 +64,8 @@ class Validator:
 
         conditions = [
             user.get('isPaidUser') is False,
-            expert.get('type') != 'internal',
             user.get('numberOfCalls', 0) <= 0,
+            expert.get('type') not in non_sarathi_types,
         ]
 
         if all(conditions):
