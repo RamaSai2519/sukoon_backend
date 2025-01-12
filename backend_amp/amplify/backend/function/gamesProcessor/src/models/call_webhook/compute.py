@@ -176,9 +176,17 @@ class Compute:
         print(message)
         return message
 
-    def notify_failed_expert(self, expert: Expert) -> str:
-        payload = {'template_name': 'SARATHI_MISSED_CALL',
-                   'phone_number': expert.phoneNumber, "parameters": {}}
+    def notify_failed_expert(self, expert: Expert, user: User) -> str:
+        payload = {
+            'template_name': 'SARATHI_MISSED_CALL_FROM_USER_PROD',
+            'phone_number': expert.phoneNumber,
+            "parameters": {
+                "user_name": user.name or user.phoneNumber,
+                "expert_name": expert.name or expert.phoneNumber,
+                "status": self.status,
+                "reason": str(self.failed_reason).replace('expert ', ' ')
+            }
+        }
         response = requests.post(self.url, json=payload)
         message = 'Failed call message sent' if response.status_code == 200 else 'Failed call message not sent'
         print(message)
@@ -203,11 +211,11 @@ class Compute:
         user_message = self.update_user(call, expert, user)
         feedback_message = 'Feedback message not sent'
 
-        if call.status in ['missed']:
+        if call.status == 'missed':
             self.notify_missed_user(user, expert)
 
         if call.status == 'failed':
-            self.notify_failed_expert(expert)
+            self.notify_failed_expert(expert, user)
 
         feedback_message = self.send_feedback_message(call, expert, user)
         promo_message = self.send_promo_message(call, expert, user)
