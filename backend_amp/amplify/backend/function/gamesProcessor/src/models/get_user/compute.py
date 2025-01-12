@@ -83,6 +83,10 @@ class Compute:
                                 '0001-01-01', '%Y-%m-%d')}
                         ]
                     }
+            bool_fields = ['isDeleted', 'profileCompleted', 'isPaidUser',
+                           'wa_opt_out', 'isBlocked', 'isBusy', 'active']
+            if self.input.filter_field in bool_fields:
+                query[self.input.filter_field] = 'true' if self.input.filter_value == 'true' else 'false'
 
             if self.input.joined_from and self.input.joined_till:
                 query['createdDate'] = {
