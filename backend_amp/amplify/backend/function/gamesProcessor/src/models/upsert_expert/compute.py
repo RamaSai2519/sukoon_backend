@@ -58,6 +58,12 @@ class Compute:
                     for item in expert_data["sub_category"]
                 ]
 
+        if "escalation_level" in expert_data:
+            level = expert_data["escalation_level"]
+            if isinstance(level, str):
+                expert_data["escalation_level"] = int(
+                    level) if level.isdigit() else 0
+
         expert_data = self.populate_categories(expert_data)
         return expert_data
 
