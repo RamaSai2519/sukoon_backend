@@ -12,6 +12,7 @@ import requests
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
+        self.expert_number = None
         self.collection = get_escalations_collection()
         self.experts_collection = get_experts_collections()
 
@@ -21,6 +22,7 @@ class Compute:
         while True:
             expert = self.experts_collection.find_one(query)
             if expert:
+                self.expert_number = expert['phoneNumber']
                 return expert['_id']
             else:
                 level += 1
@@ -72,7 +74,18 @@ class Compute:
 
         return response
 
-    # TODO: Send whatsapp message to user
+    def notify_agent(self) -> None:
+        url = config.URL + '/actions/send_whatsapp'
+        payload = {
+            'phone_number': self.expert_number,
+            'template_name': 'ESCALATION_MESSAGE_PROD',
+            'parameters': {
+                'misc': str(self.input.user_id)
+            }
+        }
+        response = requests.post(url, json=payload)
+        print('Agent notified' if response.status_code ==
+              200 else 'Agent not notified')
 
     def compute(self) -> Output:
         if not self.input._id:
