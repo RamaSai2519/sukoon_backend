@@ -7,7 +7,8 @@ from models.escalate.main import Escalate
 from models.get_calls.main import GetCalls
 from models.make_call.main import MakeCall
 from models.call_webhook.main import CallWebhook
-from shared.models.interfaces import CallInput, WebhookInput, GetCallsInput, Escalation, EachEscalation
+from models.get_escalations.main import GetEscalations
+from shared.models.interfaces import CallInput, WebhookInput, GetCallsInput, Escalation, EachEscalation, GetEscalationsInput
 
 
 class CallService(Resource):
@@ -49,6 +50,14 @@ class EscalationService(Resource):
             **each) for each in input['escalations']]
         input = Escalation(**input)
         output = Escalate(input).process()
+        output = dataclasses.asdict(output)
+
+        return output
+
+    def get(self) -> dict:
+        input_params = request.args
+        input = GetEscalationsInput(**input_params)
+        output = GetEscalations(input).process()
         output = dataclasses.asdict(output)
 
         return output

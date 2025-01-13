@@ -198,7 +198,7 @@ class Compute:
         payload = None
         if call.type == 'escalated' and call.scheduledId:
             query = {'_id': ObjectId(call.scheduledId)}
-            payload = self.escalations_collection.find_one(query)            
+            payload = self.escalations_collection.find_one(query)
         if not payload:
             payload = {
                 'user_id': call.user,
@@ -209,7 +209,7 @@ class Compute:
         if 'output_status' in response.json() and response.json()['output_status'] == 'SUCCESS':
             message = 'Escalation successful'
         message = 'Escalation failed'
-        print(message, '__call__')
+        print(message, '__call_webhook__')
         return message
 
     def compute(self) -> Output:
@@ -236,6 +236,7 @@ class Compute:
 
         if call.status == 'failed':
             self.notify_failed_expert(expert, user)
+            self.escalate(call)
 
         feedback_message = self.send_feedback_message(call, expert, user)
         promo_message = self.send_promo_message(call, expert, user)
