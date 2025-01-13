@@ -25,16 +25,17 @@ class Compute:
             query['status'] = self.input.call_status or 'successful'
 
         user_ids = []
-        self.input.last_reached_from = datetime.strptime(
-            self.input.last_reached_from, TimeFormats.ANTD_TIME_FORMAT
-        )
-        self.input.last_reached_till = datetime.strptime(
-            self.input.last_reached_till, TimeFormats.ANTD_TIME_FORMAT
-        )
-        query[filter_field] = {
-            '$gte': self.input.last_reached_from,
-            '$lte': self.input.last_reached_till
-        }
+        if self.input.last_reached_from and isinstance(self.input.last_reached_from, str):
+            self.input.last_reached_from = datetime.strptime(
+                self.input.last_reached_from, TimeFormats.ANTD_TIME_FORMAT
+            )
+        if self.input.last_reached_till and isinstance(self.input.last_reached_till, str):
+            self.input.last_reached_till = datetime.strptime(
+                self.input.last_reached_till, TimeFormats.ANTD_TIME_FORMAT
+            )
+        query[filter_field] = {'$lte': self.input.last_reached_till}
+        if self.input.last_reached_from:
+            query[filter_field]['$gte'] = self.input.last_reached_from
         user_ids = collection.distinct(distinct_field, query)
         return user_ids
 
