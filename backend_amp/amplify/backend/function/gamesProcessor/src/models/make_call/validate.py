@@ -3,6 +3,7 @@ from bson import ObjectId
 from shared.configs import CONFIG as config
 from models.make_call.slack import SlackNotifier
 from shared.db.experts import get_experts_collections
+from shared.db.calls import get_escalations_collection
 from shared.models.interfaces import CallInput as Input
 from shared.db.users import get_user_collection, get_meta_collection
 from shared.models.constants import not_interested_statuses, non_sarathi_types
@@ -15,6 +16,7 @@ class Validator:
         self.meta_collection = get_meta_collection()
         self.users_collection = get_user_collection()
         self.experts_collection = get_experts_collections()
+        self.escalations_collection = get_escalations_collection()
 
     def get_users(self, user_id: ObjectId, expert_id: ObjectId) -> tuple:
         user = self.users_collection.find_one({'_id': user_id})
@@ -24,7 +26,7 @@ class Validator:
         return user, user_meta, expert
 
     def validate_input(self) -> tuple:
-        if self.input.type_ not in ['call', 'scheduled']:
+        if self.input.type_ not in ['call', 'scheduled', 'escalated']:
             return False, 'Invalid type'
 
         user, user_meta, expert = self.get_users(
@@ -94,8 +96,31 @@ class Validator:
             }
         }
         response = requests.post(url, json=payload)
-        message = 'Failed call message sent' if response.status_code == 200 else 'Failed call message not sent'
-        print(message)
+        if 'output_status' in response.json() and response.json()['output_status'] == 'SUCCESS':
+            message = 'Failed call message sent'
+        message = 'Failed call message not sent'
+        print(message, '__make_call__')
+        return message
+
+    def escalate(self) -> str:
+        url = config.URL + '/actions/escalate'
+        payload = None
+        if self.input.type_ == 'escalated' and self.input.scheduledId:
+            query = {'_id': ObjectId(self.input.scheduledId)}
+            payload = self.escalations_collection.find_one(query)
+        if not payload:
+            payload = {
+                'user_id': self.input.user_id,
+                'expert_id': self.input.expert_id,
+                'escalations': []
+            }
+        response = requests.post(url, json=payload)
+        if 'output_status' in response.json() and response.json()['output_status'] == 'SUCCESS':
+            message = 'Escalation successful'
+        message = 'Escalation failed'
+        print(message, '__make_call__')
+        print('user_id: ', self.input.user_id,
+              'expert_id: ', self.input.expert_id)
         return message
 
     def validate_expert(self, user: dict, expert: dict) -> tuple:
@@ -110,6 +135,7 @@ class Validator:
                 status='offline',
             )
             self.notify_failed_expert(expert, user, 'Offline')
+            self.escalate()
             return False, 'Expert is offline'
 
         if expert.get('isBusy') is True:
@@ -120,6 +146,7 @@ class Validator:
                 status='sarathi_busy',
             )
             self.notify_failed_expert(expert, user, 'Busy')
+            self.escalate()
             return False, 'Expert is busy'
 
         return True, expert

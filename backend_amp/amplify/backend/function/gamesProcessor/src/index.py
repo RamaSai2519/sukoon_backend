@@ -20,6 +20,7 @@ CORS(app, supports_credentials=True)
 
 # Call Routes
 api.add_resource(CallService, '/actions/call')
+api.add_resource(EscalationService, '/actions/escalate')
 api.add_resource(CallWebhookService, '/actions/call_webhook')
 
 # Club Routes
