@@ -48,6 +48,7 @@ class EscalationService(Resource):
         input = json.loads(request.get_data())
         input['escalations'] = [EachEscalation(
             **each) for each in input['escalations']]
+        input = Common.clean_dict(input, Escalation)
         input = Escalation(**input)
         output = Escalate(input).process()
         output = dataclasses.asdict(output)

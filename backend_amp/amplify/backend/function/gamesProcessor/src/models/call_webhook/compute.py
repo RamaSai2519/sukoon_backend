@@ -207,6 +207,7 @@ class Compute:
                 'expert_id': str(call.expert),
                 'escalations': []
             }
+        payload = Common.jsonify(payload)
         response = requests.post(url, json=payload)
         response_dict = response.json()
         if 'output_status' in response_dict and response_dict['output_status'] == 'SUCCESS':
@@ -239,7 +240,7 @@ class Compute:
 
         if call.status == 'failed':
             self.notify_failed_expert(expert, user)
-            self.escalate(call)
+            threading.Thread(target=self.escalate, args=(call,)).start()
 
         feedback_message = self.send_feedback_message(call, expert, user)
         promo_message = self.send_promo_message(call, expert, user)

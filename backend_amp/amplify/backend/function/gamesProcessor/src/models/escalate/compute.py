@@ -36,11 +36,11 @@ class Compute:
             if field in doc and isinstance(doc[field], str):
                 doc[field] = ObjectId(doc[field])
 
-        doc['escalations'] = [asdict(each) for each in doc['escalations']]
-
-        for each in doc.get('escalations', []):
+        escalations = doc.get('escalations', [])
+        for each in escalations:
             if isinstance(each.get('expert_id'), str):
                 each['expert_id'] = ObjectId(each['expert_id'])
+        doc['escalations'] = escalations
 
         doc['updated_at'] = Common.get_current_utc_time()
         doc = Common.filter_none_values(doc)
@@ -108,7 +108,7 @@ class Compute:
         new_escalation = EachEscalation(
             level=new_level, expert_id=expert_id,
             time=Common.get_current_utc_time()
-        )
+        ).__dict__
         doc['escalations'].append(new_escalation)
         doc = self.prep_data(doc)
         self.collection.update_one(
