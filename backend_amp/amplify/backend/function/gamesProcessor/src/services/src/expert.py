@@ -14,7 +14,7 @@ from models.update_timings.main import UpdateTimings
 from models.get_agents_meta.main import GetAgentsMeta
 from models.create_applicant.main import CreateApplicant
 from models.upsert_agent_meta.main import UpsertAgentMeta
-from shared.models.interfaces import Expert, CategoriesInput, GetExpertsInput, ApplicantInput, GetSlotsInput, GetTimingsInput, UpdateTimingsInput, TimingsRow, GetApplicantsInput, UpsertAgentMetaInput, GetAgentsMetaInput
+from shared.models.interfaces import Expert, CategoriesInput, GetExpertsInput, ApplicantInput, GetSlotsInput, GetTimingsInput, UpdateTimingsInput, TimingsRow, GetApplicantsInput, UpsertAgentMetaInput, GetAgentsMetaInput, AgentCallMeta
 
 
 class ExpertService(Resource):
@@ -105,6 +105,10 @@ class AgentMetaService(Resource):
 
     def post(self) -> dict:
         input = json.loads(request.get_data())
+        if 'call_meta' in input:
+            call_meta = input.get('call_meta', {})
+            call_meta = AgentCallMeta(**call_meta)
+            input['call_meta'] = call_meta
         input = UpsertAgentMetaInput(**input)
         output = UpsertAgentMeta(input).process()
         output = dataclasses.asdict(output)

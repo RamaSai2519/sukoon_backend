@@ -14,10 +14,14 @@ class Compute:
         data = asdict(self.input)
         data['agent_id'] = ObjectId(data['agent_id'])
         data['updatedAt'] = Common.get_current_utc_time()
-        upsertion = self.collection.update_one(
+        upsertion = self.collection.find_one_and_update(
             {"agent_id": data["agent_id"]},
             {"$set": data},
-            upsert=True
+            upsert=True,
+            return_document=True
         )
 
-        return Output(output_message="Agent meta data upserted successfully")
+        return Output(
+            output_message="Agent meta data upserted successfully",
+            output_details=Common.jsonify(upsertion)
+            )
