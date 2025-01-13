@@ -5,8 +5,8 @@ from typing import Union
 from bson import ObjectId
 from shared.models.common import Common
 from shared.configs import CONFIG as config
-from shared.db.calls import get_calls_collection
 from shared.db.experts import get_experts_collections
+from shared.db.calls import get_calls_collection, get_escalations_collection
 from shared.db.users import get_user_collection, get_user_notification_collection
 from shared.models.interfaces import WebhookInput as Input, Call, Output, User, Expert
 from shared.models.constants import OutputStatus, application_json_header, CallStatus, non_sarathi_types
@@ -20,6 +20,7 @@ class Compute:
         self.calls_collection = get_calls_collection()
         self.url = config.URL + '/actions/send_whatsapp'
         self.experts_collection = get_experts_collections()
+        self.escalations_collection = get_escalations_collection()
         self.user_notifications_collection = get_user_notification_collection()
         self.duration_secs = self.common.duration_str_to_seconds(
             input.call_duration)
@@ -190,6 +191,25 @@ class Compute:
         response = requests.post(self.url, json=payload)
         message = 'Failed call message sent' if response.status_code == 200 else 'Failed call message not sent'
         print(message)
+        return message
+
+    def escalate(self, call: Call) -> str:
+        url = config.URL + '/actions/escalate'
+        payload = None
+        if call.type == 'escalated' and call.scheduledId:
+            query = {'_id': ObjectId(call.scheduledId)}
+            payload = self.escalations_collection.find_one(query)            
+        if not payload:
+            payload = {
+                'user_id': call.user,
+                'expert_id': call.expert,
+                'escalations': []
+            }
+        response = requests.post(url, json=payload)
+        if 'output_status' in response.json() and response.json()['output_status'] == 'SUCCESS':
+            message = 'Escalation successful'
+        message = 'Escalation failed'
+        print(message, '__call__')
         return message
 
     def compute(self) -> Output:
