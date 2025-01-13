@@ -107,7 +107,7 @@ class Validator:
         payload = None
         if self.input.type_ == 'escalated' and self.input.scheduledId:
             query = {'_id': ObjectId(self.input.scheduledId)}
-            payload = self.escalations_collection.find_one(query)            
+            payload = self.escalations_collection.find_one(query)
         if not payload:
             payload = {
                 'user_id': self.input.user_id,
