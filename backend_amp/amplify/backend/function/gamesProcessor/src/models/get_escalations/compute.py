@@ -27,6 +27,21 @@ class Compute:
                 query[field] = datetime.strptime(
                     self.input.filter_value, TimeFormats.ANTD_TIME_FORMAT)
 
+        int_fields = ['escalations.level']
+        for field in int_fields:
+            if self.input.filter_field == field:
+                query[field] = int(self.input.filter_value)
+
+        cursor = self.collection.find(query)
+        paginated_cursor = Common.paginate_cursor(
+            cursor, int(self.input.page), int(self.input.size))
+        data = list(paginated_cursor)
+        total = self.collection.count_documents(query)
+
         return Output(
+            output_details={
+                'data': data,
+                'total': total
+            },
             output_message="Data fetched successfully"
         )
