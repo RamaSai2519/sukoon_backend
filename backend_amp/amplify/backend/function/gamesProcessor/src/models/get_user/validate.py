@@ -23,6 +23,6 @@ class Validator():
                 return False, "Page and size must be integers"
 
         if self.input.last_reached_type and not self.input.last_reached_till:
-            return False, "Both last_reached_from and last_reached_till must be provided"
+            return False, "last_reached_till must be provided"
 
         return True, ""
