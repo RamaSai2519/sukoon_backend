@@ -27,9 +27,9 @@ class Compute:
                 if self.input.context == 'ark_main':
                     now_date = Common.get_current_utc_time()
                     now_date = now_date.strftime('%Y-%m-%d')
-                    query = {'createdAt': now_date}
+                    history_query = {'createdAt': now_date}
                     update = {'$set': {'history.0.content': self.input.content}}
-                    self.histories_collection.update_many(query, update)
+                    self.histories_collection.update_many(history_query, update)
 
                 self.prompt_proposals_collection.update_one(
                     query, {"$set": {"approved": True}})

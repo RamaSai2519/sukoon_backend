@@ -95,8 +95,8 @@ class Compute:
             wa_response = self.notifier.send_wa_notification(user, expert)
         else:
             wa_response = " but Expert is internal, no whatsapp notification sent"
-            time.sleep(15)
 
+        time.sleep(15)
         call_id = self._make_call(user["phoneNumber"], expert["phoneNumber"])
         if not call_id:
             self.slack_notifier.send_notification(
