@@ -8,8 +8,8 @@ from shared.configs import CONFIG as config
 from shared.db.calls import get_calls_collection
 from shared.db.experts import get_experts_collections
 from shared.db.users import get_user_collection, get_user_notification_collection
-from shared.models.constants import OutputStatus, application_json_header, CallStatus
 from shared.models.interfaces import WebhookInput as Input, Call, Output, User, Expert
+from shared.models.constants import OutputStatus, application_json_header, CallStatus, non_sarathi_types
 
 
 class Compute:
@@ -79,7 +79,7 @@ class Compute:
             user.numberOfCalls > 0,
             self.duration_secs > 600,
             user.isPaidUser == False,
-            expert.type != 'internal',
+            expert.type not in non_sarathi_types
         ]
         if all(conditions):
             update_values['numberOfCalls'] = user.numberOfCalls - 1
@@ -123,7 +123,7 @@ class Compute:
         return 'Scheduled job not updated, '
 
     def send_feedback_message(self, call: Call, expert: Expert, user: User) -> str:
-        if call.status == 'successful' and self.duration_secs > 120 and expert.type != 'internal':
+        if call.status == 'successful' and self.duration_secs > 120 and expert.type not in non_sarathi_types:
             if not user or not expert:
                 return 'Feedback message not sent as user or expert not found'
             payload = {
@@ -168,7 +168,7 @@ class Compute:
         if not user:
             return 'User not found'
         payload = {
-            'template_name': 'SARATHI_MISSED_CALL' if expert.type != 'internal' else 'MISSED_INTERNAL_CALL',
+            'template_name': 'SARATHI_MISSED_CALL' if expert.type not in non_sarathi_types else 'MISSED_INTERNAL_CALL',
             'phone_number': user.phoneNumber, 'parameters': {}
         }
         response = requests.post(self.url, json=payload)
@@ -176,9 +176,17 @@ class Compute:
         print(message)
         return message
 
-    def notify_failed_expert(self, expert: Expert) -> str:
-        payload = {'template_name': 'SARATHI_MISSED_CALL',
-                   'phone_number': expert.phoneNumber, "parameters": {}}
+    def notify_failed_expert(self, expert: Expert, user: User) -> str:
+        payload = {
+            'template_name': 'SARATHI_MISSED_CALL_FROM_USER_PROD',
+            'phone_number': expert.phoneNumber,
+            "parameters": {
+                "user_name": user.name or user.phoneNumber,
+                "expert_name": expert.name or expert.phoneNumber,
+                "status": self.status,
+                "reason": str(self.failed_reason).replace('expert ', ' ')
+            }
+        }
         response = requests.post(self.url, json=payload)
         message = 'Failed call message sent' if response.status_code == 200 else 'Failed call message not sent'
         print(message)
@@ -189,7 +197,6 @@ class Compute:
         call = self.find_call(callId)
         if not call:
             return Output(
-                output_details={},
                 output_status=OutputStatus.FAILURE,
                 output_message=f'Call not found with callId: {callId}'
             )
@@ -204,11 +211,11 @@ class Compute:
         user_message = self.update_user(call, expert, user)
         feedback_message = 'Feedback message not sent'
 
-        if call.status in ['missed']:
+        if call.status == 'missed':
             self.notify_missed_user(user, expert)
 
         if call.status == 'failed':
-            self.notify_failed_expert(expert)
+            self.notify_failed_expert(expert, user)
 
         feedback_message = self.send_feedback_message(call, expert, user)
         promo_message = self.send_promo_message(call, expert, user)

@@ -47,7 +47,7 @@ class Notifications:
             "phone_number": expert.get("phoneNumber", ""),
             "template_name": "CALL_NOTIFICATION",
             "parameters": {
-                "last_expert": self.get_last_expert_name(),
+                "last_expert": self.common.get_last_expert_name(self.input.user_id),
                 "user_name": user.get("name", "Not provided"),
                 "city": user.get("city", "Not provided"),
                 "birth_date": birth_date,
@@ -60,15 +60,3 @@ class Notifications:
         response_dict: dict = response.json()
         response_str = response_dict.get("output_message", "")
         return " and " + response_str
-
-    def get_last_expert_name(self) -> str:
-        calls_collection = get_calls_collection()
-        query = {"user": ObjectId(self.input.user_id),
-                 "status": {"$ne": "initiated"}}
-        sort = [("initiatedTime", -1)]
-        last_call: dict = calls_collection.find_one(query, sort=sort)
-        if not last_call:
-            return "First call"
-        last_expert = last_call.get("expert", "")
-        last_expert_name = self.common.get_expert_name(last_expert)
-        return last_expert_name

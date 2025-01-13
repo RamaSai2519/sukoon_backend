@@ -1,9 +1,12 @@
 import json
+import pytz
 import requests
 from typing import Tuple
+from datetime import datetime
 from shared.models.common import Common
 from shared.configs import CONFIG as config
 from shared.helpers.users import UsersHelper
+from shared.models.constants import TimeFormats
 from shared.helpers.experts import ExpertsHelper
 from shared.db.schedules import get_schedules_collection
 from shared.models.interfaces import User, Expert, Schedule, Output
@@ -32,31 +35,65 @@ class WAHandler:
 
         return user, expert
 
-    def invoke_whatsapp_api(self) -> requests.Response:
+    def notify_user(self, phoneNumber: str, user_name: str, expert_name: str, difference: int) -> str:
         url = self.url + '/actions/send_whatsapp'
-        user, expert = self.get_participants()
-        user_name = user.name or user.phoneNumber
-        expert_name = expert.name or expert.phoneNumber
-        names = {'user_name': user_name, 'expert_name': expert_name}
         payload = {
-            'template_name': 'SCHEDULE_REMINDER',
-            'phone_number': user.phoneNumber,
-            'request_meta': json.dumps(names),
-            'parameters': names
+            'template_name': 'SCHEDULE_REMINDER_MINUTE_PROD',
+            'phone_number': phoneNumber,
+            'parameters': {
+                'expert_name': user_name,
+                'user_name': expert_name,
+                'minutes': int(difference / 60)
+            }
         }
-
         response = requests.post(url, json=payload)
-        print(response.text)
+        print(response.text, '__user_scheduler_notification__')
+
+        return response.text
+
+    def notify_expert(self, phoneNumber: str, user_name: str, user_city: str, user_birth: str, difference: int) -> str:
+        url = self.url + '/actions/send_whatsapp'
+        payload = {
+            'template_name': 'SARATHI_NOTIFICATION_FOR_USER_CALL_PRODUCTION',
+            'phone_number': phoneNumber,
+            'parameters': {
+                "last_expert": self.common.get_last_expert_name(str(self.job.user_id)),
+                "user_name": user_name,
+                "city": user_city,
+                "birth_date": user_birth,
+                "minutes": int(difference / 60)
+            }
+        }
+        response = requests.post(url, json=payload)
+        print(response.text, '__expert_scheduler_notification__')
 
         return response.text
 
     def process(self) -> Output:
+        user, expert = self.get_participants()
+        user_name = user.name or user.phoneNumber
+        expert_name = expert.name or expert.phoneNumber
+        job_time: datetime = self.job.job_time.replace(tzinfo=pytz.utc)
+        difference_seconds = (
+            job_time - Common.get_current_utc_time()).total_seconds()
+        birth_date = user.birthDate
+        if isinstance(birth_date, str):
+            birth_date = datetime.strptime(
+                birth_date, TimeFormats.ANTD_TIME_FORMAT)
+        birth_date = birth_date.strftime(
+            "%d %B, %Y") if birth_date else "Not provided"
         try:
-            response = self.invoke_whatsapp_api()
+            user_response = self.notify_user(
+                user.phoneNumber, user_name, expert_name, difference_seconds)
+            expert_response = self.notify_expert(
+                expert.phoneNumber, user_name, user.city, birth_date, difference_seconds)
         except Exception as error:
             print(error, "Error in sending whatsapp message: {job}".format(
                 job=self.job.__dict__))
-            response = None
+            user_response = None
+            expert_response = None
         self.common.update_schedule_status(self.job._id, "PENDING")
 
-        return Output(output_details=response)
+        return Output(
+            output_message=f"User: {user_response}, Expert: {expert_response}"
+        )

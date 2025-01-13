@@ -7,10 +7,10 @@ from dataclasses import asdict
 from typing import Tuple, Dict
 from shared.db.users import get_user_collection
 from shared.db.calls import get_calls_collection
-from shared.models.constants import OutputStatus
-from shared.db.experts import get_experts_collections
 from models.make_call.slack import SlackNotifier
+from shared.db.experts import get_experts_collections
 from models.make_call.notifications import Notifications
+from shared.models.constants import OutputStatus, non_sarathi_types
 from shared.models.interfaces import CallInput as Input, Output, Call
 
 
@@ -91,14 +91,10 @@ class Compute:
             )
 
         fcm_response = self.notifier.send_fcm_notification(user, expert)
-        if expert.get("type") != "internal":
+        if expert.get("type") not in non_sarathi_types:
             wa_response = self.notifier.send_wa_notification(user, expert)
         else:
             wa_response = " but Expert is internal, no whatsapp notification sent"
-
-        if expert.get("type") == "internal":
-            pass
-        else:
             time.sleep(15)
 
         call_id = self._make_call(user["phoneNumber"], expert["phoneNumber"])

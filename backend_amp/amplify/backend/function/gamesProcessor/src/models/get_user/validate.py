@@ -15,4 +15,11 @@ class Validator():
         if self.input.call_status and self.input.call_status not in self.status_list:
             return False, "Invalid call status, must be one of: " + ", ".join(self.status_list)
 
+        if self.input.page and self.input.size:
+            try:
+                int(self.input.page)
+                int(self.input.size)
+            except Exception as e:
+                return False, "Page and size must be integers"
+
         return True, ""

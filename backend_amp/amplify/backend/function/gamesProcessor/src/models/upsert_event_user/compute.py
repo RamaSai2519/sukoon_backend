@@ -1,10 +1,11 @@
 from shared.models.interfaces import EventUserInput as Input, User, EventUser, Output, UserMeta, Event
+from shared.models.constants import OutputStatus, application_json_header, TimeFormats
 from shared.db.events import get_event_users_collection, get_events_collection
-from shared.models.constants import OutputStatus, application_json_header
 from shared.db.users import get_user_collection, get_meta_collection
-from pymongo.collection import Collection
 from shared.configs import CONFIG as config
+from pymongo.collection import Collection
 from shared.models.common import Common
+from datetime import timedelta
 from dataclasses import asdict
 from datetime import datetime
 from bson import ObjectId
@@ -102,13 +103,15 @@ class Compute:
 
     def send_confirmation(self, user: User, event: Event) -> str:
         url = config.URL + "/actions/send_whatsapp"
+        event_date = event.startEventDate
+        event_date = event_date + timedelta(hours=5, minutes=30)
         payload = {
             'phone_number': user.phoneNumber,
             'template_name': 'EVENT_REGISTRATION_CONFIRMATION',
             'parameters': {
                 'user_name': user.name,
                 'topic_name': event.mainTitle,
-                'date_and_time': event.startEventDate.strftime('%d %b %Y %H:%M'),
+                'date_and_time': event_date.strftime(TimeFormats.USER_TIME_FORMAT),
                 'custom_text': event.subTitle,
                 'speakers_name': event.guestSpeaker,
                 'event_name': event.mainTitle,
@@ -122,7 +125,7 @@ class Compute:
         response_dict = response.json()
         if "output_status" in response_dict and response_dict.get("output_status") == "SUCCESS":
             return "Event details sent"
-        return "Event details not sent"
+        return "[event_message] Event details not sent"
 
     def compute(self) -> Output:
         user = self.find_user(self.input.phoneNumber)
@@ -163,6 +166,8 @@ class Compute:
         messages = [user_message, event_message,
                     nudge_message, confirmation_message]
         f_message = ". ".join([msg for msg in messages if msg])
+        print(f_message)
+
         return Output(
             output_details=Common.jsonify(event_user.__dict__),
             output_status=OutputStatus.SUCCESS,

@@ -1,6 +1,11 @@
+import pytz
+import requests
 from bson import ObjectId
-from datetime import datetime, timedelta
 from shared.models.common import Common
+from datetime import datetime, timedelta
+from shared.configs import CONFIG as config
+from shared.db.users import get_user_collection
+from shared.db.experts import get_experts_collections
 from shared.db.schedules import get_schedules_collection
 from shared.models.constants import TimeFormats, OutputStatus
 from shared.models.interfaces import UpsertScheduleInput as Input, Output
@@ -9,6 +14,9 @@ from shared.models.interfaces import UpsertScheduleInput as Input, Output
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
+        self.common = Common()
+        self.users_collection = get_user_collection()
+        self.experts_collection = get_experts_collections()
         self.schedules_collection = get_schedules_collection()
 
     def prep_data(self, new_data: dict, old_data: dict = None) -> dict:
@@ -53,12 +61,67 @@ class Compute:
         conflict = self.schedules_collection.find_one(query)
         return conflict is not None
 
+    def get_parties(self) -> tuple:
+        numbers = []
+        query = {"_id": ObjectId(self.input.expert_id)}
+        projection = {"customerPersona": 0, "persona": 0}
+        expert = self.experts_collection.find_one(query, projection)
+        query = {"_id": ObjectId(self.input.user_id)}
+        user = self.users_collection.find_one(query, projection)
+        return user, expert
+
+    def notify_expert(self, url: str, user: dict, expert: dict, difference: int):
+        birth_date: datetime = user.get("birthDate", None)
+        birth_date = birth_date.strftime(
+            "%d %B, %Y") if birth_date else "Not provided"
+        payload = {
+            "template_name": "SARATHI_NOTIFICATION_FOR_USER_CALL_PRODUCTION",
+            "parameters": {
+                "last_expert": self.common.get_last_expert_name(self.input.user_id),
+                "user_name": user.get("name", "Not provided"),
+                "city": user.get("city", "Not provided"),
+                "birth_date": birth_date,
+                "minutes": int(difference / 60)
+            }
+        }
+        payload['phone_number'] = expert["phoneNumber"]
+        response = requests.post(url, json=payload)
+        print(response.text, '__expert_immediate_schedule_notification__')
+
+    def notify_user(self, url: str, user: dict, expert: dict, difference: int):
+        user_name = user.get('name') or user['phoneNumber']
+        expert_name = expert.get('name') or expert['phoneNumber']
+        payload = {
+            'template_name': 'SCHEDULE_REMINDER_MINUTE_PROD',
+            'phone_number': user['phoneNumber'],
+            'parameters': {
+                'user_name': user_name,
+                'expert_name': expert_name,
+                'minutes': int(difference / 60)
+            }
+        }
+        response = requests.post(url, json=payload)
+        print(response.text, '__user_immediate_schedule_notification__')
+
+    def notify_parties(self, difference: int):
+        url = config.URL + '/actions/send_whatsapp'
+        user, expert = self.get_parties()
+        self.notify_expert(url, user, expert, difference)
+        self.notify_user(url, user, expert, difference)
+
     def compute(self) -> Output:
         if self.input.expert_id:
-            self.input.expert_id = ObjectId(self.input.expert_id)
-            self.input.job_time = datetime.strptime(
+            expert_id = ObjectId(self.input.expert_id)
+
+            job_time = datetime.strptime(
                 self.input.job_time, TimeFormats.AWS_TIME_FORMAT)
-            if self.check_expert_availability(self.input.expert_id, self.input.job_time):
+            job_time = job_time.replace(tzinfo=pytz.utc)
+            difference_seconds = (
+                job_time - Common.get_current_utc_time()).total_seconds()
+            if difference_seconds < (15 * 60):
+                self.notify_parties(difference_seconds)
+
+            if self.check_expert_availability(expert_id, job_time):
                 return Output(
                     output_status=OutputStatus.FAILURE,
                     output_message="Expert is not available at this time"
