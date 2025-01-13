@@ -72,6 +72,8 @@ class Compute:
 
         return response
 
+    # TODO: Send whatsapp message to user
+
     def compute(self) -> Output:
         if not self.input._id:
             doc = self.create_escaltion()
@@ -86,7 +88,9 @@ class Compute:
         new_level = current_level + 1
         expert_id = self.get_expert_id_by_level(new_level)
         if not expert_id:
-            return Output(output_message="No expert available for escalation", output_status=OutputStatus.FAILURE)
+            return Output(
+                output_message="No expert available for escalation", output_status=OutputStatus.FAILURE
+            )
 
         new_escalation = EachEscalation(
             level=new_level, expert_id=expert_id,

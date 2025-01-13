@@ -119,6 +119,8 @@ class Validator:
             message = 'Escalation successful'
         message = 'Escalation failed'
         print(message, '__make_call__')
+        print('user_id: ', self.input.user_id,
+              'expert_id: ', self.input.expert_id)
         return message
 
     def validate_expert(self, user: dict, expert: dict) -> tuple:
