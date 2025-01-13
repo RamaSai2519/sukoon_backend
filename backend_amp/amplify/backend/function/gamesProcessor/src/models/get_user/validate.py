@@ -22,7 +22,7 @@ class Validator():
             except Exception as e:
                 return False, "Page and size must be integers"
 
-        if self.input.last_reached_type and not self.input.last_reached_from or not self.input.last_reached_till:
-            return False, "Both last_reached_from and last_reached_till must be provided"
+        if self.input.last_reached_type and not self.input.last_reached_till:
+            return False, "last_reached_till must be provided"
 
         return True, ""
