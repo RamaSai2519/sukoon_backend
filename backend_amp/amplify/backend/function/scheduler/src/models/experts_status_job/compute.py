@@ -24,7 +24,7 @@ class Compute:
         return self.now_time.replace(hour=22, minute=0, second=0, microsecond=0)
 
     def job(self) -> list:
-        query = {"status": "online"}
+        query = {"status": "online", "type": {"$ne": "agent"}}
         experts = list(self.experts_collection.find(query))
         messages = []
         for e in experts:
