@@ -1,5 +1,6 @@
 import requests
 from bson import ObjectId
+from shared.models.common import Common
 from shared.configs import CONFIG as config
 from models.make_call.slack import SlackNotifier
 from shared.db.experts import get_experts_collections
@@ -115,6 +116,7 @@ class Validator:
                 'expert_id': self.input.expert_id,
                 'escalations': []
             }
+        payload = Common.jsonify(payload)
         response = requests.post(url, json=payload)
         if 'output_status' in response.json() and response.json()['output_status'] == 'SUCCESS':
             message = 'Escalation successful'
