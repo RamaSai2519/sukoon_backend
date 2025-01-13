@@ -41,6 +41,7 @@ class Validator:
             return expert_validation
 
         if user_validation[1]['phoneNumber'] == expert_validation[1]['phoneNumber']:
+            self.escalate()
             return False, 'User and Expert phone number cannot be same'
 
         return True, ''

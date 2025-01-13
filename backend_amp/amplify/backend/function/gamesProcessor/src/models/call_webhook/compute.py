@@ -141,6 +141,7 @@ class Compute:
                 'POST', self.url, headers=application_json_header, data=json.dumps(payload))
             message = 'Feedback message sent' if response.status_code == 200 else 'Feedback message not sent'
             return message
+        return 'Feedback message not sent'
 
     def send_promo_message(self, call: Call, expert: Expert, user: User) -> str:
         query = {'userId': user._id, 'templateName': 'PROMO_TEMPLATE'}
@@ -158,6 +159,7 @@ class Compute:
                 'POST', self.url, headers=application_json_header, data=json.dumps(payload))
             message = 'Promo message sent' if response.status_code == 200 else 'Promo message not sent'
             return message
+        return 'Promo message not sent'
 
     def call_mark(self) -> None:
         callId = self.input.call_uuid.replace('_0', '')
@@ -201,12 +203,13 @@ class Compute:
             payload = self.escalations_collection.find_one(query)
         if not payload:
             payload = {
-                'user_id': call.user,
-                'expert_id': call.expert,
+                'user_id': str(call.user),
+                'expert_id': str(call.expert),
                 'escalations': []
             }
         response = requests.post(url, json=payload)
-        if 'output_status' in response.json() and response.json()['output_status'] == 'SUCCESS':
+        response_dict = response.json()
+        if 'output_status' in response_dict and response_dict['output_status'] == 'SUCCESS':
             message = 'Escalation successful'
         message = 'Escalation failed'
         print(message, '__call_webhook__')
@@ -235,7 +238,7 @@ class Compute:
             self.notify_missed_user(user, expert)
 
         if call.status == 'failed':
-            self.notify_failed_expert(expert, user)
+            # self.notify_failed_expert(expert, user)
             self.escalate(call)
 
         feedback_message = self.send_feedback_message(call, expert, user)

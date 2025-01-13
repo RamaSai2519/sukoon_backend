@@ -1,3 +1,4 @@
+import traceback
 from shared.models.constants import OutputStatus
 from models.call_webhook.compute import Compute
 from models.call_webhook.validate import Validator
@@ -22,6 +23,7 @@ class CallWebhook:
         try:
             output = self._compute(input)
         except Exception as e:
+            print(traceback.format_exc())
             return Output(
                 output_details={},
                 output_status=OutputStatus.FAILURE,
