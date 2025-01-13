@@ -238,7 +238,7 @@ class Compute:
             self.notify_missed_user(user, expert)
 
         if call.status == 'failed':
-            # self.notify_failed_expert(expert, user)
+            self.notify_failed_expert(expert, user)
             self.escalate(call)
 
         feedback_message = self.send_feedback_message(call, expert, user)
