@@ -1,7 +1,6 @@
 from shared.models.interfaces import UpdateUserBalanceInput as Input, Output
 from shared.db.users import get_user_balances_collection
-from shared.models.constants import OutputStatus
-from shared.models.common import Common
+from bson import ObjectId
 
 
 class Compute:
@@ -10,20 +9,21 @@ class Compute:
         self.balances_collection = get_user_balances_collection()
 
     def compute(self) -> Output:
-        query = {'user': self.input.user_id}
+        query = {'user': ObjectId(self.input.user_id)}
         balance = self.balances_collection.find_one(query)
         if self.input.action == 'plus':
             new_balance = balance[self.input.balance] + self.input.value
         elif self.input.action == 'minus':
             new_balance = balance[self.input.balance] - self.input.value
 
-        self.balances_collection.update_one(
+        balance = self.balances_collection.find_one_and_update(
             query,
             {
                 '$set': {
                     self.input.balance: new_balance
                 }
-            }
+            },
+            return_document=True
         )
 
         return Output(

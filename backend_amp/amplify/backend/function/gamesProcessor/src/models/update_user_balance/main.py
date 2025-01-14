@@ -9,7 +9,7 @@ class UpdateUserBalance:
     def __init__(self, input: Input) -> None:
         self.input = input
 
-    def process(self):
+    def process(self) -> Output:
         input = self.input
         valid_input, error_message = self._validate(input)
 
@@ -32,7 +32,7 @@ class UpdateUserBalance:
 
         return output
 
-    def _validate(self, input: Input):
+    def _validate(self, input: Input) -> tuple:
         validation_obj = Validator(input)
         validation_result, error_message = validation_obj.validate_input()
 
