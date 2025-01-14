@@ -9,11 +9,11 @@ from datetime import datetime
 from typing import Union, Tuple
 from shared.models.common import Common
 from shared.configs import CONFIG as config
-from shared.db.users import get_user_collection
 from models.upsert_user.slack import SlackManager
-from shared.models.interfaces import User as Input, Output
 from shared.db.referral import get_user_referral_collection
-from shared.models.constants import OutputStatus, application_json_header
+from shared.models.interfaces import User as Input, Output, UserBalance
+from shared.models.constants import OutputStatus, application_json_header, test_numbers
+from shared.db.users import get_user_collection, get_subscription_plans_collection, get_user_balances_collection
 
 
 class Compute:
@@ -22,7 +22,9 @@ class Compute:
         self.query = self.decide_query()
         self.slack_manager = SlackManager()
         self.users_collection = get_user_collection()
+        self.balances_collection = get_user_balances_collection()
         self.referrals_collection = get_user_referral_collection()
+        self.plans_collection = get_subscription_plans_collection()
 
     def decide_query(self) -> dict:
         query = {}
@@ -35,6 +37,7 @@ class Compute:
     def defaults(self, user_data: dict) -> dict:
         user_data['active'] = True
         user_data['isBusy'] = False
+        user_data['plan'] = 'default'
         user_data['isBlocked'] = False
         user_data['isPaidUser'] = False
         user_data['wa_opt_out'] = False
@@ -136,10 +139,11 @@ class Compute:
         if user_data.get('profileCompleted') == True and prev_user and prev_user.get('profileCompleted') == False:
             user_number = user_data.get('phoneNumber')
             user_name = user_data.get('name', user_number)
-            message = self.slack_manager.send_message(
-                user_name, 'User', str(prev_user['_id']))
             response = self.send_insert_message(user_name, user_number, True)
-            message += ' and sent welcome message' if response else ' but failed to send welcome message'
+            message = ' and sent welcome message' if response else ' but failed to send welcome message'
+            if user_number not in test_numbers:
+                message += self.slack_manager.send_message(
+                    user_name, 'User', str(prev_user['_id']))
 
             return f'Successfully updated user{message}'
 
@@ -158,8 +162,9 @@ class Compute:
         message += ' and sent welcome message' if response else ' but did not send welcome message'
 
         signup_type = 'User' if user_profile else 'Lead'
-        message += self.slack_manager.send_message(
-            user_name, signup_type, str(user_data['_id']))
+        if user_number not in test_numbers:
+            message += self.slack_manager.send_message(
+                user_name, signup_type, str(user_data['_id']))
         return message, user_data
 
     def handle_referral(self, user_data: dict, prev_user: dict) -> str:
@@ -173,7 +178,7 @@ class Compute:
         self.users_collection.update_one(self.query, {'$set': user_data})
 
     def send_insert_message(self, name: str, phone_number: str, profileCompleted: bool):
-        if profileCompleted == True:
+        if profileCompleted == True and phone_number not in test_numbers:
             payload = {
                 'template_name': 'PROMO_TEMPLATE',
                 'phone_number': phone_number,
@@ -183,6 +188,24 @@ class Compute:
             response = self.send_wa_message(payload)
             return response
         return None
+
+    def set_default_balances(self, user_data: dict):
+        query = {'name': user_data.get('plan', 'default')}
+        plan = self.plans_collection.find_one(query)
+        if not plan:
+            plan = {
+                'name': 'default',
+                'price': 0,
+                'free_events': 1000,
+                'paid_events': 0,
+                'sarathi_calls': 0,
+                'expert_calls': 0,
+            }
+            self.plans_collection.insert_one(plan)
+        plan['user'] = user_data['_id']
+        balance_doc = Common.clean_dict(plan, UserBalance)
+        self.balances_collection.insert_one(balance_doc)
+        return balance_doc
 
     def compute(self) -> Output:
         user = self.input
@@ -194,6 +217,9 @@ class Compute:
             message = self.update_user(user_data, prev_user)
         else:
             message, user_data = self.insert_user(user_data)
+            balance_doc = self.set_default_balances(user_data)
+            print(balance_doc, '__balance_doc__')
+
         self.handle_referral(user_data, prev_user)
 
         return Output(

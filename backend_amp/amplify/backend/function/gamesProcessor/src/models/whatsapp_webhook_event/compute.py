@@ -4,8 +4,8 @@ import threading
 from bson import ObjectId
 from datetime import datetime
 from shared.configs import CONFIG as config
-from shared.models.constants import OutputStatus
 from shared.db.whatsapp import get_wa_refs_collection
+from shared.models.constants import OutputStatus, test_numbers
 from models.whatsapp_webhook_event.slack import WASlackNotifier
 from shared.models.interfaces import WhatsappWebhookEventInput as Input, Output
 from shared.db.users import get_user_collection, get_user_webhook_messages_collection, get_user_notification_collection, get_user_whatsapp_feedback_collection
@@ -46,7 +46,7 @@ class Compute:
         return user
 
     def create_user_webhook_message_id(self, body, user_id, from_number, name) -> None:
-        if from_number not in ['919398036558']:
+        if from_number not in test_numbers:
             slack_notifier = WASlackNotifier(
                 from_number=from_number, name=name, body=body)
             slack_notifier.send_notification()
