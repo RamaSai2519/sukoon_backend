@@ -152,4 +152,10 @@ class Validator:
             self.escalate()
             return False, 'Expert is busy'
 
+        req_balance = 'sarathi_calls'
+        if expert.get('type', 'saarthi') == 'expert':
+            req_balance = 'expert_calls'
+        if not Common.authorize_action(str(user['_id']), req_balance, 'done'):
+            return False, 'Invalid Token'
+
         return True, expert
