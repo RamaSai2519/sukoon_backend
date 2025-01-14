@@ -94,6 +94,7 @@ api.add_resource(DashboardStatsService, '/actions/dashboard_stats')
 
 # Push Notification Routes
 api.add_resource(PushNotificationService, '/actions/push')
+api.add_resource(FCMTemplateService, '/actions/fcm_template')
 api.add_resource(FCMTokenService, '/actions/update_fcm_token')
 api.add_resource(BytePlusTokenService, '/actions/byte_plus_token')
 
