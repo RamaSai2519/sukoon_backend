@@ -13,7 +13,4 @@ class Validator:
         if self.input.balance not in user_balance_types:
             return False, "Invalid balance field"
 
-        if self.input.intent == 'done' and not self.input.token:
-            return False, "Token required for done intent"
-
         return True, ""

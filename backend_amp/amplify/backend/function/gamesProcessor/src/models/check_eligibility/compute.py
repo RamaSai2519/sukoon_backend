@@ -44,7 +44,7 @@ class Compute:
                 output_status=OutputStatus.FAILURE
             )
         req_balance = balance[self.input.balance]
-        if req_balance < 0:
+        if req_balance <= 0:
             return Output(
                 output_message="Insufficient balance",
                 output_status=OutputStatus.FAILURE
