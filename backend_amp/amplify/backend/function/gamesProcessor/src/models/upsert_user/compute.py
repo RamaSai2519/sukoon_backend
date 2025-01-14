@@ -60,11 +60,15 @@ class Compute:
             user_data = self.defaults(user_data)
         user_data.pop('refCode', None)
 
-        user_data['profileCompleted'] = True
+        user_data['profileCompleted'] = False
         man_fields = ['birthDate', 'city', 'name']
-        for field in man_fields:
-            if field not in user_data or field in ['', None]:
-                user_data['profileCompleted'] = False
+        if all(user_data.get(field) for field in man_fields):
+            for field in man_fields:
+                if user_data.get(field) not in ['', None]:
+                    user_data['profileCompleted'] = True
+                else:
+                    user_data['profileCompleted'] = False
+                    break
 
         if user_data.get('profileCompleted') and (not prev_user or not prev_user.get('refCode')):
             user_name = user_data.get('name', '') or ''
@@ -204,6 +208,7 @@ class Compute:
             self.plans_collection.insert_one(plan)
         plan['user'] = user_data['_id']
         balance_doc = Common.clean_dict(plan, UserBalance)
+        balance_doc.pop('_id')
         self.balances_collection.insert_one(balance_doc)
         return balance_doc
 
