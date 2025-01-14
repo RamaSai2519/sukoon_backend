@@ -1,6 +1,7 @@
 from bson import ObjectId
+from shared.models.constants import user_balance_types
+from shared.models.interfaces import UpdateUserBalanceInput as Input
 from shared.db.users import get_user_collection, get_user_balances_collection
-from shared.models.interfaces import UpdateUserBalanceInput as Input, UserBalance
 
 
 class Validator():
@@ -21,7 +22,7 @@ class Validator():
         if not balance:
             return False, "Balance not found"
 
-        if self.input.balance not in UserBalance.__dataclass_fields__.keys():
+        if self.input.balance not in user_balance_types:
             return False, "Invalid balance field"
 
         if not isinstance(self.input.value, int):

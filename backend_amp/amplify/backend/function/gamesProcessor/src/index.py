@@ -33,6 +33,7 @@ api.add_resource(UserBalanceService, '/actions/balancer')
 api.add_resource(RedeemOfferService, '/actions/redeem_offer')
 api.add_resource(PhoneConfigService, '/actions/phone_config')
 api.add_resource(UserReferralService, '/actions/user_referrals')
+api.add_resource(CheckEligibilityService, '/actions/eligibility')
 
 # Experts Routes
 api.add_resource(SlotsService, '/actions/slots')
