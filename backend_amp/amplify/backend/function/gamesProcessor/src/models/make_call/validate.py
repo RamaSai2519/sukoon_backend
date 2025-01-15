@@ -148,8 +148,9 @@ class Validator:
                 sarathi_name=expert.get('name', ''),
                 status='sarathi_busy',
             )
+            if expert.get('type') not in non_sarathi_types:
+                self.escalate()
             self.notify_failed_expert(expert, user, 'Busy')
-            self.escalate()
             return False, 'Expert is busy'
 
         req_balance = 'sarathi_calls'
