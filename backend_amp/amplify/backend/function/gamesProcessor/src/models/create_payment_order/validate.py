@@ -13,9 +13,9 @@ class Validator():
         if self.input.pay_type and self.input.pay_type not in types:
             return False, "Invalid payment type"
 
-        query = {'name': self.input.plan}
-        plan = self.plans_collection.find_one(query)
-        if not plan:
-            return False, "Invalid plan"
+        # query = {'name': self.input.plan}
+        # plan = self.plans_collection.find_one(query)
+        # if not plan:
+        #     return False, "Invalid plan"
 
         return True, ""
