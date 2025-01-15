@@ -1,4 +1,4 @@
-from shared.models.interfaces import GetEventUsersInput as Input
+from shared.models.interfaces import GetFCMTemplatesInput as Input
 
 
 class Validator:
