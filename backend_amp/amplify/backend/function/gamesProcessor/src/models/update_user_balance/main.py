@@ -1,11 +1,11 @@
 import traceback
 from shared.models.constants import OutputStatus
-from models.call_webhook.compute import Compute
-from models.call_webhook.validate import Validator
-from shared.models.interfaces import WebhookInput as Input, Output
+from models.update_user_balance.compute import Compute
+from models.update_user_balance.validate import Validator
+from shared.models.interfaces import UpdateUserBalanceInput as Input, Output
 
 
-class CallWebhook:
+class UpdateUserBalance:
     def __init__(self, input: Input) -> None:
         self.input = input
 
@@ -17,22 +17,22 @@ class CallWebhook:
             return Output(
                 output_details={},
                 output_status=OutputStatus.FAILURE,
-                output_message=f"INVALID_INPUT: {error_message}"
+                output_message=f"INVALID_INPUT. {error_message}",
             )
 
         try:
             output = self._compute(input)
         except Exception as e:
             print(traceback.format_exc())
-            return Output(
+            output = Output(
                 output_details={},
                 output_status=OutputStatus.FAILURE,
-                output_message=f"ERROR: {str(e)}"
+                output_message=f"{e}",
             )
 
         return output
 
-    def _validate(self, input: Input):
+    def _validate(self, input: Input) -> tuple:
         validation_obj = Validator(input)
         validation_result, error_message = validation_obj.validate_input()
 

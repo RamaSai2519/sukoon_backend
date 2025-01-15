@@ -5,8 +5,8 @@ from typing import Union
 from bson import ObjectId
 from shared.models.common import Common
 from shared.configs import CONFIG as config
-from shared.db.calls import get_calls_collection
 from shared.db.experts import get_experts_collections
+from shared.db.calls import get_calls_collection, get_escalations_collection
 from shared.db.users import get_user_collection, get_user_notification_collection
 from shared.models.interfaces import WebhookInput as Input, Call, Output, User, Expert
 from shared.models.constants import OutputStatus, application_json_header, CallStatus, non_sarathi_types
@@ -20,6 +20,7 @@ class Compute:
         self.calls_collection = get_calls_collection()
         self.url = config.URL + '/actions/send_whatsapp'
         self.experts_collection = get_experts_collections()
+        self.escalations_collection = get_escalations_collection()
         self.user_notifications_collection = get_user_notification_collection()
         self.duration_secs = self.common.duration_str_to_seconds(
             input.call_duration)
@@ -140,6 +141,7 @@ class Compute:
                 'POST', self.url, headers=application_json_header, data=json.dumps(payload))
             message = 'Feedback message sent' if response.status_code == 200 else 'Feedback message not sent'
             return message
+        return 'Feedback message not sent'
 
     def send_promo_message(self, call: Call, expert: Expert, user: User) -> str:
         query = {'userId': user._id, 'templateName': 'PROMO_TEMPLATE'}
@@ -157,6 +159,7 @@ class Compute:
                 'POST', self.url, headers=application_json_header, data=json.dumps(payload))
             message = 'Promo message sent' if response.status_code == 200 else 'Promo message not sent'
             return message
+        return 'Promo message not sent'
 
     def call_mark(self) -> None:
         callId = self.input.call_uuid.replace('_0', '')
@@ -192,6 +195,27 @@ class Compute:
         print(message)
         return message
 
+    def escalate(self, call: Call) -> str:
+        url = config.URL + '/actions/escalate'
+        payload = None
+        if call.type == 'escalated' and call.scheduledId:
+            query = {'_id': ObjectId(call.scheduledId)}
+            payload = self.escalations_collection.find_one(query)
+        if not payload:
+            payload = {
+                'user_id': str(call.user),
+                'expert_id': str(call.expert),
+                'escalations': []
+            }
+        payload = Common.jsonify(payload)
+        response = requests.post(url, json=payload)
+        response_dict = response.json()
+        if 'output_status' in response_dict and response_dict['output_status'] == 'SUCCESS':
+            message = 'Escalation successful'
+        message = 'Escalation failed'
+        print(message, '__call_webhook__')
+        return message
+
     def compute(self) -> Output:
         callId = self.input.call_uuid.replace('_0', '')
         call = self.find_call(callId)
@@ -216,6 +240,7 @@ class Compute:
 
         if call.status == 'failed':
             self.notify_failed_expert(expert, user)
+            threading.Thread(target=self.escalate, args=(call,)).start()
 
         feedback_message = self.send_feedback_message(call, expert, user)
         promo_message = self.send_promo_message(call, expert, user)

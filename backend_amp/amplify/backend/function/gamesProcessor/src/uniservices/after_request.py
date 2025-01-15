@@ -1,5 +1,6 @@
 import json
 from flask import request, Response
+from shared.models.constants import OutputStatus
 from shared.db.misc import get_display_messages_collection
 
 
@@ -30,7 +31,7 @@ class Handler:
         if "output_status" in output:
             status = output["output_status"]
         else:
-            status = "FAILURE"
+            status = OutputStatus.FAILURE
 
         message = self.determine_message(route, method, status)
         if message:
@@ -39,4 +40,6 @@ class Handler:
             self.create_empty_message(route, method, status)
             output["display_message"] = output.get("output_message", "")
         self.response.data = json.dumps(output)
+        if "output_status" in output and output["output_status"] == OutputStatus.FAILURE:
+            self.response.status_code = 400
         return self.response
