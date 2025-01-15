@@ -21,10 +21,10 @@ class Validator():
         if not event:
             return False, 'Invalid source'
 
-        user_id = self.get_user_id()
-        req_balance = 'paid_events' if event.get(
-            'isPremiumUserOnly', False) == True else 'free_events'
-        if not Common.authorize_action(user_id, req_balance, 'done'):
-            return False, 'Invalid Token'
+        # user_id = self.get_user_id()
+        # req_balance = 'paid_events' if event.get(
+        #     'isPremiumUserOnly', False) == True else 'free_events'
+        # if not Common.authorize_action(user_id, req_balance, 'done'):
+        #     return False, 'Invalid Token'
 
         return True, ''
