@@ -4,20 +4,21 @@ import requests
 from bson import ObjectId
 from datetime import datetime, timedelta
 from shared.configs import CONFIG as config
-from shared.db.users import get_user_collection, get_user_payment_collection
 from shared.models.interfaces import CashfreeWebhookEventInput as Input, Output
 from shared.db.events import get_events_collection, get_contribute_events_collection
-from shared.models.constants import OutputStatus, application_json_header, pay_types, TimeFormats
+from shared.db.users import get_user_collection, get_user_payment_collection, get_subscription_plans_collection
+from shared.models.constants import OutputStatus, application_json_header, pay_types, TimeFormats, user_balance_types
 
 
 class Compute:
     def __init__(self, input: Input) -> None:
-        self.input = input
         self.event = None
+        self.input = input
         self.phoneNumber = None
         self.headers = application_json_header
         self.events_collection = get_events_collection()
         self.payments_collection = get_user_payment_collection()
+        self.plans_collection = get_subscription_plans_collection()
         self.contribute_events_collection = get_contribute_events_collection()
 
     def get_user_id_from_number(self) -> str:
@@ -31,7 +32,7 @@ class Compute:
 
         return user_id
 
-    def update_user_membership_status(self):
+    def update_user_membership_status(self) -> tuple:
         user_collection = get_user_collection()
         user_collection.update_one(
             {"_id": ObjectId(self.user_id)},
@@ -39,7 +40,7 @@ class Compute:
         )
         return True, ""
 
-    def send_invoice_to_the_user(self, invoice_s3_url: str, event_name: str = None):
+    def send_invoice_to_the_user(self, invoice_s3_url: str, event_name: str = None) -> None:
         customer_details = self.payment_data.get("customer_details")
         phone_number = customer_details.get("customer_phone")
 
@@ -154,6 +155,26 @@ class Compute:
         print(response_dict)
         return "Event details not sent"
 
+    def update_balances(self, plan: str, user_id: str) -> None:
+        query = {'name': plan}
+        plan = self.plans_collection.find_one(query)
+        if not plan:
+            return
+        new_req_balances = {}
+        for type in user_balance_types:
+            new_req_balances[type] = plan.get(type, 0)
+
+        url = config.URL + '/actions/balancer'
+        payload = {
+            'user_id': user_id,
+            'action': 'plus',
+        }
+        for key, value in new_req_balances.items():
+            payload['balance'] = key
+            payload['value'] = value
+            response = requests.post(url, json=payload)
+            print(response.json(), "balance_response_cashfree")
+
     def update_payment_status(self) -> tuple:
 
         order_details = self.payment_data.get("order")
@@ -186,6 +207,8 @@ class Compute:
                     if pay_type == 'code':
                         self.update_user_meta(event_id)
                 self.send_invoice_to_the_user(invoice_s3_url)
+
+        self.update_balances(payment.get("plan"), str(self.user_id))
 
         payment_id = payment.get("_id")
         self.payments_collection.update_one(

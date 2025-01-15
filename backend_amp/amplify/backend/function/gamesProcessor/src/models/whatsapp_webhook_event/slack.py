@@ -1,8 +1,8 @@
 import pytz
 from datetime import datetime
 from slack_sdk import WebClient
-from shared.configs import CONFIG as config
 from slack_sdk.errors import SlackApiError
+from shared.configs import CONFIG as config
 
 
 class WASlackNotifier:
