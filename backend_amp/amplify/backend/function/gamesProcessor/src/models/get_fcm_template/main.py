@@ -1,7 +1,7 @@
 import traceback
 from shared.models.constants import OutputStatus
-from models.get_events.compute import Compute
-from models.get_events.validate import Validator
+from models.get_fcm_template.compute import Compute
+from models.get_fcm_template.validate import Validator
 from shared.models.interfaces import GetFCMTemplatesInput as Input, Output
 
 
