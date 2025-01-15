@@ -1,8 +1,8 @@
 from shared.models.interfaces import UpsertFCMTemplateInput as Input, Output
-from shared.models.constants import OutputStatus
 from shared.db.users import get_fcm_templates_collection
+from shared.models.constants import OutputStatus
 from shared.models.common import Common
-from bson import ObjectId
+
 
 class Compute:
     def __init__(self, input: Input) -> None:
@@ -11,7 +11,7 @@ class Compute:
 
     def pop_immutable_fields(self, new_data: dict) -> dict:
         # Remove immutable fields that should not be updated
-        fields = ["_id","createdAt"]
+        fields = ["_id", "createdAt"]
         for field in fields:
             new_data.pop(field, None)
         return new_data
@@ -31,7 +31,7 @@ class Compute:
             new_data["updatedAt"] = Common.get_current_utc_time()
         else:
             new_data["createdAt"] = Common.get_current_utc_time()
-            #new_data["user_id"] = ObjectId(self.input.user_id)
+            # new_data["user_id"] = ObjectId(self.input.user_id)
         new_data = {k: v for k, v in new_data.items() if v is not None}
         return new_data
 
@@ -53,7 +53,7 @@ class Compute:
             # Update existing entry
             new_data = self.prep_data(new_data, old_data)
             self.templates_collection.update_one(
-                {"_id": old_data["_id"]}, {"$set": new_data}va
+                {"_id": old_data["_id"]}, {"$set": new_data}
             )
             message = "FCM template updated successfully"
         else:

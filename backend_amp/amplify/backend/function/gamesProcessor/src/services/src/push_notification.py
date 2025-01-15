@@ -39,3 +39,6 @@ class FCMTemplateService(Resource):
 
         return output
 
+    def get(self) -> dict:
+        output = UpsertFCMTemplate().process()
+        
