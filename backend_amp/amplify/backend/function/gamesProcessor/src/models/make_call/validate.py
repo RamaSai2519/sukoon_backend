@@ -148,8 +148,15 @@ class Validator:
                 sarathi_name=expert.get('name', ''),
                 status='sarathi_busy',
             )
+            if expert.get('type') not in non_sarathi_types:
+                self.escalate()
             self.notify_failed_expert(expert, user, 'Busy')
-            self.escalate()
             return False, 'Expert is busy'
+
+        req_balance = 'sarathi_calls'
+        if expert.get('type', 'saarthi') == 'expert':
+            req_balance = 'expert_calls'
+        if not Common.authorize_action(str(user['_id']), req_balance, 'done'):
+            return False, 'Invalid Token'
 
         return True, expert

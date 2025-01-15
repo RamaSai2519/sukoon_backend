@@ -28,13 +28,18 @@ api.add_resource(ClubService, '/actions/club')
 
 # Users Routes
 api.add_resource(UserService, '/actions/user')
-api.add_resource(SlotsService, '/actions/slots')
-api.add_resource(ExpertService, '/actions/expert')
-api.add_resource(ApplicantService, '/actions/applicant')
 api.add_resource(AgentMetaService, '/actions/agent_meta')
+api.add_resource(UserBalanceService, '/actions/balancer')
 api.add_resource(RedeemOfferService, '/actions/redeem_offer')
 api.add_resource(PhoneConfigService, '/actions/phone_config')
 api.add_resource(UserReferralService, '/actions/user_referrals')
+api.add_resource(CheckEligibilityService, '/actions/eligibility')
+
+# Experts Routes
+api.add_resource(SlotsService, '/actions/slots')
+api.add_resource(ExpertService, '/actions/expert')
+api.add_resource(ApplicantService, '/actions/applicant')
+api.add_resource(UpdateExpertScoresService, '/actions/expert_scores')
 
 # Events Routes
 api.add_resource(ListEventsService, '/actions/list_events')
@@ -49,9 +54,8 @@ api.add_resource(SchedulesService, '/actions/schedules')
 api.add_resource(ReSchedulesService, '/actions/reschedules')
 
 # Mark Routes
-api.add_resource(UpdateExpertScoresService, '/actions/expert_scores')
-api.add_resource(SystemPromptsService, '/actions/system_prompts')
 api.add_resource(HistoriesService, '/actions/histories')
+api.add_resource(SystemPromptsService, '/actions/system_prompts')
 
 # Cashfree Routes
 api.add_resource(CashfreeWebhookService, '/actions/cashfree_webhook')
@@ -95,6 +99,7 @@ api.add_resource(DashboardStatsService, '/actions/dashboard_stats')
 
 # Push Notification Routes
 api.add_resource(PushNotificationService, '/actions/push')
+api.add_resource(FCMTemplateService, '/actions/fcm_template')
 api.add_resource(FCMTokenService, '/actions/update_fcm_token')
 api.add_resource(BytePlusTokenService, '/actions/byte_plus_token')
 

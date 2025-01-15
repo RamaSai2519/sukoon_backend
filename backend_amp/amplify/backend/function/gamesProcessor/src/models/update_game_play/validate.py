@@ -1,5 +1,4 @@
 from shared.models.interfaces import UpdateGamePlayInput as Input
-from models.enum import GameType
 
 
 class Validator():
