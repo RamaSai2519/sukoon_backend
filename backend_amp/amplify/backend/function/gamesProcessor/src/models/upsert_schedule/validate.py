@@ -29,7 +29,7 @@ class Validator:
             mandatory_fields.append('expert_id')
         for field in mandatory_fields:
             if not getattr(self.input, field):
-                return False, f'{field.replace('_', ' ').capitalize()} is mandatory'
+                return False, f'{field} is mandatory'
         return True, ''
 
     def validate_job_time_and_status(self) -> tuple:
