@@ -10,17 +10,14 @@ from models.save_remark.main import SaveRemark
 from models.upsert_user.main import UpsertUser
 from models.redeem_offer.main import RedeemOffer
 from models.upsert_event_user.main import UpsertEventUser
-from models.check_eligibility.main import CheckEligibility
 from models.get_engagement_data.main import GetEngagementData
 from models.upsert_phone_config.main import UpsertPhoneConfig
-from models.update_user_balance.main import UpdateUserBalance
 from models.upsert_engagement_data.main import UpsertEngagementData
 from models.get_user_status_options.main import GetUserStatusOptions
 from shared.models.interfaces import (
-    Persona, UpdateUserBalanceInput, CheckEligiblilityInput,
-    User, GetUsersInput, EventUserInput, GetLeadsInput, SaveRemarkInput,
-    GetEngagementDataInput, UpsertEngagementDataInput, PhoneConfigInput,
-    GetUserStatusesInput, RedeemOfferInput, Demographics, Psychographics
+    Persona, User, GetUsersInput, EventUserInput, GetLeadsInput,
+    SaveRemarkInput, GetEngagementDataInput, UpsertEngagementDataInput,
+    PhoneConfigInput, GetUserStatusesInput, RedeemOfferInput, Demographics, Psychographics
 )
 
 
@@ -144,28 +141,6 @@ class RedeemOfferService(Resource):
         input = json.loads(request.get_data())
         input = RedeemOfferInput(**input)
         output = RedeemOffer(input).process()
-        output = dataclasses.asdict(output)
-
-        return output
-
-
-class UserBalanceService(Resource):
-
-    def post(self) -> dict:
-        input = json.loads(request.get_data())
-        input = UpdateUserBalanceInput(**input)
-        output = UpdateUserBalance(input).process()
-        output = dataclasses.asdict(output)
-
-        return output
-
-
-class CheckEligibilityService(Resource):
-
-    def post(self) -> dict:
-        input = json.loads(request.get_data())
-        input = CheckEligiblilityInput(**input)
-        output = CheckEligibility(input).process()
         output = dataclasses.asdict(output)
 
         return output
