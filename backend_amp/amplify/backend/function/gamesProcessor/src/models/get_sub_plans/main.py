@@ -1,11 +1,11 @@
 import traceback
 from shared.models.constants import OutputStatus
-from models.upsert_sub_plan.compute import Compute
-from models.upsert_sub_plan.validate import Validator
-from shared.models.interfaces import UpsertSubPlanInput as Input, Output
+from models.get_sub_plans.compute import Compute
+from models.get_sub_plans.validate import Validator
+from shared.models.interfaces import GetSubPlansInput as Input, Output
 
 
-class UpsertSubPlan:
+class GetSubPlans:
     def __init__(self, input: Input) -> None:
         self.input = input
 
@@ -32,7 +32,7 @@ class UpsertSubPlan:
 
         return output
 
-    def _validate(self, input: Input) -> tuple:
+    def _validate(self, input: Input):
         validation_obj = Validator(input)
         validation_result, error_message = validation_obj.validate_input()
 
