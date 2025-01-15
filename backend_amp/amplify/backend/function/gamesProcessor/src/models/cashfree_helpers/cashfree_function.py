@@ -5,7 +5,7 @@ from shared.configs import CONFIG as config
 CASHFREE_CONFIG = config.CASHFREE_API_CREDENTIALS
 
 
-def get_cashfree_payment_session_id(customer_details_dict, order_details_dict):
+def get_cashfree_payment_session_id(customer_details_dict: dict, order_details_dict: dict) -> requests.Response:
 
     phone_number = customer_details_dict.get("phone_number")
     customer_id = customer_details_dict.get("customer_id")
