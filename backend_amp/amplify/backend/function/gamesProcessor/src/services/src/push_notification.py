@@ -1,11 +1,13 @@
 import json
 import dataclasses
-from flask_restful import Resource
 from flask import request
-from shared.models.interfaces import PushNotificationInput, Output, UpdateFCMTokenInput, UpsertFCMTemplateInput
-from models.send_push_notification.main import SendPushNotification
+from flask_restful import Resource
+from models.get_fcm_templates.main import GetFCMTemplates
 from models.update_fcm_token.main import UpdateUserFCMToken
 from models.upsert_fcm_template.main import UpsertFCMTemplate
+from models.send_push_notification.main import SendPushNotification
+from shared.models.interfaces import PushNotificationInput, Output, UpdateFCMTokenInput, UpsertFCMTemplateInput
+
 
 class PushNotificationService(Resource):
 
@@ -29,16 +31,16 @@ class FCMTokenService(Resource):
 
         return output
 
+
 class FCMTemplateService(Resource):
 
     def post(self) -> dict:
         input = json.loads(request.get_data())
         input = UpsertFCMTemplateInput(**input)
-        output= UpsertFCMTemplate(input).process()
+        output = UpsertFCMTemplate(input).process()
         output = dataclasses.asdict(output)
 
         return output
 
     def get(self) -> dict:
         output = UpsertFCMTemplate().process()
-        
