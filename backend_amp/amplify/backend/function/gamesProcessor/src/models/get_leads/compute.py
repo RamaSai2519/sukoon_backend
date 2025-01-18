@@ -59,10 +59,8 @@ class Compute:
         return {'_id': {'$in': users}}
 
     def prep_query(self) -> dict:
-        query = {'profileCompleted': False}
-        filter_query = Common.get_filter_query(
+        query = Common.get_filter_query(
             self.input.filter_field, self.input.filter_value)
-        query.update(filter_query)
         if self.input.type == 'one_call_users':
             spec_query = self.get_call_users(1)
             query.update(spec_query)
@@ -76,7 +74,7 @@ class Compute:
             query.update(spec_query)
             return query
         else:
-            return query
+            return query.update({'profileCompleted': False})
 
     def compute(self) -> dict:
         query = self.prep_query()
