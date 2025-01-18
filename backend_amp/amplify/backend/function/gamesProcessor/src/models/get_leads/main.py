@@ -1,6 +1,7 @@
-from shared.models.constants import OutputStatus
+import traceback
 from models.get_leads.compute import Compute
 from models.get_leads.validate import Validator
+from shared.models.constants import OutputStatus
 from shared.models.interfaces import GetLeadsInput as Input, Output
 
 
@@ -22,6 +23,7 @@ class GetLeads:
         try:
             output = self._compute(input)
         except Exception as e:
+            traceback.print_exc()
             return Output(
                 output_details={},
                 output_status=OutputStatus.FAILURE,

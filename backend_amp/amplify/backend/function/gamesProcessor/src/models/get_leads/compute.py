@@ -1,17 +1,33 @@
 from shared.models.common import Common
-from shared.db.users import get_user_collection
 from shared.db.calls import get_calls_collection
 from shared.models.interfaces import GetLeadsInput as Input, Output
+from shared.db.users import get_user_collection, get_meta_collection
 
 
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
+        self.meta_collection = get_meta_collection()
         self.users_collection = get_user_collection()
         self.calls_collection = get_calls_collection()
 
+    def __format__(self, user: dict) -> dict:
+        query = {"user": user.get("_id")}
+        user_meta: dict = self.meta_collection.find_one(query)
+        if user_meta:
+            user["leadSource"] = user_meta.get("source", "Website")
+        else:
+            user["leadSource"] = "Website"
+        user.update(user_meta or {})
+        return Common.jsonify(user)
+
     def get_leads(self, query: dict) -> dict:
-        cursor = self.users_collection.find(query).sort(
+        projection = {
+            'name': 1, '_id': 1,
+            'createdDate': 1, 'city': 1,
+            'birthDate': 1, 'source': 1,
+        }
+        cursor = self.users_collection.find(query, projection).sort(
             self.input.sort_field, int(self.input.sort_order))
         paginated_cursor = Common.paginate_cursor(
             cursor, int(self.input.page), int(self.input.size))
@@ -19,7 +35,7 @@ class Compute:
         return Output(
             output_details={
                 'total': self.users_collection.count_documents(query),
-                'data': users
+                'data': [self.__format__(user) for user in users]
             })
 
     def get_call_users(self, number_of_calls: int) -> dict:
