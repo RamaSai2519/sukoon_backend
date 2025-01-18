@@ -74,14 +74,9 @@ class Compute:
         return counts_dict
 
     def compute(self) -> Output:
-        start = time.perf_counter()
-
         leads_query = self.get_user_query(leads=True)
         non_leads_query = self.get_user_query(leads=False)
 
         counts = self.get_counts(leads_query, non_leads_query)
-
-        end = time.perf_counter()
-        print(f'Finished in {end - start} seconds')
 
         return Output(output_details=counts)

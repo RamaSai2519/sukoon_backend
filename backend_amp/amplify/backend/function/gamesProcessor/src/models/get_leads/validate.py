@@ -1,5 +1,5 @@
 from dataclasses import fields
-from typing import get_origin, get_args, Optional, Union
+from typing import get_origin, get_args, Union
 from shared.models.interfaces import GetLeadsInput as Input, User
 
 
@@ -16,6 +16,12 @@ class Validator:
 
         if not self.validate_filter_field(filter_field, user_fields):
             return False, f"Invalid field {filter_field}"
+
+        if self.input.sort_order not in ['1', '-1']:
+            return False, "Invalid sort order"
+
+        if self.input.filter_field and self.input.filter_field in ['profileCompleted', '_id']:
+            return False, "Invalid filter field"
 
         if not self.validate_filter_value_type(filter_field, filter_value, user_fields):
             return False, f"Invalid type for field {filter_field}: Expected {self.get_expected_type_str(filter_field, user_fields)}, got {type(filter_value).__name__}"

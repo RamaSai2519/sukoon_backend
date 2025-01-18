@@ -9,11 +9,8 @@ class Validator:
             value for name, value in CallStatus.__dict__.items() if not name.startswith('__')]
 
     def validate_input(self) -> tuple:
-        
+
         if self.input.call_status not in self.status_list:
             return False, "Invalid call status"
-        
-        return True, ""
 
-    
-    
+        return True, ""
