@@ -71,12 +71,15 @@ api.add_resource(WhatsappMessageService, '/actions/send_whatsapp')
 api.add_resource(SendOTPService, '/actions/send_otp')
 api.add_resource(ValidateOTPService, '/actions/validate_otp')
 
+# Leads Routes
+api.add_resource(LeadsService, '/actions/leads')
+api.add_resource(LeadsCountService, '/actions/leads_count')
+
 # Admin Routes
 # - Auth
 api.add_resource(AdminAuthService, '/actions/admin_auth')
 # - Data
 api.add_resource(LogsService, '/actions/logs')
-api.add_resource(LeadsService, '/actions/leads')
 api.add_resource(RemarkService, '/actions/remarks')
 api.add_resource(WhatsappHistoryService, '/actions/wa_history')
 api.add_resource(EngagementDataService, '/actions/user_engagement')
