@@ -29,10 +29,13 @@ api.add_resource(ClubService, '/actions/club')
 # Users Routes
 api.add_resource(UserService, '/actions/user')
 api.add_resource(AgentMetaService, '/actions/agent_meta')
-api.add_resource(UserBalanceService, '/actions/balancer')
 api.add_resource(RedeemOfferService, '/actions/redeem_offer')
 api.add_resource(PhoneConfigService, '/actions/phone_config')
 api.add_resource(UserReferralService, '/actions/user_referrals')
+
+# Subscription Routes
+api.add_resource(SubPlanService, '/actions/sub_plans')
+api.add_resource(UserBalanceService, '/actions/balancer')
 api.add_resource(CheckEligibilityService, '/actions/eligibility')
 
 # Experts Routes

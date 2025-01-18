@@ -203,9 +203,10 @@ class Compute:
             payload = self.escalations_collection.find_one(query)
         if not payload:
             payload = {
+                'escalations': [],
+                'call_id': call.callId,
                 'user_id': str(call.user),
                 'expert_id': str(call.expert),
-                'escalations': []
             }
         payload = Common.jsonify(payload)
         response = requests.post(url, json=payload)

@@ -117,10 +117,28 @@ class Compute:
                 return pay.get("desc")
         return "Invoice"
 
+    def check_eligibility(self) -> str:
+        url = config.URL + '/actions/eligibility'
+        payload = {
+            'user': str(self.user_id),
+            'intent': 'perform',
+            'balance': 'paid_events'
+        }
+        response = requests.post(url, json=payload)
+        response_dict = response.json()
+        if "output_status" in response_dict and response_dict.get("output_status") == "SUCCESS":
+            token = response_dict.get("output_details").get("token")
+            return token
+        return None
+
     def register_user_for_event(self, event_id: str):
+        token = self.check_eligibility()
+        if not token:
+            return "User not eligible for event"
         url = config.URL + "/actions/upsert_event_user"
         payload = {'phoneNumber': self.phoneNumber,
                    'isUserPaid': True, 'source': event_id}
+        headers = {'Authorization': f'Bearer {token}'}
         response = requests.post(url, json=payload)
         response_dict = response.json()
         message = "User not registered for event"
