@@ -45,18 +45,13 @@ class Compute:
             return True, doc
         return False, doc
 
-    def get_lower_time_str(self) -> tuple:
-        upper_bound = self.now_time + timedelta(minutes=35)
-        lower_bound = upper_bound - timedelta(minutes=10)
-
-        return upper_bound, lower_bound
-
     def get_wapending_schedules(self) -> list:
-        upper_bound, lower_bound = self.get_lower_time_str()
         query = {
             "isDeleted": False,
             "status": "WAPENDING",
-            "job_time": {"$gte": lower_bound, "$lt": upper_bound}
+            "job_time": {
+                "$gt": self.now_time - timedelta(minutes=1),
+                "$lt": self.now_time + timedelta(minutes=31)}
         }
 
         print(query, '__wa_query__')
