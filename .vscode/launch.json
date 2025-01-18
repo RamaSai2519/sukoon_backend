@@ -8,7 +8,7 @@
             "program": "backend_amp/amplify/backend/function/scheduler/src/index.py",
             "console": "integratedTerminal",
             "env": {
-                "ENV": "dev"
+                "ENV": "local"
             }
         },
         {
@@ -19,7 +19,7 @@
             "env": {
                 "FLASK_APP": "backend_amp/amplify/backend/function/gamesProcessor/src/index.py",
                 "FLASK_DEBUG": "1",
-                "ENV": "dev"
+                "ENV": "local"
             },
             "args": [
                 "run",
@@ -37,7 +37,7 @@
             "env": {
                 "FLASK_APP": "backend_amp/amplify/backend/function/pandas/src/index.py",
                 "FLASK_DEBUG": "1",
-                "ENV": "dev"
+                "ENV": "local"
             },
             "args": [
                 "run",
