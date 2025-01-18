@@ -63,9 +63,7 @@ class Compute:
         filter_query = Common.get_filter_query(
             self.input.filter_field, self.input.filter_value)
         query.update(filter_query)
-        if self.input.type == 'total_leads':
-            return query
-        elif self.input.type == 'one_call_users':
+        if self.input.type == 'one_call_users':
             spec_query = self.get_call_users(1)
             query.update(spec_query)
             return query
@@ -76,6 +74,8 @@ class Compute:
         elif self.input.type == 'repeat_call_users':
             spec_query = self.get_call_users(3)
             query.update(spec_query)
+            return query
+        else:
             return query
 
     def compute(self) -> dict:
