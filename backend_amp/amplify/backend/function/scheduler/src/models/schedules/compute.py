@@ -45,28 +45,32 @@ class Compute:
             return True, doc
         return False, doc
 
-    def get_lower_time_str(self) -> tuple:
-        upper_bound = self.now_time + timedelta(minutes=35)
-        lower_bound = upper_bound - timedelta(minutes=10)
-
-        return upper_bound, lower_bound
-
-    def get_wapending_schedules(self) -> list:
-        upper_bound, lower_bound = self.get_lower_time_str()
+    def mark_all_missed_wa_msgs(self) -> None:
         query = {
             "isDeleted": False,
             "status": "WAPENDING",
-            "job_time": {"$gte": lower_bound, "$lt": upper_bound}
+            "job_time": {"$lt": self.now_time}
+        }
+        self.collection.update_many(query, {"$set": {"status": "PENDING"}})
+
+    def get_wapending_schedules(self) -> list:
+        query = {
+            "isDeleted": False,
+            "status": "WAPENDING",
+            "job_time": {
+                "$gt": self.now_time - timedelta(minutes=1),
+                "$lt": self.now_time + timedelta(minutes=31)}
         }
 
         print(query, '__wa_query__')
+        self.mark_all_missed_wa_msgs()
         schedules = self.collection.find(query)
         return list(schedules)
 
     def get_pending_schedules(self) -> list:
         query = {
             "isDeleted": False,
-            "job_time": {"$lt": self.now_time},
+            "job_time": {"$lt": self.now_time + timedelta(minutes=1)},
             "status": "PENDING"
         }
         allowed, doc = self.check_wa_counter()
