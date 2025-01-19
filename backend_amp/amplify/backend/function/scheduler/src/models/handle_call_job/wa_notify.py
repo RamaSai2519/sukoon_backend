@@ -35,7 +35,13 @@ class WAHandler:
 
         return user, expert
 
-    def notify_user(self, phoneNumber: str, user_name: str, expert_name: str, difference: int) -> str:
+    def get_diff_in_minutes(self, difference_in_seconds: int) -> str:
+        minutes = int(difference_in_seconds / 60)
+        if minutes <= 2:
+            return 'couple of'
+        return str(minutes)
+
+    def notify_user(self, phoneNumber: str, user_name: str, expert_name: str, difference: str) -> str:
         url = self.url + '/actions/send_whatsapp'
         payload = {
             'template_name': 'SCHEDULE_REMINDER_MINUTE_PROD',
@@ -43,7 +49,7 @@ class WAHandler:
             'parameters': {
                 'expert_name': user_name,
                 'user_name': expert_name,
-                'minutes': int(difference / 60)
+                'minutes': difference
             }
         }
         response = requests.post(url, json=payload)
@@ -51,7 +57,7 @@ class WAHandler:
 
         return response.text
 
-    def notify_expert(self, phoneNumber: str, user_name: str, user_city: str, user_birth: str, difference: int) -> str:
+    def notify_expert(self, phoneNumber: str, user_name: str, user_city: str, user_birth: str, difference: str) -> str:
         url = self.url + '/actions/send_whatsapp'
         payload = {
             'template_name': 'SARATHI_NOTIFICATION_FOR_USER_CALL_PRODUCTION',
@@ -61,7 +67,7 @@ class WAHandler:
                 "user_name": user_name,
                 "city": user_city,
                 "birth_date": user_birth,
-                "minutes": int(difference / 60)
+                "minutes": difference / 60
             }
         }
         response = requests.post(url, json=payload)
@@ -83,10 +89,11 @@ class WAHandler:
         birth_date = birth_date.strftime(
             "%d %B, %Y") if birth_date else "Not provided"
         try:
+            difference_minutes = self.get_diff_in_minutes(difference_seconds)
             user_response = self.notify_user(
-                user.phoneNumber, user_name, expert_name, difference_seconds)
+                user.phoneNumber, user_name, expert_name, difference_minutes)
             expert_response = self.notify_expert(
-                expert.phoneNumber, user_name, user.city, birth_date, difference_seconds)
+                expert.phoneNumber, user_name, user.city, birth_date, difference_minutes)
         except Exception as error:
             print(error, "Error in sending whatsapp message: {job}".format(
                 job=self.job.__dict__))
