@@ -74,7 +74,8 @@ class Compute:
             query.update(spec_query)
             return query
         else:
-            return query.update({'profileCompleted': False})
+            query.update({'profileCompleted': False})
+            return query
 
     def compute(self) -> dict:
         query = self.prep_query()
