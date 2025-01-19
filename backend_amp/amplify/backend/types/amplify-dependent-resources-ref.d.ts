@@ -12,16 +12,6 @@ export type AmplifyDependentResourcesAttributes = {
     }
   },
   "function": {
-    "backendamppandas": {
-      "Arn": "string"
-    },
-    "excelUploader": {
-      "Arn": "string",
-      "LambdaExecutionRole": "string",
-      "LambdaExecutionRoleArn": "string",
-      "Name": "string",
-      "Region": "string"
-    },
     "gamesProcessor": {
       "Arn": "string",
       "LambdaExecutionRole": "string",

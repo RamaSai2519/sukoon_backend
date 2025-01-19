@@ -1,6 +1,6 @@
-import json
 import pytz
 import requests
+import traceback
 from typing import Tuple
 from datetime import datetime
 from shared.models.common import Common
@@ -67,7 +67,7 @@ class WAHandler:
                 "user_name": user_name,
                 "city": user_city,
                 "birth_date": user_birth,
-                "minutes": difference / 60
+                "minutes": difference
             }
         }
         response = requests.post(url, json=payload)
@@ -95,6 +95,7 @@ class WAHandler:
             expert_response = self.notify_expert(
                 expert.phoneNumber, user_name, user.city, birth_date, difference_minutes)
         except Exception as error:
+            traceback.print_exc()
             print(error, "Error in sending whatsapp message: {job}".format(
                 job=self.job.__dict__))
             user_response = None
