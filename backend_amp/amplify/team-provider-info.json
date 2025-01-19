@@ -19,11 +19,11 @@
         },
         "scheduler": {
           "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
-          "s3Key": "amplify-builds/scheduler-3134786244325a463774-build.zip"
+          "s3Key": "amplify-builds/scheduler-2f556d58745177422f4a-build.zip"
         },
         "pandas": {
           "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
-          "s3Key": "amplify-builds/pandas-79496f72506430706879-build.zip"
+          "s3Key": "amplify-builds/pandas-7677344255576b61657a-build.zip"
         }
       },
       "api": {
