@@ -17,8 +17,9 @@ class Compute:
 
     def compute(self) -> Output:
         if self.input.phoneNumber is not None or self.input.expert_id is not None:
+            req_calls = False if self.input.req_calls == 'false' else True
             experts = self.helper.get_expert(
-                self.input.phoneNumber, self.input.expert_id)
+                self.input.phoneNumber, self.input.expert_id, req_calls)
             if not experts:
                 return Output(
                     output_status=OutputStatus.FAILURE,
