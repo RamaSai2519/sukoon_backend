@@ -1,2 +1,3 @@
 pull_request:
-  - .github/PULL_REQUEST_TEMPLATE/template.md
+  - .github/PULL_REQUEST_TEMPLATE/feature.md
+  - .github/PULL_REQUEST_TEMPLATE/bug.md
