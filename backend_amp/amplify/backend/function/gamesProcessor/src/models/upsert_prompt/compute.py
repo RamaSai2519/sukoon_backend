@@ -16,7 +16,7 @@ class Compute:
             query = {"context": self.input.context}
             doc = self.prompt_proposals_collection.find_one(query)
             if doc:
-                content = doc.get("content", self.input.content)
+                content = self.input.content
                 prompt = self.system_prompts_collection.find_one_and_update(
                     filter={"context": self.input.context},
                     update={"$set": {"content": content}},
@@ -29,7 +29,8 @@ class Compute:
                     now_date = now_date.strftime('%Y-%m-%d')
                     history_query = {'createdAt': now_date}
                     update = {'$set': {'history.0.content': self.input.content}}
-                    self.histories_collection.update_many(history_query, update)
+                    self.histories_collection.update_many(
+                        history_query, update)
 
                 self.prompt_proposals_collection.update_one(
                     query, {"$set": {"approved": True}})
