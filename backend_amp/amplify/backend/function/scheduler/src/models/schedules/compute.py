@@ -45,6 +45,14 @@ class Compute:
             return True, doc
         return False, doc
 
+    def mark_all_missed_wa_msgs(self) -> None:
+        query = {
+            "isDeleted": False,
+            "status": "WAPENDING",
+            "job_time": {"$lt": self.now_time}
+        }
+        self.collection.update_many(query, {"$set": {"status": "PENDING"}})
+
     def get_wapending_schedules(self) -> list:
         query = {
             "isDeleted": False,
@@ -55,13 +63,14 @@ class Compute:
         }
 
         print(query, '__wa_query__')
+        self.mark_all_missed_wa_msgs()
         schedules = self.collection.find(query)
         return list(schedules)
 
     def get_pending_schedules(self) -> list:
         query = {
             "isDeleted": False,
-            "job_time": {"$lt": self.now_time},
+            "job_time": {"$lt": self.now_time + timedelta(minutes=1)},
             "status": "PENDING"
         }
         allowed, doc = self.check_wa_counter()
