@@ -14,36 +14,29 @@ class Compute:
     def compute(self) -> Output:
         if self.input.auth == 196970:
             query = {"context": self.input.context}
-            doc = self.prompt_proposals_collection.find_one(query)
-            if doc:
-                content = self.input.content
-                prompt = self.system_prompts_collection.find_one_and_update(
-                    filter={"context": self.input.context},
-                    update={"$set": {"content": content}},
-                    upsert=True,
-                    return_document=True
-                )
+            content = self.input.content
+            prompt = self.system_prompts_collection.find_one_and_update(
+                filter={"context": self.input.context},
+                update={"$set": {"content": content}},
+                upsert=True,
+                return_document=True
+            )
 
-                if self.input.context == 'ark_main':
-                    now_date = Common.get_current_utc_time()
-                    now_date = now_date.strftime('%Y-%m-%d')
-                    history_query = {'createdAt': now_date}
-                    update = {'$set': {'history.0.content': self.input.content}}
-                    self.histories_collection.update_many(
-                        history_query, update)
+            if self.input.context == 'ark_main':
+                now_date = Common.get_current_utc_time()
+                now_date = now_date.strftime('%Y-%m-%d')
+                history_query = {'createdAt': now_date}
+                update = {'$set': {'history.0.content': self.input.content}}
+                self.histories_collection.update_many(
+                    history_query, update)
 
-                self.prompt_proposals_collection.update_one(
-                    query, {"$set": {"approved": True}})
-                return Output(
-                    output_details=Common.jsonify(prompt),
-                    output_status=OutputStatus.SUCCESS,
-                    output_message="Successfully approved prompt"
-                )
-            else:
-                return Output(
-                    output_status=OutputStatus.FAILURE,
-                    output_message="Prompt Proposal not found",
-                )
+            self.prompt_proposals_collection.update_one(
+                query, {"$set": {"approved": True}})
+            return Output(
+                output_details=Common.jsonify(prompt),
+                output_status=OutputStatus.SUCCESS,
+                output_message="Successfully approved prompt"
+            )
 
         prompt = self.prompt_proposals_collection.find_one_and_update(
             filter={"context": self.input.context},
