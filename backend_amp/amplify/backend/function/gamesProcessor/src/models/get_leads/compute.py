@@ -69,12 +69,13 @@ class Compute:
             spec_query = self.get_call_users(2)
             query.update(spec_query)
             return query
-        elif self.input.type == 'repeat_call_users':
+        elif self.input.type == 'repeat_users':
             spec_query = self.get_call_users(3)
             query.update(spec_query)
             return query
         else:
-            return query.update({'profileCompleted': False})
+            query.update({'profileCompleted': False})
+            return query
 
     def compute(self) -> dict:
         query = self.prep_query()
