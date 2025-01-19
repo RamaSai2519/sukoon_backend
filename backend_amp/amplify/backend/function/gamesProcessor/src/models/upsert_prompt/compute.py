@@ -16,7 +16,7 @@ class Compute:
             query = {"context": self.input.context}
             content = self.input.content
             prompt = self.system_prompts_collection.find_one_and_update(
-                filter={"context": self.input.context},
+                filter=query,
                 update={"$set": {"content": content}},
                 upsert=True,
                 return_document=True
@@ -26,12 +26,13 @@ class Compute:
                 now_date = Common.get_current_utc_time()
                 now_date = now_date.strftime('%Y-%m-%d')
                 history_query = {'createdAt': now_date}
-                update = {'$set': {'history.0.content': self.input.content}}
+                update = {'$set': {'history.0.content':  content}}
                 self.histories_collection.update_many(
                     history_query, update)
 
+            prompt['approved'] = True
             self.prompt_proposals_collection.update_one(
-                query, {"$set": {"approved": True}})
+                query, {"$set": prompt})
             return Output(
                 output_details=Common.jsonify(prompt),
                 output_status=OutputStatus.SUCCESS,
