@@ -7,3 +7,6 @@
 [submodule "backend_amp/amplify/backend/function/gamesProcessor/src/shared"]
 	path = backend_amp/amplify/backend/function/gamesProcessor/src/shared
 	url = https://github.com/SukoonUnlimited/shared_sukoon.git
+[submodule "backend_amp/amplify/backend/function/stcaller/src/shared"]
+	path = backend_amp/amplify/backend/function/stcaller/src/shared
+	url = https://github.com/SukoonUnlimited/shared_sukoon.git
