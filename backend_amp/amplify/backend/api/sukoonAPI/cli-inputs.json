@@ -15,8 +15,8 @@
         "setting": "open"
       }
     },
-    "/stcall/{action}": {
-      "name": "/stcall/{action}",
+    "/st/{action}": {
+      "name": "/st/{action}",
       "lambdaFunction": "stcaller",
       "permissions": {
         "setting": "open"
