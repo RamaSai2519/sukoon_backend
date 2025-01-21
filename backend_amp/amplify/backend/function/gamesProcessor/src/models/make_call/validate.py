@@ -1,11 +1,13 @@
 import requests
 from bson import ObjectId
+from datetime import timedelta
 from shared.models.common import Common
 from shared.configs import CONFIG as config
 from models.make_call.slack import SlackNotifier
 from shared.db.experts import get_experts_collections
 from shared.db.calls import get_escalations_collection
 from shared.models.interfaces import CallInput as Input
+from shared.db.schedules import get_schedules_collection
 from shared.db.users import get_user_collection, get_meta_collection
 from shared.models.constants import not_interested_statuses, non_sarathi_types
 
@@ -17,6 +19,7 @@ class Validator:
         self.meta_collection = get_meta_collection()
         self.users_collection = get_user_collection()
         self.experts_collection = get_experts_collections()
+        self.schedules_collection = get_schedules_collection()
         self.escalations_collection = get_escalations_collection()
 
     def get_users(self, user_id: ObjectId, expert_id: ObjectId) -> tuple:
@@ -126,9 +129,23 @@ class Validator:
               'expert_id: ', self.input.expert_id)
         return message
 
+    def check_expert_availability(self, expert: dict) -> bool:
+        lower_bound = Common.get_current_utc_time()
+        upper_bound = lower_bound + timedelta(minutes=10)
+        query = {
+            'job_time': {'$gte': lower_bound, '$lte': upper_bound},
+            "isDeleted": {"$ne": True},
+            'expert_id': expert['_id'],
+        }
+        schedule = self.schedules_collection.find_one(query)
+        return False if schedule else True
+
     def validate_expert(self, user: dict, expert: dict) -> tuple:
         if not expert:
             return False, 'Expert not found'
+
+        if self.check_expert_availability(expert) is False:
+            return False, 'Expert has an upcoming call'
 
         if expert.get('status') == 'offline':
             self.notifier.send_notification(

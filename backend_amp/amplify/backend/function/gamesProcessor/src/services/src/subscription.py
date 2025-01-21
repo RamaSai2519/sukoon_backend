@@ -6,7 +6,7 @@ from models.get_sub_plans.main import GetSubPlans
 from models.upsert_sub_plan.main import UpsertSubPlan
 from models.check_eligibility.main import CheckEligibility
 from models.update_user_balance.main import UpdateUserBalance
-from shared.models.interfaces import UpdateUserBalanceInput, CheckEligiblilityInput, UpsertSubPlanInput, GetSubPlansInput
+from shared.models.interfaces import UpdateUserBalanceInput, CheckEligiblilityInput, UpsertSubPlanInput, GetSubPlansInput, Output
 
 
 class UserBalanceService(Resource):
