@@ -1,7 +1,7 @@
 from shared.models.constants import OutputStatus, exclude_deleted_query
 from shared.models.interfaces import GetExpertsInput as Input, Output
+from shared.db.schedules import get_schedules_collection
 from shared.db.experts import get_categories_collection
-from shared.db.calls import get_schedules_collection
 from shared.helpers.experts import ExpertsHelper
 from shared.models.common import Common
 from bson import ObjectId

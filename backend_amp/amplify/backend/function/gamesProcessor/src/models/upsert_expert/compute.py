@@ -4,6 +4,7 @@ from typing import Union
 from bson import ObjectId
 from datetime import datetime
 from shared.models.common import Common
+from shared.models.constants import expert_times
 from shared.models.constants import OutputStatus
 from models.upsert_expert.slack import SlackManager
 from shared.models.interfaces import Expert as Input, Output
@@ -84,8 +85,7 @@ class Compute:
     def insert_blank_timings(self, expert_id) -> dict:
         days = ["Monday", "Tuesday", "Wednesday",
                 "Thursday", "Friday", "Saturday", "Sunday"]
-        times = ["PrimaryStartTime", "PrimaryEndTime",
-                 "SecondaryStartTime", "SecondaryEndTime"]
+        times = expert_times
 
         for day in days:
             timing_docs = self.timings_collection.find(

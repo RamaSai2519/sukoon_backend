@@ -35,6 +35,14 @@
           ],
           "category": "function",
           "resourceName": "pandas"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "stcaller"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -85,6 +93,11 @@
           "resourceName": "backendamp"
         }
       ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
+    "stcaller": {
+      "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     }
