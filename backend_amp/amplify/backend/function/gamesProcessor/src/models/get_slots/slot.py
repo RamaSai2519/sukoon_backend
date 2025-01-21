@@ -1,5 +1,6 @@
 from shared.db.experts import get_experts_collections, get_timings_collection
-from shared.db.calls import get_schedules_collection
+from shared.db.schedules import get_schedules_collection
+from shared.models.constants import expert_times
 from datetime import datetime, timedelta
 from bson import ObjectId
 import pytz
@@ -10,8 +11,7 @@ class Slot:
         self.timings_collection = get_timings_collection()
         self.experts_collection = get_experts_collections()
         self.schedules_collection = get_schedules_collection()
-        self.times = ["PrimaryStartTime", "PrimaryEndTime",
-                      "SecondaryStartTime", "SecondaryEndTime"]
+        self.times = expert_times
         self.utc_date = utc_date
         self.duration = duration
         self.expert_id = expert_id
