@@ -5,7 +5,7 @@ from services.controller import *
 from flask import Flask, Response
 from flask_jwt_extended import JWTManager
 from shared.configs import CONFIG as config
-from uniservices.after_request import Handler
+from shared.uniservices.after_request import Handler
 
 
 app = Flask(__name__)
