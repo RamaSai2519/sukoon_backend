@@ -134,6 +134,7 @@ class Validator:
         upper_bound = lower_bound + timedelta(minutes=10)
         query = {
             'job_time': {'$gte': lower_bound, '$lte': upper_bound},
+            "isDeleted": {"$ne": True},
             'expert_id': expert['_id'],
         }
         schedule = self.schedules_collection.find_one(query)
