@@ -17,6 +17,8 @@ api = Api(app)
 JWTManager(app)
 CORS(app, supports_credentials=True)
 
+api.add_resource(CallService, '/stcall/call')
+
 
 @app.after_request
 def handle_after_request(response: Response) -> Response:
