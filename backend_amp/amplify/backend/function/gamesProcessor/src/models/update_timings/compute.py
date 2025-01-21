@@ -2,6 +2,7 @@ from bson import ObjectId
 from shared.models.common import Common
 from pymongo.results import UpdateResult
 from shared.models.constants import OutputStatus
+from shared.models.constants import expert_times
 from shared.db.experts import get_timings_collection
 from shared.models.interfaces import UpdateTimingsInput as Input, Output
 
@@ -9,8 +10,7 @@ from shared.models.interfaces import UpdateTimingsInput as Input, Output
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
-        self.times = ["PrimaryStartTime", "PrimaryEndTime",
-                      "SecondaryStartTime", "SecondaryEndTime"]
+        self.times = expert_times
         self.timings_collection = get_timings_collection()
 
     def update_timing(self) -> UpdateResult:
