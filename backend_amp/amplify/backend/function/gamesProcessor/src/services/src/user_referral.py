@@ -6,7 +6,8 @@ from models.list_offers.main import ListOffers
 from models.upsert_offer.main import UpsertOffer
 from models.get_referrals.main import GetUserReferrals
 from models.list_referrals.main import ListUserReferrals
-from shared.models.interfaces import GetReferralsInput, UpsertOfferInput, ListOffersInput
+from models.validate_ref_token.main import ValidateRefToken
+from shared.models.interfaces import GetReferralsInput, UpsertOfferInput, ListOffersInput, ValidateRefTokenInput
 
 
 class UserReferralService(Resource):
@@ -40,6 +41,16 @@ class UpsertOfferService(Resource):
         input_params = request.args
         input = ListOffersInput(**input_params)
         output = ListOffers(input).process()
+        output = dataclasses.asdict(output)
+
+        return output
+
+class ValidateRefTokenService(Resource):
+
+    def get(self) -> dict:
+        input_params = request.args
+        input = ValidateRefTokenInput(**input_params)
+        output = ValidateRefToken(input).process()
         output = dataclasses.asdict(output)
 
         return output

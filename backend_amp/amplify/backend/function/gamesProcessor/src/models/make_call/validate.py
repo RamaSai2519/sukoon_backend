@@ -29,63 +29,6 @@ class Validator:
 
         return user, user_meta, expert
 
-    def validate_input(self) -> tuple:
-        if self.input.type_ not in ['call', 'scheduled', 'escalated']:
-            return False, 'Invalid type'
-
-        user, user_meta, expert = self.get_users(
-            ObjectId(self.input.user_id), ObjectId(self.input.expert_id))
-
-        user_validation = self.validate_user(user, user_meta, expert)
-        if not user_validation[0]:
-            return user_validation
-
-        expert_validation = self.validate_expert(user, expert)
-        if not expert_validation[0]:
-            return expert_validation
-
-        if user_validation[1]['phoneNumber'] == expert_validation[1]['phoneNumber']:
-            self.escalate()
-            return False, 'User and Expert phone number cannot be same'
-
-        return True, ''
-
-    def validate_user(self, user: dict, user_meta: dict, expert: dict) -> tuple:
-        if not user:
-            return False, 'User not found'
-
-        if user.get('isActive') is False:
-            return False, 'User is inactive'
-
-        if user.get('isBusy') is True:
-            self.notifier.send_notification(
-                type_=self.input.type_,
-                user_name=user.get('name', ''),
-                sarathi_name=expert.get('name', ''),
-                status='user_busy',
-            )
-            return False, 'User is busy'
-
-        if user_meta and user_meta.get('userStatus') in not_interested_statuses:
-            return False, 'User is not interested'
-
-        conditions = [
-            user.get('isPaidUser') is False,
-            user.get('numberOfCalls', 0) <= 0,
-            expert.get('type') not in non_sarathi_types,
-        ]
-
-        if all(conditions):
-            self.notifier.send_notification(
-                type_=self.input.type_,
-                user_name=user.get('name', ''),
-                sarathi_name=expert.get('name', ''),
-                status='balance_low',
-            )
-            return False, 'User has reached maximum number of calls'
-
-        return True, user
-
     def notify_failed_expert(self, expert: dict, user: dict, reason: str) -> str:
         url = config.URL + '/actions/send_whatsapp'
         user_name = user.get('name', user['phoneNumber'])
@@ -129,8 +72,19 @@ class Validator:
               'expert_id: ', self.input.expert_id)
         return message
 
+    def check_user_availability(self, user: dict) -> bool:
+        lower_bound = Common.get_current_utc_time() + timedelta(minutes=1)
+        upper_bound = lower_bound + timedelta(minutes=10)
+        query = {
+            'job_time': {'$gte': lower_bound, '$lte': upper_bound},
+            "isDeleted": {"$ne": True},
+            'user_id': user['_id'],
+        }
+        schedule = self.schedules_collection.find_one(query)
+        return False if schedule else True
+
     def check_expert_availability(self, expert: dict) -> bool:
-        lower_bound = Common.get_current_utc_time()
+        lower_bound = Common.get_current_utc_time() + timedelta(minutes=1)
         upper_bound = lower_bound + timedelta(minutes=10)
         query = {
             'job_time': {'$gte': lower_bound, '$lte': upper_bound},
@@ -177,3 +131,63 @@ class Validator:
         #     return False, 'Invalid Token'
 
         return True, expert
+
+    def validate_user(self, user: dict, user_meta: dict, expert: dict) -> tuple:
+        if not user:
+            return False, 'User not found'
+
+        if user.get('isActive') is False:
+            return False, 'User is inactive'
+
+        if user.get('isBusy') is True:
+            self.notifier.send_notification(
+                type_=self.input.type_,
+                user_name=user.get('name', ''),
+                sarathi_name=expert.get('name', ''),
+                status='user_busy',
+            )
+            return False, 'User is busy'
+
+        if user_meta and user_meta.get('userStatus') in not_interested_statuses:
+            return False, 'User is not interested'
+
+        conditions = [
+            user.get('isPaidUser') is False,
+            user.get('numberOfCalls', 0) <= 0,
+            expert.get('type') not in non_sarathi_types,
+        ]
+
+        if all(conditions):
+            self.notifier.send_notification(
+                type_=self.input.type_,
+                user_name=user.get('name', ''),
+                sarathi_name=expert.get('name', ''),
+                status='balance_low',
+            )
+            return False, 'User has reached maximum number of calls'
+
+        if self.check_user_availability(user) is False:
+            return False, 'User has an upcoming call'
+
+        return True, user
+
+    def validate_input(self) -> tuple:
+        if self.input.type_ not in ['call', 'scheduled', 'escalated']:
+            return False, 'Invalid type'
+
+        user, user_meta, expert = self.get_users(
+            ObjectId(self.input.user_id), ObjectId(self.input.expert_id))
+
+        user_validation = self.validate_user(user, user_meta, expert)
+        if not user_validation[0]:
+            return user_validation
+
+        expert_validation = self.validate_expert(user, expert)
+        if not expert_validation[0]:
+            return expert_validation
+
+        if user_validation[1]['phoneNumber'] == expert_validation[1]['phoneNumber']:
+            self.escalate()
+            return False, 'User and Expert phone number cannot be same'
+
+        return True, ''
