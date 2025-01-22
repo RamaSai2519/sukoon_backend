@@ -26,15 +26,31 @@ class Compute:
         return user
 
     def compute(self) -> Output:
+        output_dict = {
+            'isValidToken': False,
+            'isValidUser': False,
+            'user': None
+        }
         if not self.validate_token():
-            return Output(output_status=OutputStatus.FAILURE, output_message='Invalid token')
+            return Output(
+                output_status=OutputStatus.FAILURE,
+                output_message='Invalid token',
+                output_details=output_dict
+            )
+        output_dict['isValidToken'] = True
 
         user = self.get_user()
         if not user:
-            return Output(output_status=OutputStatus.FAILURE, output_message='User not found')
+            return Output(
+                output_status=OutputStatus.FAILURE,
+                output_message='User not found',
+                output_details=output_dict
+            )
+        output_dict['isValidUser'] = True
+        output_dict['user'] = user
 
         return Output(
             output_status=OutputStatus.SUCCESS,
             output_message='Valid token',
-            output_details=Common.jsonify(user)
+            output_details=Common.jsonify(output_dict)
         )
