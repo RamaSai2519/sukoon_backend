@@ -14,13 +14,6 @@
       "permissions": {
         "setting": "open"
       }
-    },
-    "/st/{action}": {
-      "name": "/st/{action}",
-      "lambdaFunction": "stcaller",
-      "permissions": {
-        "setting": "open"
-      }
     }
   }
 }

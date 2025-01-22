@@ -15,17 +15,16 @@
       "function": {
         "gamesProcessor": {
           "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
-          "s3Key": "amplify-builds/gamesProcessor-3677696f4a2b57323639-build.zip"
+          "s3Key": "amplify-builds/gamesProcessor-4647576a514162534f34-build.zip"
         },
         "scheduler": {
           "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
-          "s3Key": "amplify-builds/scheduler-2f556d58745177422f4a-build.zip"
+          "s3Key": "amplify-builds/scheduler-6a43306d5474657a3257-build.zip"
         },
         "pandas": {
           "deploymentBucketName": "amplify-backendamp-main-3186f-deployment",
-          "s3Key": "amplify-builds/pandas-7677344255576b61657a-build.zip"
-        },
-        "stcaller": {}
+          "s3Key": "amplify-builds/pandas-7947666f565477365245-build.zip"
+        }
       },
       "api": {
         "sukoonAPI": {},
