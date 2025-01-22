@@ -61,8 +61,20 @@ class Compute:
         conflict = self.schedules_collection.find_one(query)
         return conflict is not None
 
+    def check_user_availability(self, user_id: ObjectId, job_time: datetime) -> bool:
+        time_window = 15 * 60
+        start_time = job_time - timedelta(seconds=time_window)
+        end_time = job_time + timedelta(seconds=time_window)
+
+        query = {
+            "user_id": user_id,
+            "isDeleted": {"$ne": True},
+            "job_time": {"$gte": start_time, "$lte": end_time}
+        }
+        conflict = self.schedules_collection.find_one(query)
+        return conflict is not None
+
     def get_parties(self) -> tuple:
-        numbers = []
         query = {"_id": ObjectId(self.input.expert_id)}
         projection = {"customerPersona": 0, "persona": 0}
         expert = self.experts_collection.find_one(query, projection)
@@ -125,6 +137,17 @@ class Compute:
                 return Output(
                     output_status=OutputStatus.FAILURE,
                     output_message="Expert is not available at this time"
+                )
+
+        if self.input.user_id:
+            user_id = ObjectId(self.input.user_id)
+            job_time = datetime.strptime(
+                self.input.job_time, TimeFormats.AWS_TIME_FORMAT)
+            job_time = job_time.replace(tzinfo=pytz.utc)
+            if self.check_user_availability(user_id, job_time):
+                return Output(
+                    output_status=OutputStatus.FAILURE,
+                    output_message="User is not available at this time"
                 )
 
         if self.input._id:
