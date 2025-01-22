@@ -130,7 +130,7 @@ class Validator:
         return message
 
     def check_expert_availability(self, expert: dict) -> bool:
-        lower_bound = Common.get_current_utc_time()
+        lower_bound = Common.get_current_utc_time() + timedelta(minutes=1)
         upper_bound = lower_bound + timedelta(minutes=10)
         query = {
             'job_time': {'$gte': lower_bound, '$lte': upper_bound},
