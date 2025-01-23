@@ -34,11 +34,15 @@ class Compute:
         if self.input.filter_field == '_id':
             query['_id'] = ObjectId(self.input.filter_value)
 
+        total_histories = self.histories_collection.count_documents(query)
+        if total_histories <= 10:
+            self.input.page = 1
+            self.input.size = total_histories
+
         cursor = self.histories_collection.find(query).sort('updatedAt', -1)
         paginated_cursor = Common.paginate_cursor(
             cursor, int(self.input.page), int(self.input.size))
         histories = list(paginated_cursor)
-        total_histories = self.histories_collection.count_documents(query)
         return Output(
             output_details={
                 'data': self.__format__(histories),

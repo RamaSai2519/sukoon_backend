@@ -14,11 +14,14 @@ class Compute:
             self.input.filter_field, self.input.filter_value)
         if self.input.filter_field == '_id':
             query = {'_id': ObjectId(self.input.filter_value)}
+        total = self.collection.count_documents(query)
+        if total <= 10:
+            self.input.page = 1
+            self.input.size = total
         cursor = self.collection.find(query)
         paginated_cursor = Common.paginate_cursor(
             cursor, int(self.input.page), int(self.input.size))
         data = list(paginated_cursor)
-        total = self.collection.count_documents(query)
 
         return Output(
             output_details={
