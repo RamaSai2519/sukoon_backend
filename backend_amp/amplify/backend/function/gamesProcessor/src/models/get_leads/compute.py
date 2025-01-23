@@ -27,6 +27,10 @@ class Compute:
             'createdDate': 1, 'city': 1,
             'birthDate': 1, 'source': 1,
         }
+        total = self.users_collection.count_documents(query)
+        if total <= 10:
+            self.input.page = 1
+            self.input.size = total
         cursor = self.users_collection.find(query, projection).sort(
             self.input.sort_field, int(self.input.sort_order))
         paginated_cursor = Common.paginate_cursor(
@@ -34,7 +38,7 @@ class Compute:
         users = list(paginated_cursor)
         return Output(
             output_details={
-                'total': self.users_collection.count_documents(query),
+                'total': total,
                 'data': [self.__format__(user) for user in users]
             })
 

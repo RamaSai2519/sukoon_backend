@@ -17,11 +17,14 @@ class Compute:
             query = Common.get_filter_query(
                 self.input.filter_field, self.input.filter_value, 'int')
 
+        total = self.collection.count_documents(query)
+        if total <= 10:
+            self.input.page = 1
+            self.input.size = total
         cursor = self.collection.find(query)
         paginated_cursor = Common.paginate_cursor(
             cursor, int(self.input.page), int(self.input.size))
         data = [Common.jsonify(d) for d in list(paginated_cursor)]
-        total = self.collection.count_documents(query)
 
         return Output(
             output_details={
