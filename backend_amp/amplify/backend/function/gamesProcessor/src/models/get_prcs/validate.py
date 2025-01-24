@@ -1,4 +1,4 @@
-from shared.models.interfaces import GetRefTokensInput as Input
+from shared.models.interfaces import GetPRCSInput as Input
 
 
 class Validator:

@@ -26,12 +26,13 @@ api.add_resource(CallWebhookService, '/actions/call_webhook')
 api.add_resource(ClubService, '/actions/club')
 
 # Users Routes
+api.add_resource(PRCService, '/actions/prc')
 api.add_resource(UserService, '/actions/user')
 api.add_resource(AgentMetaService, '/actions/agent_meta')
+api.add_resource(ValidatePRCService, '/actions/validate_prc')
 api.add_resource(RedeemOfferService, '/actions/redeem_offer')
 api.add_resource(PhoneConfigService, '/actions/phone_config')
 api.add_resource(UserReferralService, '/actions/user_referrals')
-api.add_resource(ValidateRefTokenService, '/actions/valid_ref_token')
 
 # Subscription Routes
 api.add_resource(SubPlanService, '/actions/sub_plans')

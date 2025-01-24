@@ -1,15 +1,15 @@
 import traceback
+from models.upsert_prc.compute import Compute
+from models.upsert_prc.validate import Validator
 from shared.models.constants import OutputStatus
-from models.get_ref_token.compute import Compute
-from models.get_ref_token.validate import Validator
-from shared.models.interfaces import GetRefTokensInput as Input, Output
+from shared.models.interfaces import UpsertPRCInput as Input, Output
 
 
-class GetRefTokens:
+class UpsertPRC:
     def __init__(self, input: Input) -> None:
         self.input = input
 
-    def process(self):
+    def process(self) -> Output:
         input = self.input
         valid_input, error_message = self._validate(input)
 
@@ -32,7 +32,7 @@ class GetRefTokens:
 
         return output
 
-    def _validate(self, input: Input):
+    def _validate(self, input: Input) -> tuple:
         validation_obj = Validator(input)
         validation_result, error_message = validation_obj.validate_input()
 

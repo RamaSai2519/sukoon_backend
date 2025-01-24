@@ -1,11 +1,11 @@
 import traceback
+from models.validate_prc.compute import Compute
 from shared.models.constants import OutputStatus
-from models.validate_ref_token.compute import Compute
-from models.validate_ref_token.validate import Validator
-from shared.models.interfaces import ValidateRefTokenInput as Input, Output
+from models.validate_prc.validate import Validator
+from shared.models.interfaces import ValidatePRCInput as Input, Output
 
 
-class ValidateRefToken:
+class ValidatePRC:
     def __init__(self, input: Input) -> None:
         self.input = input
 
