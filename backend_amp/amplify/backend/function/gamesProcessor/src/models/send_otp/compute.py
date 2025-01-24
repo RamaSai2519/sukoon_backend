@@ -56,6 +56,4 @@ class Compute:
         threading.Thread(target=self.send_otp_via_whatsapp,
                          args=(self.input.phone_number, otp)).start()
 
-        return Output(
-            output_message=OutputStatus.SUCCESS
-        )
+        return Output(output_message=OutputStatus.SUCCESS)
