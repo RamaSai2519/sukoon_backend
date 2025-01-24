@@ -58,10 +58,13 @@ class Compute:
 
     def get_schedules(self) -> list:
         query = self.prep_query()
+        total_count = self.collection.count_documents(query)
+        if total_count <= 10:
+            self.input.page = 1
+            self.input.size = total_count
         cursor = self.collection.find(query).sort('job_time', -1)
         cursor = Common.paginate_cursor(cursor, int(
             self.input.page), int(self.input.size))
-        total_count = self.collection.count_documents(query)
 
         return {'data': self.__format__(list(cursor)), 'total': total_count}
 

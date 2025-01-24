@@ -1,5 +1,6 @@
-from shared.models.interfaces import ValidateRefTokenInput as Input
+from shared.models.interfaces import ValidatePRCInput as Input
 from bson import ObjectId
+
 
 class Validator:
     def __init__(self, input: Input) -> None:
@@ -7,7 +8,7 @@ class Validator:
 
     def validate_input(self):
         try:
-            ObjectId(self.input.user_id) 
+            ObjectId(self.input.user_id)
         except Exception:
             return False, "Invalid User Id"
 
