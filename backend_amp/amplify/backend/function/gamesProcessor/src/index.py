@@ -49,7 +49,6 @@ api.add_resource(AdClickService, '/actions/ad_click')
 api.add_resource(PRCTracksService, '/actions/prc_tracks')
 api.add_resource(ValidatePRCService, '/actions/validate_prc')
 
-
 # Events Routes
 api.add_resource(ListEventsService, '/actions/list_events')
 api.add_resource(UpsertEventsService, '/actions/upsert_event')
@@ -67,6 +66,7 @@ api.add_resource(HistoriesService, '/actions/histories')
 api.add_resource(SystemPromptsService, '/actions/system_prompts')
 
 # Cashfree Routes
+api.add_resource(PaymentsService, '/actions/payments')
 api.add_resource(CashfreeWebhookService, '/actions/cashfree_webhook')
 api.add_resource(CreatePaymentOrderService, '/actions/create_payment_order')
 
