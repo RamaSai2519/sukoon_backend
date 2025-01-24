@@ -2,10 +2,10 @@ import traceback
 from shared.models.constants import OutputStatus
 from models.get_ref_token.compute import Compute
 from models.get_ref_token.validate import Validator
-from shared.models.interfaces import GetRefTokenInput as Input, Output
+from shared.models.interfaces import GetRefTokensInput as Input, Output
 
 
-class GetRefToken:
+class GetRefTokens:
     def __init__(self, input: Input) -> None:
         self.input = input
 

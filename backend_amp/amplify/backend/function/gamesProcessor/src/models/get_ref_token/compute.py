@@ -1,4 +1,4 @@
-from shared.models.interfaces import GetRefTokenInput as Input, Output
+from shared.models.interfaces import GetRefTokensInput as Input, Output
 from shared.db.referral import get_ref_tokens_collection
 from shared.models.common import Common
 
@@ -14,20 +14,20 @@ class Compute:
             self.input.filter_field, self.input.filter_value
         )
 
+        total = self.ref_tokens_collection.count_documents(query)
+        if total <= 10:
+            self.input.page = 1
+            self.input.size = total
         cursor = self.ref_tokens_collection.find(query)
-
         paginated_cursor = Common.paginate_cursor(
             cursor, int(self.input.page), int(self.input.size)
         )
-
-        data = [Common.jsonify(document) for document in list(paginated_cursor)]
-
-        total = self.ref_tokens_collection.count_documents(query)
+        data = [Common.jsonify(list(paginated_cursor))]
 
         return Output(
             output_details={
                 'data': data,
                 'total': total
             },
-            output_message=""
+            output_message="Fetched Tokens",
         )
