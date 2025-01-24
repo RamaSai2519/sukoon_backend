@@ -1,4 +1,4 @@
-from shared.models.interfaces import GetRefTracksInput as Input
+from shared.models.interfaces import GetPRCTracksInput as Input
 
 
 class Validator:

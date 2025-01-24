@@ -1,11 +1,11 @@
 import traceback
 from shared.models.constants import OutputStatus
-from models.get_ref_tracks.compute import Compute
-from models.get_ref_tracks.validate import Validator
-from shared.models.interfaces import GetRefTracksInput as Input, Output
+from models.get_prc_tracks.compute import Compute
+from models.get_prc_tracks.validate import Validator
+from shared.models.interfaces import GetPRCTracksInput as Input, Output
 
 
-class GetRefTracks:
+class GetPRCTracks:
     def __init__(self, input: Input) -> None:
         self.input = input
 

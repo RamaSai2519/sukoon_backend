@@ -1,5 +1,5 @@
-from shared.models.interfaces import GetRefTracksInput as Input, Output
-from shared.db.referral import get_ref_tracks_collection
+from shared.models.interfaces import GetPRCTracksInput as Input, Output
+from shared.db.referral import get_prc_tracks_collection
 from shared.models.common import Common
 
 
@@ -7,7 +7,7 @@ class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
         self.common = Common()
-        self.ref_tracks_collection = get_ref_tracks_collection()
+        self.ref_tracks_collection = get_prc_tracks_collection()
 
     def compute(self) -> Output:
         query = Common.get_filter_query(
@@ -31,6 +31,5 @@ class Compute:
             output_details={
                 'data': data,
                 'total': total
-            },
-            output_message=""
+            }
         )

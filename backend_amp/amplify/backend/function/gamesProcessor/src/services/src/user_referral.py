@@ -7,9 +7,10 @@ from models.upsert_prc.main import UpsertPRC
 from models.list_offers.main import ListOffers
 from models.upsert_offer.main import UpsertOffer
 from models.validate_prc.main import ValidatePRC
+from models.get_prc_tracks.main import GetPRCTracks
 from models.get_referrals.main import GetUserReferrals
 from models.list_referrals.main import ListUserReferrals
-from shared.models.interfaces import GetReferralsInput, UpsertOfferInput, ListOffersInput, ValidatePRCInput, GetPRCSInput, UpsertPRCInput
+from shared.models.interfaces import GetReferralsInput, UpsertOfferInput, ListOffersInput, ValidatePRCInput, GetPRCSInput, UpsertPRCInput, GetPRCTracksInput
 
 
 class UserReferralService(Resource):
@@ -62,6 +63,17 @@ class PRCService(Resource):
         input_params = request.args
         input = GetPRCSInput(**input_params)
         output = GetPRCS(input).process()
+        output = dataclasses.asdict(output)
+
+        return output
+
+
+class PRCTracksService(Resource):
+
+    def get(self) -> dict:
+        input = request.args
+        input = GetPRCTracksInput(**input)
+        output = GetPRCTracks(input).process()
         output = dataclasses.asdict(output)
 
         return output

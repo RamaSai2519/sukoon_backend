@@ -26,10 +26,8 @@ api.add_resource(CallWebhookService, '/actions/call_webhook')
 api.add_resource(ClubService, '/actions/club')
 
 # Users Routes
-api.add_resource(PRCService, '/actions/prc')
 api.add_resource(UserService, '/actions/user')
 api.add_resource(AgentMetaService, '/actions/agent_meta')
-api.add_resource(ValidatePRCService, '/actions/validate_prc')
 api.add_resource(RedeemOfferService, '/actions/redeem_offer')
 api.add_resource(PhoneConfigService, '/actions/phone_config')
 api.add_resource(UserReferralService, '/actions/user_referrals')
@@ -44,6 +42,12 @@ api.add_resource(SlotsService, '/actions/slots')
 api.add_resource(ExpertService, '/actions/expert')
 api.add_resource(ApplicantService, '/actions/applicant')
 api.add_resource(UpdateExpertScoresService, '/actions/expert_scores')
+
+# PRC Routes
+api.add_resource(PRCService, '/actions/prc')
+api.add_resource(PRCTracksService, '/actions/prc_tracks')
+api.add_resource(ValidatePRCService, '/actions/validate_prc')
+
 
 # Events Routes
 api.add_resource(ListEventsService, '/actions/list_events')
