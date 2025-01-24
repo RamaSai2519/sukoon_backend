@@ -1,5 +1,5 @@
 from shared.models.interfaces import SendOTPInput as Input, Output
-from shared.models.constants import TestCreds
+from shared.models.constants import TestCreds, OutputStatus
 from shared.db.otp import get_otp_collection
 from shared.configs import CONFIG as config
 import threading
@@ -57,5 +57,5 @@ class Compute:
                          args=(self.input.phone_number, otp)).start()
 
         return Output(
-            output_message='Triggering messages'
+            output_message=OutputStatus.SUCCESS
         )
