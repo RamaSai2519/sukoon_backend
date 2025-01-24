@@ -1,11 +1,12 @@
 import requests
+from shared.models.interfaces import CallerInput as Input
 
 
 class MakeKnowlarityCall:
-    def __init__(self):
-        pass
+    def __init__(self, input: Input):
+        self.input = input
 
-    def _make_call(self, user_number: str, expert_number: str) -> str:
+    def _make_call(self) -> str:
         knowlarity_url = "https://kpi.knowlarity.com/Basic/v1/account/call/makecall"
         headers = {
             "x-api-key": "bb2S4y2cTvaBVswheid7W557PUzUVMnLaPnvyCxI",
@@ -13,8 +14,8 @@ class MakeKnowlarityCall:
         }
         payload = {
             "k_number": "+918035752993",
-            "agent_number": "+91" + expert_number,
-            "customer_number": "+91" + user_number,
+            "agent_number": "+91" + self.input.expert_numer,
+            "customer_number": "+91" + self.input.user_number,
             "caller_id": "+918035752993"
         }
         response = requests.post(knowlarity_url, headers=headers, json=payload)

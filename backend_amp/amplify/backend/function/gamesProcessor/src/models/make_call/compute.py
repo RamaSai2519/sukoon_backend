@@ -4,6 +4,7 @@ from bson import ObjectId
 from datetime import datetime
 from dataclasses import asdict
 from typing import Tuple, Dict
+from .servetel import MakeServeTelCall
 from .knowlarity import MakeKnowlarityCall
 from shared.db.users import get_user_collection
 from shared.db.calls import get_calls_collection
@@ -11,7 +12,7 @@ from models.make_call.slack import SlackNotifier
 from shared.models.constants import OutputStatus
 from shared.db.experts import get_experts_collections
 from models.make_call.notifications import Notifications
-from shared.models.interfaces import CallInput as Input, Output, Call
+from shared.models.interfaces import CallInput as Input, Output, Call, CallerInput
 
 
 class Compute:
@@ -73,12 +74,15 @@ class Compute:
         if self.input.wait == True:
             time.sleep(15)
 
+        payload = CallerInput(
+            user_number=user["phoneNumber"], expert_number=expert["phoneNumber"])
         if expert.get('type', 'internal') == 'internal':
-            pass
+            caller = MakeServeTelCall(payload)
+            call_id = caller._make_call()
         else:
-            caller = MakeKnowlarityCall()
-            call_id = caller._make_call(
-                user["phoneNumber"], expert["phoneNumber"])
+            caller = MakeKnowlarityCall(payload)
+            call_id = caller._make_call()
+
         if not call_id:
             self.slack_notifier.send_notification(
                 type_=self.input.type_,
