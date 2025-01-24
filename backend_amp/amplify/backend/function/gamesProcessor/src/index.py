@@ -45,6 +45,7 @@ api.add_resource(UpdateExpertScoresService, '/actions/expert_scores')
 
 # PRC Routes
 api.add_resource(PRCService, '/actions/prc')
+api.add_resource(AdClickService, '/actions/ad_click')
 api.add_resource(PRCTracksService, '/actions/prc_tracks')
 api.add_resource(ValidatePRCService, '/actions/validate_prc')
 
