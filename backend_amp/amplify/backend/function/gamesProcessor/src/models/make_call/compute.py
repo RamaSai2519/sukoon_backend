@@ -1,17 +1,18 @@
 import pytz
 import time
-import requests
 from bson import ObjectId
 from datetime import datetime
 from dataclasses import asdict
 from typing import Tuple, Dict
+from .servetel import MakeServeTelCall
+from .knowlarity import MakeKnowlarityCall
 from shared.db.users import get_user_collection
 from shared.db.calls import get_calls_collection
 from models.make_call.slack import SlackNotifier
 from shared.models.constants import OutputStatus
 from shared.db.experts import get_experts_collections
 from models.make_call.notifications import Notifications
-from shared.models.interfaces import CallInput as Input, Output, Call
+from shared.models.interfaces import CallInput as Input, Output, Call, CallerInput
 
 
 class Compute:
@@ -29,29 +30,6 @@ class Compute:
         expert = self.experts_collection.find_one({"_id": expert_id})
 
         return user, expert
-
-    def _make_call(self, user_number: str, expert_number: str):
-        knowlarity_url = "https://kpi.knowlarity.com/Basic/v1/account/call/makecall"
-        headers = {
-            "x-api-key": "bb2S4y2cTvaBVswheid7W557PUzUVMnLaPnvyCxI",
-            "authorization": "0738be9e-1fe5-4a8b-8923-0fe503e87deb"
-        }
-        payload = {
-            "k_number": "+918035752993",
-            "agent_number": "+91" + expert_number,
-            "customer_number": "+91" + user_number,
-            "caller_id": "+918035752993"
-        }
-        response = requests.post(knowlarity_url, headers=headers, json=payload)
-
-        if response.status_code != 200:
-            print(response.json(), "Failed to make call")
-            return False
-
-        response_dict: dict = response.json()
-        success: dict = response_dict.get("success", {})
-        call_id = success.get("call_id", None)
-        return call_id
 
     def prep_call(self, user_id: ObjectId, expert_id: ObjectId, call_id: str) -> dict:
         call = Call(user=user_id, expert=expert_id, callId=call_id, user_requested=self.input.user_requested, scheduledId=self.input.scheduledId,
@@ -96,7 +74,15 @@ class Compute:
         if self.input.wait == True:
             time.sleep(15)
 
-        call_id = self._make_call(user["phoneNumber"], expert["phoneNumber"])
+        payload = CallerInput(
+            user_number=user["phoneNumber"], expert_number=expert["phoneNumber"])
+        if expert.get('type', 'internal') == 'internal':
+            caller = MakeServeTelCall(payload)
+            call_id = caller._make_call()
+        else:
+            caller = MakeKnowlarityCall(payload)
+            call_id = caller._make_call()
+
         if not call_id:
             self.slack_notifier.send_notification(
                 type_=self.input.type_,
