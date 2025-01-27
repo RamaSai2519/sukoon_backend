@@ -23,7 +23,7 @@ class Compute:
     def _send_whatsapp_message(self, parameters, phoneNumber, template_name) -> None:
         url = config.URL + '/actions/send_whatsapp'
         payload = {
-            'phoneNumber': phoneNumber,
+            'phone_number': phoneNumber,
             'template_name': template_name,
             'parameters': parameters
         }
