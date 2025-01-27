@@ -36,7 +36,7 @@ class Compute:
 
     def create_order_details_dict(self) -> dict:
         order_id = str(uuid.uuid4())
-        order_amount = self.input.order_amount
+        order_amount = self.order_amount
         order_details_dict = {
             "order_id": order_id,
             "order_amount": order_amount
