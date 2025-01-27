@@ -187,7 +187,9 @@ class Compute:
                 'template_name': 'PROMO_TEMPLATE',
                 'phone_number': phone_number,
                 'request_meta': json.dumps({'user_name': name}),
-                'parameters': {'image_link': 'https://sukoon-media.s3.ap-south-1.amazonaws.com/wa_promo_image.jpeg'}
+                'parameters': {
+                    # 'image_link': 'https://sukoon-media.s3.ap-south-1.amazonaws.com/wa_promo_image.jpeg'
+                }
             }
             response = self.send_wa_message(payload)
             return response
