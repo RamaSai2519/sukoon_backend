@@ -3,6 +3,7 @@ import requests
 import threading
 from bson import ObjectId
 from datetime import datetime
+from shared.models.common import Common
 from shared.configs import CONFIG as config
 from shared.db.whatsapp import get_wa_refs_collection
 from shared.models.constants import OutputStatus, test_numbers
@@ -14,6 +15,7 @@ from shared.db.users import get_user_collection, get_user_webhook_messages_colle
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
+        self.common = Common()
         self.users_collection = get_user_collection()
         self.refs_collection = get_wa_refs_collection()
         self.notifications_collection = get_user_notification_collection()
@@ -169,6 +171,12 @@ class Compute:
         else:
             return None
 
+    def _reply_to_feedback(self, phoneNumber: str, expert_id: str) -> None:
+        expert_name = self.common.get_expert_name(ObjectId(expert_id))
+        parameters = {'sarathi_name': expert_name}
+        template_name = 'SARATHI_SUCCESSFUL_CALL'
+        self._send_whatsapp_message(parameters, phoneNumber, template_name)
+
     def compute(self) -> Output:
         body, from_number = self._get_message_body_and_phoneNumber_from_message()
         if not body:
@@ -183,6 +191,7 @@ class Compute:
                     call_id = request_meta.get('callId', '')
                     self._create_user_feedback_message(
                         screen_0_recommend_0, user_id, sarathi_id, call_id)
+                    self._reply_to_feedback(from_number[2:], sarathi_id)
             else:
                 message_id, status = self._get_status_and_message_id_value()
                 if message_id and status:
