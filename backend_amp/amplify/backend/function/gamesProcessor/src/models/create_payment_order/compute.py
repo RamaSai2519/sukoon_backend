@@ -15,6 +15,8 @@ class Compute:
         self.order_amount = self.get_order_amount()
 
     def get_order_amount(self) -> float:
+        if self.input.order_amount:
+            return self.input.order_amount
         plans_collection = get_subscription_plans_collection()
         query = {'name': self.input.plan}
         plan = plans_collection.find_one(query)
