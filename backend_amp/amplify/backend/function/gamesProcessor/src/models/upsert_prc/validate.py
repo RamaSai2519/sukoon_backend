@@ -1,0 +1,12 @@
+from shared.models.interfaces import UpsertPRCInput as Input
+
+
+class Validator:
+    def __init__(self, input: Input) -> None:
+        self.input = input
+
+    def validate_input(self):
+        if ' ' in self.input.name:
+            return False, "Name should not contain spaces"
+
+        return True, ""

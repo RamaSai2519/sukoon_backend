@@ -1,6 +1,7 @@
 import json
 from shared.models.common import Common
 from models.schedules.main import Schedules
+from models.db_backup.main import DbBackupJob
 from shared.models.constants import TimeFormats
 from models.experts_status_job.main import StatusJob
 from models.recurring_schedules.main import RecurringSchedules
@@ -45,6 +46,11 @@ def handler(event, context):
         schedules = Schedules()
         output = schedules.process()
         print(f"Schedules Output: {output}\n")
+
+        # Db Backup Job
+        db_backup_job = DbBackupJob()
+        output = db_backup_job.process()
+        print(f"Db Backup Job Output: {output}\n")
 
     except Exception as error:
         error = fetch_error.format(time=time, status=status, error=error)

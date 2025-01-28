@@ -31,7 +31,6 @@ api.add_resource(AgentMetaService, '/actions/agent_meta')
 api.add_resource(RedeemOfferService, '/actions/redeem_offer')
 api.add_resource(PhoneConfigService, '/actions/phone_config')
 api.add_resource(UserReferralService, '/actions/user_referrals')
-api.add_resource(ValidateRefTokenService, '/actions/valid_ref_token')
 
 # Subscription Routes
 api.add_resource(SubPlanService, '/actions/sub_plans')
@@ -42,7 +41,14 @@ api.add_resource(CheckEligibilityService, '/actions/eligibility')
 api.add_resource(SlotsService, '/actions/slots')
 api.add_resource(ExpertService, '/actions/expert')
 api.add_resource(ApplicantService, '/actions/applicant')
+api.add_resource(UserVacationService, '/actions/vacation')
 api.add_resource(UpdateExpertScoresService, '/actions/expert_scores')
+
+# PRC Routes
+api.add_resource(PRCService, '/actions/prc')
+api.add_resource(AdClickService, '/actions/ad_click')
+api.add_resource(PRCTracksService, '/actions/prc_tracks')
+api.add_resource(ValidatePRCService, '/actions/validate_prc')
 
 # Events Routes
 api.add_resource(ListEventsService, '/actions/list_events')
@@ -61,6 +67,7 @@ api.add_resource(HistoriesService, '/actions/histories')
 api.add_resource(SystemPromptsService, '/actions/system_prompts')
 
 # Cashfree Routes
+api.add_resource(PaymentsService, '/actions/payments')
 api.add_resource(CashfreeWebhookService, '/actions/cashfree_webhook')
 api.add_resource(CreatePaymentOrderService, '/actions/create_payment_order')
 

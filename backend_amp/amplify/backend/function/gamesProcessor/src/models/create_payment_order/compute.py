@@ -12,17 +12,21 @@ from shared.db.users import get_user_collection, get_user_payment_collection, ge
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
-    #     self.order_amount = self.get_order_amount()
+        self.order_amount = self.get_order_amount()
 
-    # def get_order_amount(self) -> float:
-    #     plans_collection = get_subscription_plans_collection()
-    #     query = {'name': self.input.plan}
-    #     plan = plans_collection.find_one(query)
-    #     return plan.get("price")
+    def get_order_amount(self) -> float:
+        if self.input.order_amount:
+            return self.input.order_amount
+        plans_collection = get_subscription_plans_collection()
+        query = {'name': self.input.plan}
+        plan = plans_collection.find_one(query)
+        return plan.get("price")
 
     def create_user_details_dict(self, user_id) -> dict:
         user_collection = get_user_collection()
         user = user_collection.find_one({"_id": ObjectId(user_id)})
+        if not user:
+            return None
         user_name = user.get("name")
         user_phone_number = user.get("phoneNumber")
         user_details_dict = {
@@ -34,7 +38,7 @@ class Compute:
 
     def create_order_details_dict(self) -> dict:
         order_id = str(uuid.uuid4())
-        order_amount = self.input.order_amount
+        order_amount = self.order_amount
         order_details_dict = {
             "order_id": order_id,
             "order_amount": order_amount
@@ -51,14 +55,19 @@ class Compute:
             "created_at": datetime.now(),
             "order_id": order_details_dict.get("order_id"),
             "payment_status": "INCOMPLETED",
-            "order_amount": self.input.order_amount,
-            # "plan": self.input.plan
+            "order_amount": self.order_amount,
+            "plan": self.input.plan
         }
         user_payment_collection.insert_one(order_details_dict)
 
     def compute(self) -> Output:
 
         user_details_dict = self.create_user_details_dict(self.input.user_id)
+        if not user_details_dict:
+            return Output(
+                output_status=OutputStatus.FAILURE,
+                output_message="User not found"
+            )
         order_details_dict = self.create_order_details_dict()
 
         api_response = get_cashfree_payment_session_id(
