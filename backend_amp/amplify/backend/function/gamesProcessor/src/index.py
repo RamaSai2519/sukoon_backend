@@ -41,6 +41,7 @@ api.add_resource(CheckEligibilityService, '/actions/eligibility')
 api.add_resource(SlotsService, '/actions/slots')
 api.add_resource(ExpertService, '/actions/expert')
 api.add_resource(ApplicantService, '/actions/applicant')
+api.add_resource(UserVacationService, '/actions/vacation')
 api.add_resource(UpdateExpertScoresService, '/actions/expert_scores')
 
 # PRC Routes

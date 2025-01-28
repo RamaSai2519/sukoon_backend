@@ -25,6 +25,8 @@ class Compute:
     def create_user_details_dict(self, user_id) -> dict:
         user_collection = get_user_collection()
         user = user_collection.find_one({"_id": ObjectId(user_id)})
+        if not user:
+            return None
         user_name = user.get("name")
         user_phone_number = user.get("phoneNumber")
         user_details_dict = {
@@ -61,6 +63,11 @@ class Compute:
     def compute(self) -> Output:
 
         user_details_dict = self.create_user_details_dict(self.input.user_id)
+        if not user_details_dict:
+            return Output(
+                output_status=OutputStatus.FAILURE,
+                output_message="User not found"
+            )
         order_details_dict = self.create_order_details_dict()
 
         api_response = get_cashfree_payment_session_id(

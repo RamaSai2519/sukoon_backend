@@ -23,7 +23,7 @@ class Compute:
     def _send_whatsapp_message(self, parameters, phoneNumber, template_name) -> None:
         url = config.URL + '/actions/send_whatsapp'
         payload = {
-            'phoneNumber': phoneNumber,
+            'phone_number': phoneNumber,
             'template_name': template_name,
             'parameters': parameters
         }
@@ -173,7 +173,7 @@ class Compute:
 
     def _reply_to_feedback(self, phoneNumber: str, expert_id: str) -> None:
         expert_name = self.common.get_expert_name(ObjectId(expert_id))
-        parameters = {'sarathi_name': expert_name}
+        parameters = {'sarathi_name': expert_name.replace('sarathi ', '')}
         template_name = 'SARATHI_SUCCESSFUL_CALL'
         self._send_whatsapp_message(parameters, phoneNumber, template_name)
 
