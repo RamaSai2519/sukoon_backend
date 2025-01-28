@@ -5,9 +5,11 @@ from flask_restful import Resource
 from models.get_chat.main import Chat
 from models.get_photos.main import Photos
 from models.save_content.main import SaveContent
+from models.get_blogposts.main import GetBlogPosts
 from models.generate_image.main import GenerateImage
+from models.upsert_blogposts.main import UpsertBlogPost
 from models.get_content_posts.main import GetContentPosts
-from shared.models.interfaces import ChatInput, SaveContentInput, PhotosInput, Output, Content, ContentPhoto, GetContentPostsInput
+from shared.models.interfaces import ChatInput, SaveContentInput, PhotosInput, Output, Content, ContentPhoto, GetContentPostsInput, BlogPostInput, GetBlogPostsInput
 
 
 class ChatService(Resource):
@@ -60,6 +62,24 @@ class DallImageService(Resource):
         input_params = request.args
         input = ChatInput(**input_params)
         output = GenerateImage(input).process()
+        output = dataclasses.asdict(output)
+
+        return output
+
+class BlogPostService(Resource):
+
+    def get(self) -> Output:
+        input_params = request.args
+        input= GetBlogPostsInput(**input_params)
+        output = GetBlogPosts(input).process()
+        output = dataclasses.asdict(output)
+
+        return output
+
+    def post(self) -> Output:
+        input = json.loads(request.get_data())
+        input = BlogPostInput(**input)
+        output = UpsertBlogPost(input).process()
         output = dataclasses.asdict(output)
 
         return output
