@@ -64,6 +64,7 @@ api.add_resource(ReSchedulesService, '/actions/reschedules')
 
 # Mark Routes
 api.add_resource(HistoriesService, '/actions/histories')
+api.add_resource(BetaTesterService, '/actions/beta_tester')
 api.add_resource(SystemPromptsService, '/actions/system_prompts')
 
 # Cashfree Routes
