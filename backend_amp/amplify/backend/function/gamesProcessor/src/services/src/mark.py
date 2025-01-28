@@ -5,8 +5,9 @@ from flask_restful import Resource
 from models.get_prompts.main import GetPrompts
 from models.upsert_prompt.main import UpsertPrompt
 from models.get_histories.main import GetHistories
+from models.delete_history.main import DeleteHistory
 from models.update_expert_scores.main import UpdateExpertScores
-from shared.models.interfaces import UpdateScoresInput, UpsertPromptInput, GetPromptsInput, GetHistoriesInput
+from shared.models.interfaces import UpdateScoresInput, UpsertPromptInput, GetPromptsInput, GetHistoriesInput, DeleteHistoryInput
 
 
 class UpdateExpertScoresService(Resource):
@@ -44,6 +45,14 @@ class HistoriesService(Resource):
         input_params = request.args
         input = GetHistoriesInput(**input_params)
         output = GetHistories(input).process()
+        output = dataclasses.asdict(output)
+
+        return output
+
+    def delete(self) -> dict:
+        input_params = request.args
+        input = DeleteHistoryInput(**input_params)
+        output = DeleteHistory(input).process()
         output = dataclasses.asdict(output)
 
         return output
