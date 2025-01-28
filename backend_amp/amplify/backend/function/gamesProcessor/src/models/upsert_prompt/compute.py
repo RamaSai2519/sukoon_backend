@@ -31,6 +31,7 @@ class Compute:
                     history_query, update)
 
             prompt['approved'] = True
+            prompt.pop('_id')
             self.prompt_proposals_collection.update_one(
                 query, {"$set": prompt})
             return Output(
