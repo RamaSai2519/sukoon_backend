@@ -9,7 +9,7 @@ class Validator:
         try:
             int(self.input.page)
             int(self.input.size)
-        except (ValueError, TypeError):
+        except:
             return False, "Page and size must be integers"
 
         return True, ""
