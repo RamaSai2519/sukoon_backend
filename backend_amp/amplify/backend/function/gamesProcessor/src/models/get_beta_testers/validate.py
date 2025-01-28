@@ -1,4 +1,4 @@
-from shared.models.interfaces import GetAdClicksInput as Input
+from shared.models.interfaces import GetBetaTestersInput as Input
 
 
 class Validator:
@@ -10,6 +10,6 @@ class Validator:
             int(self.input.page)
             int(self.input.size)
         except:
-            return False, "Page and size must be integers"
+            return False, "page and size should be integers"
 
         return True, ""
