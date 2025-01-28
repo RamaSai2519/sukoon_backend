@@ -1,7 +1,7 @@
 import traceback
 from shared.models.constants import OutputStatus
 from models.upsert_blogposts.compute import Compute
-from models.upsert_blogposts.validate import UpsertValidator
+from models.upsert_blogposts.validate import Validator
 from shared.models.interfaces import BlogPostInput as Input, Output
 
 class UpsertBlogPost:
@@ -32,11 +32,11 @@ class UpsertBlogPost:
         return output
 
     def _validate(self, input: Input):
-        validation_obj = UpsertValidator(input)
+        validation_obj = Validator(input)
         validation_result, error_message = validation_obj.validate_input()
         return validation_result, error_message
 
     def _upsert(self, input: Input) -> Output:
         computation_obj = Compute(input)
-        output = computation_obj.upsert_blogposts()
+        output = computation_obj.compute()
         return output

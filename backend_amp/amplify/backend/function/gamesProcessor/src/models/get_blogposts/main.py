@@ -1,7 +1,7 @@
 import traceback
 from shared.models.constants import OutputStatus
 from models.get_blogposts.compute import Compute
-from models.get_blogposts.validate import Validate
+from models.get_blogposts.validate import Validator
 from shared.models.interfaces import GetBlogPostsInput as Input, Output
 
 class GetBlogPosts:
@@ -32,7 +32,7 @@ class GetBlogPosts:
         return output
 
     def _validate(self, input: Input) -> tuple:
-        validation_obj = Validate(input)
+        validation_obj = Validator(input)
         return validation_obj.validate_input()
 
     def _compute(self, input: Input) -> Output:

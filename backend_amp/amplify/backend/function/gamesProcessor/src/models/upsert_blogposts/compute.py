@@ -16,7 +16,7 @@ class Compute:
             "context": "blog",
             "phoneNumber": "1234567890"
         }
-        url = config.URL + '/actions/chat' #would it be blog?
+        url = config.URL + '/actions/chat' 
         response = requests.post(url, json=payload)
         data = response.json().get('output_details', {})
 
