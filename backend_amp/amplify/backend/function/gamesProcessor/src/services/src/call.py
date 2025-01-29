@@ -7,8 +7,9 @@ from models.escalate.main import Escalate
 from models.get_calls.main import GetCalls
 from models.make_call.main import MakeCall
 from models.call_webhook.main import CallWebhook
+from models.scall_webhook.main import SCallWebhook
 from models.get_escalations.main import GetEscalations
-from shared.models.interfaces import CallInput, WebhookInput, GetCallsInput, Escalation, EachEscalation, GetEscalationsInput
+from shared.models.interfaces import CallInput, WebhookInput, GetCallsInput, Escalation, EachEscalation, GetEscalationsInput, SCallEndWebhookInput
 
 
 class CallService(Resource):
@@ -37,6 +38,18 @@ class CallWebhookService(Resource):
         input = Common.clean_dict(input, WebhookInput)
         input = WebhookInput(**input)
         output = CallWebhook(input).process()
+        output = dataclasses.asdict(output)
+
+        return output
+
+
+class SCallWebhookService(Resource):
+
+    def post(self) -> dict:
+        input = json.loads(request.get_data())
+        input = Common.clean_dict(input, SCallEndWebhookInput)
+        input = SCallEndWebhookInput(**input)
+        output = SCallWebhook(input).process()
         output = dataclasses.asdict(output)
 
         return output
