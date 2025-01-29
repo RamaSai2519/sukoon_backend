@@ -83,7 +83,6 @@ class Compute:
             call_id = self._update_db(user_id, expert_id)
             payload.call_id = str(call_id)
             caller = MakeServeTelCall(payload)
-            # caller._make_call()
             threading.Thread(target=caller._make_call).start()
         else:
             caller = MakeKnowlarityCall(payload)
@@ -112,7 +111,6 @@ class Compute:
 
         return Output(
             output_details=Common.jsonify({'call_id': call_id}),
-            output_status=OutputStatus.SUCCESS,
             output_message="Call initiated with callid: " +
-            call_id + fcm_response + wa_response
+            str(call_id) + fcm_response + wa_response
         )
