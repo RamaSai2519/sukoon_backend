@@ -1,6 +1,5 @@
 from shared.models.interfaces import GetBlogPostsInput as Input
 
-
 class Validator:
     def __init__(self, input: Input) -> None:
         self.input = input
