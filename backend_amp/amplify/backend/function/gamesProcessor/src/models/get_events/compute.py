@@ -25,7 +25,7 @@ class Compute:
     def prepare_query(self) -> dict:
         query = {"$or": [{"isDeleted": False},
                          {"isDeleted": {"$exists": False}}]}
-        if self.input.events_type.lower() == "sukoon":
+        if self.input.events_type and self.input.events_type.lower() == "sukoon":
             query["isSukoon"] = True
         if self.input.fromToday and self.input.fromToday.lower() == "true":
             currentTime = self.common.current_time
