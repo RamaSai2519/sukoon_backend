@@ -26,6 +26,8 @@ class Compute:
                 return CallStatus.FAILED
             elif cause == 'cancel':
                 return CallStatus.FAILED
+            elif cause == 'no answer':
+                return CallStatus.FAILED
             elif cause == 'noanswer':
                 return CallStatus.MISSED
             elif cause == 'chanunavail':
@@ -39,6 +41,8 @@ class Compute:
     def determine_failed_reason(self, cause: str) -> str:
         if cause == 'failed':
             return 'expert missed'
+        elif cause == 'no answer':
+            return 'expert declined'
         elif cause == 'cancel':
             return 'expert picked and cancelled'
         elif cause == 'noanswer':
@@ -100,7 +104,6 @@ class Compute:
                 output_status=OutputStatus.FAILURE,
                 output_message="Call not found"
             )
-
 
         call_message = self.update_call(call)
         schedule_message = self.update_schedule(call)
