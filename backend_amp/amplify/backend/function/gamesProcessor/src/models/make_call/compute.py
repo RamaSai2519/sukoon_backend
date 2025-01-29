@@ -71,8 +71,7 @@ class Compute:
             )
 
         fcm_response = self.notifier.send_fcm_notification(user, expert)
-        wa_response = ''
-        # wa_response = self.notifier.send_wa_notification(user, expert)
+        wa_response = self.notifier.send_wa_notification(user, expert)
 
         if self.input.wait == True:
             time.sleep(15)
