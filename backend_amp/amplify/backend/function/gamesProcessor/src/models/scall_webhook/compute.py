@@ -101,15 +101,15 @@ class Compute:
                 output_message="Call not found"
             )
 
+
+        call_message = self.update_call(call)
+        schedule_message = self.update_schedule(call)
+        message = call_message + schedule_message
         helper = CallWebhookHelper(
             self.callId, int(
                 self.input.duration), self.status, self.failed_reason
         )
         threading.Thread(target=helper.compute).start()
-
-        call_message = self.update_call(call)
-        schedule_message = self.update_schedule(call)
-        message = call_message + schedule_message
 
         print(self.callId + ' updated: ' + message)
         return Output(output_message="Call processed")
