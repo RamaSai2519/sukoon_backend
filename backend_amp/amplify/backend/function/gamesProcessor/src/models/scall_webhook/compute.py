@@ -28,6 +28,8 @@ class Compute:
                 return CallStatus.FAILED
             elif cause == 'noanswer':
                 return CallStatus.MISSED
+            elif cause == 'chanunavail':
+                return CallStatus.MISSED
         elif call_status == 'answered':
             if int(self.input.duration) > 120:
                 return CallStatus.SUCCESSFUL
@@ -41,6 +43,8 @@ class Compute:
             return 'expert picked and cancelled'
         elif cause == 'noanswer':
             return 'user missed'
+        elif cause == 'chanunavail':
+            return 'user declined'
         else:
             return cause
 
