@@ -124,11 +124,12 @@ class Validator:
             self.notify_failed_expert(expert, user, 'Busy')
             return False, 'Expert is busy'
 
-        # req_balance = 'sarathi_calls'
-        # if expert.get('type', 'saarthi') == 'expert':
-        #     req_balance = 'expert_calls'
-        # if not Common.authorize_action(str(user['_id']), req_balance, 'done'):
-        #     return False, 'Invalid Token'
+        # if self.input.type_ == 'call':
+        #     req_balance = 'sarathi_calls'
+        #     if expert.get('type', 'sarathi') == 'expert':
+        #         req_balance = 'expert_calls'
+        #     if not Common.authorize_action(str(user['_id']), req_balance, 'done'):
+        #         return False, 'Invalid Token'
 
         return True, expert
 
