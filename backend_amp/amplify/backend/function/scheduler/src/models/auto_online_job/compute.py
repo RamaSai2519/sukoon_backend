@@ -21,7 +21,7 @@ class Compute:
         if not expert:
             return
         expert_phone = expert['phoneNumber']
-        url = config.URL
+        url = config.URL + '/actions/expert'
         payload = {
             'phoneNumber': expert_phone,
             'status': 'online'
@@ -49,6 +49,7 @@ class Compute:
             ]
         }
         docs = list(self.timings_collection.find(query))
+        print(docs)
         for doc in docs:
             expert_id = doc['expert']
             timing_id = doc['_id']
