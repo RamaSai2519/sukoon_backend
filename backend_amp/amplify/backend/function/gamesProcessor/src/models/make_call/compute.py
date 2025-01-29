@@ -1,10 +1,12 @@
 import pytz
 import time
+import threading
 from bson import ObjectId
 from datetime import datetime
 from dataclasses import asdict
 from typing import Tuple, Dict
 from .servetel import MakeServeTelCall
+from shared.models.common import Common
 from .knowlarity import MakeKnowlarityCall
 from shared.db.users import get_user_collection
 from shared.db.calls import get_calls_collection
@@ -36,7 +38,7 @@ class Compute:
                     initiatedTime=datetime.now(pytz.utc), status="initiated", type=self.input.type_)
         return asdict(call)
 
-    def _update_db(self, user_id: ObjectId, expert_id: ObjectId, call_id: str) -> bool:
+    def _update_db(self, user_id: ObjectId, expert_id: ObjectId, call_id: str = None) -> bool:
         user_update = self.users_collection.update_one(
             {"_id": user_id}, {"$set": {"isBusy": True}})
         if user_update.modified_count == 0:
@@ -48,13 +50,13 @@ class Compute:
             print("Failed to update expert")
 
         call = self.prep_call(user_id, expert_id, call_id)
-        call = {k: v for k, v in call.items() if v is not None}
+        call = Common.filter_none_values(call)
         call_insert = self.calls_collection.insert_one(call)
         if call_insert.inserted_id is None:
             print("Failed to insert call")
-            return False
+            return None
 
-        return True
+        return call_insert.inserted_id
 
     def compute(self) -> Output:
         user_id = ObjectId(self.input.user_id)
@@ -69,7 +71,8 @@ class Compute:
             )
 
         fcm_response = self.notifier.send_fcm_notification(user, expert)
-        wa_response = self.notifier.send_wa_notification(user, expert)
+        wa_response = ''
+        # wa_response = self.notifier.send_wa_notification(user, expert)
 
         if self.input.wait == True:
             time.sleep(15)
@@ -77,11 +80,15 @@ class Compute:
         payload = CallerInput(
             user_number=user["phoneNumber"], expert_number=expert["phoneNumber"])
         if expert.get('type', 'internal') == 'internal':
+            call_id = self._update_db(user_id, expert_id)
+            payload.call_id = str(call_id)
             caller = MakeServeTelCall(payload)
-            call_id = caller._make_call()
+            # caller._make_call()
+            threading.Thread(target=caller._make_call).start()
         else:
             caller = MakeKnowlarityCall(payload)
             call_id = caller._make_call()
+            call_id = self._update_db(user_id, expert_id, call_id)
 
         if not call_id:
             self.slack_notifier.send_notification(
@@ -95,22 +102,17 @@ class Compute:
                 output_status=OutputStatus.FAILURE,
                 output_message="Failed to make call"
             )
-
-        db_update = self._update_db(user_id, expert_id, call_id)
-        message = " but Failed to update database"
-        if db_update:
-            message = " and Updated database successfully"
-            self.slack_notifier.send_notification(
-                type_=self.input.type_,
-                user_name=user.get("name", ""),
-                sarathi_name=expert.get("name", ""),
-                status="success",
-                call_link=self.call_link + call_id,
-            )
+        self.slack_notifier.send_notification(
+            type_=self.input.type_,
+            user_name=user.get("name", ""),
+            sarathi_name=expert.get("name", ""),
+            status="success",
+            call_link=self.call_link + str(call_id),
+        )
 
         return Output(
-            output_details={'call_id': call_id},
+            output_details=Common.jsonify({'call_id': call_id}),
             output_status=OutputStatus.SUCCESS,
             output_message="Call initiated with callid: " +
-            call_id + message + fcm_response + wa_response
+            call_id + fcm_response + wa_response
         )

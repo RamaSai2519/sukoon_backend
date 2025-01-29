@@ -14,7 +14,7 @@ class MakeKnowlarityCall:
         }
         payload = {
             "k_number": "+918035752993",
-            "agent_number": "+91" + self.input.expert_numer,
+            "agent_number": "+91" + self.input.expert_number,
             "customer_number": "+91" + self.input.user_number,
             "caller_id": "+918035752993"
         }

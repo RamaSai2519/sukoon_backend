@@ -11,7 +11,7 @@ class MakeServeTelCall:
         self.api_key = self.get_agent_api_key()
 
     def get_agent_api_key(self) -> str:
-        query = {'phoneNumber': self.input.expert_numer}
+        query = {'phoneNumber': self.input.expert_number}
         doc = self.sagents_collection.find_one(query)
         if not doc:
             cursor = self.sagents_collection.find()
@@ -21,7 +21,7 @@ class MakeServeTelCall:
 
             url = config.SERVETEL_API_CONFIG['base_url'] + \
                 f'/user/{agent_id}'
-            payload = {'number': self.input.expert_numer}
+            payload = {'number': self.input.expert_number}
             headers = {
                 'Authorization': 'Bearer ' + config.SERVETEL_API_CONFIG['token']
             }
@@ -36,6 +36,7 @@ class MakeServeTelCall:
         payload = {
             'customer_number': self.input.user_number,
             'api_key': self.api_key,
+            'suid': self.input.call_id
         }
         response = requests.post(url, json=payload)
         if response.status_code != 200:
