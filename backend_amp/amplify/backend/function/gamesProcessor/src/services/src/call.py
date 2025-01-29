@@ -8,8 +8,9 @@ from models.get_calls.main import GetCalls
 from models.make_call.main import MakeCall
 from models.call_webhook.main import CallWebhook
 from models.scall_webhook.main import SCallWebhook
+from models.scall_livehook.main import SCallLivehook
 from models.get_escalations.main import GetEscalations
-from shared.models.interfaces import CallInput, WebhookInput, GetCallsInput, Escalation, EachEscalation, GetEscalationsInput, SCallEndWebhookInput
+from shared.models.interfaces import CallInput, WebhookInput, GetCallsInput, Escalation, EachEscalation, GetEscalationsInput, SCallEndWebhookInput, SCallLivehookInput
 
 
 class CallService(Resource):
@@ -52,6 +53,18 @@ class SCallWebhookService(Resource):
         if not input.duration or input.duration == '':
             input.duration = 0
         output = SCallWebhook(input).process()
+        output = dataclasses.asdict(output)
+
+        return output
+
+
+class SCallLivehookService(Resource):
+
+    def post(self) -> dict:
+        input = json.loads(request.get_data())
+        input = Common.clean_dict(input, SCallLivehookInput)
+        input = SCallLivehookInput(**input)
+        output = SCallLivehook(input).process()
         output = dataclasses.asdict(output)
 
         return output
