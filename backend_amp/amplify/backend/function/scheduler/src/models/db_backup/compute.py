@@ -47,10 +47,6 @@ class Compute:
             self.collection.update_one(query, update)
             return True
         last_triggered = last_triggered.replace(tzinfo=pytz.utc)
-        if not last_triggered:
-            update = {'$set': {collection: current_time}}
-            self.collection.update_one(query, update)
-            return True
         difference = current_time - last_triggered
         if difference.days < 1:
             return False
@@ -76,10 +72,6 @@ class Compute:
                 dev_collection.drop()
                 msg = self.insert_docs(
                     dev_collection, prod_collection, collection)
-                self.collection.update_one(
-                    {'name': 'db_backup'},
-                    {'$set': {collection: self.now_time}}
-                )
                 msgs.append(msg)
         return msgs
 

@@ -1,5 +1,6 @@
 from shared.db.experts import get_experts_collections, get_timings_collection
 from shared.models.constants import TimeFormats
+from shared.models.interfaces import Output
 from shared.configs import CONFIG as config
 from shared.models.common import Common
 from datetime import timedelta
@@ -34,7 +35,7 @@ class Compute:
             return True
         return False
 
-    def compute(self) -> list:
+    def compute(self) -> Output:
         today = self.now_time.strftime("%A")
         ctime = self.now_time.replace(minute=0)
         hour = ctime.strftime(TimeFormats.HOURS_24_FORMAT)
@@ -54,3 +55,5 @@ class Compute:
             job_status = self.job(expert_id, timing_id)
             if job_status:
                 print('Expert: ', expert_id, ' is online')
+
+        return Output()

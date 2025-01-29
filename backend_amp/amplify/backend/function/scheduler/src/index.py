@@ -4,6 +4,7 @@ from models.schedules.main import Schedules
 from models.db_backup.main import DbBackupJob
 from shared.models.constants import TimeFormats
 from models.experts_status_job.main import StatusJob
+from models.auto_online_job.main import AutoOnlineJob
 from models.recurring_schedules.main import RecurringSchedules
 
 
@@ -46,6 +47,11 @@ def handler(event, context):
         schedules = Schedules()
         output = schedules.process()
         print(f"Schedules Output: {output}\n")
+
+        # Auto Online Job
+        auto_online_job = AutoOnlineJob()
+        output = auto_online_job.process()
+        print(f"Auto Online Job Output: {output}\n")
 
         # Db Backup Job
         db_backup_job = DbBackupJob()
