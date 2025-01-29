@@ -1,13 +1,12 @@
-from shared.models.interfaces import GetPRCSInput as Input, Output
-from shared.db.referral import get_prcs_collection
+from shared.models.interfaces import GetBetaTestersInput as Input, Output
+from shared.db.misc import get_beta_testers_collection
 from shared.models.common import Common
 
 
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
-        self.common = Common()
-        self.collection = get_prcs_collection()
+        self.collection = get_beta_testers_collection()
 
     def compute(self) -> Output:
         query = Common.get_filter_query(
@@ -22,12 +21,9 @@ class Compute:
         paginated_cursor = Common.paginate_cursor(
             cursor, int(self.input.page), int(self.input.size)
         )
-        data = Common.jsonify(list(paginated_cursor))
+        data =Common.jsonify(list(paginated_cursor))
 
         return Output(
-            output_details={
-                'data': data,
-                'total': total
-            },
-            output_message="Fetched Tokens",
+            output_message="Data fetched successfully",
+            output_details={"data": data, "total": total}
         )

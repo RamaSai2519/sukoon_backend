@@ -16,4 +16,7 @@ class Validator:
         if self.input.locationType not in ["virtual", "on-site"]:
             return False, "Invalid locationType"
 
+        if not isinstance(self.input.isSukoon, bool):
+            return False, "Invalid isSukoon"
+
         return True, None

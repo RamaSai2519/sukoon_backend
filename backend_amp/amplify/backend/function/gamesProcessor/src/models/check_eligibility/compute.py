@@ -3,6 +3,7 @@ from shared.models.interfaces import CheckEligiblilityInput as Input, Output
 from shared.db.users import get_user_balances_collection
 from shared.db.misc import get_tokens_collection
 from shared.models.constants import OutputStatus
+from shared.models.common import Common
 from datetime import timedelta
 from flask import request
 from bson import ObjectId
@@ -27,7 +28,7 @@ class Compute:
 
         return Output(
             output_message="Token generated",
-            output_details=doc
+            output_details=Common.jsonify(doc)
         )
 
     @jwt_required()

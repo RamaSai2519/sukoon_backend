@@ -86,7 +86,7 @@ class Compute:
             if user_data.get(field) and not isinstance(user_data[field], ObjectId):
                 user_data[field] = ObjectId(user_data[field])
 
-        user_data = {k: v for k, v in user_data.items() if v is not None}
+        user_data = Common.filter_none_values(user_data)
         return user_data
 
     def send_wa_message(self, payload: dict) -> None:
@@ -187,7 +187,9 @@ class Compute:
                 'template_name': 'PROMO_TEMPLATE',
                 'phone_number': phone_number,
                 'request_meta': json.dumps({'user_name': name}),
-                'parameters': {'image_link': 'https://sukoon-media.s3.ap-south-1.amazonaws.com/wa_promo_image.jpeg'}
+                'parameters': {
+                    # 'image_link': 'https://sukoon-media.s3.ap-south-1.amazonaws.com/wa_promo_image.jpeg'
+                }
             }
             response = self.send_wa_message(payload)
             return response

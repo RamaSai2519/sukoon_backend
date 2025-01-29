@@ -41,6 +41,7 @@ api.add_resource(CheckEligibilityService, '/actions/eligibility')
 api.add_resource(SlotsService, '/actions/slots')
 api.add_resource(ExpertService, '/actions/expert')
 api.add_resource(ApplicantService, '/actions/applicant')
+api.add_resource(UserVacationService, '/actions/vacation')
 api.add_resource(UpdateExpertScoresService, '/actions/expert_scores')
 
 # PRC Routes
@@ -63,6 +64,7 @@ api.add_resource(ReSchedulesService, '/actions/reschedules')
 
 # Mark Routes
 api.add_resource(HistoriesService, '/actions/histories')
+api.add_resource(BetaTesterService, '/actions/beta_tester')
 api.add_resource(SystemPromptsService, '/actions/system_prompts')
 
 # Cashfree Routes
@@ -97,6 +99,7 @@ api.add_resource(UserStatusOptionsService, '/actions/user_status_options')
 # - Content
 api.add_resource(ChatService, '/actions/chat')
 api.add_resource(PhotoService, '/actions/photos')
+api.add_resource(BlogPostService, '/actions/blog')
 api.add_resource(ContentService, '/actions/content')
 api.add_resource(DallImageService, '/actions/dall_image')
 # - Services

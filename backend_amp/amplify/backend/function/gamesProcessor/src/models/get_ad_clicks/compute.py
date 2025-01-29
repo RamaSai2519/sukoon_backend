@@ -22,7 +22,7 @@ class Compute:
         paginated_cursor = Common.paginate_cursor(
             cursor, int(self.input.page), int(self.input.size)
         )
-        data = [Common.jsonify(list(paginated_cursor))]
+        data = Common.jsonify(list(paginated_cursor))
 
         return Output(
             output_details={

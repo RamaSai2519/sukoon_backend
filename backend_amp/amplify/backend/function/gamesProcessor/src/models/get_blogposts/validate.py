@@ -1,4 +1,4 @@
-from shared.models.interfaces import GetAdClicksInput as Input
+from shared.models.interfaces import GetBlogPostsInput as Input
 
 
 class Validator:
