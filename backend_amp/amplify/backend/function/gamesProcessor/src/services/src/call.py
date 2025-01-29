@@ -49,6 +49,8 @@ class SCallWebhookService(Resource):
         input = json.loads(request.get_data())
         input = Common.clean_dict(input, SCallEndWebhookInput)
         input = SCallEndWebhookInput(**input)
+        if not input.duration or input.duration == '':
+            input.duration = 0
         output = SCallWebhook(input).process()
         output = dataclasses.asdict(output)
 
