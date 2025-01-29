@@ -21,6 +21,8 @@ CORS(app, supports_credentials=True)
 api.add_resource(CallService, '/actions/call')
 api.add_resource(EscalationService, '/actions/escalate')
 api.add_resource(CallWebhookService, '/actions/call_webhook')
+api.add_resource(SCallWebhookService, '/actions/scall_webhook')
+api.add_resource(SCallLivehookService, '/actions/scall_livehook')
 
 # Club Routes
 api.add_resource(ClubService, '/actions/club')
