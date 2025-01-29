@@ -18,13 +18,15 @@ class Compute:
                                  "active_together", "wellness_connect"]
 
     def determine_collection(self) -> Collection:
-        if self.input.events_type and self.input.events_type.lower() == "contribute":
+        if self.input.events_type and self.input.events_type.lower() in ["contribute", "sukoon"]:
             return get_contribute_events_collection()
         return get_events_collection()
 
     def prepare_query(self) -> dict:
         query = {"$or": [{"isDeleted": False},
                          {"isDeleted": {"$exists": False}}]}
+        if self.input.events_type.lower() == "sukoon":
+            query["isSukoon"] = True
         if self.input.fromToday and self.input.fromToday.lower() == "true":
             currentTime = self.common.current_time
             query["validUpto"] = {"$gte": currentTime}
