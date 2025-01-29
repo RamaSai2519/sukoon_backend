@@ -25,7 +25,7 @@ class Compute:
         docs = prod_collection.find().sort('_id', -1)
         if 'user' not in collection:
             docs.limit(1000)
-            docs = list(docs)
+        docs = list(docs)
         if docs and len(docs) > 0:
             update = dev_collection.insert_many(docs)
             msg = f'Copied {len(update.inserted_ids)} docs'
@@ -42,11 +42,11 @@ class Compute:
             self.collection.insert_one(doc)
             return True
         last_triggered: datetime = doc.get(collection)
-        last_triggered = last_triggered.replace(tzinfo=pytz.utc)
         if not last_triggered:
             update = {'$set': {collection: current_time}}
             self.collection.update_one(query, update)
             return True
+        last_triggered = last_triggered.replace(tzinfo=pytz.utc)
         difference = current_time - last_triggered
         if difference.days < 1:
             return False

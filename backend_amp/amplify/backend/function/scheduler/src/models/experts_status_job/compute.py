@@ -1,24 +1,18 @@
 from shared.db.experts import get_experts_collections
 from shared.configs import CONFIG as config
 from shared.models.interfaces import Output
+from shared.models.common import Common
 from datetime import datetime
 import requests
-import pytz
 import json
 
 
 class Compute:
     def __init__(self) -> None:
         self.url = config.URL
-        self.now_time = self.get_now_time()
+        self.now_time = Common.get_current_ist_time()
         self.target_time = self.get_target_time()
         self.experts_collection = get_experts_collections()
-
-    def get_now_time(self) -> datetime:
-        timezone = pytz.timezone("Asia/Kolkata")
-        current_time = datetime.now(timezone)
-
-        return current_time
 
     def get_target_time(self) -> datetime:
         return self.now_time.replace(hour=22, minute=0, second=0, microsecond=0)
