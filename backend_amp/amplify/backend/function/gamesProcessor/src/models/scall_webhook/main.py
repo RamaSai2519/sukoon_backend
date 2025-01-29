@@ -1,7 +1,7 @@
 import traceback
-from models.save_remark.compute import Compute
 from shared.models.constants import OutputStatus
-from models.save_remark.validate import Validator
+from models.scall_webhook.compute import Compute
+from models.scall_webhook.validate import Validator
 from shared.models.interfaces import SCallEndWebhookInput as Input, Output
 
 
