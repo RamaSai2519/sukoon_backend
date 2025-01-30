@@ -22,15 +22,11 @@ class Compute:
 
     def determine_status(self, cause: str, call_status: str) -> str:
         if call_status == 'missed':
-            if cause == 'failed':
+            failed_causes = ['failed', 'cancel', 'no answer']
+            if cause in failed_causes:
                 return CallStatus.FAILED
-            elif cause == 'cancel':
-                return CallStatus.FAILED
-            elif cause == 'no answer':
-                return CallStatus.FAILED
-            elif cause == 'noanswer':
-                return CallStatus.MISSED
-            elif cause == 'chanunavail':
+            missed_causes = ['noanswer', 'chanunavail']
+            if cause in missed_causes:
                 return CallStatus.MISSED
         elif call_status == 'answered':
             if int(self.input.duration) > 120:
@@ -44,7 +40,7 @@ class Compute:
         elif cause == 'no answer':
             return 'expert declined'
         elif cause == 'cancel':
-            return 'expert picked and cancelled'
+            return 'expert cancelled'
         elif cause == 'noanswer':
             return 'user missed'
         elif cause == 'chanunavail':
