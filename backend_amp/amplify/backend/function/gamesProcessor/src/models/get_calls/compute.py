@@ -28,8 +28,12 @@ class Compute:
             return {'expert': {'$in': expert_ids}}
 
         elif self.input.filter_field == 'user':
-            filter_query = self.common.get_filter_query(
-                'name', self.input.filter_value)
+            if self.input.filter_value.isdigit():
+                filter_query = self.common.get_filter_query(
+                    'phoneNumber', self.input.filter_value)
+            else:
+                filter_query = self.common.get_filter_query(
+                    'name', self.input.filter_value)
             users = list(self.common.users_collection.find(filter_query))
             user_ids = [user['_id'] for user in users]
             query = {'user': {'$in': user_ids}}
