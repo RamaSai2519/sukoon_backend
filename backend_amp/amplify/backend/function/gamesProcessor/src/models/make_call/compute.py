@@ -82,7 +82,7 @@ class Compute:
             call_id = self._update_db(user_id, expert_id)
             payload.call_id = str(call_id)
             caller = MakeServeTelCall(payload)
-            threading.Thread(target=caller._make_call).start()
+            caller._make_call()
         else:
             caller = MakeKnowlarityCall(payload)
             call_id = caller._make_call()
