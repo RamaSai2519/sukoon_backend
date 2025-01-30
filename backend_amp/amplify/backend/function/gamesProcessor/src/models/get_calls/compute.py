@@ -18,8 +18,12 @@ class Compute:
             self.input.internal)
 
         if self.input.filter_field == 'expert':
-            filter_query = self.common.get_filter_query(
-                'name', self.input.filter_value)
+            if self.input.filter_value.isdigit():
+                filter_query = self.common.get_filter_query(
+                    'phoneNumber', self.input.filter_value)
+            else:
+                filter_query = self.common.get_filter_query(
+                    'name', self.input.filter_value)
             internal_query = self.common.get_internal_exclude_query(
                 self.input.internal, '_id')
             query = {**filter_query, **internal_query}
