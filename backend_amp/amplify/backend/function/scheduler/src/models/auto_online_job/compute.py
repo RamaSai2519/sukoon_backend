@@ -18,7 +18,7 @@ class Compute:
         target_time = Common.get_current_utc_time() + timedelta(hours=1)
         expert = self.collection.find_one(
             {'_id': expert_id})
-        if not expert:
+        if not expert or expert.get('isDeleted', False) is True:
             return
         expert_phone = expert['phoneNumber']
         url = config.URL + '/actions/expert'
