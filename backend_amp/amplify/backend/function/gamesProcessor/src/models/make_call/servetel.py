@@ -1,4 +1,5 @@
 import requests
+from shared.models.common import Common
 from shared.configs import CONFIG as config
 from shared.db.experts import get_sagents_collection
 from shared.models.interfaces import CallerInput as Input
@@ -32,7 +33,8 @@ class MakeServeTelCall:
 
             self.sagents_collection.update_one(
                 {'id': agent_id},
-                {'$set': {'phoneNumber': self.input.expert_number}}
+                {'$set': {'phoneNumber': self.input.expert_number,
+                          'updatedAt': Common.get_current_utc_time()}}
             )
 
         return doc['api_key']
