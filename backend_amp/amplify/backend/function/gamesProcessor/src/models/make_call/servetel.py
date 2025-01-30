@@ -26,8 +26,14 @@ class MakeServeTelCall:
                 'Authorization': 'Bearer ' + config.SERVETEL_API_CONFIG['token']
             }
             response = requests.patch(url, headers=headers, json=payload)
+            print(response.text, '__servetel_response__')
             if response.status_code != 200:
                 raise Exception('Error getting agent api key')
+
+            self.sagents_collection.update_one(
+                {'id': agent_id},
+                {'$set': {'phoneNumber': self.input.expert_number}}
+            )
 
         return doc['api_key']
 
