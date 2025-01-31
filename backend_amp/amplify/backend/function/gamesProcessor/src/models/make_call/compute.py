@@ -78,15 +78,15 @@ class Compute:
 
         payload = CallerInput(
             user_number=user["phoneNumber"], expert_number=expert["phoneNumber"])
-        if expert.get('type', 'internal') == 'internal':
-            call_id = self._update_db(user_id, expert_id)
-            payload.call_id = str(call_id)
-            caller = MakeServeTelCall(payload)
-            threading.Thread(target=caller._make_call).start()
-        else:
-            caller = MakeKnowlarityCall(payload)
-            call_id = caller._make_call()
-            call_id = self._update_db(user_id, expert_id, call_id)
+       # if expert.get('type', 'internal') == 'internal':
+        call_id = self._update_db(user_id, expert_id)
+        payload.call_id = str(call_id)
+        caller = MakeServeTelCall(payload)
+        threading.Thread(target=caller._make_call).start()
+       # else:
+       #     caller = MakeKnowlarityCall(payload)
+       #     call_id = caller._make_call()
+       #     call_id = self._update_db(user_id, expert_id, call_id)
 
         if not call_id:
             self.slack_notifier.send_notification(
