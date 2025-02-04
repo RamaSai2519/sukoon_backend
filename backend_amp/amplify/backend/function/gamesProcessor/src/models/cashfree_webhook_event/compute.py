@@ -7,7 +7,7 @@ from shared.configs import CONFIG as config
 from shared.models.interfaces import CashfreeWebhookEventInput as Input, Output
 from shared.db.events import get_events_collection, get_contribute_events_collection
 from shared.db.users import get_user_collection, get_user_payment_collection, get_subscription_plans_collection
-from shared.models.constants import OutputStatus, application_json_header, pay_types, TimeFormats, user_balance_types
+from shared.models.constants import OutputStatus, application_json_header, pay_types, TimeFormats, user_balance_types, customer_care_number
 
 
 class Compute:
@@ -162,7 +162,7 @@ class Compute:
                 'event_name': self.event.get("mainTitle"),
                 'image_link': self.event.get("imageUrl"),
                 'webinar_link': self.event.get("meetingLink"),
-                'phone_number': "+918660610840",
+                'phone_number': '+91' + customer_care_number,
                 'whatsapp_community_link': "https://sukoonunlimited.com/wa-join-community"
             }
         }

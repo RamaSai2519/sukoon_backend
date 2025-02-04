@@ -2,9 +2,9 @@ import requests
 from bson import ObjectId
 from shared.models.common import Common
 from shared.configs import CONFIG as config
-from shared.models.constants import OutputStatus
 from shared.db.referral import get_offers_collection
 from shared.db.users import get_meta_collection, get_user_collection
+from shared.models.constants import OutputStatus, customer_care_number
 from shared.models.interfaces import RedeemOfferInput as Input, Output
 
 
@@ -82,7 +82,7 @@ class Compute:
                 "offer_title": offer.get("title"),
                 "website_url": offer.get("website"),
                 "expiry_date": expiry_date,
-                "phone_number": "+918660610840"
+                "phone_number": '+91' + customer_care_number,
             }
         }
 

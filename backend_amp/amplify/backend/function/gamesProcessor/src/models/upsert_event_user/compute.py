@@ -1,5 +1,5 @@
+from shared.models.constants import OutputStatus, application_json_header, TimeFormats, customer_care_number
 from shared.models.interfaces import EventUserInput as Input, User, EventUser, Output, UserMeta, Event
-from shared.models.constants import OutputStatus, application_json_header, TimeFormats
 from shared.db.events import get_event_users_collection, get_events_collection
 from shared.db.users import get_user_collection, get_meta_collection
 from shared.configs import CONFIG as config
@@ -117,7 +117,7 @@ class Compute:
                 'event_name': event.mainTitle,
                 'image_link': event.imageUrl,
                 'webinar_link': event.meetingLink,
-                'phone_number': "+918660610840",
+                'phone_number': '+91' + customer_care_number,
                 'whatsapp_community_link': "https://sukoonunlimited.com/wa-join-community"
             }
         }
