@@ -42,17 +42,23 @@ class Compute:
 
     def determine_failed_reason(self, cause: str) -> str:
         if cause == 'failed':
-            return 'expert missed'
+            message = 'expert missed'
         elif cause == 'no answer':
-            return 'expert declined'
+            message = 'expert declined'
         elif cause == 'cancel':
-            return 'expert cancelled'
+            message = 'expert cancelled'
         elif cause == 'noanswer':
-            return 'user missed'
+            message = 'user missed'
         elif cause == 'chanunavail':
-            return 'user declined'
+            message = 'user declined'
         else:
-            return cause
+            message = cause
+        if self.input.direction != 'outbound':
+            if 'user' in message:
+                message = message.replace('user', 'expert')
+            else:
+                message = message.replace('expert', 'user')
+        return message
 
     def determine_failed_reason_and_status(self) -> tuple:
         cause = self.input.hangup_cause.lower()
