@@ -1,7 +1,7 @@
 import traceback
+from models.scall_inhook.compute import Compute
 from shared.models.constants import OutputStatus
-from models.scall_livehook.compute import Compute
-from models.scall_livehook.validate import Validator
+from models.scall_inhook.validate import Validator
 from shared.models.interfaces import SCallInhookInput as Input, Output
 
 
