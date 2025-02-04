@@ -13,6 +13,8 @@ class MakeServeTelCall:
 
     def get_agent_api_key(self) -> str:
         query = {'phoneNumber': self.input.expert_number}
+        if self.input.expert_number != '8660610840':
+            query['immutable'] = False
         doc = self.sagents_collection.find_one(query)
         if not doc:
             cursor = self.sagents_collection.find()
