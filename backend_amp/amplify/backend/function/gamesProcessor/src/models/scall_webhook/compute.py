@@ -24,10 +24,16 @@ class Compute:
         if call_status == 'missed':
             failed_causes = ['failed', 'cancel', 'no answer']
             if cause in failed_causes:
-                return CallStatus.FAILED
+                if self.input.direction == 'outbound':
+                    return CallStatus.FAILED
+                else:
+                    return CallStatus.MISSED
             missed_causes = ['noanswer', 'chanunavail']
             if cause in missed_causes:
-                return CallStatus.MISSED
+                if self.input.direction == 'outbound':
+                    return CallStatus.MISSED
+                else:
+                    return CallStatus.FAILED
         elif call_status == 'answered':
             if int(self.input.duration) > 120:
                 return CallStatus.SUCCESSFUL
