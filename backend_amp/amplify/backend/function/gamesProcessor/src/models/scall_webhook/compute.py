@@ -64,7 +64,10 @@ class Compute:
         return f'{hours:02}:{minutes:02}:{seconds:02}'
 
     def find_call(self, call_oid: str) -> dict:
-        query = {"_id": ObjectId(call_oid)}
+        if call_oid:
+            query = {"_id": ObjectId(call_oid)}
+        else:
+            query = {'callId': self.callId}
         call = self.collection.find_one(query)
         call = Common.clean_dict(call, Call)
         return Call(**call) if call else None
