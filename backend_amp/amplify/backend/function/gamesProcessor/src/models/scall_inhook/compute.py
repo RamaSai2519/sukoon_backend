@@ -16,7 +16,7 @@ class Compute:
         self.user_number = self.input.caller_id_number
         self.experts_collection = get_experts_collections()
 
-    def find_user(self) -> dict:
+    def find_user(self) -> User:
         url = config.URL + '/actions/user'
         payload = {'phoneNumber': self.user_number}
         response = requests.post(url, json=payload)
@@ -26,7 +26,7 @@ class Compute:
         user = User(**user)
         return user
 
-    def find_expert(self) -> dict:
+    def find_expert(self) -> Expert:
         query = {'phoneNumber': customer_care_number}
         expert = self.experts_collection.find_one(query)
         expert = Common.clean_dict(expert, Expert)
@@ -38,8 +38,8 @@ class Compute:
         expert = self.find_expert()
         call = Call(
             callId=self.callId,
-            user=user,
-            expert=expert,
+            user=user._id,
+            expert=expert._id,
             initiatedTime=Common.get_current_utc_time(),
             status='initiated',
             direction='inbound',
