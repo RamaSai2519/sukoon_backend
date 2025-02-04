@@ -1,4 +1,5 @@
 import requests
+from bson import ObjectId
 from shared.models.common import Common
 from shared.configs import CONFIG as config
 from shared.db.calls import get_calls_collection
@@ -38,8 +39,8 @@ class Compute:
         expert = self.find_expert()
         call = Call(
             callId=self.callId,
-            user=user._id,
-            expert=expert._id,
+            user=ObjectId(user._id),
+            expert=ObjectId(expert._id),
             initiatedTime=Common.get_current_utc_time(),
             status='initiated',
             direction='inbound',
