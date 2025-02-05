@@ -23,12 +23,6 @@ class Validator:
                 if value is not None and not isinstance(value, bool):
                     return False, f"Field {field} must be a boolean"
 
-        int_fields = ["numberOfGames", "numberOfCalls"]
-        for field in int_fields:
-            if hasattr(self.input, field):
-                value = getattr(self.input, field)
-                if value is not None and not isinstance(value, int):
-                    return False, f"Field {field} must be an integer"
         return True, ""
 
     def validate_mandatory_fields(self) -> tuple:

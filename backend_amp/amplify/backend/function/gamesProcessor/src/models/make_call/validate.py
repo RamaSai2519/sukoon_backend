@@ -152,21 +152,6 @@ class Validator:
         if user_meta and user_meta.get('userStatus') in not_interested_statuses:
             return False, 'User is not interested'
 
-        conditions = [
-            user.get('isPaidUser') is False,
-            user.get('numberOfCalls', 0) <= 0,
-            expert.get('type') not in non_sarathi_types,
-        ]
-
-        if all(conditions):
-            self.notifier.send_notification(
-                type_=self.input.type_,
-                user_name=user.get('name', ''),
-                sarathi_name=expert.get('name', ''),
-                status='balance_low',
-            )
-            return False, 'User has reached maximum number of calls'
-
         if self.check_user_availability(user) is False:
             return False, 'User has an upcoming call'
 

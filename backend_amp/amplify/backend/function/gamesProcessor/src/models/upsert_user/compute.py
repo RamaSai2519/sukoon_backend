@@ -39,10 +39,7 @@ class Compute:
         user_data['isBusy'] = False
         user_data['plan'] = 'default'
         user_data['isBlocked'] = False
-        user_data['isPaidUser'] = False
         user_data['wa_opt_out'] = False
-        user_data['numberOfGames'] = 0
-        user_data['numberOfCalls'] = 3
         user_data.pop('_id', None)
         return user_data
 
