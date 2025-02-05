@@ -21,14 +21,14 @@ class Compute:
         self.status, self.failed_reason = self.determine_failed_reason_and_status()
 
     def determine_status(self, cause: str, call_status: str) -> str:
+        missed_causes = ['noanswer', 'chanunavail']
+        failed_causes = ['failed', 'cancel', 'no answer']
         if call_status == 'missed':
-            failed_causes = ['failed', 'cancel', 'no answer']
             if cause in failed_causes:
                 if self.input.direction == 'inbound':
                     return CallStatus.MISSED
                 else:
                     return CallStatus.FAILED
-            missed_causes = ['noanswer', 'chanunavail']
             if cause in missed_causes:
                 if self.input.direction == 'inbound':
                     return CallStatus.FAILED
@@ -42,31 +42,18 @@ class Compute:
 
     def determine_failed_reason(self, cause: str) -> str:
         direction = self.input.direction
-        if cause == 'failed':
+        cause_mapping = {
+            'failed': 'missed',
+            'no answer': 'declined',
+            'cancel': 'cancelled',
+            'noanswer': 'missed',
+            'chanunavail': 'declined'
+        }
+        if cause in cause_mapping:
             if direction == 'inbound':
-                message = 'user missed'
+                message = f'user {cause_mapping[cause]}'
             else:
-                message = 'expert missed'
-        elif cause == 'no answer':
-            if direction == 'inbound':
-                message = 'user declined'
-            else:
-                message = 'expert declined'
-        elif cause == 'cancel':
-            if direction == 'inbound':
-                message = 'user cancelled'
-            else:
-                message = 'expert cancelled'
-        elif cause == 'noanswer':
-            if direction == 'inbound':
-                message = 'expert missed'
-            else:
-                message = 'user missed'
-        elif cause == 'chanunavail':
-            if direction == 'inbound':
-                message = 'expert declined'
-            else:
-                message = 'user declined'
+                message = f'expert {cause_mapping[cause]}'
         else:
             message = cause
         return message
