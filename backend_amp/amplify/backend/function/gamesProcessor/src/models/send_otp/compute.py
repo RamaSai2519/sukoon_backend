@@ -47,7 +47,7 @@ class Compute:
         return otp
 
     def compute(self) -> Output:
-        if self.input.phone_number == TestCreds.phone_number:
+        if self.input.phone_number in TestCreds.phone_number:
             return Output()
 
         otp = self.generate_otp()
