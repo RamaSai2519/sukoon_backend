@@ -2,7 +2,6 @@ import requests
 from shared.models.common import Common
 from shared.configs import CONFIG as config
 from shared.db.experts import get_sagents_collection
-from shared.models.constants import customer_care_number
 from shared.models.interfaces import CallerInput as Input
 
 
@@ -13,9 +12,9 @@ class MakeServeTelCall:
         self.api_key = self.get_agent_api_key()
 
     def get_agent_api_key(self) -> str:
+        if self.input.expert_number == config.SERVETEL_CONST_AGENT_CREDS['phoneNumber']:
+            return config.SERVETEL_CONST_AGENT_CREDS['api_key']
         query = {'phoneNumber': self.input.expert_number}
-        if self.input.expert_number != customer_care_number:
-            query['immutable'] = False
         doc = self.sagents_collection.find_one(query)
         if not doc:
             cursor = self.sagents_collection.find()
