@@ -41,23 +41,34 @@ class Compute:
         return CallStatus.FAILED
 
     def determine_failed_reason(self, cause: str) -> str:
+        direction = self.input.direction
         if cause == 'failed':
-            message = 'expert missed'
+            if direction == 'inbound':
+                message = 'user missed'
+            else:
+                message = 'expert missed'
         elif cause == 'no answer':
-            message = 'expert declined'
+            if direction == 'inbound':
+                message = 'user declined'
+            else:
+                message = 'expert declined'
         elif cause == 'cancel':
-            message = 'expert cancelled'
+            if direction == 'inbound':
+                message = 'user cancelled'
+            else:
+                message = 'expert cancelled'
         elif cause == 'noanswer':
-            message = 'user missed'
+            if direction == 'inbound':
+                message = 'expert missed'
+            else:
+                message = 'user missed'
         elif cause == 'chanunavail':
-            message = 'user declined'
+            if direction == 'inbound':
+                message = 'expert declined'
+            else:
+                message = 'user declined'
         else:
             message = cause
-        if self.input.direction != 'outbound':
-            if 'user' in message:
-                message = message.replace('user', 'expert')
-            else:
-                message = message.replace('expert', 'user')
         return message
 
     def determine_failed_reason_and_status(self) -> tuple:
