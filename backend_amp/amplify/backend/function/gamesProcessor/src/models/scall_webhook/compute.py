@@ -17,12 +17,14 @@ class Compute:
         self.call_oid = self.input.suid
         self.collection = get_calls_collection()
         self.users_collection = get_user_collection()
+        self.user_fails = ['noanswer', 'chanunavail']
         self.experts_collection = get_experts_collections()
+        self.expert_fails = ['failed', 'cancel', 'no answer']
         self.status, self.failed_reason = self.determine_failed_reason_and_status()
 
     def determine_status(self, cause: str, call_status: str) -> str:
-        missed_causes = ['noanswer', 'chanunavail']
-        failed_causes = ['failed', 'cancel', 'no answer']
+        missed_causes = self.user_fails
+        failed_causes = self.expert_fails
         if call_status == 'missed':
             if cause in failed_causes:
                 if self.input.direction == 'inbound':
@@ -51,9 +53,15 @@ class Compute:
         }
         if cause in cause_mapping:
             if direction == 'inbound':
-                message = f'user {cause_mapping[cause]}'
+                if cause in self.user_fails:
+                    message = f'expert {cause_mapping[cause]}'
+                else:
+                    message = f'user {cause_mapping[cause]}'
             else:
-                message = f'expert {cause_mapping[cause]}'
+                if cause in self.user_fails:
+                    message = f'user {cause_mapping[cause]}'
+                else:
+                    message = f'expert {cause_mapping[cause]}'
         else:
             message = cause
         return message
