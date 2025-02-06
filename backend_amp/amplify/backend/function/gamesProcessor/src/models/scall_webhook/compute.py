@@ -13,8 +13,8 @@ class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
         self.common = Common()
-        self.callId = self.input.uuid
         self.call_oid = self.input.suid
+        self.callId = self.input.call_id
         self.collection = get_calls_collection()
         self.users_collection = get_user_collection()
         self.user_fails = ['noanswer', 'chanunavail']
@@ -92,10 +92,9 @@ class Compute:
 
     def update_call(self, call: Call) -> str:
         duration_str = self.seconds_to_duration_str()
-        filter = {'callId': call.callId}
+        filter = {'_id': call._id}
         update = {
             '$set': {
-                'callId': self.callId,
                 'status': self.status,
                 'duration': duration_str,
                 'failedReason': self.failed_reason,

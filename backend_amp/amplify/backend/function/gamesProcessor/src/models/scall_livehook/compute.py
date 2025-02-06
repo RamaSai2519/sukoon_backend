@@ -9,8 +9,8 @@ class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
         self.common = Common()
-        self.callId = self.input.uuid
         self.call_oid = self.input.suid
+        self.callId = self.input.call_id
         self.collection = get_calls_collection()
 
     def find_call(self, call_oid: str) -> dict:

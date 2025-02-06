@@ -12,7 +12,7 @@ class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
         self.common = Common()
-        self.callId = self.input.uuid
+        self.callId = self.input.call_id
         self.collection = get_calls_collection()
         self.user_number = self.input.caller_id_number
         self.experts_collection = get_experts_collections()
