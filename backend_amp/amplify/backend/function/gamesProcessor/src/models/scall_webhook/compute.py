@@ -95,6 +95,7 @@ class Compute:
         filter = {'_id': call._id}
         update = {
             '$set': {
+                'callId': self.callId,
                 'status': self.status,
                 'duration': duration_str,
                 'failedReason': self.failed_reason,
