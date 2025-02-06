@@ -13,6 +13,7 @@ class Compute:
             utc_date=self.input.datetime,
             duration=self.input.duration
         )
+        print(slot, '__slot__')
         output_slots = slot.to_output_slots()
 
         return Output(
