@@ -39,7 +39,7 @@ class Validator:
             'parameters': {
                 'user_name': user_name,
                 'expert_name': expert_name,
-                'status': 'failed',
+                'status': 'missed',
                 'reason': reason
             }
         }
@@ -109,7 +109,8 @@ class Validator:
                 status='offline',
             )
             self.notify_failed_expert(expert, user, 'Offline')
-            self.escalate()
+            if expert.get('type') == 'saarthi' and self.input.scheduledId not in [None, '']:
+                self.escalate()
             return False, 'Expert is offline'
 
         if expert.get('isBusy') is True:
@@ -119,9 +120,7 @@ class Validator:
                 sarathi_name=expert.get('name', ''),
                 status='sarathi_busy',
             )
-            if expert.get('type') not in non_sarathi_types:
-                self.escalate()
-            self.notify_failed_expert(expert, user, 'Busy')
+            self.notify_failed_expert(expert, user, 'on another call')
             return False, 'Expert is busy'
 
         # if self.input.type_ == 'call':
@@ -173,7 +172,6 @@ class Validator:
             return expert_validation
 
         if user_validation[1]['phoneNumber'] == expert_validation[1]['phoneNumber']:
-            self.escalate()
             return False, 'User and Expert phone number cannot be same'
 
         return True, ''
