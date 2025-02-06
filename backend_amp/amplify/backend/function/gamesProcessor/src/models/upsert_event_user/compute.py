@@ -42,7 +42,7 @@ class Compute:
             name=input.name or "", refCode=input.source or "",
             phoneNumber=input.phoneNumber, city=input.city or "", email=input.email or "",
             birthDate=datetime.strptime(
-                input.dob, "%Y-%m-%dT%H:%M:%S.%fZ") if input.dob else ""
+                input.dob, TimeFormats.ANTD_TIME_FORMAT) if input.dob else ""
         )
         return user
 

@@ -1,4 +1,5 @@
 from shared.models.interfaces import GetSlotsInput as Input
+from shared.models.constants import TimeFormats
 from datetime import datetime
 from bson import ObjectId
 
@@ -36,7 +37,7 @@ class Validator():
     def _is_valid_datetime(self):
         try:
             datetime.strptime(self.input.datetime,
-                              "%Y-%m-%dT%H:%M:%S.%fZ")
+                              TimeFormats.ANTD_TIME_FORMAT)
             return True
         except ValueError:
             return False

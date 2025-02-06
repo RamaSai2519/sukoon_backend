@@ -1,6 +1,6 @@
 from shared.models.interfaces import UpsertScheduleInput as Input, WhtasappMessageInput
+from shared.models.constants import not_interested_statuses, TimeFormats
 from shared.db.users import get_meta_collection, get_user_collection
-from shared.models.constants import not_interested_statuses
 from shared.db.experts import get_experts_collections
 from shared.models.common import Common
 from datetime import datetime
@@ -34,7 +34,7 @@ class Validator:
 
     def validate_job_time_and_status(self) -> tuple:
         try:
-            datetime.strptime(self.input.job_time, '%Y-%m-%dT%H:%M:%SZ')
+            datetime.strptime(self.input.job_time, TimeFormats.AWS_TIME_FORMAT)
         except ValueError:
             return False, 'Job time is not a valid AWS time string'
 

@@ -1,6 +1,6 @@
 from shared.db.experts import get_experts_collections, get_timings_collection
+from shared.models.constants import expert_times, TimeFormats
 from shared.db.schedules import get_schedules_collection
-from shared.models.constants import expert_times
 from datetime import datetime, timedelta
 from bson import ObjectId
 import pytz
@@ -21,7 +21,7 @@ class Slot:
 
     def convert_to_ist(self) -> datetime:
         utc_datetime = datetime.strptime(
-            self.utc_date, "%Y-%m-%dT%H:%M:%S.%fZ")
+            self.utc_date, TimeFormats.ANTD_TIME_FORMAT)
         return utc_datetime + timedelta(hours=5, minutes=30)
 
     def calculate_slots(self):
@@ -40,7 +40,7 @@ class Slot:
             slot_start_utc = (slot_start_ist - timedelta(hours=5,
                               minutes=30)).replace(tzinfo=utc_zone)
             slot_start_utc_str = slot_start_utc.strftime(
-                "%Y-%m-%dT%H:%M:%S.%fZ")
+                TimeFormats.ANTD_TIME_FORMAT)
 
             slot_dict = {
                 "slot": slot,
@@ -71,7 +71,7 @@ class Slot:
                         self.slots.remove(next_slot)
 
             utc_datetime = datetime.strptime(
-                slot_dict["datetime"], '%Y-%m-%dT%H:%M:%S.%fZ')
+                slot_dict["datetime"], TimeFormats.ANTD_TIME_FORMAT)
             ist_datetime = utc_datetime.astimezone(ist_timezone)
             ist_hour = ist_datetime.hour
 
