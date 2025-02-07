@@ -30,6 +30,8 @@ class Validator:
         self.experts_collection.update_one(query, update)
 
     def validate_input(self) -> tuple:
+        if not self.input.suid:
+            return True, ""
         call = self.find_call()
         if not call:
             return False, "Call not found"
