@@ -87,6 +87,9 @@ class Compute:
         return user_data
 
     def send_wa_message(self, payload: dict) -> None:
+        if self.input.origin:
+            # Handled in adclick
+            return True
         url = config.URL + '/actions/send_whatsapp'
         headers = application_json_header
         response = requests.request(
