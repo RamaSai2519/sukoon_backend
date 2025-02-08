@@ -115,12 +115,6 @@ class Compute:
         response = requests.post(url, json=payload)
         print(response.text, '__user_immediate_schedule_notification__')
 
-    def notify_parties(self, difference: int):
-        url = config.URL + '/actions/send_whatsapp'
-        user, expert = self.get_parties()
-        self.notify_expert(url, user, expert, difference)
-        self.notify_user(url, user, expert, difference)
-
     def compute(self) -> Output:
         if self.input.expert_id:
             expert_id = ObjectId(self.input.expert_id)
@@ -128,10 +122,6 @@ class Compute:
             job_time = datetime.strptime(
                 self.input.job_time, TimeFormats.AWS_TIME_FORMAT)
             job_time = job_time.replace(tzinfo=pytz.utc)
-            difference_seconds = (
-                job_time - Common.get_current_utc_time()).total_seconds()
-            if difference_seconds < (15 * 60):
-                self.notify_parties(difference_seconds)
 
             if self.check_expert_availability(expert_id, job_time):
                 return Output(

@@ -2,6 +2,7 @@ import requests
 from requests import Response
 from shared.models.common import Common
 from shared.configs import CONFIG as config
+from shared.models.constants import OutputStatus
 from shared.models.interfaces import Schedule, Output
 from shared.db.schedules import get_schedules_collection
 
@@ -33,6 +34,9 @@ class Compute:
         response = response.json()
         response = Output(**response)
         status = response.output_message
+        if response.output_status == OutputStatus.FAILURE:
+            # TODO: Send slack message
+            pass
         self.common.update_schedule_status(self.job._id, status)
 
         return Output(output_message="Job executed successfully")
