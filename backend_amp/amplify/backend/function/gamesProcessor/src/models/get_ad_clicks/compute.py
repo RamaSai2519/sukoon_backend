@@ -13,6 +13,8 @@ class Compute:
         query = Common.get_filter_query(
             self.input.filter_field, self.input.filter_value
         )
+        if self.input.token:
+            query = {'token': self.input.token}
 
         total = self.collection.count_documents(query)
         if total <= 10:
