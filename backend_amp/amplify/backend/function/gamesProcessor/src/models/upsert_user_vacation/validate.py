@@ -1,12 +1,21 @@
 from shared.models.interfaces import UpsertUserVacationInput as Input
 from shared.models.constants import TimeFormats
+from shared.models.common import Common
 from datetime import datetime
 from bson import ObjectId
 
 
-class Validator():
+class Validator:
     def __init__(self, input: Input) -> None:
         self.input = input
+
+    def validate_start_data(self) -> bool:
+        start_date = datetime.strptime(self.input.start_date,
+                                       TimeFormats.ANTD_TIME_FORMAT)
+        current_time = Common.get_current_utc_time()
+        if start_date < current_time:
+            return False, "Start date cannot be in the past"
+        return True, ""
 
     def validate_input(self) -> tuple:
         try:
@@ -17,6 +26,7 @@ class Validator():
         try:
             fields = ['start_date', 'end_date']
             for field in fields:
+                print(getattr(self.input, field))
                 datetime.strptime(getattr(self.input, field),
                                   TimeFormats.ANTD_TIME_FORMAT)
         except:
@@ -32,5 +42,9 @@ class Validator():
 
         if self.input.user_type not in ['user', 'expert']:
             return False, "Invalid user type"
+
+        valid, message = self.validate_start_data()
+        if not valid:
+            return valid, message
 
         return True, ""
