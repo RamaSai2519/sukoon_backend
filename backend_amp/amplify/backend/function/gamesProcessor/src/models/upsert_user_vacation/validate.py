@@ -11,6 +11,8 @@ class Validator:
         self.input = input
 
     def validate_start_data(self) -> bool:
+        if not self.input.start_date:
+            return True, ""
         start_date = datetime.strptime(self.input.start_date,
                                        TimeFormats.ANTD_TIME_FORMAT)
         start_date = start_date.replace(tzinfo=pytz.utc)
@@ -28,16 +30,18 @@ class Validator:
         try:
             fields = ['start_date', 'end_date']
             for field in fields:
-                date = getattr(self.input, field)
-                datetime.strptime(date, TimeFormats.ANTD_TIME_FORMAT)
+                if hasattr(self.input, field):
+                    date = getattr(self.input, field)
+                    datetime.strptime(date, TimeFormats.ANTD_TIME_FORMAT)
         except:
             return False, "Invalid date(s)"
 
         try:
             fields = ['start_time', 'end_time']
             for field in fields:
-                datetime.strptime(getattr(self.input, field),
-                                  TimeFormats.HOURS_24_FORMAT)
+                if hasattr(self.input, field):
+                    datetime.strptime(getattr(self.input, field),
+                                      TimeFormats.HOURS_24_FORMAT)
         except:
             return False, "Invalid time(s)"
 
