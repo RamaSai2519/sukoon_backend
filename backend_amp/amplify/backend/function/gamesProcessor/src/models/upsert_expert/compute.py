@@ -145,6 +145,7 @@ class Compute:
         prev_expert = self.validate_phoneNumber(expert_data["phoneNumber"])
 
         if prev_expert:
+            # TODO: Do not let the sarathi go online if on vacation
             expert_data = self.prep_data(expert_data, prev_expert)
             self.experts_collection.update_one(
                 {"phoneNumber": expert_data["phoneNumber"]},
