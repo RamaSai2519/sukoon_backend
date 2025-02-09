@@ -1,7 +1,6 @@
 from shared.models.interfaces import PushNotificationInput as Input, Output
 from firebase_admin import credentials, messaging
 from shared.models.constants import OutputStatus
-from shared.configs import CONFIG as config
 import firebase_admin
 import os
 
@@ -45,14 +44,14 @@ class Compute:
 
     def compute(self) -> Output:
         self.initialize_firebase_admin()
-        token = self.input.token
         body = self.input.body
-        image_url = self.input.image_url
+        token = self.input.token
         title = self.input.title
-        user_id = self.input.user_id
-        sarathi_id = self.input.sarathi_id
         type_ = self.input.type_
         action = self.input.action
+        user_id = self.input.user_id
+        image_url = self.input.image_url
+        sarathi_id = self.input.sarathi_id
 
         response = self.send_notification_fcm(
             token, body, image_url, title, user_id, sarathi_id, type_, action
