@@ -30,7 +30,7 @@ class Validator:
         try:
             fields = ['start_date', 'end_date']
             for field in fields:
-                if hasattr(self.input, field):
+                if getattr(self.input, field) not in [None, '']:
                     date = getattr(self.input, field)
                     datetime.strptime(date, TimeFormats.ANTD_TIME_FORMAT)
         except:
@@ -39,7 +39,7 @@ class Validator:
         try:
             fields = ['start_time', 'end_time']
             for field in fields:
-                if hasattr(self.input, field):
+                if getattr(self.input, field) not in [None, '']:
                     datetime.strptime(getattr(self.input, field),
                                       TimeFormats.HOURS_24_FORMAT)
         except:
