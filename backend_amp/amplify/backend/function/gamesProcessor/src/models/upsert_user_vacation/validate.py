@@ -1,7 +1,7 @@
 from shared.models.interfaces import UpsertUserVacationInput as Input
 from shared.models.constants import TimeFormats
+from datetime import datetime, timedelta
 from shared.models.common import Common
-from datetime import datetime
 from bson import ObjectId
 import pytz
 
@@ -17,6 +17,7 @@ class Validator:
                                        TimeFormats.ANTD_TIME_FORMAT)
         start_date = start_date.replace(tzinfo=pytz.utc)
         current_time = Common.get_current_utc_time()
+        current_time -= timedelta(minutes=2)
         if start_date < current_time:
             return False, "Start date cannot be in the past"
         return True, ""
