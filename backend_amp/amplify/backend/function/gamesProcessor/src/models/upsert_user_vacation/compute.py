@@ -41,6 +41,14 @@ class Compute:
             self.collection.update_one(query, {'$set': doc})
             message = 'User vacation updated successfully'
         else:
+            fields = ['start_date', 'end_date', 'start_time',
+                      'end_time', 'user', 'user_type']
+            for field in fields:
+                if not hasattr(self.input, field):
+                    return Output(
+                        output_details={},
+                        output_message=f"Missing field: {field}"
+                    )
             doc = self.prep_data(self.input.__dict__)
             self.collection.insert_one(doc)
             message = 'User vacation created successfully'

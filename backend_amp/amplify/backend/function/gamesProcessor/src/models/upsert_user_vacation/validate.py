@@ -44,8 +44,8 @@ class Validator:
         if self.input.user_type not in ['user', 'expert']:
             return False, "Invalid user type"
 
-        # valid, message = self.validate_start_data()
-        # if not valid:
-        #     return valid, message
+        valid, message = self.validate_start_data()
+        if not valid:
+            return valid, message
 
         return True, ""
