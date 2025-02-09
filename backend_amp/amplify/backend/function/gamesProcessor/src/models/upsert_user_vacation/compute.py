@@ -21,6 +21,7 @@ class Compute:
             new_data = Common.merge_dicts(new_data, old_data)
         else:
             new_data['createdAt'] = Common.get_current_utc_time()
+            new_data['isDeleted'] = False
 
         date_fields = ['createdAt', 'start_date', 'end_date']
         for field in date_fields:

@@ -42,6 +42,7 @@ class Compute:
         current_time = Common.get_current_utc_time()
         query['start_date'] = {'$lte': current_time}
         query['end_date'] = {'$gte': current_time}
+        query['isDeleted'] = False
         doc = self.vacations_collection.find_one(query)
         if not doc:
             return True
