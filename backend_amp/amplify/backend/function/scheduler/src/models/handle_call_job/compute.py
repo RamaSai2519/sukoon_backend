@@ -1,5 +1,6 @@
 import requests
 from requests import Response
+from .slack import SlackManager
 from shared.models.common import Common
 from shared.configs import CONFIG as config
 from shared.models.constants import OutputStatus
@@ -12,6 +13,7 @@ class Compute:
         self.job = input
         self.url = config.URL
         self.common = Common()
+        self.slack = SlackManager()
         self.collection = get_schedules_collection()
 
     def execute_job(self) -> Response:
@@ -35,8 +37,9 @@ class Compute:
         response = Output(**response)
         status = response.output_message
         if response.output_status == OutputStatus.FAILURE:
-            # TODO: Send slack message
-            pass
+            message = self.slack.send_message(
+                self.job.user_id, self.job.expert_id, status)
+            print(message)
         self.common.update_schedule_status(self.job._id, status)
 
         return Output(output_message="Job executed successfully")

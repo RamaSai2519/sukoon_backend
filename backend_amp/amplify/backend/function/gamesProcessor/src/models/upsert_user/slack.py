@@ -1,15 +1,13 @@
-import pytz
-from datetime import datetime
 from slack_sdk import WebClient
-from shared.configs import CONFIG as config
+from shared.models.common import Common
 from slack_sdk.errors import SlackApiError
+from shared.configs import CONFIG as config
 
 
 class SlackManager:
     def __init__(self) -> None:
         self.client = WebClient(token=config.SARATHI_SLACK_BOT_TOKEN)
         self.channel = "C07R58933DW"
-        self.timezone = pytz.timezone("Asia/Kolkata")
         self.dashboard_url = "https://admin.sukoonunlimited.com/admin/users/"
 
     def join_channel(self) -> None:
@@ -56,7 +54,7 @@ class SlackManager:
                 "fields": [
                     {
                         "type": 'mrkdwn',
-                        "text": f'*Time:*\n{datetime.now(self.timezone).strftime("%Y-%m-%d %H:%M:%S")}'
+                        "text": f'*Time:*\n{Common.get_current_ist_time().strftime("%Y-%m-%d %H:%M:%S")}'
                     },
                     {
                         "type": 'mrkdwn',
