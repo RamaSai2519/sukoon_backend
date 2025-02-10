@@ -1,9 +1,9 @@
 import pytz
 import requests
 from bson import ObjectId
+from .slack import SlackManager
 from shared.models.common import Common
 from datetime import datetime, timedelta
-from shared.configs import CONFIG as config
 from shared.db.users import get_user_collection
 from shared.db.experts import get_experts_collections
 from shared.db.schedules import get_schedules_collection
@@ -139,6 +139,14 @@ class Compute:
                     output_status=OutputStatus.FAILURE,
                     output_message="User is not available at this time"
                 )
+
+        if self.input.initiatedBy and self.input.initiatedBy.lower() == 'ark':
+            user, expert = self.get_parties()
+            user_name = user.get('name') or user['phoneNumber']
+            expert_name = expert.get('name') or expert['phoneNumber']
+            slack = SlackManager(user_name, expert_name)
+            msg = slack.send_message()
+            print(msg, '__ark_schedule_slack__')
 
         if self.input._id:
             old_data = self.get_old_data()
