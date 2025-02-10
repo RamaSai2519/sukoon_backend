@@ -1,5 +1,8 @@
 import bcrypt
+import requests
+from .slack import SlackManager
 from shared.models.common import Common
+from shared.configs import CONFIG as config
 from shared.db.referral import get_ad_clicks_collection
 from shared.models.interfaces import RecordAdClickInput as Input, Output
 
@@ -7,6 +10,7 @@ from shared.models.interfaces import RecordAdClickInput as Input, Output
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
+        self.slack = SlackManager()
         self.collection = get_ad_clicks_collection()
 
     def validate_token(self) -> dict:
@@ -28,6 +32,18 @@ class Compute:
             doc['updatedAt'] = Common.get_current_utc_time()
         return doc
 
+    def update_user(self) -> bool:
+        url = config.URL + '/actions/user'
+        payload = {
+            'phoneNumber': self.input.user_phone,
+            'name': self.input.user_name or None,
+            'city': self.input.user_city or None,
+        }
+        response = requests.post(url, json=payload)
+        if response.status_code != 200:
+            return False
+        return True
+
     def compute(self) -> Output:
         doc = self.validate_token()
         if not doc:
@@ -39,6 +55,10 @@ class Compute:
             query = {'_id': doc['_id']}
             doc = self.prep_doc(False)
             self.collection.update_one(query, {'$set': doc})
+
+        self.slack.send_message(self.input.prc)
+        if self.input.user_phone:
+            self.update_user()
 
         return Output(
             output_details=Common.jsonify(doc),
