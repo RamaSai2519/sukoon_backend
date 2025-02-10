@@ -5,10 +5,10 @@ from shared.models.common import Common
 from shared.configs import CONFIG as config
 from models.make_call.slack import SlackNotifier
 from shared.db.experts import get_experts_collections
-from shared.db.calls import get_escalations_collection
 from shared.models.interfaces import CallInput as Input
 from shared.db.schedules import get_schedules_collection
 from shared.db.users import get_user_collection, get_meta_collection
+from shared.db.calls import get_escalations_collection, get_calls_collection
 from shared.models.constants import not_interested_statuses, non_sarathi_types
 
 
@@ -18,6 +18,7 @@ class Validator:
         self.notifier = SlackNotifier()
         self.meta_collection = get_meta_collection()
         self.users_collection = get_user_collection()
+        self.calls_collection = get_calls_collection()
         self.experts_collection = get_experts_collections()
         self.schedules_collection = get_schedules_collection()
         self.escalations_collection = get_escalations_collection()
@@ -132,6 +133,16 @@ class Validator:
 
         return True, expert
 
+    def check_user_previous_call(self, user: dict) -> bool:
+        lower_bound = Common.get_current_utc_time() - timedelta(minutes=5)
+        upper_bound = Common.get_current_utc_time()
+        query = {
+            'initiatedTime': {'$gte': lower_bound, '$lte': upper_bound},
+            'user': user['_id']
+        }
+        call = self.calls_collection.find_one(query)
+        return False if call else True
+
     def validate_user(self, user: dict, user_meta: dict, expert: dict) -> tuple:
         if not user:
             return False, 'User not found'
@@ -153,6 +164,9 @@ class Validator:
 
         if self.check_user_availability(user) is False:
             return False, 'User has an upcoming call'
+
+        if self.check_user_previous_call(user) is False:
+            return False, 'User had a recent call'
 
         return True, user
 
