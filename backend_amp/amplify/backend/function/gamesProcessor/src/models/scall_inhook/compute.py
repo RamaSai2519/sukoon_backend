@@ -1,5 +1,6 @@
 import requests
 from bson import ObjectId
+from .slack import SlackManager
 from shared.models.common import Common
 from shared.configs import CONFIG as config
 from shared.db.calls import get_calls_collection
@@ -12,6 +13,7 @@ class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
         self.common = Common()
+        self.slack = SlackManager()
         self.callId = self.input.call_id
         self.collection = get_calls_collection()
         self.user_number = self.input.caller_id_number
@@ -48,5 +50,9 @@ class Compute:
         ).__dict__
         call = Common.filter_none_values(call)
         self.collection.insert_one(call)
+
+        user_name = user.name or user.phoneNumber
+        message = self.slack.send_message(user_name)
+        print(message, '__inbound_call_slack__')
 
         return Output(output_message="Call Noted")
