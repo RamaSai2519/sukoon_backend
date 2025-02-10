@@ -1,4 +1,4 @@
-from shared.db.experts import get_experts_collections, get_timings_collection, get_vacations_collection
+from shared.db.experts import get_experts_collections, get_timings_collection
 from shared.models.constants import TimeFormats
 from shared.models.interfaces import Output
 from shared.configs import CONFIG as config
@@ -14,7 +14,6 @@ class Compute:
         self.collection = get_experts_collections()
         self.now_time = Common.get_current_ist_time()
         self.timings_collection = get_timings_collection()
-        self.vacations_collection = get_vacations_collection()
 
     def job(self, expert_id: ObjectId, timing_id: ObjectId) -> bool:
         target_time = Common.get_current_utc_time() + timedelta(hours=1)
