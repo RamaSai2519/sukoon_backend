@@ -1,6 +1,4 @@
-import json
 from bson import ObjectId
-from typing import List, Dict
 from shared.models.common import Common
 from shared.models.constants import OutputStatus
 from shared.db.schedules import get_schedules_collection
@@ -34,6 +32,10 @@ class Compute:
         query['job_type'] = 'CALL'
         if self.input.pending == 'true':
             query['status'] = {'$in': ['PENDING', 'WAPENDING']}
+        if self.input.fromToday == 'true':
+            today = Common.get_current_utc_time()
+            start_time = today.replace(hour=0, minute=0)
+            query['job_time'] = {'$gte': start_time}
         if self.input.filter_field == 'expert':
             filter_query = self.common.get_filter_query(
                 'name', self.input.filter_value)
