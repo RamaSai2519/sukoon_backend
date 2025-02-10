@@ -14,6 +14,7 @@ from shared.db.experts import get_experts_collections, get_timings_collection, g
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
+        self.common = Common()
         self.slack_manager = SlackManager()
         self.timings_collection = get_timings_collection()
         self.experts_collection = get_experts_collections()
@@ -145,8 +146,10 @@ class Compute:
         prev_expert = self.validate_phoneNumber(expert_data["phoneNumber"])
 
         if prev_expert:
-            # TODO: Do not let the sarathi go online if on vacation
             expert_data = self.prep_data(expert_data, prev_expert)
+            if expert_data["status"] == 'online':
+                if not self.common.check_vacation(expert_data['_id']):
+                    return Output(output_message='Expert is on Vacation, cannot set status to online', output_status=OutputStatus.FAILURE)
             self.experts_collection.update_one(
                 {"phoneNumber": expert_data["phoneNumber"]},
                 {"$set": expert_data}
