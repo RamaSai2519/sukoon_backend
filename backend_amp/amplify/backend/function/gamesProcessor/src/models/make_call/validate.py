@@ -137,8 +137,9 @@ class Validator:
         lower_bound = Common.get_current_utc_time() - timedelta(minutes=5)
         upper_bound = Common.get_current_utc_time()
         query = {
-            'initiatedTime': {'$gte': lower_bound, '$lte': upper_bound},
-            'user': user['_id']
+            'user': user['_id'],
+            'direction': {'$ne': 'inbound'},
+            'initiatedTime': {'$gte': lower_bound, '$lte': upper_bound}
         }
         call = self.calls_collection.find_one(query)
         return False if call else True
