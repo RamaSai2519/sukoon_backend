@@ -9,13 +9,14 @@ from models.get_timings.main import GetTimings
 from models.get_experts.main import ListExperts
 from models.get_categories.main import Categories
 from models.upsert_expert.main import UpsertExpert
+from models.get_vacations.main import GetVacations
 from models.get_applicants.main import GetApplicants
 from models.update_timings.main import UpdateTimings
 from models.get_agents_meta.main import GetAgentsMeta
 from models.create_applicant.main import CreateApplicant
 from models.upsert_agent_meta.main import UpsertAgentMeta
 from models.upsert_user_vacation.main import UpsertUserVacation
-from shared.models.interfaces import Expert, CategoriesInput, GetExpertsInput, ApplicantInput, GetSlotsInput, GetTimingsInput, UpdateTimingsInput, TimingsRow, GetApplicantsInput, UpsertAgentMetaInput, GetAgentsMetaInput, AgentCallMeta, UpsertUserVacationInput
+from shared.models.interfaces import Expert, CategoriesInput, GetExpertsInput, ApplicantInput, GetSlotsInput, GetTimingsInput, UpdateTimingsInput, TimingsRow, GetApplicantsInput, UpsertAgentMetaInput, GetAgentsMetaInput, AgentCallMeta, UpsertUserVacationInput, GetVacationsInput
 
 
 class ExpertService(Resource):
@@ -131,6 +132,14 @@ class UserVacationService(Resource):
         input = json.loads(request.get_data())
         input = UpsertUserVacationInput(**input)
         output = UpsertUserVacation(input).process()
+        output = dataclasses.asdict(output)
+
+        return output
+
+    def get(self) -> dict:
+        input_params = request.args
+        input = GetVacationsInput(**input_params)
+        output = GetVacations(input).process()
         output = dataclasses.asdict(output)
 
         return output
