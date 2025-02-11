@@ -3,6 +3,7 @@ from shared.models.interfaces import GetEventsInput as Input, Output
 from shared.models.constants import OutputStatus
 from pymongo.collection import Collection
 from shared.models.common import Common
+from datetime import timedelta
 from bson import ObjectId
 
 
@@ -28,7 +29,7 @@ class Compute:
         if self.input.events_type and self.input.events_type.lower() == "sukoon":
             query["isSukoon"] = True
         if self.input.fromToday and self.input.fromToday.lower() == "true":
-            currentTime = self.common.current_time
+            currentTime = self.common.current_time - timedelta(hours=2)
             query["validUpto"] = {"$gte": currentTime}
 
         if self.input.filter_field == "sub_category":
