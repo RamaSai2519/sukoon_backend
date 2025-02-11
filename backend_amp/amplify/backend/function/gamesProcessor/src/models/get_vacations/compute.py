@@ -1,6 +1,5 @@
+from shared.db.experts import get_vacations_collection, get_experts_collections
 from shared.models.interfaces import GetUsersInput as Input, Output
-from shared.db.experts import get_vacations_collection
-from shared.db.users import get_user_collection
 from shared.models.common import Common
 
 
@@ -9,7 +8,11 @@ class Compute:
         self.input = input
         self.common = Common()
         self.collection = get_vacations_collection()
-        self.users_collection = get_user_collection()
+        self.experts_collection = get_experts_collections()
+
+    def __format__(self, doc: dict) -> dict:
+        doc['user'] = self.common.get_expert_name(doc['user'])
+        return Common.jsonify(doc)
 
     def compute(self) -> Output:
         query = Common.get_filter_query(
@@ -23,8 +26,8 @@ class Compute:
             query = Common.get_filter_query(
                 'name', self.input.filter_value
             )
-            users = self.users_collection.distinct('_id', query)
-            query['user'] = {'$in': users}
+            experts = self.experts_collection.distinct('_id', query)
+            query['user'] = {'$in': experts}
 
         total = self.collection.count_documents(query)
         if total <= 10:
@@ -34,7 +37,7 @@ class Compute:
         paginated_cursor = Common.paginate_cursor(
             cursor, int(self.input.page), int(self.input.size)
         )
-        data = Common.jsonify(list(paginated_cursor))
+        data = [self.__format__(doc) for doc in list(paginated_cursor)]
 
         return Output(
             output_details={
