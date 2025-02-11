@@ -101,6 +101,8 @@ api.add_resource(PlatformCategoryService, '/actions/platform_category')
 api.add_resource(UserStatusOptionsService, '/actions/user_status_options')
 # - Content
 api.add_resource(ChatService, '/actions/chat')
+api.add_resource(SongService, '/actions/songs')
+# api.add_resource(LikesService, '/actions/likes')
 api.add_resource(PhotoService, '/actions/photos')
 api.add_resource(BlogPostService, '/actions/blog')
 api.add_resource(ContentService, '/actions/content')

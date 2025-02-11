@@ -12,8 +12,8 @@ from services.src.scheduled_jobs import ReSchedulesService, SchedulesService
 from services.src.authenticate import SendOTPService, ValidateOTPService, AdminAuthService
 from services.src.subscription import UserBalanceService, CheckEligibilityService, SubPlanService
 from services.src.push_notification import PushNotificationService, FCMTokenService, FCMTemplateService
-from services.src.content import ChatService, PhotoService, ContentService, DallImageService, BlogPostService
 from services.src.mark import UpdateExpertScoresService, SystemPromptsService, HistoriesService, BetaTesterService
+from services.src.content import ChatService, PhotoService, ContentService, DallImageService, BlogPostService, SongService
 from services.src.call import CallWebhookService, CallService, EscalationService, SCallWebhookService, SCallLivehookService, SCallInhookService
 from services.src.user_referral import UserReferralService, UpsertOfferService, PRCService, ValidatePRCService, PRCTracksService, AdClickService
 from services.src.expert import ExpertService, ApplicantService, SlotsService, TimingService, CategoryService, AgentMetaService, UserVacationService

@@ -21,9 +21,6 @@ class Compute:
         if total <= 10:
             self.input.page = 1
             self.input.size = total
-        greatest_page = total // int(self.input.size)
-        if int(self.input.page) > greatest_page:
-            self.input.page = greatest_page + 1
 
         cursor = self.collection.find(query)
         cursor = Common.paginate_cursor(cursor, int(
