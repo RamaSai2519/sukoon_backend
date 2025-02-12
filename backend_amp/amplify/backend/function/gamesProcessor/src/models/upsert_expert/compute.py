@@ -8,7 +8,7 @@ from shared.models.constants import expert_times
 from shared.models.constants import OutputStatus
 from models.upsert_expert.slack import SlackManager
 from shared.models.interfaces import Expert as Input, Output
-from shared.db.experts import get_experts_collections, get_timings_collection, get_categories_collection, get_expertlogs_collection
+from shared.db.experts import get_experts_collections, get_timings_collection, get_expertlogs_collection
 
 
 class Compute:
@@ -18,13 +18,11 @@ class Compute:
         self.slack_manager = SlackManager()
         self.timings_collection = get_timings_collection()
         self.experts_collection = get_experts_collections()
-        self.categories_collection = get_categories_collection()
         self.expertlogs_collection = get_expertlogs_collection()
 
     def set_defaults(self, expert_data: dict) -> dict:
         expert_data["active"] = True
         expert_data["isBusy"] = False
-        expert_data["categories"] = []
         expert_data["highlights"] = []
         expert_data["type"] = "internal"
         expert_data["isDeleted"] = False
@@ -60,28 +58,24 @@ class Compute:
                     for item in expert_data["sub_category"]
                 ]
 
+        if 'categories' in expert_data:
+            if isinstance(expert_data['categories'], list):
+                expert_data['categories'] = [
+                    ObjectId(item) if isinstance(item, str) else item
+                    for item in expert_data['categories']
+                ]
+
         if "escalation_level" in expert_data:
             level = expert_data["escalation_level"]
             if isinstance(level, str):
                 expert_data["escalation_level"] = int(
                     level) if level.isdigit() else 0
 
-        expert_data = self.populate_categories(expert_data)
         return expert_data
 
     def validate_phoneNumber(self, phoneNumber: str) -> Union[bool, dict]:
         expert = self.experts_collection.find_one({"phoneNumber": phoneNumber})
         return expert if expert else False
-
-    def populate_categories(self, expert_data: dict):
-        categories = expert_data.get("categories", [])
-        categories = list(self.categories_collection.find(
-            {"name": {"$in": categories}}))
-        if not categories:
-            return expert_data
-        expert_data["categories"] = [
-            str(category["_id"]) for category in categories]
-        return expert_data
 
     def insert_blank_timings(self, expert_id) -> dict:
         days = ["Monday", "Tuesday", "Wednesday",
