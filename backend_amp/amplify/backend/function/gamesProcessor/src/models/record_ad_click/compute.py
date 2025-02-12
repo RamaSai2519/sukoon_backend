@@ -10,6 +10,7 @@ from shared.models.interfaces import RecordAdClickInput as Input, Output
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
+        self.common = Common()
         self.slack = SlackManager()
         self.collection = get_ad_clicks_collection()
 
@@ -34,10 +35,14 @@ class Compute:
 
     def update_user(self) -> bool:
         url = config.URL + '/actions/user'
+        partner_name = self.common.get_partner_name(self.input.prc)
+        if partner_name != 'Unknown':
+            partner_name = None
         payload = {
             'phoneNumber': self.input.user_phone,
             'name': self.input.user_name or None,
             'city': self.input.user_city or None,
+            'refSource': partner_name,
         }
         response = requests.post(url, json=payload)
         if response.status_code != 200:

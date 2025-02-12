@@ -58,11 +58,11 @@ class Compute:
 
         try:
             response = self.gpt_client.chat.completions.create(
-                model="gpt-4-turbo", messages=self.message_history)
+                model="gpt-4o-2024-11-20", messages=self.message_history)
         except RateLimitError:
             time.sleep(5)
             response = self.gpt_client.chat.completions.create(
-                model="gpt-4-turbo", messages=self.message_history)
+                model="gpt-4o-2024-11-20", messages=self.message_history)
 
         assistant_response = response.choices[0].message.content
         self.message_history.append(
