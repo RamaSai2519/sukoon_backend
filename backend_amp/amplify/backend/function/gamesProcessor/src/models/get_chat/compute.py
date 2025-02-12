@@ -16,14 +16,14 @@ class Compute:
     def get_response(self, message_history: list) -> str:
         if self.input.context == 'blog':
             response = self.openai_client.beta.chat.completions.parse(
-                model="gpt-4-turbo",
+                model="gpt-4o-2024-11-20",
                 messages=message_history,
                 response_format=BlogTags
             )
             return response.choices[0].message.parsed.__dict__
         else:
             response = self.openai_client.chat.completions.create(
-                model="gpt-4-turbo",
+                model="gpt-4o-2024-11-20",
                 messages=message_history,
             ).choices[0]
         print("Raw response from OpenAI:")
