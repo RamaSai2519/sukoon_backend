@@ -10,7 +10,6 @@ class SlackManager:
     def __init__(self) -> None:
         self.common = Common()
         self.channel = 'C08D72NCA1W'
-        self.collection = get_prcs_collection()
         self.client = WebClient(token=config.SARATHI_SLACK_BOT_TOKEN)
 
     def join_channel(self) -> None:
@@ -40,15 +39,8 @@ class SlackManager:
         ]
         return blocks
 
-    def get_partner_name(self, prc: str) -> str:
-        query = {'token': prc}
-        doc = self.collection.find_one(query)
-        if doc:
-            return doc['name']
-        return 'Unknown'
-
     def send_message(self, prc: str) -> str:
-        partner = self.get_partner_name(prc)
+        partner = self.common.get_partner_name(prc)
         message = self.compose_message(partner)
         try:
             self.join_channel()

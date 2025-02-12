@@ -11,6 +11,7 @@ from shared.models.common import Common
 from shared.configs import CONFIG as config
 from models.upsert_user.slack import SlackManager
 from shared.db.referral import get_user_referral_collection
+from shared.db.whatsapp import get_whatsapp_templates_collection
 from shared.models.interfaces import User as Input, Output, UserBalance
 from shared.models.constants import OutputStatus, application_json_header, test_numbers
 from shared.db.users import get_user_collection, get_subscription_plans_collection, get_user_balances_collection
@@ -25,6 +26,7 @@ class Compute:
         self.balances_collection = get_user_balances_collection()
         self.referrals_collection = get_user_referral_collection()
         self.plans_collection = get_subscription_plans_collection()
+        self.templates_collection = get_whatsapp_templates_collection()
 
     def decide_query(self) -> dict:
         query = {}
@@ -87,9 +89,6 @@ class Compute:
         return user_data
 
     def send_wa_message(self, payload: dict) -> None:
-        if self.input.origin:
-            # Handled in adclick
-            return True
         url = config.URL + '/actions/send_whatsapp'
         headers = application_json_header
         response = requests.request(
@@ -143,7 +142,8 @@ class Compute:
         if user_data.get('profileCompleted') == True and prev_user and prev_user.get('profileCompleted') == False:
             user_number = user_data.get('phoneNumber')
             user_name = user_data.get('name', user_number)
-            response = self.send_insert_message(user_name, user_number, True)
+            response = self.send_insert_message(
+                user_name, user_number, True, user_data.get('refSource'))
             message = ' and sent welcome message' if response else ' but failed to send welcome message'
             if user_number not in test_numbers:
                 message += self.slack_manager.send_message(
@@ -162,7 +162,7 @@ class Compute:
         user_name = user_data.get('name', user_number)
         user_profile = user_data.get('profileCompleted', False)
         response = self.send_insert_message(
-            user_name, user_number, user_profile)
+            user_name, user_number, user_profile, user_data.get('refSource'))
         message += ' and sent welcome message' if response else ' but did not send welcome message'
 
         signup_type = 'User' if user_profile else 'Lead'
@@ -181,10 +181,19 @@ class Compute:
                     user_data['refSource'] = self.input.refCode
         self.users_collection.update_one(self.query, {'$set': user_data})
 
-    def send_insert_message(self, name: str, phone_number: str, profileCompleted: bool):
+    def get_template_name(self, refSource: str) -> str:
+        if refSource:
+            name = f'{refSource}_SIGNUP_TEMPLATE'
+            template = self.templates_collection.find_one({'name': name})
+            if template:
+                return name
+        return 'PROMO_TEMPLATE'
+
+    def send_insert_message(self, name: str, phone_number: str, profileCompleted: bool, refSource: str = None):
         if profileCompleted == True and phone_number not in test_numbers:
+            template_name = self.get_template_name(refSource.upper())
             payload = {
-                'template_name': 'PROMO_TEMPLATE',
+                'template_name': template_name,
                 'phone_number': phone_number,
                 'request_meta': json.dumps({'user_name': name}),
                 'parameters': {
