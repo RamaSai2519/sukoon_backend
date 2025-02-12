@@ -2,7 +2,7 @@ import traceback
 from models.record_like.compute import Compute
 from shared.models.constants import OutputStatus
 from models.record_like.validate import Validator
-from shared.models.interfaces import RedeemOfferInput as Input, Output
+from shared.models.interfaces import RecordSongLikeInput as Input, Output
 
 
 class RedeemOffer:
