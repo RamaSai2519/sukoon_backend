@@ -107,6 +107,7 @@ api.add_resource(PhotoService, '/actions/photos')
 api.add_resource(BlogPostService, '/actions/blog')
 api.add_resource(ContentService, '/actions/content')
 api.add_resource(DallImageService, '/actions/dall_image')
+api.add_resource(FetchShortsService, '/actions/fetch_shorts')
 # - Services
 api.add_resource(UploadService, '/actions/upload')
 api.add_resource(TimingService, '/actions/timings')
