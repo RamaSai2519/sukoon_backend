@@ -15,8 +15,7 @@ class Validator:
         return True, ""
 
     def validate_field_types(self) -> tuple:
-        bool_fields = ["active", "isBusy", "profileCompleted",
-                       "wa_opt_out", "isPaidUser"]
+        bool_fields = ["active", "isBusy", "profileCompleted", "wa_opt_out"]
         for field in bool_fields:
             if hasattr(self.input, field):
                 value = getattr(self.input, field)

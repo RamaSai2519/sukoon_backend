@@ -114,8 +114,8 @@ class Compute:
                                 '0001-01-01', '%Y-%m-%d')}
                         ]
                     }
-            bool_fields = ['isDeleted', 'profileCompleted', 'isPaidUser',
-                           'wa_opt_out', 'isBlocked', 'isBusy', 'active']
+            bool_fields = ['isDeleted', 'profileCompleted', 'wa_opt_out',
+                           'isBlocked', 'isBusy', 'active']
             if self.input.filter_field in bool_fields:
                 query[self.input.filter_field] = True if self.input.filter_value == 'true' else False
 

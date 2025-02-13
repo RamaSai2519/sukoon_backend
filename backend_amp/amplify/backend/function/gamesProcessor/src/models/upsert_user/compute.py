@@ -129,16 +129,6 @@ class Compute:
     def update_user(self, user_data: dict, prev_user: dict) -> str:
         self.users_collection.update_one(self.query, {'$set': user_data})
 
-        if user_data.get('isPaidUser') == True and prev_user and prev_user.get('isPaidUser') == False:
-            payload = {
-                'phone_number': prev_user.get('phoneNumber', ''),
-                'template_name': 'CLUB_SUKOON_MEMBERSHIP',
-                'parameters': {
-                    'user_name': str(str(prev_user.get('name', '')).split(' ')[0].capitalize())
-                }
-            }
-            self.send_wa_message(payload)
-
         if user_data.get('profileCompleted') == True and prev_user and prev_user.get('profileCompleted') == False:
             user_number = user_data.get('phoneNumber')
             user_name = user_data.get('name', user_number)

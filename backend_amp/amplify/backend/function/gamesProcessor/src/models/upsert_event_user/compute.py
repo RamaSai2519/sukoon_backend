@@ -150,8 +150,6 @@ class Compute:
 
             if event.isPremiumUserOnly == False:
                 confirmation_message = self.send_confirmation(user, event)
-            elif event.isPremiumUserOnly == True and user.isPaidUser == True:
-                confirmation_message = self.send_confirmation(user, event)
         else:
             event_user = self.prep_data(asdict(self.input), asdict(event_user))
             self.event_users_collection.update_one(

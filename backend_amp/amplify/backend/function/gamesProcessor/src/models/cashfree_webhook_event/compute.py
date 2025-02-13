@@ -16,6 +16,7 @@ class Compute:
         self.input = input
         self.phoneNumber = None
         self.headers = application_json_header
+        self.users_collection = get_user_collection()
         self.events_collection = get_events_collection()
         self.payments_collection = get_user_payment_collection()
         self.plans_collection = get_subscription_plans_collection()
@@ -24,21 +25,13 @@ class Compute:
     def get_user_id_from_number(self) -> str:
         customer_details = self.payment_data.get("customer_details")
         self.phoneNumber = customer_details.get("customer_phone")
-        user_collection = get_user_collection()
-        user = user_collection.find_one({"phoneNumber": self.phoneNumber})
+        user = self.users_collection.find_one(
+            {"phoneNumber": self.phoneNumber})
         if not user:
             return None
         user_id = user.get("_id")
 
         return user_id
-
-    def update_user_membership_status(self) -> tuple:
-        user_collection = get_user_collection()
-        user_collection.update_one(
-            {"_id": ObjectId(self.user_id)},
-            {"$set": {"isPaidUser": True}},
-        )
-        return True, ""
 
     def send_invoice_to_the_user(self, invoice_s3_url: str, event_name: str = None) -> None:
         customer_details = self.payment_data.get("customer_details")
@@ -221,7 +214,6 @@ class Compute:
                 print(event_wa_message, "event_wa_message_cashfree")
             else:
                 if pay_type in ['code', 'club']:
-                    self.update_user_membership_status()
                     if pay_type == 'code':
                         self.update_user_meta(event_id)
                 self.send_invoice_to_the_user(invoice_s3_url)

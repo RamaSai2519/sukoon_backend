@@ -41,7 +41,6 @@ class Notifications:
         birth_date: datetime = user.get("birthDate", None)
         birth_date = birth_date.strftime(
             "%d %B, %Y") if birth_date else "Not provided"
-        premium = "Yes" if user.get("isPaidUser", False) else "No"
 
         payload = json.dumps({
             "phone_number": expert.get("phoneNumber", ""),
@@ -51,7 +50,7 @@ class Notifications:
                 "user_name": user.get("name", "Not provided"),
                 "city": user.get("city", "Not provided"),
                 "birth_date": birth_date,
-                "premium": premium
+                "premium": 'Unavailable'
             }
         })
 
