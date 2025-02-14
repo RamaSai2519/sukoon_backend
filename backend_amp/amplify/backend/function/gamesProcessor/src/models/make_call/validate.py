@@ -46,9 +46,22 @@ class Validator:
         }
         response = requests.post(url, json=payload)
         if 'output_status' in response.json() and response.json()['output_status'] == 'SUCCESS':
-            message = 'Failed call message sent'
-        message = 'Failed call message not sent'
+            message = 'Failed call message sent to expert'
+        message = 'Failed call message not sent to expert'
         print(message, '__make_call__')
+
+        # Notify missed user
+        if expert.get('type') == 'saarthi' and self.input.scheduledId not in [None, '']:
+            payload = {
+                'template_name': 'SARATHI_FAILED_CALL_TO_USER',
+                'phone_number': user['phoneNumber'],
+                'parameters': {}
+            }
+            response = requests.post(url, json=payload)
+            if 'output_status' in response.json() and response.json()['output_status'] == 'SUCCESS':
+                message = 'Failed call message sent to user'
+            message = 'Failed call message not sent to user'
+            print(message, '__make_call__')
         return message
 
     def escalate(self) -> str:
