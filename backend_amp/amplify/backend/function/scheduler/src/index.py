@@ -84,8 +84,8 @@ def handler(event, context):
             return "Misc Jobs Done"
 
         with ThreadPoolExecutor() as executor:
-            methods_to_run = [schedules_jobs,
-                              events_reminders_jobs, experts_jobs, misc_jobs]
+            methods_to_run = [schedules_jobs, events_reminders_jobs,
+                              experts_jobs, misc_jobs]
             futures = {executor.submit(
                 method): method for method in methods_to_run}
             for future in as_completed(futures):

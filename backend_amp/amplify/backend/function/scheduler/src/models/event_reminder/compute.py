@@ -86,5 +86,5 @@ class Compute:
         for reminder in reminders:
             self.job(reminder)
             self.counters_collection.update_one(
-                {'_id': ObjectId(reminder['_id'])}, {'$set': {'done': True}})
+                {'_id': ObjectId(reminder['_id'])}, {'$set': {'done': True, 'sent_at': self.now_time}})
         return Output(output_message='Reminders sent')
