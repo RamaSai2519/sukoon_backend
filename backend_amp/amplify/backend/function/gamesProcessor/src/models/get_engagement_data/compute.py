@@ -5,6 +5,7 @@ from shared.models.common import Common
 from shared.helpers.excel import ExcelS3Helper
 from shared.db.calls import get_calls_collection
 from shared.db.admins import get_error_logs_collection
+from shared.db.events import get_event_users_collection
 from shared.models.constants import successful_calls_query
 from shared.models.constants import OutputStatus, meta_fields
 from shared.db.users import get_user_collection, get_meta_collection
@@ -23,6 +24,7 @@ class Compute:
         self.users_collection = get_user_collection()
         self.calls_collection = get_calls_collection()
         self.logs_collection = get_error_logs_collection()
+        self.event_users_collection = get_event_users_collection()
 
     def populate_meta_data(self, user: dict, query: dict) -> dict:
         meta_data: dict = self.meta_collection.find_one(query)
@@ -54,6 +56,27 @@ class Compute:
 
         return user
 
+    def populate_event_data(self, user: dict) -> dict:
+        query = {'phoneNumber': user['phoneNumber']}
+        sort = [('createdAt', -1)]
+        last_event = self.event_users_collection.find_one(
+            query, sort=sort)
+        if last_event:
+            last_event_time = Common.string_to_date(last_event, "createdAt")
+            user["lastEventDate"] = last_event_time
+            user["eventAge"] = (
+                self.common.current_time - last_event_time).days
+        else:
+            user["lastEventDate"] = "No Events"
+            user["eventAge"] = 0
+
+        events = self.event_users_collection.count_documents(query)
+        user['eventsDone'] = events
+        user['eventStatus'] = self.common.get_call_status(events)
+        user["eventStatus"] = user["eventStatus"].replace('call', 'event')
+
+        return user
+
     def format_users(self, users: List[Dict]) -> list:
         for user in users:
             created_date = Common.string_to_date(user, "createdDate")
@@ -64,6 +87,7 @@ class Compute:
 
             user = self.populate_meta_data(user, population_query)
             user = self.populate_call_data(user, population_query)
+            user = self.populate_event_data(user)
 
             user = Common.jsonify(user)
         return users
