@@ -202,10 +202,10 @@ class Validator:
         if user_validation[1]['phoneNumber'] == expert_validation[1]['phoneNumber']:
             return False, 'User and Expert phone number cannot be same'
 
-        query = {'status': {
-            '$nin': ['missed', 'successful', 'inadequate', 'failed']}}
-        calls = self.calls_collection.count_documents(query)
-        if calls >= 5:
-            return False, 'Maximum call limit reached'
+        # query = {'status': {
+        #     '$nin': ['missed', 'successful', 'inadequate', 'failed']}}
+        # calls = self.calls_collection.count_documents(query)
+        # if calls >= 5:
+        #     return False, 'Maximum call limit reached'
 
         return True, ''
