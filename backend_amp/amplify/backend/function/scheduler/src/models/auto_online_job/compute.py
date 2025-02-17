@@ -36,7 +36,19 @@ class Compute:
             return True
         return False
 
+    def handle_new_experts(self):
+        query = {'next_update': {'$exists': False}}
+        docs = list(self.timings_collection.find(query))
+        if len(docs) == 0:
+            return
+        self.timings_collection.update_many(
+            {'_id': {'$in': [doc['_id'] for doc in docs]}},
+            {'$set': {'next_update': Common.get_current_utc_time()}}
+        )
+        return
+
     def compute(self) -> Output:
+        self.handle_new_experts()
         today = self.now_time.strftime("%A")
         ctime = self.now_time.replace(minute=0)
         hour = ctime.strftime(TimeFormats.HOURS_24_FORMAT)
