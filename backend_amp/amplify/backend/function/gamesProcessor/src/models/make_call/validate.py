@@ -179,8 +179,8 @@ class Validator:
         if self.check_user_availability(user) is False:
             return False, 'User has an upcoming call'
 
-        if self.check_user_previous_call(user) is False:
-            return False, 'User had a recent call'
+        # if self.check_user_previous_call(user) is False:
+        #     return False, 'User had a recent call'
 
         return True, user
 
