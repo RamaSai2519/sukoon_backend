@@ -1,5 +1,4 @@
 from shared.models.interfaces import SCallEndWebhookInput as Input, Call
-from shared.db.experts import get_experts_collections
 from shared.db.calls import get_calls_collection
 from shared.db.users import get_user_collection
 from shared.models.common import Common
@@ -11,7 +10,6 @@ class Validator:
         self.input = input
         self.users_collection = get_user_collection()
         self.calls_collection = get_calls_collection()
-        self.experts_collection = get_experts_collections()
 
     def find_call(self) -> Call:
         query = {'_id': ObjectId(self.input.suid)}
@@ -25,9 +23,7 @@ class Validator:
         self.users_collection.update_one(query, update)
 
     def update_expert(self, expert_id: ObjectId) -> None:
-        query = {'_id': expert_id}
-        update = {'$set': {'isBusy': False}}
-        self.experts_collection.update_one(query, update)
+        Common.update_expert_isbusy(expert_id, False)
 
     def validate_input(self) -> tuple:
         if not self.input.suid:

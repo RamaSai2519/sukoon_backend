@@ -3,6 +3,7 @@ import dataclasses
 from typing import Union
 from bson import ObjectId
 from datetime import datetime
+from .firebase import Firebase
 from shared.models.common import Common
 from shared.models.constants import expert_times
 from shared.models.constants import OutputStatus
@@ -155,6 +156,11 @@ class Compute:
             expert = self.experts_collection.insert_one(expert_data)
             self.insert_blank_timings(expert.inserted_id)
             message = "Successfully created expert"
+
+        expert = Common.clean_dict(expert_data, Input)
+        expert = Input(**expert)
+        firebase = Firebase(expert)
+        firebase.upsert_expert()
 
         return Output(
             output_details=Common.jsonify(expert_data),
