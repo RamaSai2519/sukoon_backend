@@ -44,7 +44,10 @@ class Compute:
         if user_update.modified_count == 0:
             print("Failed to update user")
 
-        expert_update = Common.update_expert_isbusy(expert_id, True)
+        query = {'_id': expert_id}
+        expert = self.experts_collection.find_one(query)
+        number = expert.get('phoneNumber')
+        expert_update = Common.update_expert_isbusy(number, True)
         if expert_update != True:
             print("Failed to update expert")
 
