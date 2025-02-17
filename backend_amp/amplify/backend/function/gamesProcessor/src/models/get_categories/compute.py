@@ -14,11 +14,9 @@ class Compute:
     def get_categories(self) -> Output:
         projection = {"_id": 0, "name": 1}
         categories = list(self.collection.find({}, projection))
-        categories = [category["name"] for category in categories]
 
         return Output(
-            output_details=categories,
-            output_status=OutputStatus.SUCCESS,
+            output_details=Common.jsonify(categories),
             output_message="Fetched categories successfully"
         )
 
