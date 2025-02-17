@@ -25,9 +25,8 @@ class Firebase:
         self.initialize_firebase_admin()
         ref = db.reference('/experts')
 
-        ref.set({
-            str(self.expert._id): {
-                'status': self.expert.status,
-                'isBusy': self.expert.isBusy
-            }
+        expert_ref = ref.child(str(self.expert._id))
+        expert_ref.update({
+            'status': self.expert.status,
+            'isBusy': self.expert.isBusy
         })
