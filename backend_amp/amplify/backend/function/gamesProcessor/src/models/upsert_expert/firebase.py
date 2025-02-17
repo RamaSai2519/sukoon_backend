@@ -11,11 +11,13 @@ class Firebase:
     def initialize_firebase_admin(self) -> None:
         cred_file_path = os.path.join(os.path.dirname(
             __file__), 'sukoonlove-007-firebase.json')
-        if not firebase_admin._apps:
-            cred = credentials.Certificate(cred_file_path)
-            firebase_admin.initialize_app(cred, {
-                'databaseURL': 'https://sukoonlove-007-default-rtdb.firebaseio.com/'
-            })
+        if firebase_admin._apps:
+            for app in firebase_admin._apps:
+                firebase_admin.delete_app(app)
+        cred = credentials.Certificate(cred_file_path)
+        firebase_admin.initialize_app(cred, {
+            'databaseURL': 'https://sukoonlove-007-default-rtdb.firebaseio.com/'
+        })
 
     def upsert_expert(self) -> None:
         self.initialize_firebase_admin()
