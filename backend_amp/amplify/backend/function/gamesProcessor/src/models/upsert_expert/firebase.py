@@ -12,9 +12,9 @@ class Firebase:
         cred_file_path = os.path.join(os.path.dirname(
             __file__), 'sukoonlove-007-firebase.json')
         if firebase_admin._apps:
-            apps = firebase_admin._apps
-            for app in apps:
-                app = firebase_admin.get_app(app)
+            apps = list(firebase_admin._apps.keys())
+            for app_name in apps:
+                app = firebase_admin.get_app(app_name)
                 firebase_admin.delete_app(app)
         cred = credentials.Certificate(cred_file_path)
         firebase_admin.initialize_app(cred, {
