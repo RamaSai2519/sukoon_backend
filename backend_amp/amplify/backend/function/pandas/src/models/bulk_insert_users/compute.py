@@ -48,6 +48,7 @@ class Compute:
 
         user['createdDate'] = user_joined_date
         user["phoneNumber"] = str(record["Phone"])
+        user['refSource'] = str(record.get("ref", "")).strip()
 
         return user
 
@@ -59,7 +60,7 @@ class Compute:
         meta = {
             'user': user_id,
             'context': str(record.get("Webinar", "")).strip(),
-            'source': 'zoom',
+            'source': str(record.get("ref", "")).strip(),
             'userStatus': '',
             'remarks': '',
         }
