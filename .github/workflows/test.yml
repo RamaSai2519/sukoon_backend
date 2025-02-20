@@ -42,4 +42,4 @@ jobs:
 
       - name: Run Tests
         run: |
-          pytest tests/
+          pytest backend_amp/amplify/backend/function/gamesProcessor/src/tests/
