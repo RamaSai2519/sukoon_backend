@@ -42,5 +42,4 @@ jobs:
       - name: Run Tests
         run: |
           cd backend_amp/amplify/backend/function/gamesProcessor/src
-          pipenv shell
-          pytest tests/
+          pipenv run pytest tests/
