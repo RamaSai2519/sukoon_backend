@@ -25,8 +25,18 @@ jobs:
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
+          pip install pipenv
           pipenv install
           pip install pytest pytest-flask
+        
+      - name: Set up Environment
+        run: |
+          export GITHUB_PAT=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
+
+      - name: Initialize submodules
+        run: |
+          git submodule deinit --all --force
+          git submodule update --init --recursive
 
       - name: Run Tests
         run: pytest tests/
