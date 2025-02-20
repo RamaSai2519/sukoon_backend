@@ -32,7 +32,6 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install pipenv pytest pytest-flask awsgi boto3
-          pipenv install
 
       - name: Initialize submodules
         run: |
@@ -42,4 +41,5 @@ jobs:
       - name: Run Tests
         run: |
           cd backend_amp/amplify/backend/function/gamesProcessor/src
+          pipenv install
           pipenv run pytest tests/
