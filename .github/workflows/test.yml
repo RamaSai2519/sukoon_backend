@@ -40,4 +40,6 @@ jobs:
           git submodule update --init --recursive
 
       - name: Run Tests
-        run: pytest tests/
+        run: |
+          cd backend_amp/amplify/backend/function/gamesProcessor/src/
+          pytest tests/
