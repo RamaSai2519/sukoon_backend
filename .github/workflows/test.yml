@@ -30,6 +30,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
+          cd backend_amp/amplify/backend/function/gamesProcessor/src/
           python -m pip install --upgrade pip
           pip install pipenv pytest pytest-flask awsgi boto3
           pipenv install
@@ -41,5 +42,4 @@ jobs:
 
       - name: Run Tests
         run: |
-          cd backend_amp/amplify/backend/function/gamesProcessor/src/
           pytest tests/
