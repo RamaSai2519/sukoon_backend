@@ -61,7 +61,7 @@ class Compute:
     def get_schedules(self) -> list:
         query = self.prep_query()
         total_count = self.collection.count_documents(query)
-        if total_count <= 10:
+        if 0 < total_count <= 10:
             self.input.page = 1
             self.input.size = total_count
         greatest_page = total_count // int(self.input.size)
