@@ -87,7 +87,7 @@ class Compute:
                 events = [Common.jsonify(event) for event in events]
             else:
                 cursor = self.events_collection.find(
-                    query, self.projection).sort("validUpto", 1)
+                    query, self.projection).sort("validUpto", -1)
                 paginated_cursor = Common.paginate_cursor(
                     cursor, int(self.input.page), int(self.input.size))
                 events = list(paginated_cursor)
