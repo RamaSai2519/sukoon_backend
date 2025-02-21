@@ -1,0 +1,63 @@
+[
+    {
+        "method": "GET",
+        "path": "/actions/list_events"
+    },
+    {
+        "method": "GET",
+        "path": "/actions/list_events",
+        "params": {
+            "events_type": "contribute"
+        }
+    },
+    {
+        "method": "POST",
+        "path": "/actions/upsert_event",
+        "payload": {
+            "name": "Priya Malani",
+            "mainTitle": "Tax Benifit Scheme For Seniors",
+            "subTitle": "Learn about tax-saving schemes like SCSS and discover deductions seniors can use to maximize their savings in a practical session.",
+            "hostedBy": "Kanchan Bhatt",
+            "slug": "tax",
+            "isPremiumUserOnly": false,
+            "isAlways": false,
+            "registrationAllowedTill": "2024-12-07T11:30:00.000Z",
+            "startEventDate": "2024-12-07T11:30:00.000Z",
+            "guestSpeaker": "Kanchan Bhatt",
+            "repeat": "once",
+            "eventType": "online",
+            "imageUrl": "https://sukoon-media.s3.amazonaws.com/5.png",
+            "sub_category": "675b02690cef8a93d33649a4",
+            "meetingLink": "https://us06web.zoom.us/meeting/register/tZYqfuqorDssHtc5v1IlaGLMkFUJ6QBunMXd",
+            "category": "",
+            "description": "",
+            "maxVisitorsAllowed": 100,
+            "prizeMoney": 0,
+            "validUpto": "2024-12-07T11:30:00.000Z",
+            "images": [
+                {
+                    "platform": "default",
+                    "url": "https://sukoon-media.s3.ap-south-1.amazonaws.com/1719032140634_75279eab-10ec-42b5-80a0-822b8e8df164_Untitled%2Bdesign%2B-%2B15.png"
+                },
+                {
+                    "platform": "app",
+                    "url": "https://sukoon-media.s3.ap-south-1.amazonaws.com/1719032140634_75279eab-10ec-42b5-80a0-822b8e8df164_Untitled%2Bdesign%2B-%2B15.png"
+                }
+            ]
+        }
+    },
+    {
+        "method": "GET",
+        "path": "/actions/expert"
+    },
+    {
+        "method": "POST",
+        "path": "/actions/expert",
+        "payload": {
+            "phoneNumber": "9398036558",
+            "status": "offline",
+            "name": "Sarathi Test",
+            "isBusy": false
+        }
+    }
+]

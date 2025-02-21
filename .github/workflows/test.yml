@@ -22,7 +22,6 @@ jobs:
         
       - name: Set up Environment
         run: |
-          export ENV=main
           export GITHUB_PAT=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
           echo "machine github.com login $GITHUB_PAT" > ~/.netrc
           git config --global credential.helper store
