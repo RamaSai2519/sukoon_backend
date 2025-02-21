@@ -67,6 +67,8 @@ class Compute:
     def send_whatsapp(self) -> tuple:
         url = config.URL + '/actions/send_whatsapp'
         user = self.get_user()
+        if not user:
+            return False, "User not found"
         offer = self.get_offer()
 
         user_phone = user.get("phoneNumber")
