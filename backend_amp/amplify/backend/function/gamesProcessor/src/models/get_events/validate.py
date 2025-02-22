@@ -22,4 +22,7 @@ class Validator:
         if self.input.isHomePage.lower() not in ["true", "false"]:
             return False, "isHomePage should be a boolean"
 
+        if self.input.sort_order not in ['-1', '1']:
+            return False, "sort_order should be either 1 or -1"
+
         return True, ""
