@@ -1,13 +1,32 @@
 [
     {
         "method": "GET",
-        "path": "/actions/list_events"
+        "path": "/actions/list_events",
+        "params": {
+            "page": "1",
+            "size": "10",
+            "sort_order": "-1",
+            "fromToday": "true",
+            "isHomePage": "true"
+        }
     },
     {
         "method": "GET",
         "path": "/actions/list_events",
         "params": {
-            "events_type": "contribute"
+            "page": "1",
+            "size": "10",
+            "fromToday": "true",
+            "isHomePage": "false"
+        }
+    },
+    {
+        "method": "GET",
+        "path": "/actions/list_events",
+        "params": {
+            "events_type": "contribute",
+            "page": "1",
+            "size": "10"
         }
     },
     {
@@ -48,7 +67,11 @@
     },
     {
         "method": "GET",
-        "path": "/actions/expert"
+        "path": "/actions/expert",
+        "params": {
+            "page": "1",
+            "size": "10"
+        }
     },
     {
         "method": "POST",
