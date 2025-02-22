@@ -119,7 +119,8 @@ class Compute:
                 'webinar_link': event.meetingLink,
                 'phone_number': '+91' + customer_care_number,
                 'whatsapp_community_link': "https://sukoonunlimited.com/wa-join-community"
-            }
+            },
+            'skip_check': True
         }
         response = requests.post(url, json=payload)
         response_dict = response.json()

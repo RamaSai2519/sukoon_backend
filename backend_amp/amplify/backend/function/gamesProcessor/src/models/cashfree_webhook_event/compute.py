@@ -7,7 +7,7 @@ from shared.configs import CONFIG as config
 from shared.models.interfaces import CashfreeWebhookEventInput as Input, Output
 from shared.db.events import get_events_collection, get_contribute_events_collection
 from shared.db.users import get_user_collection, get_user_payment_collection, get_subscription_plans_collection
-from shared.models.constants import OutputStatus, application_json_header, pay_types, TimeFormats, user_balance_types, customer_care_number
+from shared.models.constants import application_json_header, pay_types, TimeFormats, user_balance_types, customer_care_number
 
 
 class Compute:
@@ -45,7 +45,7 @@ class Compute:
                 "parameters": {
                     "event_name": event_name,
                     "document_link": invoice_s3_url
-                }
+                }, 'skip_check': True
             })
         else:
             payload = json.dumps({
@@ -53,7 +53,7 @@ class Compute:
                 "template_name": "INVOICE_DOWNLOAD",
                 "parameters": {
                     "document_link": invoice_s3_url
-                }
+                }, 'skip_check': True
             })
         headers = self.headers
         response = requests.request("POST", url, headers=headers, data=payload)
@@ -157,7 +157,7 @@ class Compute:
                 'webinar_link': self.event.get("meetingLink"),
                 'phone_number': '+91' + customer_care_number,
                 'whatsapp_community_link': "https://sukoonunlimited.com/wa-join-community"
-            }
+            }, 'skip_check': True
         }
         response = requests.post(url, json=payload)
         response_dict = response.json()
@@ -244,8 +244,4 @@ class Compute:
         self.user_id = self.get_user_id_from_number()
         self.update_payment_status()
 
-        return Output(
-            output_details={},
-            output_status=OutputStatus.SUCCESS,
-            output_message="Successfully updated payment status"
-        )
+        return Output(output_message="Successfully updated payment status")

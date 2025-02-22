@@ -36,7 +36,7 @@ class Compute:
                 'event_name': reminder['event_name'],
                 'meeting_link': reminder['meeting_link'],
                 'minutes': str(self.get_difference(reminder['validUpto']))
-            }
+            }, 'skip_check': True
         }
         response = requests.post(url, json=payload)
         return response.text

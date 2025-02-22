@@ -1,10 +1,8 @@
 from shared.models.constants import application_json_header
 from shared.models.interfaces import CallInput as Input
-from shared.db.calls import get_calls_collection
 from shared.configs import CONFIG as config
 from shared.models.common import Common
 from datetime import datetime
-from bson import ObjectId
 import requests
 import json
 
@@ -51,7 +49,8 @@ class Notifications:
                 "city": user.get("city", "Not provided"),
                 "birth_date": birth_date,
                 "premium": 'Unavailable'
-            }
+            },
+            'skip_check': True
         })
 
         response = requests.request(

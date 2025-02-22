@@ -50,7 +50,7 @@ class WAHandler:
                 'expert_name': user_name,
                 'user_name': expert_name,
                 'minutes': difference
-            }
+            }, 'skip_check': True
         }
         response = requests.post(url, json=payload)
         print(response.text, '__user_scheduler_notification__')

@@ -57,7 +57,7 @@ class Compute:
 
     def compute(self) -> Output:
         user = self.get_user(self.input.phone_number)
-        if user:
+        if user and self.input.skip_check == False:
             user_wa = user.get('wa_opt_out', False)
             if user_wa:
                 return Output(

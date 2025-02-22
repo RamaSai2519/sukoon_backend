@@ -55,7 +55,7 @@ class Validator:
             payload = {
                 'template_name': 'SARATHI_FAILED_CALL_TO_USER',
                 'phone_number': user['phoneNumber'],
-                'parameters': {}
+                'parameters': {}, 'skip_check': True
             }
             response = requests.post(url, json=payload)
             if 'output_status' in response.json() and response.json()['output_status'] == 'SUCCESS':
