@@ -24,7 +24,9 @@
         "method": "GET",
         "path": "/actions/list_events",
         "params": {
-            "events_type": "contribute"
+            "events_type": "contribute",
+            "page": "1",
+            "size": "10"
         }
     },
     {
@@ -65,7 +67,11 @@
     },
     {
         "method": "GET",
-        "path": "/actions/expert"
+        "path": "/actions/expert",
+        "params": {
+            "page": "1",
+            "size": "10"
+        }
     },
     {
         "method": "POST",
