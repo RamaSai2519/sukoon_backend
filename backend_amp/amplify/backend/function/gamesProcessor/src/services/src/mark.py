@@ -2,6 +2,7 @@ import json
 import dataclasses
 from flask import request
 from flask_restful import Resource
+from shared.models.common import Common
 from models.get_prompts.main import GetPrompts
 from models.upsert_prompt.main import UpsertPrompt
 from models.get_histories.main import GetHistories
@@ -53,6 +54,7 @@ class HistoriesService(Resource):
 
     def delete(self) -> dict:
         input_params = request.args
+        input_params = Common.clean_dict(input_params, DeleteHistoryInput)
         input = DeleteHistoryInput(**input_params)
         output = DeleteHistory(input).process()
         output = dataclasses.asdict(output)

@@ -30,3 +30,9 @@ class TestAPIs:
 
         assert response.status_code == 200
         print(response.json['output_message'])
+
+# TODO Add tests for:
+# - /call
+# - /send_whatsapp
+# - /user
+# - /send_otp
