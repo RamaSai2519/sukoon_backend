@@ -1,4 +1,5 @@
 from shared.db.experts import get_experts_collections, get_timings_collection
+from shared.models.common import Common
 from shared.models.constants import expert_times, TimeFormats
 from shared.db.schedules import get_schedules_collection
 from datetime import datetime, timedelta
@@ -11,10 +12,11 @@ class Slot:
         self.timings_collection = get_timings_collection()
         self.experts_collection = get_experts_collections()
         self.schedules_collection = get_schedules_collection()
+        self.expert_id = expert_id
         self.times = expert_times
         self.utc_date = utc_date
         self.duration = duration
-        self.expert_id = expert_id
+        self.common = Common()
         self.ist_datetime = self.convert_to_ist()
         self.day_name = self.ist_datetime.strftime("%A")
         self.slots = self.calculate_slots() or []
@@ -47,44 +49,52 @@ class Slot:
                 "datetime": slot_start_utc_str,
                 "available": slot_start_utc >= datetime.now(utc_zone)
             }
+            slot_dict = self.check_availability(slot_dict, slot, ist_timezone)
+            off_vacation = self.common.check_vacation(
+                ObjectId(self.expert_id), slot_start_utc)
+            if off_vacation == False:
+                slot_dict["available"] = False
             output_slots.append(slot_dict)
-            self.check_availability(slot_dict, slot, ist_timezone)
 
         return output_slots
 
     def check_availability(self, slot_dict, slot, ist_timezone):
-        if slot_dict["available"]:
-            expert_schedule = self.schedules_collection.find_one({
-                "expert": ObjectId(self.expert_id),
-                "datetime": {
-                    "$gte": datetime.combine(self.ist_datetime.date(), datetime.strptime(slot.split(' - ')[0], "%H:%M").time()),
-                    "$lt": datetime.combine(self.ist_datetime.date(), datetime.strptime(slot.split(' - ')[0], "%H:%M").time()) + timedelta(minutes=self.duration)
-                }
-            })
+        if slot_dict["available"] == False:
+            return slot_dict
 
-            if expert_schedule:
-                scheduled_duration = expert_schedule["duration"] if "duration" in expert_schedule else 60
-                if scheduled_duration in [30, 60]:
-                    slot_dict["available"] = False
-                    if scheduled_duration == 60:
-                        next_slot = self.slots[self.slots.index(slot) + 1]
-                        self.slots.remove(next_slot)
+        expert_schedule = self.schedules_collection.find_one({
+            "expert": ObjectId(self.expert_id),
+            "datetime": {
+                "$gte": datetime.combine(self.ist_datetime.date(), datetime.strptime(slot.split(' - ')[0], "%H:%M").time()),
+                "$lt": datetime.combine(self.ist_datetime.date(), datetime.strptime(slot.split(' - ')[0], "%H:%M").time()) + timedelta(minutes=self.duration)
+            }
+        })
 
-            utc_datetime = datetime.strptime(
-                slot_dict["datetime"], TimeFormats.ANTD_TIME_FORMAT)
-            ist_datetime = utc_datetime.astimezone(ist_timezone)
-            ist_hour = ist_datetime.hour
+        if expert_schedule:
+            scheduled_duration = expert_schedule["duration"] if "duration" in expert_schedule else 60
+            if scheduled_duration in [30, 60]:
+                slot_dict["available"] = False
+                if scheduled_duration == 60:
+                    next_slot = self.slots[self.slots.index(slot) + 1]
+                    self.slots.remove(next_slot)
 
-            expert_doc = self.experts_collection.find_one(
-                {"_id": ObjectId(self.expert_id)}, {"type": 1})
-            expert_type = expert_doc["type"] if expert_doc else None
+        utc_datetime = datetime.strptime(
+            slot_dict["datetime"], TimeFormats.ANTD_TIME_FORMAT)
+        ist_datetime = utc_datetime.astimezone(ist_timezone)
+        ist_hour = ist_datetime.hour
 
-            if expert_type and expert_type in ["saarthi", "sarathi"]:
-                if not (9 <= ist_hour < 22):
-                    slot_dict["available"] = False
-            else:
-                if not (10 <= ist_hour < 14) or not (16 <= ist_hour < 20):
-                    slot_dict["available"] = False
+        expert_doc = self.experts_collection.find_one(
+            {"_id": ObjectId(self.expert_id)}, {"type": 1})
+        expert_type = expert_doc["type"] if expert_doc else None
+
+        if expert_type and expert_type in ["saarthi", "sarathi"]:
+            if not (9 <= ist_hour < 22):
+                slot_dict["available"] = False
+        else:
+            if not (10 <= ist_hour < 14) or not (16 <= ist_hour < 20):
+                slot_dict["available"] = False
+
+        return slot_dict
 
     def slots_calculater(self, expert_id, day: str, duration=30):
         timings = list(self.timings_collection.find(
