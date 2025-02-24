@@ -29,7 +29,7 @@ class Compute:
             response = requests.post(url, json=payload)
             response = json.loads(response.text)
             message = response.get('output_message')
-            log = f'Expert: {e['phoneNumber']} Message: {message}'
+            log = f"Expert: {e['phoneNumber']} Message: {message}"
             messages.append(log)
 
         self.users_collection.update_many({}, {'$set': {'isBusy': False}})
