@@ -62,9 +62,11 @@ class Compute:
         query = {
             "expert_id": expert_id,
             "isDeleted": {"$ne": True},
-            "job_time": {"$gte": start_time, "$lte": end_time}
+            "job_time": {"$gte": start_time, "$lte": end_time},
+            "status": {"$eq": {"$regex": "pending", "$options": "i"}}
         }
-        return self.schedules_collection.find_one(query) is not None
+        doc = self.schedules_collection.find_one(query)
+        return doc is not None
 
     def _is_expert_available(self, expert_id: ObjectId, job_time: datetime) -> bool:
         if not self.common.check_vacation(expert_id, job_time):
@@ -76,7 +78,7 @@ class Compute:
         query = {'expert': expert_id, 'day': job_time.strftime('%A')}
         timing: dict = self.timings_collection.find_one(query)
         if not timing:
-            return False
+            return True
 
         start_time_one = timing.get('PrimaryStartTime')
         end_time_one = timing.get('PrimaryEndTime')
@@ -85,7 +87,7 @@ class Compute:
         all_fields = [start_time_one, end_time_one,
                       start_time_two, end_time_two]
         if all(field is None for field in all_fields) or all(field == '' for field in all_fields):
-            return False
+            return True
         return self._is_within_timing(hour, start_time_one, end_time_one) or self._is_within_timing(hour, start_time_two, end_time_two)
 
     def _is_within_timing(self, hour: int, start_time: str, end_time: str) -> bool:
@@ -106,7 +108,8 @@ class Compute:
         query = {
             "user_id": user_id,
             "isDeleted": {"$ne": True},
-            "job_time": {"$gte": start_time, "$lte": end_time}
+            "job_time": {"$gte": start_time, "$lte": end_time},
+            "status": {"$eq": {"$regex": "pending", "$options": "i"}}
         }
         conflict = self.schedules_collection.find_one(query)
         return conflict is not None
@@ -118,39 +121,6 @@ class Compute:
         query = {"_id": ObjectId(self.input.user_id)}
         user = self.users_collection.find_one(query, projection)
         return user, expert
-
-    def notify_expert(self, url: str, user: dict, expert: dict, difference: int):
-        birth_date: datetime = user.get("birthDate", None)
-        birth_date = birth_date.strftime(
-            "%d %B, %Y") if birth_date else "Not provided"
-        payload = {
-            "template_name": "SARATHI_NOTIFICATION_FOR_USER_CALL_PRODUCTION",
-            "parameters": {
-                "last_expert": self.common.get_last_expert_name(self.input.user_id),
-                "user_name": user.get("name", "Not provided"),
-                "city": user.get("city", "Not provided"),
-                "birth_date": birth_date,
-                "minutes": int(difference / 60)
-            }
-        }
-        payload['phone_number'] = expert["phoneNumber"]
-        response = requests.post(url, json=payload)
-        print(response.text, '__expert_immediate_schedule_notification__')
-
-    def notify_user(self, url: str, user: dict, expert: dict, difference: int):
-        user_name = user.get('name') or user['phoneNumber']
-        expert_name = expert.get('name') or expert['phoneNumber']
-        payload = {
-            'template_name': 'SCHEDULE_REMINDER_MINUTE_PROD',
-            'phone_number': user['phoneNumber'],
-            'parameters': {
-                'user_name': user_name,
-                'expert_name': expert_name,
-                'minutes': int(difference / 60)
-            }
-        }
-        response = requests.post(url, json=payload)
-        print(response.text, '__user_immediate_schedule_notification__')
 
     def compute(self) -> Output:
         if self.input.expert_id:

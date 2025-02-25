@@ -47,8 +47,8 @@ class WAHandler:
             'template_name': 'SCHEDULE_REMINDER_MINUTE_PROD',
             'phone_number': phoneNumber,
             'parameters': {
-                'expert_name': user_name,
-                'user_name': expert_name,
+                'expert_name': expert_name,
+                'user_name': user_name,
                 'minutes': difference
             }, 'skip_check': True
         }
