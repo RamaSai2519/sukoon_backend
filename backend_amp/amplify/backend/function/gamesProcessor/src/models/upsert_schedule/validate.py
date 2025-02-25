@@ -5,6 +5,7 @@ from shared.db.experts import get_experts_collections
 from shared.models.common import Common
 from datetime import datetime
 from bson import ObjectId
+import pytz
 
 
 class Validator:
@@ -34,9 +35,14 @@ class Validator:
 
     def validate_job_time_and_status(self) -> tuple:
         try:
-            datetime.strptime(self.input.job_time, TimeFormats.AWS_TIME_FORMAT)
+            time = datetime.strptime(
+                self.input.job_time, TimeFormats.AWS_TIME_FORMAT)
+            time = time.replace(tzinfo=pytz.utc)
         except ValueError:
             return False, 'Job time is not a valid AWS time string'
+
+        if time < Common.get_current_utc_time():
+            return False, 'Job time is in the past'
 
         if self.input.status not in ['PENDING', 'WAPENDING']:
             return False, 'Invalid status'
