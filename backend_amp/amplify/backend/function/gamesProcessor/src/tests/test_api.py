@@ -2,6 +2,8 @@ import os
 import json
 import pytest
 from flask.testing import FlaskClient
+from shared.db.users import get_user_collection
+from shared.db.experts import get_experts_collections
 
 
 def load_test_cases() -> list:
@@ -10,6 +12,27 @@ def load_test_cases() -> list:
 
 
 class TestAPIs:
+    def __init__(self):
+        self.users_collection = get_user_collection()
+        self.experts_collection = get_experts_collections()
+
+    def get_user_id(self) -> str:
+        query = {'phoneNumber': '9936142128'}
+        user = self.users_collection.find_one(query)
+        if user is None:
+            user = {
+                'phoneNumber': '9936142128',
+                'name': 'Mayank Dwivedi'
+            }
+            insertion = self.users_collection.insert_one(user)
+            user['_id'] = insertion.inserted_id
+        return str(user['_id'])
+
+    def get_expert_id(self) -> str:
+        query = {'phoneNumber': '9398036558'}
+        expert = self.experts_collection.find_one(query)
+        return str(expert['_id'])
+
     @pytest.fixture(autouse=True)
     def setup(self, client: FlaskClient) -> None:
         self.client = client
@@ -21,6 +44,10 @@ class TestAPIs:
         params = test_case.get('params', {})
         payload = test_case.get('payload', {})
 
+        if path == '/actions/call' and method == 'POST':
+            payload['user_id'] = self.get_user_id()
+            payload['expert_id'] = self.get_expert_id()
+
         if method == 'GET':
             response = self.client.get(path, query_string=params)
         elif method == 'POST':
@@ -30,6 +57,3 @@ class TestAPIs:
 
         assert response.status_code == 200
         print(response.json['output_message'])
-
-# TODO Add tests for:
-# - /send_whatsapp
