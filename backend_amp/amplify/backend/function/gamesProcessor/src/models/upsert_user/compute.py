@@ -174,14 +174,16 @@ class Compute:
     def get_template_name(self, refSource: str) -> str:
         if refSource:
             name = f'{refSource}_SIGNUP_TEMPLATE'
-            template = self.templates_collection.find_one({'name': name})
+            template = self.templates_collection.find_one({'template_name': name})
             if template:
                 return name
         return 'PROMO_TEMPLATE'
 
     def send_insert_message(self, name: str, phone_number: str, profileCompleted: bool, refSource: str = None):
-        if profileCompleted == True and phone_number not in test_numbers:
-            template_name = self.get_template_name(refSource.upper())
+        template_name = self.get_template_name(refSource.upper())
+        if template_name != 'PROMO_TEMPLATE':
+            profileCompleted = True
+        if profileCompleted == True:
             payload = {
                 'template_name': template_name,
                 'phone_number': phone_number,
