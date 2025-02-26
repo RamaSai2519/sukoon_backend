@@ -36,13 +36,13 @@ class Compute:
     def update_user(self) -> bool:
         url = config.URL + '/actions/user'
         partner_name = self.common.get_partner_name(self.input.prc)
-        if partner_name != 'Unknown':
+        if partner_name == 'Unknown':
             partner_name = None
         payload = {
             'phoneNumber': self.input.user_phone,
             'name': self.input.user_name or None,
             'city': self.input.user_city or None,
-            'refSource': partner_name,
+            'refSource': partner_name.lower() if partner_name else None
         }
         response = requests.post(url, json=payload)
         if response.status_code != 200:
