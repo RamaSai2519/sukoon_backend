@@ -78,7 +78,7 @@
         "path": "/actions/expert",
         "payload": {
             "phoneNumber": "9398036558",
-            "status": "offline",
+            "status": "online",
             "name": "Sarathi Test",
             "isBusy": false
         }
