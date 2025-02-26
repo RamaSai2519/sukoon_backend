@@ -12,11 +12,8 @@ def load_test_cases() -> list:
 
 
 class TestAPIs:
-    def __init__(self):
-        self.users_collection = get_user_collection()
-        self.experts_collection = get_experts_collections()
-
     def get_user_id(self) -> str:
+        self.users_collection = get_user_collection()
         query = {'phoneNumber': '9936142128'}
         user = self.users_collection.find_one(query)
         if user is None:
@@ -29,6 +26,7 @@ class TestAPIs:
         return str(user['_id'])
 
     def get_expert_id(self) -> str:
+        self.experts_collection = get_experts_collections()
         query = {'phoneNumber': '9398036558'}
         expert = self.experts_collection.find_one(query)
         return str(expert['_id'])
