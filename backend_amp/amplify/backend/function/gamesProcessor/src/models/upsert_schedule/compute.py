@@ -87,7 +87,7 @@ class Compute:
         all_fields = [start_time_one, end_time_one,
                       start_time_two, end_time_two]
         if all(field is None for field in all_fields) or all(field == '' for field in all_fields):
-            return True
+            return False
         return self._is_within_timing(hour, start_time_one, end_time_one) or self._is_within_timing(hour, start_time_two, end_time_two)
 
     def _is_within_timing(self, hour: int, start_time: str, end_time: str) -> bool:
