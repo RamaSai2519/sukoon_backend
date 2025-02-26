@@ -77,10 +77,354 @@
         "method": "POST",
         "path": "/actions/expert",
         "payload": {
-            "phoneNumber": "9398036558",
+            "phoneNumber": "9936142128",
             "status": "offline",
             "name": "Sarathi Test",
             "isBusy": false
+        }
+    },
+    {
+        "method": "POST",
+        "path": "/actions/call",
+        "payload": {
+            "wait": false,
+            "user_requested": false,
+            "user_id": "67ac7334f1f8a2ebfefc22b6",
+            "expert_id": "66ed9a38247403a4f1a09b02"
+        }
+    },
+    {
+        "method": "POST",
+        "path": "/actions/send_otp",
+        "payload": {
+            "phoneNumber": "9936142128"
+        }
+    },
+    {
+        "method": "POST",
+        "path": "/actions/user",
+        "payload": {
+            "name": "Rama Sathya Sai",
+            "city": "New York",
+            "active": true,
+            "isBusy": false,
+            "isBlocked": false,
+            "wa_opt_out": false,
+            "phoneNumber": "9936142128",
+            "profileCompleted": true,
+            "customerPersona": {
+                "explanation": "Tech-savvy urban professional who values efficiency and convenience.",
+                "personality": "Outgoing and goal-oriented",
+                "confidence": 0.85,
+                "demographics": {
+                    "age": 64,
+                    "gender": "Male",
+                    "income": "80k-100k",
+                    "hobbies": "Photography, Hiking, Gaming",
+                    "location": "Manhattan, NY",
+                    "religion": "None",
+                    "ethnicity": "Caucasian",
+                    "education": "Master's Degree",
+                    "occupation": "Software Engineer",
+                    "techComfort": "High",
+                    "workStatus": "Full-Time",
+                    "birthPlace": "Boston, MA",
+                    "nationality": "American",
+                    "lastCompany": "TechCorp",
+                    "housingType": "Apartment",
+                    "livingStatus": "Single",
+                    "petOwnership": "Dog Owner",
+                    "maritalStatus": "Single",
+                    "smokingHabits": "Non-Smoker",
+                    "familyMembers": "2 Parents, 1 Sibling",
+                    "physicalState": "Healthy",
+                    "medicalHistory": "No major issues",
+                    "politicalViews": "Liberal",
+                    "drinkingHabits": "Occasionally",
+                    "favoriteCuisine": "Italian",
+                    "travelFrequency": "Once a year",
+                    "socialMediaUsage": "Active on Instagram and Twitter",
+                    "standardOfLiving": "Comfortable",
+                    "exerciseFrequency": "3 times a week",
+                    "languagePreference": "English",
+                    "dietaryPreferences": "Vegetarian",
+                    "transportationMode": "Public Transit",
+                    "favoriteMusicGenre": "Pop",
+                    "favoriteMovieGenre": "Sci-Fi"
+                },
+                "psychographics": {
+                    "needs": "Convenience and efficiency",
+                    "goals": "Career growth and financial stability",
+                    "fears": "Job insecurity and stagnation",
+                    "values": "Innovation and community",
+                    "opinions": "Strong advocate for renewable energy",
+                    "interests": "Tech trends, Gaming, Photography",
+                    "attitudes": "Optimistic and adaptable",
+                    "lifestyle": "Busy but balanced",
+                    "behaviors": "Frequent online shopper",
+                    "painPoints": "Time management issues",
+                    "motivators": "Recognition and rewards",
+                    "challenges": "Balancing work and personal life",
+                    "aspirations": "Start a tech startup",
+                    "preferences": "Prefers online over in-person services",
+                    "brandLoyalty": "High for trusted brands",
+                    "buyingBehavior": "Researches thoroughly before purchasing",
+                    "socialInfluences": "Friends and tech influencers",
+                    "mediaConsumption": "Tech blogs and YouTube",
+                    "personalityTraits": "Analytical and outgoing",
+                    "decisionMakingStyle": "Data-driven and logical"
+                }
+            }
+        }
+    },
+    {
+        "method": "GET",
+        "path": "/actions/user",
+        "params": {
+            "page": "1",
+            "size": "10"
+        }
+    },
+    {
+        "method": "GET",
+        "path": "/actions/user",
+        "params": {
+            "phoneNumber": "9936142128"
+        }
+    },
+    {
+        "method": "POST",
+        "path": "/actions/send_whatsapp",
+        "payload": {
+            "phone_number": "9936142128",
+            "template_name": "EVENT_INVOICE_GENERIC",
+            "parameters": {
+                "event_name": "Club Sukoon",
+                "document_link": "https://sukoon-media.s3.ap-south-1.amazonaws.com/invoices/661526bc6159273a018e7b89-7679.pdf"
+            },
+            "skip_check": true
+        }
+    },
+    {
+        "method": "POST",
+        "path": "/actions/send_whatsapp",
+        "payload": {
+            "phone_number": "9936142128",
+            "template_name": "EVENT_REGISTRATION_CONFIRMATION",
+            "parameters": {
+                "phone_number": "9936142128",
+                "user_name": "Rama Sathya Sai",
+                "speakers_name": "Kanchan Bhatt",
+                "date_and_time": "2024-12-07T11:30:00.000Z",
+                "topic_name": "Tax Benifit Scheme For Seniors",
+                "event_name": "Tax Benifit Scheme For Seniors",
+                "image_link": "https://sukoon-media.s3.amazonaws.com/5.png",
+                "whatsapp_community_link": "https://sukoonunlimited.com/wa-join-community",
+                "webinar_link": "https://us06web.zoom.us/meeting/register/tZYqfuqorDssHtc5v1IlaGLMkFUJ6QBunMXd",
+                "custom_text": "We are excited to have you join us for the session on Tax Benifit Scheme For Seniors. Please click on the link below to join the session."
+            },
+            "skip_check": true
+        }
+    },
+    {
+        "method": "POST",
+        "path": "/actions/send_whatsapp",
+        "payload": {
+            "phone_number": "9936142128",
+            "template_name": "CONTRIBUTE_UTILITY_USER_RESPONSE_PROD",
+            "parameters": {
+                "address": "New York",
+                "role": "Assistant Manager",
+                "phone_number": "9936142128",
+                "user_name": "Rama Sathya Sai",
+                "event_name": "Tax Benifit Scheme For Seniors"
+            },
+            "skip_check": true
+        }
+    },
+    {
+        "method": "POST",
+        "path": "/actions/send_whatsapp",
+        "payload": {
+            "phone_number": "9936142128",
+            "template_name": "ESCALATION_MESSAGE_PROD",
+            "parameters": {
+                "misc": "1234567890"
+            },
+            "skip_check": true
+        }
+    },
+    {
+        "method": "POST",
+        "path": "/actions/send_whatsapp",
+        "payload": {
+            "phone_number": "9936142128",
+            "template_name": "CALL_NOTIFICATION",
+            "parameters": {
+                "city": "New York",
+                "last_expert": "Mayank",
+                "premium": "Unavailable",
+                "birth_date": "1990-01-01",
+                "user_name": "Rama Sathya Sai"
+            },
+            "skip_check": true
+        }
+    },
+    {
+        "method": "POST",
+        "path": "/actions/send_whatsapp",
+        "payload": {
+            "phone_number": "9936142128",
+            "template_name": "SARATHI_MISSED_CALL_FROM_USER_PROD",
+            "parameters": {
+                "status": "Failed",
+                "reason": "Offline",
+                "expert_name": "Sarathi Test",
+                "user_name": "Rama Sathya Sai"
+            },
+            "skip_check": true
+        }
+    },
+    {
+        "method": "POST",
+        "path": "/actions/send_whatsapp",
+        "payload": {
+            "phone_number": "9936142128",
+            "template_name": "PARTNER_POST_SUBSCRIPTION",
+            "parameters": {
+                "user_name": "Rama Sathya Sai",
+                "offer_title": "Special Discount",
+                "website_url": "https://example.com",
+                "expiry_date": "31 December, 2023",
+                "phone_number": "+919936142128"
+            },
+            "skip_check": true
+        }
+    },
+    {
+        "method": "POST",
+        "path": "/actions/send_whatsapp",
+        "payload": {
+            "phone_number": "9936142128",
+            "template_name": "PROMO_TEMPLATE",
+            "parameters": {},
+            "skip_check": true
+        }
+    },
+    {
+        "method": "POST",
+        "path": "/actions/send_whatsapp",
+        "payload": {
+            "phone_number": "9936142128",
+            "template_name": "SARATHI_SUCCESSFUL_CALL",
+            "parameters": {
+                "sarathi_name": "Test"
+            },
+            "skip_check": true
+        }
+    },
+    {
+        "method": "POST",
+        "path": "/actions/send_whatsapp",
+        "payload": {
+            "phone_number": "9936142128",
+            "template_name": "SARATHI_MISSED_CALL",
+            "parameters": {},
+            "skip_check": true
+        }
+    },
+    {
+        "method": "POST",
+        "path": "/actions/send_whatsapp",
+        "payload": {
+            "phone_number": "9936142128",
+            "template_name": "MISSED_INTERNAL_CALL",
+            "parameters": {
+                "user_name": "Rama Sathya Sai",
+                "company_phone": "+919936142128"
+            },
+            "skip_check": true
+        }
+    },
+    {
+        "method": "POST",
+        "path": "/actions/send_whatsapp",
+        "payload": {
+            "phone_number": "9936142128",
+            "template_name": "SARATHI_FAILED_CALL_TO_USER",
+            "parameters": {},
+            "skip_check": true
+        }
+    },
+    {
+        "method": "POST",
+        "path": "/actions/send_whatsapp",
+        "payload": {
+            "phone_number": "9936142128",
+            "template_name": "FEEDBACK_SURVEY",
+            "parameters": {
+                "user_name": "Rama Sathya Sai",
+                "sarathi_name": "Test"
+            },
+            "skip_check": true
+        }
+    },
+    {
+        "method": "POST",
+        "path": "/actions/send_whatsapp",
+        "payload": {
+            "phone_number": "9936142128",
+            "template_name": "FEEDBACK_INTERNAL_CALLL",
+            "parameters": {
+                "user_name": "Rama Sathya Sai",
+                "expert_name": "Test"
+            },
+            "skip_check": true
+        }
+    },
+    {
+        "method": "POST",
+        "path": "/actions/send_whatsapp",
+        "payload": {
+            "phone_number": "9936142128",
+            "template_name": "EVENT_REMINDER_MINUTES",
+            "parameters": {
+                "minutes": "30",
+                "user_name": "Rama Sathya Sai",
+                "event_name": "Tax Benifit Scheme For Seniors",
+                "meeting_link": "https://us06web.zoom.us/meeting/register/tZYqfuqorDssHtc5v1IlaGLMkFUJ6QBunMXd"
+            },
+            "skip_check": true
+        }
+    },
+    {
+        "method": "POST",
+        "path": "/actions/send_whatsapp",
+        "payload": {
+            "phone_number": "9936142128",
+            "template_name": "SCHEDULE_REMINDER_MINUTE_PROD",
+            "parameters": {
+                "expert_name": "Sarathi Test",
+                "user_name": "Rama Sathya Sai",
+                "minutes": "30"
+            },
+            "skip_check": true
+        }
+    },
+    {
+        "method": "POST",
+        "path": "/actions/send_whatsapp",
+        "payload": {
+            "phone_number": "9936142128",
+            "template_name": "SARATHI_NOTIFICATION_FOR_USER_CALL_PRODUCTION",
+            "parameters": {
+                "last_expert": "Mayank",
+                "user_name": "Rama Sathya Sai",
+                "city": "New York",
+                "birth_date": "1990-01-01",
+                "minutes": "30"
+            },
+            "skip_check": true
         }
     }
 ]

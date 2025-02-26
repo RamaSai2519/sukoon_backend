@@ -44,4 +44,5 @@ jobs:
         run: |
           cd backend_amp/amplify/backend/function/gamesProcessor/src
           source venv/bin/activate
+          export ENV=local
           pytest tests/

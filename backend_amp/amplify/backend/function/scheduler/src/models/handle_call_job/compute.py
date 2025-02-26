@@ -19,11 +19,12 @@ class Compute:
     def execute_job(self) -> Response:
         url = self.url + '/actions/call'
         payload = {
+            'wait': False,
             'type_': 'scheduled',
             'scheduledId': str(self.job._id),
             'user_id': str(self.job.user_id),
             'expert_id': str(self.job.expert_id),
-            'user_requested': self.job.user_requested
+            'user_requested': self.job.user_requested,
         }
 
         response = requests.post(url, json=payload)

@@ -63,7 +63,7 @@ class Compute:
             "expert_id": expert_id,
             "isDeleted": {"$ne": True},
             "job_time": {"$gte": start_time, "$lte": end_time},
-            "status": {"$eq": {"$regex": "pending", "$options": "i"}}
+            "status": {'$in': ['PENDING', 'WAPENDING']}
         }
         doc = self.schedules_collection.find_one(query)
         return doc is not None
@@ -109,7 +109,7 @@ class Compute:
             "user_id": user_id,
             "isDeleted": {"$ne": True},
             "job_time": {"$gte": start_time, "$lte": end_time},
-            "status": {"$eq": {"$regex": "pending", "$options": "i"}}
+            "status": {'$in': ['PENDING', 'WAPENDING']}
         }
         conflict = self.schedules_collection.find_one(query)
         return conflict is not None

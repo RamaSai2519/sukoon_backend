@@ -32,7 +32,4 @@ class TestAPIs:
         print(response.json['output_message'])
 
 # TODO Add tests for:
-# - /call
 # - /send_whatsapp
-# - /user
-# - /send_otp
