@@ -78,6 +78,12 @@ class DashboardStats:
             if self.total_successful_calls > 0 else 0
         )
 
+    def today_incoming_calls(self) -> int:
+        return self.calls_collection.count_documents({"direction": "inbound", **self.today_query, **self.exclude_query})
+
+    def incoming_calls(self) -> int:
+        return self.calls_collection.count_documents({"direction": "inbound", **self.exclude_query})
+
     def avg_conversation_score(self) -> float:
         return self._get_avg_conversation_score_()
 

@@ -20,10 +20,10 @@ class Compute:
         stats_data = {}
 
         methods_to_run = [
-            "avg_conversation_score", "onlineSarathis",
             "missed_calls", "today_missed_calls", "average_call_duration",
             "total_calls", "today_calls", "successful_calls", "today_successful_calls",
             "inadequate_calls", "today_inadequate_calls", "failed_calls", "today_failed_calls",
+            "avg_conversation_score", "onlineSarathis", "today_incoming_calls", "incoming_calls"
         ]
 
         with ThreadPoolExecutor() as executor:
@@ -41,11 +41,7 @@ class Compute:
             stats.total_duration
         )
 
-        return Output(
-            output_details=stats_data,
-            output_message="Dashboard Stats",
-            output_status=OutputStatus.SUCCESS
-        )
+        return Output(output_details=stats_data)
 
     def _get_insights(self) -> dict:
         insights = CallInsights(self.exclude_query).get_insights()
@@ -85,14 +81,9 @@ class Compute:
             return self.get_dashboard_stats()
         elif self.input.item == "insights":
             insights = self._get_insights()
-            return Output(
-                output_details=insights,
-                output_status=OutputStatus.SUCCESS,
-                output_message="Insights"
-            )
+            return Output(output_details=insights)
 
         return Output(
-            output_details={},
             output_status=OutputStatus.FAILURE,
             output_message="Invalid Item"
         )
