@@ -37,8 +37,11 @@ class Notifications:
     def send_wa_notification(self, user: dict, expert: dict) -> str:
         url = self.url + "/actions/send_whatsapp"
         birth_date: datetime = user.get("birthDate", None)
-        birth_date = birth_date.strftime(
-            "%d %B, %Y") if birth_date else "Not provided"
+        if birth_date and not isinstance(birth_date, str):
+            birth_date = birth_date.strftime(
+                "%d %B, %Y")
+        else:
+            birth_date = "Not provided"
 
         payload = json.dumps({
             "phone_number": expert.get("phoneNumber", ""),
