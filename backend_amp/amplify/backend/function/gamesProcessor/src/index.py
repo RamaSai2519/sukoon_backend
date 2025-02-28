@@ -128,6 +128,7 @@ api.add_resource(BytePlusTokenService, '/actions/byte_plus_token')
 api.add_resource(QuizGameService, '/actions/quiz_game')
 api.add_resource(SaveGamePlayService, '/actions/save_game')
 api.add_resource(LeaderBoardService, '/actions/leaderboard')
+api.add_resource(QuizQuestionsService, '/actions/quiz_questions')
 
 # Game Routes (deprecated)
 api.add_resource(CardGameService, '/actions/card_game')

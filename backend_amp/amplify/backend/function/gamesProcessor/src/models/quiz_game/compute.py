@@ -1,6 +1,6 @@
 from shared.db.users import get_user_collection, get_user_stats_collection
 from shared.models.interfaces import QuizGameInput as Input, Output
-from shared.db.games import get_quiz_questions_collections
+from shared.db.games import get_quiz_questions_collection
 from shared.models.common import Common
 from bson import ObjectId
 
@@ -10,7 +10,7 @@ class Compute:
         self.input = input
         self.users_collection = get_user_collection()
         self.stats_collection = get_user_stats_collection()
-        self.questions_collection = get_quiz_questions_collections()
+        self.questions_collection = get_quiz_questions_collection()
 
     def _get_questions_for_a_user_at_a_level(self, last_question_shown_at_this_level):
         query = {"level": self.input.level}
