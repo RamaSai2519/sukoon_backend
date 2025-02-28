@@ -122,6 +122,9 @@ class Compute:
         user = self.users_collection.find_one(query, projection)
         return user, expert
 
+    def notify_user(self, user_id: ObjectId) -> None:
+        pass
+
     def compute(self) -> Output:
         if self.input.expert_id:
             expert_id = ObjectId(self.input.expert_id)
@@ -146,6 +149,8 @@ class Compute:
                     output_status=OutputStatus.FAILURE,
                     output_message="User is not available at this time"
                 )
+            if self.input.job_type.lower() == 'call':
+                self.notify_user(user_id)
 
         if self.input.initiatedBy and self.input.initiatedBy.lower() == 'ark':
             user, expert = self.get_parties()
