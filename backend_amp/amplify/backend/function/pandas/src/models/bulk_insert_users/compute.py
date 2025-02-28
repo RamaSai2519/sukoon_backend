@@ -1,6 +1,8 @@
+import requests
 import pandas as pd
 from datetime import datetime
 from shared.models.common import Common
+from shared.configs import CONFIG as config
 from shared.models.constants import OutputStatus
 from shared.db.users import get_user_collection, get_meta_collection
 from shared.models.interfaces import BulkUploadInput as Input, Output, User
@@ -53,8 +55,11 @@ class Compute:
         return user
 
     def insert_user(self, user: dict) -> str:
-        inserted_record = self.users_collection.insert_one(user)
-        return inserted_record.inserted_id
+        url = config.URL + '/actions/upsert_user'
+        response = requests.post(url, json=user)
+        if response.status_code != 200:
+            raise Exception(f"Failed to insert user: {response.text}")
+        return response.json().get("output_details", {}).get("_id", "")
 
     def insert_meta(self, user_id: str, record: dict) -> None:
         meta = {
