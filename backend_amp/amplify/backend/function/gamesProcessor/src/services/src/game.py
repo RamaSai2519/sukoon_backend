@@ -1,43 +1,19 @@
-import json
-import dataclasses
+from shared.models.interfaces import GetGamePlayInput, BytePlusTokenInput, UpdateGamePlayInput, CalculateWinnerInput, ScoreUpdaterInput, CardGameInput
+from models.calculate_winner.main import CalculateWinner
+from models.update_game_play.main import UpdateGamePlay
+from models.byteplus_token.main import BytePlusToken
+from models.score_updater.main import ScoreUpdater
+from models.get_game_play.main import GetGamePlay
+from models.card_game.main import CardGame
 from flask_restful import Resource
 from flask import request
-from shared.models.interfaces import QuizGameInput, Output
-from models.quiz_game.main import QuizGame
-
-from shared.models.interfaces import CardGameInput, Output
-from models.card_game.main import CardGame
-
-from shared.models.interfaces import ScoreUpdaterInput, Output
-from models.score_updater.main import ScoreUpdater
-
-from shared.models.interfaces import CalculateWinnerInput, Output
-from models.calculate_winner.main import CalculateWinner
-
-from shared.models.interfaces import UpdateGamePlayInput, Output
-from models.update_game_play.main import UpdateGamePlay
-
-from shared.models.interfaces import GetGamePlayInput, Output
-from models.get_game_play.main import GetGamePlay
-
-from shared.models.interfaces import BytePlusTokenInput, Output
-from models.byteplus_token.main import BytePlusToken
-
-
-class QuizGameService(Resource):
-
-    def post(self) -> Output:
-        input = json.loads(request.get_data())
-        input = QuizGameInput(**input)
-        output = QuizGame(input).process()
-        output = dataclasses.asdict(output)
-
-        return output
+import dataclasses
+import json
 
 
 class CardGameService(Resource):
 
-    def post(self) -> Output:
+    def post(self) -> None:
         input = json.loads(request.get_data())
         input = CardGameInput(**input)
         output = CardGame(input).process()
@@ -48,7 +24,7 @@ class CardGameService(Resource):
 
 class ScoreUpdaterService(Resource):
 
-    def post(self) -> Output:
+    def post(self) -> None:
         input = json.loads(request.get_data())
         input = ScoreUpdaterInput(**input)
         output = ScoreUpdater(input).process()
@@ -59,7 +35,7 @@ class ScoreUpdaterService(Resource):
 
 class CalculateWinnerService(Resource):
 
-    def post(self) -> Output:
+    def post(self) -> None:
         input = json.loads(request.get_data())
         input = CalculateWinnerInput(**input)
         output = CalculateWinner(input).process()
@@ -70,7 +46,7 @@ class CalculateWinnerService(Resource):
 
 class GameHistoryService(Resource):
 
-    def post(self) -> Output:
+    def post(self) -> None:
         input = json.loads(request.get_data())
         input = UpdateGamePlayInput(**input)
         output = UpdateGamePlay(input).process()
@@ -78,7 +54,7 @@ class GameHistoryService(Resource):
 
         return output
 
-    def get(self) -> Output:
+    def get(self) -> None:
         input_params = request.args
         input = GetGamePlayInput(**input_params)
         output = GetGamePlay(input).process()
@@ -89,7 +65,7 @@ class GameHistoryService(Resource):
 
 class BytePlusTokenService(Resource):
 
-    def post(self) -> Output:
+    def post(self) -> None:
         input = json.loads(request.get_data())
         input = BytePlusTokenInput(**input)
         output = BytePlusToken(input).process()

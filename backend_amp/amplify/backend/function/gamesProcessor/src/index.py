@@ -124,8 +124,12 @@ api.add_resource(FCMTemplateService, '/actions/fcm_template')
 api.add_resource(FCMTokenService, '/actions/update_fcm_token')
 api.add_resource(BytePlusTokenService, '/actions/byte_plus_token')
 
-# Game Routes (deprecated)
+# Game Routes
 api.add_resource(QuizGameService, '/actions/quiz_game')
+api.add_resource(SaveGamePlayService, '/actions/save_game')
+api.add_resource(LeaderBoardService, '/actions/leaderboard')
+
+# Game Routes (deprecated)
 api.add_resource(CardGameService, '/actions/card_game')
 api.add_resource(GameConfigService, '/actions/game_config')
 api.add_resource(GameHistoryService, '/actions/game_history')
