@@ -4,6 +4,7 @@ from bson import ObjectId
 from .slack import SlackManager
 from shared.models.common import Common
 from datetime import datetime, timedelta
+from shared.configs import CONFIG as config
 from shared.db.users import get_user_collection
 from shared.db.schedules import get_schedules_collection
 from shared.models.constants import TimeFormats, OutputStatus
@@ -122,8 +123,26 @@ class Compute:
         user = self.users_collection.find_one(query, projection)
         return user, expert
 
-    def notify_user(self, user_id: ObjectId) -> None:
-        pass
+    def notify_user(self) -> bool:
+        user, expert = self.get_parties()
+        job_time = datetime.strptime(
+            self.input.job_time, TimeFormats.AWS_TIME_FORMAT)
+        job_time = job_time.replace(tzinfo=pytz.utc)
+        date = job_time.strftime('%d %B %Y')
+        time = job_time.strftime('%I:%M %p')
+        url = config.URL + '/actions/send_whatsapp'
+        payload = {
+            'phone_number': user['phoneNumber'],
+            'template_name': 'SCHEDULED_CALL_CONFIRMATION',
+            'parameters': {
+                'user_name': user.get('name') or 'User',
+                'expert_name': expert.get('name') or 'Expert',
+                'date': date, 'time': time
+            }
+        }
+        response = requests.post(url, json=payload)
+        print(response.json(), '__user_schedule_notification__')
+        return True if response.status_code == 200 else False
 
     def compute(self) -> Output:
         if self.input.expert_id:
@@ -149,8 +168,8 @@ class Compute:
                     output_status=OutputStatus.FAILURE,
                     output_message="User is not available at this time"
                 )
-            if self.input.job_type.lower() == 'call':
-                self.notify_user(user_id)
+            if self.input.job_type.lower() == 'call' and self.input.user_requested == True:
+                self.notify_user()
 
         if self.input.initiatedBy and self.input.initiatedBy.lower() == 'ark':
             user, expert = self.get_parties()
