@@ -1,8 +1,8 @@
 import traceback
-from shared.models.interfaces import QuizGameInput as Input, Output
-from shared.models.constants import OutputStatus
 from models.quiz_game.compute import Compute
 from models.quiz_game.validate import Validator
+from shared.models.constants import OutputStatus
+from shared.models.interfaces import QuizGameInput as Input, Output
 
 
 class QuizGame:
