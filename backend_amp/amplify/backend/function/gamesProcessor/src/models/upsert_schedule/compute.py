@@ -136,7 +136,7 @@ class Compute:
             'template_name': 'SCHEDULED_CALL_CONFIRMATION',
             'parameters': {
                 'user_name': user.get('name') or 'User',
-                'expert_name': expert.get('name') or 'Expert',
+                'expert_name': expert.get('name').replace('Sarathi ') or 'Expert',
                 'date': date, 'time': time
             }
         }
