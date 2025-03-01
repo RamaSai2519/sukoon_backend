@@ -16,8 +16,8 @@ class Compute:
     def compute(self) -> Output:
         pipeline = [
             {"$match": {"game_type": self.input.game_type}},
-            {"$group": {"_id": "$user_id", "highest_score": {"$max": "$score"}}},
-            {"$sort": {"highest_score": -1}}
+            {"$group": {"_id": "$user_id", "total_score": {"$sum": "$score"}}},
+            {"$sort": {"total_score": -1}}
         ]
         if self.input.page and self.input.size:
             page = int(self.input.page)
