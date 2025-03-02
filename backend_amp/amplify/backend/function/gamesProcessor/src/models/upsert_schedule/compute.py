@@ -127,7 +127,7 @@ class Compute:
         user, expert = self.get_parties()
         job_time = datetime.strptime(
             self.input.job_time, TimeFormats.AWS_TIME_FORMAT)
-        job_time = job_time.replace(tzinfo=pytz.utc)
+        job_time += timedelta(hours=5, minutes=30)
         date = job_time.strftime('%d %B %Y')
         time = job_time.strftime('%I:%M %p')
         url = config.URL + '/actions/send_whatsapp'
