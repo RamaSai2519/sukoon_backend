@@ -2,6 +2,7 @@ import json
 import dataclasses
 from flask import request
 from flask_restful import Resource
+from shared.models.common import Common
 from models.get_events.main import ListEvents
 from models.get_event_users.main import ListEventUsers
 from models.upsert_event_config.main import UpsertEvent
@@ -36,6 +37,7 @@ class ListEventUsersService(Resource):
 
     def get(self) -> Output:
         input_params = request.args
+        input_params = Common.clean_dict(input_params, GetEventUsersInput)
         input = GetEventUsersInput(**input_params)
         output = ListEventUsers(input).process()
         output = dataclasses.asdict(output)
