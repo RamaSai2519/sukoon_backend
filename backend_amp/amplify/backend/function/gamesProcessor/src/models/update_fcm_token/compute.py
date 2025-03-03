@@ -1,30 +1,38 @@
 from shared.models.interfaces import UpdateFCMTokenInput as Input, Output
 from shared.db.users import get_user_fcm_token_collection
-from shared.models.constants import OutputStatus
 from shared.models.common import Common
+from bson import ObjectId
 
 
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
+        self.collection = get_user_fcm_token_collection()
 
-    def _update_fcm_token(self, user_id, fcm_token) -> None:
+    def get_stored_doc(self, user_id: ObjectId) -> dict:
+        query = {"user": user_id}
+        return self.collection.find_one(query)
 
-        user_fcm_token_collection = get_user_fcm_token_collection()
+    def update_doc(self, doc: dict) -> dict:
+        if len(doc['tokens']) >= 5:
+            doc['tokens'].pop(0)
+        doc['tokens'].append({
+            'token': self.input.fcm_token,
+            'createdAt': Common.get_current_utc_time()
+        })
+        return doc
 
-        user_fcm_token_data = {
-            "userId": user_id,
-            "fcmToken": fcm_token,
-            "createdAt": Common.get_current_utc_time(),
-        }
-        user_fcm_token_collection.insert_one(user_fcm_token_data)
+    def compute(self) -> Output:
+        user_id = ObjectId(self.input.user_id)
+        doc = self.get_stored_doc(user_id)
+        if not doc:
+            doc = {
+                'user': user_id,
+                'tokens': [],
+                'createdAt': Common.get_current_utc_time()
+            }
 
-    def compute(self):
+        doc = self.update_doc(doc)
+        self.collection.replace_one({"user": user_id}, doc, upsert=True)
 
-        self._update_fcm_token(self.input.user_id, self.input.fcm_token)
-
-        return Output(
-            output_details="",
-            output_status=OutputStatus.SUCCESS,
-            output_message="Successfully updated FCM token"
-        )
+        return Output(output_message="Successfully updated FCM token")
