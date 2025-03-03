@@ -2,6 +2,7 @@ from bson import ObjectId
 from shared.models.common import Common
 from pymongo.collection import Collection
 from shared.models.constants import OutputStatus
+from shared.db.calls import get_calls_collection
 from shared.db.experts import get_experts_collections
 from shared.models.interfaces import GetWaHistoryInput as Input, Output
 from shared.db.users import get_user_webhook_messages_collection, get_user_whatsapp_feedback_collection, get_user_collection
@@ -9,9 +10,11 @@ from shared.db.users import get_user_webhook_messages_collection, get_user_whats
 
 class Compute:
     def __init__(self, input: Input) -> None:
+        self.cache = {}
         self.input = input
         self.common = Common()
         self.users_collection = get_user_collection()
+        self.calls_collection = get_calls_collection()
         self.experts_collection = get_experts_collections()
         self.wafeedback_collection = get_user_whatsapp_feedback_collection()
         self.userwebhookmessages_collection = get_user_webhook_messages_collection()
@@ -32,10 +35,19 @@ class Compute:
             document["userNumber"] = ""
         return document
 
+    def get_fc_status(self, user_id: ObjectId) -> str:
+        if user_id not in self.cache:
+            query = {'user': user_id}
+            calls = self.calls_collection.count_documents(query)
+            self.cache[user_id] = 'Yes' if calls > 1 else 'No'
+        return self.cache[user_id]
+
     def format_messages(self, documents: list) -> list:
         for document in documents:
             if document.get("userId"):
                 document = self.populate_user_details(document)
+                document["fc_done"] = self.get_fc_status(
+                    ObjectId(document["userId"]))
             document = Common.jsonify(document)
         return documents
 

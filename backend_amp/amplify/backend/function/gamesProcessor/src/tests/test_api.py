@@ -7,8 +7,14 @@ from shared.db.experts import get_experts_collections
 
 
 def load_test_cases() -> list:
-    with open(os.path.join(os.path.dirname(__file__), 'test_cases.json')) as f:
-        return json.load(f)
+    test_cases = []
+    for file_name in [
+        'test_cases.json',
+        # 'wa_cases.json'
+    ]:
+        with open(os.path.join(os.path.dirname(__file__), file_name)) as f:
+            test_cases.extend(json.load(f))
+    return test_cases
 
 
 class TestAPIs:
