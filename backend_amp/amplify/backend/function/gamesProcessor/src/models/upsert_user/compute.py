@@ -176,22 +176,20 @@ class Compute:
         self.users_collection.update_one(self.query, {'$set': user_data})
 
     def get_template_name(self, refSource: str, dob: datetime) -> str:
-        if refSource:
-            refSource = refSource.upper()
-            if dob or self.input.opt_age:
-                if not dob:
-                    age = Common.calculate_age(dob)
-                else:
-                    age = self.input.opt_age
-                if age < 50:
-                    name = f'{refSource}_SIGNUP_TEMPLATE_KIDS'
-            else:
-                name = f'{refSource}_SIGNUP_TEMPLATE'
-            template = self.templates_collection.find_one(
-                {'template_name': name})
-            if template:
-                return name
-        return 'PROMO_TEMPLATE'
+        if not refSource:
+            return 'PROMO_TEMPLATE'
+
+        refSource = refSource.upper()
+        age = Common.calculate_age(dob) if dob else self.input.opt_age
+
+        if age is not None and age < 50:
+            template_name = f'{refSource}_SIGNUP_TEMPLATE_KIDS'
+        else:
+            template_name = f'{refSource}_SIGNUP_TEMPLATE'
+
+        template = self.templates_collection.find_one(
+            {'template_name': template_name})
+        return template_name if template else 'PROMO_TEMPLATE'
 
     def send_insert_message(self, name: str, phone_number: str, profileCompleted: bool, refSource: str = None, dob: datetime = None) -> bool:
         template_name = self.get_template_name(refSource, dob)
