@@ -177,8 +177,12 @@ class Compute:
 
     def get_template_name(self, refSource: str, dob: datetime) -> str:
         if refSource:
-            if dob:
-                age = Common.calculate_age(dob)
+            refSource = refSource.upper()
+            if dob or self.input.opt_age:
+                if not dob:
+                    age = Common.calculate_age(dob)
+                else:
+                    age = self.input.opt_age
                 if age < 50:
                     name = f'{refSource}_SIGNUP_TEMPLATE_KIDS'
             else:
@@ -190,7 +194,7 @@ class Compute:
         return 'PROMO_TEMPLATE'
 
     def send_insert_message(self, name: str, phone_number: str, profileCompleted: bool, refSource: str = None, dob: datetime = None) -> bool:
-        template_name = self.get_template_name(refSource.upper(), dob)
+        template_name = self.get_template_name(refSource, dob)
         if template_name != 'PROMO_TEMPLATE':
             profileCompleted = True
         if profileCompleted == True:
@@ -228,6 +232,7 @@ class Compute:
     def compute(self) -> Output:
         user = self.input
         user_data = dataclasses.asdict(user)
+        user_data.pop('opt_age')
         prev_user = self.validate_phoneNumber()
 
         user_data = self.prep_data(user_data, prev_user)

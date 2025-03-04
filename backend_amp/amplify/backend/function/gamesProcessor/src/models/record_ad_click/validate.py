@@ -6,5 +6,9 @@ class Validator:
         self.input = input
 
     def validate_input(self):
+        try:
+            int(self.input.user_age)
+        except:
+            return False, "Invalid user_age"
 
         return True, ""

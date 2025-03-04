@@ -42,6 +42,7 @@ class Compute:
             'phoneNumber': self.input.user_phone,
             'name': self.input.user_name or None,
             'city': self.input.user_city or None,
+            'opt_age': int(self.input.user_age) or None,
             'refSource': partner_name.lower() if partner_name else None
         }
         response = requests.post(url, json=payload)
