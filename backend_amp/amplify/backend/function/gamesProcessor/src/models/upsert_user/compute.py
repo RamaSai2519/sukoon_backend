@@ -132,8 +132,9 @@ class Compute:
         if user_data.get('profileCompleted') == True and prev_user and prev_user.get('profileCompleted') == False:
             user_number = user_data.get('phoneNumber')
             user_name = user_data.get('name', user_number)
+            dob = user_data.get('birthDate')
             response = self.send_insert_message(
-                user_name, user_number, True, user_data.get('refSource'))
+                user_name, user_number, True, user_data.get('refSource'), dob)
             message = ' and sent welcome message' if response else ' but failed to send welcome message'
             if user_number not in test_numbers:
                 message += self.slack_manager.send_message(
@@ -153,8 +154,9 @@ class Compute:
         user_number = user_data.get('phoneNumber')
         user_name = user_data.get('name', user_number)
         user_profile = user_data.get('profileCompleted', False)
+        dob = user_data.get('birthDate')
         response = self.send_insert_message(
-            user_name, user_number, user_profile, user_data.get('refSource'))
+            user_name, user_number, user_profile, user_data.get('refSource'), dob)
         message += ' and sent welcome message' if response else ' but did not send welcome message'
 
         signup_type = 'User' if user_profile else 'Lead'
@@ -173,16 +175,22 @@ class Compute:
                     user_data['refSource'] = self.input.refCode
         self.users_collection.update_one(self.query, {'$set': user_data})
 
-    def get_template_name(self, refSource: str) -> str:
+    def get_template_name(self, refSource: str, dob: datetime) -> str:
         if refSource:
-            name = f'{refSource}_SIGNUP_TEMPLATE'
-            template = self.templates_collection.find_one({'template_name': name})
+            if dob:
+                age = Common.calculate_age(dob)
+                if age < 50:
+                    name = f'{refSource}_SIGNUP_TEMPLATE_KIDS'
+            else:
+                name = f'{refSource}_SIGNUP_TEMPLATE'
+            template = self.templates_collection.find_one(
+                {'template_name': name})
             if template:
                 return name
         return 'PROMO_TEMPLATE'
 
-    def send_insert_message(self, name: str, phone_number: str, profileCompleted: bool, refSource: str = None):
-        template_name = self.get_template_name(refSource.upper())
+    def send_insert_message(self, name: str, phone_number: str, profileCompleted: bool, refSource: str = None, dob: datetime = None) -> bool:
+        template_name = self.get_template_name(refSource.upper(), dob)
         if template_name != 'PROMO_TEMPLATE':
             profileCompleted = True
         if profileCompleted == True:
