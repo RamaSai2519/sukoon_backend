@@ -146,6 +146,8 @@ class Compute:
     def insert_user(self, user_data: dict) -> Tuple[str, dict]:
         user_data['_id'] = self.users_collection.insert_one(
             user_data).inserted_id
+        balance_doc = self.set_default_balances(user_data)
+        print(balance_doc, '__balance_doc__')
 
         message = 'Successfully created user'
         user_number = user_data.get('phoneNumber')
@@ -225,8 +227,6 @@ class Compute:
             message = self.update_user(user_data, prev_user)
         else:
             message, user_data = self.insert_user(user_data)
-            balance_doc = self.set_default_balances(user_data)
-            print(balance_doc, '__balance_doc__')
 
         self.handle_referral(user_data, prev_user)
 
