@@ -1,4 +1,6 @@
 from shared.models.interfaces import ApplicantInput as Input
+from shared.models.constants import TimeFormats
+from datetime import datetime
 
 
 class Validator():
@@ -14,5 +16,11 @@ class Validator():
 
         if str(self.input.gender).lower() not in ["male", "female", "notSay"]:
             return False, "Invalid Gender"
+
+        try:
+            datetime.strptime(self.input.dateOfBirth,
+                              TimeFormats.ANTD_TIME_FORMAT)
+        except:
+            return False, "Invalid Date of Birth"
 
         return True, ""

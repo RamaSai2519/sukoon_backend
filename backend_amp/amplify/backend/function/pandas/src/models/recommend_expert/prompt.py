@@ -59,8 +59,6 @@ class Prompt:
     def get_json_prompt(self, prompt: str, output_doc: dict) -> str:
         prompt += "\nGive me the output in a json format like this, don't change the keys:"
         prompt += json.dumps(output_doc, indent=4)
-        prompt += "\nand make sure I will be able to store your response as a json object using the following function by not placing colons and double quotes inside the values:"
-        prompt += extract_json_function_str
         return prompt
 
     def personas_prompt(self) -> str:
