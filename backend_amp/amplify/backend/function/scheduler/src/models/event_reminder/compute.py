@@ -32,7 +32,7 @@ class Compute:
             'phone_number': reminder['user_phone'],
             'template_name': 'EVENT_REMINDER_MINUTES',
             'parameters': {
-                'user_name': reminder['user_name'],
+                'user_name': reminder['user_name'] or 'User',
                 'event_name': reminder['event_name'],
                 'meeting_link': reminder['meeting_link'],
                 'minutes': str(self.get_difference(reminder['validUpto']))
