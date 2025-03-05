@@ -1,5 +1,5 @@
 from shared.models.interfaces import User as Input
-from shared.db.users import get_subscription_plans_collection, get_user_collection
+from shared.db.users import get_subscription_plans_collection
 
 
 class Validator:

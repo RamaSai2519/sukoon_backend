@@ -176,6 +176,9 @@ class Validator:
         if user_meta and user_meta.get('userStatus') in not_interested_statuses:
             return False, 'User is not interested'
 
+        if user.get('isBlocked', False) is True:
+            return False, 'User is blocked'
+
         if self.check_user_availability(user) is False:
             return False, 'User has an upcoming call'
 
