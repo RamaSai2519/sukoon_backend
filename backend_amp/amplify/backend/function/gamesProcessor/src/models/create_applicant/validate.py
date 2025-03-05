@@ -15,14 +15,4 @@ class Validator():
         if str(self.input.gender).lower() not in ["male", "female", "notSay"]:
             return False, "Invalid Gender"
 
-        valid, error = self.validate_required_fields()
-        if not valid:
-            return False, error
-
-        return True, ""
-
-    def validate_required_fields(self):
-        for attr, value in self.input.__dict__.items():
-            if value == '' or value == []:
-                return False, f"{attr} is required"
         return True, ""
