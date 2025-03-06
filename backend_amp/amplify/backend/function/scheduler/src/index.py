@@ -3,6 +3,7 @@ from shared.models.common import Common
 from models.schedules.main import Schedules
 from models.db_backup.main import DbBackupJob
 from shared.models.constants import TimeFormats
+from models.emails_reader.main import EmailsReader
 from models.experts_status_job.main import StatusJob
 from models.event_reminder.main import EventReminder
 from models.auto_online_job.main import AutoOnlineJob
@@ -76,6 +77,11 @@ def handler(event, context):
             return "Experts Jobs Done"
 
         def misc_jobs():
+            # Emails Reader
+            emails_reader = EmailsReader()
+            output = emails_reader.process()
+            print(f"Emails Reader Output: {output}\n")
+
             # Db Backup Job
             db_backup_job = DbBackupJob()
             output = db_backup_job.process()
