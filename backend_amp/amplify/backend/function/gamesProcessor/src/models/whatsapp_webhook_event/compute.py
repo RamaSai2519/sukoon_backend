@@ -211,7 +211,7 @@ class Compute:
             refSource = self.determine_refSource(body)
             user_id = self.create_lead(phoneNumber, refSource)
 
-        if not user.get('isBlocked', False):
+        if user.get('isBlocked', False) == False:
             static_reply = self.handle_static_replies(user, body)
             if static_reply:
                 reply_response = self.send_reply(from_number, static_reply)
