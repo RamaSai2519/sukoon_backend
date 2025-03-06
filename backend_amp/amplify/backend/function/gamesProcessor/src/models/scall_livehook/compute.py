@@ -14,13 +14,13 @@ class Compute:
         self.collection = get_calls_collection()
 
     def find_call(self, call_oid: str) -> dict:
-        query = {"_id": ObjectId(call_oid)}
+        query = {'_id': ObjectId(call_oid)}
         call = self.collection.find_one(query)
         call = Common.clean_dict(call, Call)
         return Call(**call) if call else None
 
     def update_call(self, call: Call) -> str:
-        filter = {'callId': call.callId}
+        filter = {'_id': call._id}
         update = {
             '$set': {
                 'callId': self.callId,
