@@ -38,6 +38,8 @@ class Compute:
     def get_fc_status(self, user_id: ObjectId) -> str:
         if user_id not in self.cache:
             query = {'user': user_id}
+            internal_query = self.common.get_internal_exclude_query()
+            query = {**query, **internal_query}
             calls = self.calls_collection.count_documents(query)
             self.cache[user_id] = 'Yes' if calls > 1 else 'No'
         return self.cache[user_id]
