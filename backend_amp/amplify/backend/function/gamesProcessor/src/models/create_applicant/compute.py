@@ -18,7 +18,10 @@ class Compute:
         self.input._id = inserted_id
 
     def validate_phone_number(self) -> bool:
-        if self.become_saarthis_collection.find_one({"phoneNumber": self.input.phoneNumber}):
+        query = {"phoneNumber": self.input.phoneNumber}
+        if self.input.slug:
+            query["slug"] = self.input.slug
+        if self.become_saarthis_collection.find_one(query):
             return False
         return True
 
