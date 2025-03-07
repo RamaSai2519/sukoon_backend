@@ -29,7 +29,6 @@ class Compute:
     def compute(self) -> Output:
         if not self.validate_phone_number():
             return Output(
-                output_details={},
                 output_status=OutputStatus.FAILURE,
                 output_message="Applicant already exists"
             )
@@ -38,6 +37,5 @@ class Compute:
 
         return Output(
             output_details=output_details,
-            output_status=OutputStatus.SUCCESS,
             output_message="Applicant registered successfully"
         )
