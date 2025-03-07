@@ -4,8 +4,8 @@ from typing import List, Dict
 from shared.models.common import Common
 from shared.db.users import get_user_collection
 from shared.db.experts import get_experts_collections
+from shared.models.constants import non_sarathi_types
 from shared.models.interfaces import RecommendExpertInput as Input, User
-from shared.models.constants import extract_json_function_str, non_sarathi_types
 
 
 class Prompt:
