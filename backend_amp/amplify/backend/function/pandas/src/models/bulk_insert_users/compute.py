@@ -55,7 +55,7 @@ class Compute:
         return user
 
     def insert_user(self, user: dict) -> str:
-        url = config.URL + '/actions/upsert_user'
+        url = config.URL + '/actions/user'
         response = requests.post(url, json=user)
         if response.status_code != 200:
             raise Exception(f"Failed to insert user: {response.text}")
