@@ -38,8 +38,8 @@ class Compute:
 
     def __format__(self, record: dict) -> dict:
         user = self.get_default()
-        user['name'] = str(record["First Name"] + " " +
-                           record["Last Name"]).strip()
+        user['name'] = str(str(record["First Name"]) + " " +
+                           str(record["Last Name"])).strip()
         user['email'] = str(record.get("Email", "")).strip()
 
         try:
