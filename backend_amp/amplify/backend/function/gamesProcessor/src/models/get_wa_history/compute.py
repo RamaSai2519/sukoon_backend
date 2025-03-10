@@ -1,11 +1,12 @@
 from bson import ObjectId
+from pprint import pprint
 from shared.models.common import Common
 from pymongo.collection import Collection
 from shared.models.constants import OutputStatus
 from shared.db.calls import get_calls_collection
 from shared.db.experts import get_experts_collections
 from shared.models.interfaces import GetWaHistoryInput as Input, Output
-from shared.db.users import get_user_webhook_messages_collection, get_user_whatsapp_feedback_collection, get_user_collection
+from shared.db.users import get_user_webhook_messages_collection, get_user_whatsapp_feedback_collection, get_user_collection, get_meta_collection
 
 
 class Compute:
@@ -13,6 +14,7 @@ class Compute:
         self.cache = {}
         self.input = input
         self.common = Common()
+        self.meta_collection = get_meta_collection()
         self.users_collection = get_user_collection()
         self.calls_collection = get_calls_collection()
         self.experts_collection = get_experts_collections()
@@ -35,22 +37,38 @@ class Compute:
             document["userNumber"] = ""
         return document
 
-    def get_fc_status(self, user_id: ObjectId) -> str:
+    def get_metadata(self, user_id: ObjectId) -> str:
         if user_id not in self.cache:
+            cache_doc = {}
             query = {'user': user_id}
+            doc = self.meta_collection.find_one(query)
+            if doc:
+                cache_doc['user_status'] = doc.get('userStatus')
+
             internal_query = self.common.get_internal_exclude_query()
             query = {**query, **internal_query}
             calls = self.calls_collection.count_documents(query)
-            self.cache[user_id] = 'Yes' if calls >= 1 else 'No'
+            cache_doc['fc_done'] = 'Yes' if calls >= 1 else 'No'
+
+            internal_query = self.common.get_internal_exclude_query('true')
+            query = {**query, **internal_query}
+            calls = self.calls_collection.find(
+                query).sort('initiatedTime', -1).limit(1)
+            calls = list(calls)
+            if len(calls) > 0:
+                cache_doc['last_in_call'] = calls[0].get('status')
+            else:
+                cache_doc['last_in_call'] = 'Not Done'
+
+            self.cache[user_id] = cache_doc
         return self.cache[user_id]
 
     def format_messages(self, documents: list) -> list:
         for document in documents:
             if document.get("userId"):
                 document = self.populate_user_details(document)
-                document["fc_done"] = self.get_fc_status(
-                    ObjectId(document["userId"]))
-            document = Common.jsonify(document)
+                metadata = self.get_metadata(ObjectId(document["userId"]))
+                document.update(metadata)
         return documents
 
     def format_feedbacks(self, documents: list) -> list:
@@ -60,7 +78,6 @@ class Compute:
             document["expertName"] = self.common.get_expert_name(
                 ObjectId(document.get("sarathiId")))
             document["body"] = document["body"][2:].replace("_", " ")
-            document = Common.jsonify(document)
         return documents
 
     def compute(self) -> Output:
@@ -79,11 +96,10 @@ class Compute:
 
         return Output(
             output_details={
-                "data": documents,
                 "total": total,
                 "page": int(self.input.page),
-                "pageSize": int(self.input.size)
+                "pageSize": int(self.input.size),
+                "data": Common.jsonify(documents),
             },
-            output_status=OutputStatus.SUCCESS,
             output_message="Successfully fetched documents"
         )
