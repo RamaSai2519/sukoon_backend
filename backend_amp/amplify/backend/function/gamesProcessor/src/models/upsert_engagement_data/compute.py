@@ -1,15 +1,16 @@
+import requests
 from bson import ObjectId
 from shared.models.common import Common
 from pymongo.collection import Collection
+from shared.configs import CONFIG as config
+from shared.db.users import get_meta_collection
 from shared.models.constants import OutputStatus, meta_fields
-from shared.db.users import get_user_collection, get_meta_collection
 from shared.models.interfaces import UpsertEngagementDataInput as Input, Output
 
 
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
-        self.collection = get_user_collection()
         self.meta_collection = get_meta_collection()
 
     def update_data(self, collection: Collection, filter_field: str, filter_value: str, update_data: dict, insert_data: dict = None) -> Output:
@@ -36,11 +37,7 @@ class Compute:
         query = {'user': ObjectId(user_id)}
         prev_meta: dict = self.meta_collection.find_one(query)
         if prev_meta and prev_meta.get(user_field) == user_value:
-            return Output(
-                output_details={},
-                output_status=OutputStatus.SUCCESS,
-                output_message='Value already exists'
-            )
+            return Output(output_message='Value already exists')
 
         return self.update_data(
             collection=self.meta_collection,
@@ -54,12 +51,16 @@ class Compute:
         )
 
     def update_user_data(self, user_id: str, user_field: str, user_value: str) -> Output:
-        return self.update_data(
-            collection=self.collection,
-            filter_field='_id',
-            filter_value=user_id,
-            update_data={user_field: user_value}
-        )
+        url = config.URL + '/actions/user'
+        payload = {'_id': user_id, user_field: user_value}
+        response = requests.post(url, json=payload)
+        if response.status_code == 200:
+            return Output(output_message='Data updated successfully')
+        else:
+            return Output(
+                output_status=OutputStatus.FAILURE,
+                output_message='Something went wrong'
+            )
 
     def compute(self) -> Output:
         user_id = self.input.key
