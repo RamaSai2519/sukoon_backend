@@ -67,10 +67,10 @@ class Compute:
         if self.input.intent == "perform":
             return self.perform()
 
-        # if self.check_token() == True:
-        balance[self.input.balance] -= 1
-        self.balances_collection.update_one(query, {"$set": balance})
-        return Output(output_message="Token verified and balance updated")
+        if self.check_token() == True:
+            balance[self.input.balance] -= 1
+            self.balances_collection.update_one(query, {"$set": balance})
+            return Output(output_message="Token verified and balance updated")
 
         return Output(
             output_message="Token invalid",
