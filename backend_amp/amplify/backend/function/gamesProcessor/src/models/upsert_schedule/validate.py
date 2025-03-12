@@ -101,7 +101,8 @@ class Validator:
         if self.input.job_type == 'CALL':
             funcs.append(self.validate_user)
             funcs.append(self.validate_ids)
-            funcs.append(self.validate_balance)
+            if self.input.isDeleted != True:
+                funcs.append(self.validate_balance)
         elif self.input.job_type == 'WA':
             funcs.append(self.validate_payload)
 
