@@ -11,6 +11,7 @@ import requests
 
 class Compute:
     def __init__(self, time: str) -> None:
+        self.common = Common()
         self.now_time = datetime.strptime(time, TimeFormats.AWS_TIME_FORMAT)
         self.now_week_day = self.get_week_day()
         self.now_month_day = self.get_month_day()
@@ -81,7 +82,11 @@ class Compute:
             'user_requested': job.user_requested,
             'job_time': time.strftime(TimeFormats.AWS_TIME_FORMAT)
         }
-        response = requests.post(self.url, json=payload)
+        balance = self.common.get_balance_type(str(job.expert_id))
+        token = Common.get_token(str(job.user_id), balance)
+        headers = {'Authorization': f'Bearer {token}'}
+
+        response = requests.post(self.url, json=payload, headers=headers)
         response = response.json()
         response = Output(**response)
         print(response.output_message)

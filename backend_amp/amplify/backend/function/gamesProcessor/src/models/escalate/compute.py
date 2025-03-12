@@ -12,6 +12,7 @@ import requests
 class Compute:
     def __init__(self, input: Input) -> None:
         self.input = input
+        self.common = Common()
         self.expert_number = None
         self.collection = get_escalations_collection()
         self.experts_collection = get_experts_collections()
@@ -69,7 +70,11 @@ class Compute:
             'user_id': str(self.input.user_id),
             'user_requested': False
         }
-        response = requests.post(url, json=payload)
+
+        balance = self.common.get_balance_type(expert_id)
+        token = Common.get_token(str(self.input.user_id), balance)
+        headers = {'Authorization': f'Bearer {token}'}
+        response = requests.post(url, json=payload, headers=headers)
         print(response.text)
 
         return response

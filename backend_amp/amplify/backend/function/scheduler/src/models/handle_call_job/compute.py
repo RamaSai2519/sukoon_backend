@@ -27,7 +27,10 @@ class Compute:
             'user_requested': self.job.user_requested,
         }
 
-        response = requests.post(url, json=payload)
+        balance = self.common.get_balance_type(str(self.job.expert_id))
+        token = Common.get_token(str(self.job.user_id), balance)
+        headers = {'Authorization': f'Bearer {token}'}
+        response = requests.post(url, json=payload, headers=headers)
         print(response.text)
 
         return response
