@@ -113,9 +113,9 @@ class Compute:
     def check_eligibility(self) -> str:
         url = config.URL + '/actions/eligibility'
         payload = {
+            'user': str(self.user_id),
             'intent': 'perform',
-            'balance': 'paid_events',
-            'user': str(self.user_id)
+            'balance': 'paid_events'
         }
         response = requests.post(url, json=payload)
         response_dict = response.json()
