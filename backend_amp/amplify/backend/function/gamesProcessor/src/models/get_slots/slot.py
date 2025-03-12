@@ -17,7 +17,6 @@ class Slot:
         self.expert_id = expert_id
         self.ist_datetime = self.convert_to_ist()
         self.slots = self.calculate_slots() or []
-        self.timings_collection = get_timings_collection()
         self.experts_collection = get_experts_collections()
         self.schedules_collection = get_schedules_collection()
 
@@ -65,6 +64,7 @@ class Slot:
         return output_slots
 
     def slots_calculater(self, expert_id, day: str, duration=30):
+        self.timings_collection = get_timings_collection()
         timings = list(self.timings_collection.find(
             {"expert": ObjectId(expert_id)}))
 
