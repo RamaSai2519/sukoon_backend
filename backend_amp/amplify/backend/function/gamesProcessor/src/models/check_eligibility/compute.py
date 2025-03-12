@@ -16,15 +16,18 @@ class Compute:
         self.balances_collection = get_user_balances_collection()
 
     def perform(self) -> Output:
+        doc = {
+            'action': self.input.balance,
+            'user': ObjectId(self.input.user),
+            'created_at': Common.get_current_utc_time()
+        }
+        inserted_id = self.tokens_collection.insert_one(doc).inserted_id
+        doc['_id'] = inserted_id
         token = create_access_token(
-            identity={
-                'user': self.input.user,
-                'action': self.input.balance
-            },
+            identity=str(inserted_id),
             expires_delta=timedelta(minutes=5)
         )
-        doc = {'token': token}
-        self.tokens_collection.insert_one(doc)
+        doc['token'] = token
 
         return Output(
             output_message="Token generated",
@@ -33,13 +36,14 @@ class Compute:
 
     @jwt_required()
     def check_token(self) -> bool:
-        token = request.headers.get('Authorization').replace('Bearer ', '')
-        query = {'token': token}
-        if not self.tokens_collection.find_one(query):
-            return False
         try:
-            decoded = get_jwt_identity()
-            if decoded['user'] != self.input.user or decoded['action'] != self.input.balance:
+            doc_id = get_jwt_identity()
+            query = {'_id': ObjectId(doc_id)}
+            doc = self.tokens_collection.find_one(query)
+            if not doc:
+                return False
+
+            if doc['user'] != ObjectId(self.input.user) or doc['action'] != self.input.balance:
                 return False
         except Exception:
             return False
@@ -67,10 +71,10 @@ class Compute:
         if self.input.intent == "perform":
             return self.perform()
 
-        # if self.check_token() == True:
-        balance[self.input.balance] -= 1
-        self.balances_collection.update_one(query, {"$set": balance})
-        return Output(output_message="Token verified and balance updated")
+        if self.check_token() == True:
+            balance[self.input.balance] -= 1
+            self.balances_collection.update_one(query, {"$set": balance})
+            return Output(output_message="Token verified and balance updated")
 
         return Output(
             output_message="Token invalid",

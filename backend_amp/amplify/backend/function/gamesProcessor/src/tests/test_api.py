@@ -1,7 +1,9 @@
 import os
 import json
 import pytest
+from pprint import pprint
 from flask.testing import FlaskClient
+from shared.models.common import Common
 from shared.db.users import get_user_collection
 from shared.db.experts import get_experts_collections
 
@@ -47,17 +49,32 @@ class TestAPIs:
         path = test_case['path']
         params = test_case.get('params', {})
         payload = test_case.get('payload', {})
+        headers = test_case.get('headers', {})
 
         if path == '/actions/call' and method == 'POST':
             payload['user_id'] = self.get_user_id()
             payload['expert_id'] = self.get_expert_id()
 
+        paths = ['/actions/call',
+                 '/actions/upsert_event_user', '/actions/schedules']
+        if path in paths and method == 'POST':
+            balance = 'sarathi_calls'
+            if 'event' in path:
+                balance = 'free_events'
+            token = Common.get_token(payload['user_id'], balance)
+            headers['Authorization'] = f'Bearer {token}'
+
         if method == 'GET':
-            response = self.client.get(path, query_string=params)
+            response = self.client.get(
+                path, query_string=params, headers=headers)
         elif method == 'POST':
-            response = self.client.post(path, json=payload)
+            print(f"Path: {path}")
+            print(f"Payload: {payload}")
+            print(f"Headers: {headers}")
+            response = self.client.post(path, json=payload, headers=headers)
         else:
             pytest.fail(f"Unsupported method: {method}")
 
+        if response.status_code != 200:
+            pprint(response.json)
         assert response.status_code == 200
-        print(response.json['output_message'])
