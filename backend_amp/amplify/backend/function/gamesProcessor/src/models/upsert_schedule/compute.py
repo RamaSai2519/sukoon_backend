@@ -8,6 +8,7 @@ from shared.configs import CONFIG as config
 from shared.db.users import get_user_collection
 from shared.db.schedules import get_schedules_collection
 from shared.models.constants import TimeFormats, OutputStatus
+from shared.helpers.expert_availability import IsExpertAvailable
 from shared.models.interfaces import UpsertScheduleInput as Input, Output
 from shared.db.experts import get_experts_collections, get_timings_collection
 
@@ -49,57 +50,6 @@ class Compute:
         query = {"_id": ObjectId(self.input._id)}
         old_data = self.schedules_collection.find_one(query)
         return old_data
-
-    def check_expert_availability(self, expert_id: ObjectId, job_time: datetime) -> bool:
-        if self._has_schedule_conflict(expert_id, job_time) or not self._is_expert_available(expert_id, job_time):
-            return True
-        return False
-
-    def _has_schedule_conflict(self, expert_id: ObjectId, job_time: datetime) -> bool:
-        time_window = 15 * 60
-        start_time = job_time - timedelta(seconds=time_window)
-        end_time = job_time + timedelta(seconds=time_window)
-
-        query = {
-            "expert_id": expert_id,
-            "isDeleted": {"$ne": True},
-            "job_time": {"$gte": start_time, "$lte": end_time},
-            "status": {'$in': ['PENDING', 'WAPENDING']}
-        }
-        doc = self.schedules_collection.find_one(query)
-        return doc is not None
-
-    def _is_expert_available(self, expert_id: ObjectId, job_time: datetime) -> bool:
-        if not self.common.check_vacation(expert_id, job_time):
-            return False
-
-        job_time += timedelta(hours=5, minutes=30)
-        ctime = job_time.replace(minute=0)
-        hour = int(ctime.strftime(TimeFormats.HOURS_24_FORMAT).split(':')[0])
-        query = {'expert': expert_id, 'day': job_time.strftime('%A')}
-        timing: dict = self.timings_collection.find_one(query)
-        if not timing:
-            return True
-
-        start_time_one = timing.get('PrimaryStartTime')
-        end_time_one = timing.get('PrimaryEndTime')
-        start_time_two = timing.get('SecondaryStartTime')
-        end_time_two = timing.get('SecondaryEndTime')
-        all_fields = [start_time_one, end_time_one,
-                      start_time_two, end_time_two]
-        if all(field is None for field in all_fields) or all(field == '' for field in all_fields):
-            return False
-        return self._is_within_timing(hour, start_time_one, end_time_one) or self._is_within_timing(hour, start_time_two, end_time_two)
-
-    def _is_within_timing(self, hour: int, start_time: str, end_time: str) -> bool:
-        if start_time and end_time and start_time != '' and end_time != '':
-            try:
-                start_hour = int(start_time.split(':')[0])
-                end_hour = int(end_time.split(':')[0])
-            except Exception:
-                return False
-            return start_hour <= hour < end_hour
-        return False
 
     def check_user_availability(self, user_id: ObjectId, job_time: datetime) -> bool:
         time_window = 15 * 60
@@ -152,7 +102,8 @@ class Compute:
                 self.input.job_time, TimeFormats.AWS_TIME_FORMAT)
             job_time = job_time.replace(tzinfo=pytz.utc)
 
-            if self.check_expert_availability(expert_id, job_time):
+            expert_availability = IsExpertAvailable()
+            if expert_availability.check_expert_availability(expert_id, job_time):
                 return Output(
                     output_status=OutputStatus.FAILURE,
                     output_message="Expert is not available at this time, please recheck expert timings and upcoming schedules"
