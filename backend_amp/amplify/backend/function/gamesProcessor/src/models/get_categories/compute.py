@@ -12,7 +12,7 @@ class Compute:
         self.collection = get_categories_collection()
 
     def get_categories(self) -> Output:
-        projection = {"_id": 0, "name": 1}
+        projection = {"name": 1}
         categories = list(self.collection.find({}, projection))
 
         return Output(
