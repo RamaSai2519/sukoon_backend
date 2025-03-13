@@ -93,7 +93,10 @@ class Compute:
             user = self.__format__(record)
             inserted_id = self.insert_user(Common.jsonify(user))
 
-            self.insert_meta(inserted_id, record)
+            try:
+                self.insert_meta(inserted_id, record)
+            except:
+                pass
             success += 1
 
         return Output(
