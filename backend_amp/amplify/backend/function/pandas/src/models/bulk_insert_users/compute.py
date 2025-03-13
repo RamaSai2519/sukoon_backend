@@ -45,12 +45,20 @@ class Compute:
         try:
             user_joined_date = datetime.strptime(
                 str(record["Registration Time"]), "%m/%d/%Y %I:%M:%S %p")
+            user['createdDate'] = user_joined_date
         except:
-            user_joined_date = datetime.now()
+            pass
 
-        user['createdDate'] = user_joined_date
+        try:
+            birthDate = datetime.strptime(
+                str(record['date_of_birth']), "%m/%d/%Y")
+            user['birthDate'] = birthDate
+        except:
+            pass
+
         user["phoneNumber"] = str(record["Phone"])
         user['refSource'] = str(record.get("ref", "")).strip()
+        user['city'] = str(record.get("city", "")).strip()
 
         return user
 
