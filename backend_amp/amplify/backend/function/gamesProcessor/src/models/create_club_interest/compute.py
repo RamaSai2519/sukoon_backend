@@ -1,6 +1,5 @@
 from shared.db.users import get_club_interests_collection, get_user_collection
 from shared.models.interfaces import CreateClubInterestInput as Input, Output, ClubInterest
-from shared.models.constants import OutputStatus
 from shared.models.common import Common
 
 
@@ -11,16 +10,12 @@ class Compute:
         self.collection = get_club_interests_collection()
 
     def compute(self) -> Output:
-        club_interest = ClubInterest(
-            userId=self.input.user_id,
-            isInterested=self.input.isInterested,
-        )
+        club_interest = ClubInterest(self.input.__dict__)
         data = club_interest.__dict__
-        data = {k: v for k, v in data.items() if v is not None}
+        data = Common.filter_none_values(data)
         self.collection.insert_one(data)
 
         return Output(
-            output_status=OutputStatus.SUCCESS,
             output_message="Interest created successfully",
             output_details=Common.jsonify(data)
         )
