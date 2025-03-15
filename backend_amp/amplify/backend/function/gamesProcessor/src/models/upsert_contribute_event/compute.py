@@ -2,7 +2,6 @@ import random
 import string
 from bson import ObjectId
 from shared.models.common import Common
-from shared.models.constants import OutputStatus
 from shared.db.events import get_contribute_events_collection
 from shared.models.interfaces import ContributeEvent as Input, Output
 
@@ -36,10 +35,10 @@ class Compute:
                 ]
 
         if new_event:
-            event_data["createdAt"] = self.common.current_time
             event_data["slug"] = self.generate_slug()
+            event_data["createdAt"] = self.common.current_time
         event_data["updatedAt"] = self.common.current_time
-        event_data = {k: v for k, v in event_data.items() if v is not None}
+        event_data = Common.filter_none_values(event_data)
         return event_data
 
     def compute(self) -> Output:
@@ -59,6 +58,5 @@ class Compute:
 
         return Output(
             output_details=Common.jsonify(event_data),
-            output_status=OutputStatus.SUCCESS,
             output_message=message
         )

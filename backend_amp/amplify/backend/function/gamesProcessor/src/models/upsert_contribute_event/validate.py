@@ -6,6 +6,11 @@ class Validator:
         self.input = input
 
     def validate_input(self) -> tuple:
+        if self.input.isDeleted == True and not self.input.slug:
+            return False, "slug is required to delete"
+        elif self.input.isDeleted == True:
+            return True, ""
+
         mandatory_fields = ["name", "description", "validUpto", "image",
                             "locationType", "phoneNumber", "company"]
         if not self.input.slug:
