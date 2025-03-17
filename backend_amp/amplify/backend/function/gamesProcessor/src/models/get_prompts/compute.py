@@ -10,7 +10,7 @@ class Compute:
         self.prompt_proposals_collection = get_prompt_proposals_collection()
 
     def compute(self) -> Output:
-        prompts = self.prompt_proposals_collection.find()
+        prompts = self.prompt_proposals_collection.find().sort('context', 1)
         if not prompts:
             return Output(
                 output_details={},
