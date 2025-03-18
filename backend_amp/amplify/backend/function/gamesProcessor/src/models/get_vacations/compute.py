@@ -1,5 +1,5 @@
 from shared.db.experts import get_vacations_collection, get_experts_collections
-from shared.models.interfaces import GetUsersInput as Input, Output
+from shared.models.interfaces import GetVacationsInput as Input, Output
 from shared.models.common import Common
 
 
@@ -18,16 +18,14 @@ class Compute:
         query = Common.get_filter_query(
             self.input.filter_value, self.input.filter_value
         )
-        if self.input.filter_field == 'isDeleted':
-            query = Common.get_filter_query(
-                self.input.filter_value, self.input.filter_value, 'bool'
-            )
         if self.input.filter_field == 'user':
             query = Common.get_filter_query(
                 'name', self.input.filter_value
             )
             experts = self.experts_collection.distinct('_id', query)
             query['user'] = {'$in': experts}
+
+        query['isDeleted'] = False if self.input.deleted == 'false' else True
 
         total = self.collection.count_documents(query)
         if total <= 10:
