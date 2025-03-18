@@ -59,6 +59,9 @@ class Compute:
             user_data = self.defaults(user_data)
         user_data.pop('refCode', None)
 
+        if user_data.get('birthDate') in ['', None] and self.input.opt_age:
+            user_data['birthDate'] = Common.calculate_dob(self.input.opt_age)
+
         user_data['profileCompleted'] = False
         man_fields = ['birthDate', 'city', 'name']
         if all(user_data.get(field) for field in man_fields):
