@@ -8,7 +8,6 @@ class Validator:
 
     def validate_mandatory_fields(self) -> tuple:
         required_fields = {
-            "slug": self.input.slug,
             "repeat": self.input.repeat,
             "imageUrl": self.input.imageUrl,
             "validUpto": self.input.validUpto,
@@ -50,8 +49,5 @@ class Validator:
         is_valid, message = self.validate_multiselect_fields()
         if not is_valid:
             return is_valid, message
-
-        if len(self.input.slug) > 3:
-            return False, "slug should be less than 3 characters"
 
         return True, ""
