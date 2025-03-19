@@ -105,7 +105,6 @@ class Compute:
             expert_availability = IsExpertAvailable()
             if expert_availability.check_expert_availability(expert_id, job_time):
                 return Output(
-                    output_status=OutputStatus.FAILURE,
                     output_message="Expert is not available at this time, please recheck expert timings and upcoming schedules"
                 )
 
