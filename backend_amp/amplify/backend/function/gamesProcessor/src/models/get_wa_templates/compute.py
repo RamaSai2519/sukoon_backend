@@ -1,7 +1,7 @@
 from bson import ObjectId
 from shared.models.common import Common
 from shared.db.whatsapp import get_whatsapp_templates_collection
-from shared.models.interfaces import GetWaRefsInput as Input, Output
+from shared.models.interfaces import GetWaTemplatesInput as Input, Output
 
 
 class Compute:
@@ -14,6 +14,10 @@ class Compute:
             self.input.filter_field, self.input.filter_value)
         if self.input.filter_field == '_id':
             query = {'_id': ObjectId(self.input.filter_value)}
+
+        if self.input.app != 'false':
+            query['show_in_app'] = True
+
         total = self.collection.count_documents(query)
         if total <= 10:
             self.input.page = 1
