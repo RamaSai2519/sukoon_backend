@@ -13,7 +13,7 @@ class Compute:
         self.callId = self.input.call_id
         self.collection = get_calls_collection()
 
-    def find_call(self, call_oid: str) -> dict:
+    def find_call(self, call_oid: str) -> Call:
         query = {'_id': ObjectId(call_oid)}
         call = self.collection.find_one(query)
         call = Common.clean_dict(call, Call)
@@ -45,6 +45,15 @@ class Compute:
             return Output(
                 output_status=OutputStatus.FAILURE,
                 output_message="Call not found"
+            )
+
+        if call.status in [
+            'missed', 'failed',
+            'successful', 'inadequate'
+        ]:
+            return Output(
+                output_status=OutputStatus.FAILURE,
+                output_message="Call status cannot be updated"
             )
 
         call_message = self.update_call(call)
