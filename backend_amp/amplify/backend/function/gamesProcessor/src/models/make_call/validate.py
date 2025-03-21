@@ -173,8 +173,9 @@ class Validator:
             )
             return False, 'User is busy'
 
-        if user_meta and user_meta.get('userStatus') in not_interested_statuses:
-            return False, 'User is not interested'
+        if self.input.user_requested is not None:
+            if user_meta and user_meta.get('userStatus') in not_interested_statuses:
+                return False, 'User is not interested'
 
         if user.get('isBlocked', False) is True:
             return False, 'User is blocked'
