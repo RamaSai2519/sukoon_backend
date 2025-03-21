@@ -58,12 +58,12 @@ class Compute:
                 output_message="User not found",
                 output_status=OutputStatus.FAILURE
             )
-        # req_balance = balance[self.input.balance]
-        # if req_balance <= 0:
-        #     return Output(
-        #         output_message="Insufficient balance",
-        #         output_status=OutputStatus.FAILURE
-        #     )
+        req_balance = balance[self.input.balance]
+        if req_balance <= 0:
+            return Output(
+                output_message="Insufficient balance",
+                output_status=OutputStatus.FAILURE
+            )
 
         if self.input.intent == "check":
             return Output(output_message="Eligible")
