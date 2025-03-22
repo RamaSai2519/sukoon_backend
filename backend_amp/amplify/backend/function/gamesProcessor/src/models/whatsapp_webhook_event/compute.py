@@ -205,12 +205,13 @@ class Compute:
 
         phoneNumber = from_number[2:]
         user = self.get_user_id_from_number(phoneNumber)
-        user_id = user.get('_id', None) if user else None
-        name = user.get('name', 'Unknown') if user else 'Unknown'
+        user_id = user.get('_id') if user else None
         if not user_id:
             refSource = self.determine_refSource(body)
             user_id = self.create_lead(phoneNumber, refSource)
+            user = self.get_user_id_from_number(phoneNumber)
 
+        name = user.get('name', 'Unknown')
         if user.get('isBlocked', False) == False:
             static_reply = self.handle_static_replies(user, body)
             if static_reply:
