@@ -1,3 +1,4 @@
+from datetime import timedelta
 from shared.models.common import Common
 from shared.helpers.excel import ExcelS3Helper
 from shared.models.constants import OutputStatus
@@ -62,6 +63,8 @@ class Compute:
         return {"data": calls}
 
     def _get_graph_calls(self) -> dict:
+        self.query['initiatedTime'] = {'$gte': Common.get_current_utc_time() -
+                                       timedelta(days=360)}
         calls = self.common.get_calls(req_names=False, query=self.query)
         return {"data": calls}
 
