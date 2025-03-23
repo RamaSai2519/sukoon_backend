@@ -14,6 +14,8 @@ class Compute:
         return self.collection.find_one(query)
 
     def update_doc(self, doc: dict) -> dict:
+        if self.input.fcm_token in [token['token'] for token in doc['tokens']]:
+            return doc
         if len(doc['tokens']) >= 5:
             doc['tokens'].pop(0)
         doc['tokens'].append({

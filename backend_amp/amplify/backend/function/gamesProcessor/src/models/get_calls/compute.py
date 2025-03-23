@@ -108,6 +108,5 @@ class Compute:
 
         return Output(
             output_details=calls,
-            output_status=OutputStatus.SUCCESS,
             output_message="Fetched calls successfully"
         )

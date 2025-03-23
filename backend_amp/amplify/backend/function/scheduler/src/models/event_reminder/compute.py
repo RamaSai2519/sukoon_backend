@@ -41,10 +41,9 @@ class Compute:
         response = requests.post(url, json=payload)
         return response.text
 
-    def send_notification(self, reminder: dict, token: str) -> str:
+    def send_notification(self, reminder: dict, tokens: list) -> None:
         url = config.URL + "/actions/push"
         payload = {
-            'token': token,
             'type_': 'user',
             'sound': 'bell',
             'app_type': 'user',
@@ -53,24 +52,24 @@ class Compute:
             'title': f'Join Here: {reminder["meeting_link"]}',
             'body': f'{reminder["event_name"]} is starting in {self.get_difference(reminder["validUpto"])} minutes',
         }
-        response = requests.post(url, json=payload)
-        return response.text
+        for token in tokens:
+            payload['token'] = token
+            requests.post(url, json=payload)
 
     def get_fcm_token(self, phoneNumber: str) -> str:
         user = self.users_collection.find_one({'phoneNumber': phoneNumber})
         user_id = user['_id']
-        query = {'userId': str(user_id)}
-        tokens = self.tokens_collection.find(
-            query).sort('createdAt', -1).limit(1)
-        tokens = list(tokens) if tokens else []
-        if tokens != []:
-            return tokens[0]['fcmToken']
-        return None
+        query = {'user': user_id}
+        doc = self.tokens_collection.find_one(query)
+        if not doc:
+            return None
+        tokens = [token['token'] for token in doc['tokens']]
+        return tokens
 
     def job(self, reminder: dict) -> bool:
-        token = self.get_fcm_token(reminder['user_phone'])
-        if token:
-            self.send_notification(reminder, token)
+        tokens = self.get_fcm_token(reminder['user_phone'])
+        if tokens:
+            self.send_notification(reminder, tokens)
         self.send_whatsapp(reminder)
         return True
 
