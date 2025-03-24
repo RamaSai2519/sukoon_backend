@@ -207,9 +207,6 @@ class Compute:
                     # 'image_link': 'https://sukoon-media.s3.ap-south-1.amazonaws.com/wa_promo_image.jpeg'
                 }
             }
-            if '_SIGNUP_TEMPLATE_KIDS' in template_name:
-                payload['parameters'][
-                    'custom_link'] = f'https://sukoonunlimited.com/parent?id={phone_number}'
             response = self.send_wa_message(payload)
             return response
         return None
