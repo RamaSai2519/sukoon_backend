@@ -47,6 +47,7 @@ class Compute:
 
             internal_query = self.common.get_internal_exclude_query()
             query = {**query, **internal_query}
+            query['status'] = 'successful'
             calls = self.calls_collection.count_documents(query)
             cache_doc['fc_done'] = 'Yes' if calls >= 1 else 'No'
 
