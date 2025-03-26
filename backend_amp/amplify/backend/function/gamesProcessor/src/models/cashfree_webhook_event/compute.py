@@ -154,7 +154,7 @@ class Compute:
                 'speakers_name': self.event.get("guestSpeaker"),
                 'event_name': self.event.get("mainTitle"),
                 'image_link': self.event.get("imageUrl"),
-                'webinar_link': self.event.get("meetingLink"),
+                'webinar_link': f'https://event.sukoonunlimited.com/d/l?slug={self.event.get("slug")}',
                 'phone_number': '+91' + customer_care_number,
                 'whatsapp_community_link': "https://sukoonunlimited.com/wa-join-community"
             }, 'skip_check': True

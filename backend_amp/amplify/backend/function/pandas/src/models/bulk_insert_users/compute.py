@@ -22,10 +22,10 @@ class Compute:
         if len(str(record["Phone"])) != 10:
             return False, f"Phone number {record['Phone']} is invalid"
 
-        query = {"phoneNumber": str(record["Phone"])}
-        existing_user = self.users_collection.find_one(query)
-        if existing_user:
-            return False, f"User with phone number {record['Phone']} already exists"
+        # query = {"phoneNumber": str(record["Phone"])}
+        # existing_user = self.users_collection.find_one(query)
+        # if existing_user:
+        #     return False, f"User with phone number {record['Phone']} already exists"
 
         return True, ""
 
