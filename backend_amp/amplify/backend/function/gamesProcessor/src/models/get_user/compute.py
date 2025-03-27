@@ -127,7 +127,7 @@ class Compute:
             if user_ids != []:
                 query['_id'] = {'$in': user_ids}
             users = self.helper.get_users(
-                self.input.size, self.input.page, query)
+                self.input.size, self.input.page, query, show_payments=True if self.input.show_payments == 'true' else False)
 
         total = self.collection.count_documents(query)
 
