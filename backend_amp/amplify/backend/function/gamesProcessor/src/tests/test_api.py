@@ -2,6 +2,7 @@ import os
 import json
 import pytest
 from flask.testing import FlaskClient
+from shared.models.common import Common
 from shared.db.users import get_user_collection
 from shared.db.experts import get_experts_collections
 
@@ -37,6 +38,12 @@ class TestAPIs:
         expert = self.experts_collection.find_one(query)
         return str(expert['_id'])
 
+    def get_user_token(self, expert_id: str, user_id: str) -> str:
+        common = Common()
+        balance = common.get_balance_type(expert_id)
+        token = Common.get_token(user_id, balance)
+        return token
+
     @pytest.fixture(autouse=True)
     def setup(self, client: FlaskClient) -> None:
         self.client = client
@@ -47,17 +54,23 @@ class TestAPIs:
         path = test_case['path']
         params = test_case.get('params', {})
         payload = test_case.get('payload', {})
+        headers = test_case.get('headers', {})
 
         if path == '/actions/call' and method == 'POST':
-            payload['user_id'] = self.get_user_id()
-            payload['expert_id'] = self.get_expert_id()
+            user_id = self.get_user_id()
+            expert_id = self.get_expert_id()
+            payload['user_id'] = user_id
+            payload['expert_id'] = expert_id
+            token = self.get_user_token(expert_id, user_id)
+            headers['Authorization'] = f'Bearer {token}'
 
         if method == 'GET':
-            response = self.client.get(path, query_string=params)
+            response = self.client.get(
+                path, query_string=params, headers=headers)
         elif method == 'POST':
-            response = self.client.post(path, json=payload)
+            response = self.client.post(path, json=payload, headers=headers)
         else:
             pytest.fail(f"Unsupported method: {method}")
 
-        assert response.status_code == 200
         print(response.json['output_message'])
+        assert response.status_code == 200
