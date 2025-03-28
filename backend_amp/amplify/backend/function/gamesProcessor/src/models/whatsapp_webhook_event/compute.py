@@ -191,19 +191,23 @@ class Compute:
         if not body:
             context_id, screen_0_recommend_0, screen_0_Rate_your_experience_with_us_0 = self._get_feedback_values()
             if screen_0_recommend_0 or screen_0_Rate_your_experience_with_us_0:
+                if screen_0_Rate_your_experience_with_us_0 and 'excellent' in screen_0_Rate_your_experience_with_us_0.lower():
+                    self.reply_to_event_feedback(from_number[2:])
                 query = {'messageId': context_id}
                 message = self.notifications_collection.find_one(query)
                 if message:
-                    request_meta = json.loads(message.get('requestMeta', ''))
+                    try:
+                        request_meta = json.loads(
+                            message.get('requestMeta', json.dumps({})))
+                    except json.JSONDecodeError:
+                        request_meta = {}
                     sarathi_id = request_meta.get('sarathiId', '')
                     user_id = request_meta.get('userId', '')
                     call_id = request_meta.get('callId', '')
                     self._create_user_feedback_message(
                         screen_0_recommend_0 or screen_0_Rate_your_experience_with_us_0, user_id, sarathi_id, call_id)
-                    if screen_0_recommend_0:
-                        self._reply_to_feedback(from_number[2:], sarathi_id)
-                    if screen_0_Rate_your_experience_with_us_0 and 'excellent' in screen_0_Rate_your_experience_with_us_0.lower():
-                        self.reply_to_event_feedback(from_number[2:])
+                if screen_0_recommend_0:
+                    self._reply_to_feedback(from_number[2:], sarathi_id)
             else:
                 message_id, status = self._get_status_and_message_id_value()
                 if message_id and status:

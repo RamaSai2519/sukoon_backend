@@ -44,8 +44,15 @@ class Compute:
         return True
 
     def compute(self) -> Output:
-        if self.input.event_ended:
+        if self.input.event_ended == True:
             response = self.queue_wa_msgs_for_joined_users()
+            if not response:
+                return Output(
+                    output_status=OutputStatus.FAILURE,
+                    output_message="Failed to queue wa msgs",
+                )
+        else:
+            response = self.remind_users()
             if not response:
                 return Output(
                     output_status=OutputStatus.FAILURE,
