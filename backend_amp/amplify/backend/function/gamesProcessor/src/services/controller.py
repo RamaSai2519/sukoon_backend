@@ -19,6 +19,6 @@ from services.src.game import CardGameService, ScoreUpdaterService, CalculateWin
 from services.src.call import CallWebhookService, CallService, EscalationService, SCallWebhookService, SCallLivehookService, SCallInhookService
 from services.src.user_referral import UserReferralService, UpsertOfferService, PRCService, ValidatePRCService, PRCTracksService, AdClickService
 from services.src.expert import ExpertService, ApplicantService, SlotsService, TimingService, CategoryService, AgentMetaService, UserVacationService
-from services.src.events import UpsertEventsService, ListEventsService, ListEventUsersService, UpsertContributeEventService, CreateContributeInterestService
 from services.src.user import UpsertEventUserService, UserService, RemarkService, EngagementDataService, PhoneConfigService, UserStatusOptionsService, RedeemOfferService
 from services.src.whatsapp import WhatsappMessageService, WhatsappWebhookService, WhatsappHistoryService, AdminWhatsappService, WhatsappRefService, WhatsappTemplateService
+from services.src.events import UpsertEventsService, ListEventsService, ListEventUsersService, UpsertContributeEventService, CreateContributeInterestService, EventWebhookService

@@ -4,11 +4,12 @@ from flask import request
 from flask_restful import Resource
 from shared.models.common import Common
 from models.get_events.main import ListEvents
+from models.event_webhook.main import EventWebhook
 from models.get_event_users.main import ListEventUsers
 from models.upsert_event_config.main import UpsertEvent
 from models.upsert_contribute_event.main import UpsertContributeEvent
 from models.create_contribute_interest.main import CreateContributeInterest
-from shared.models.interfaces import Event, GetEventsInput, GetEventUsersInput, ContributeEvent, CreateContributeInterestInput, Output
+from shared.models.interfaces import Event, GetEventsInput, GetEventUsersInput, ContributeEvent, CreateContributeInterestInput, Output, EventWebhookInput
 
 
 class UpsertEventsService(Resource):
@@ -62,6 +63,17 @@ class CreateContributeInterestService(Resource):
         input = json.loads(request.get_data())
         input = CreateContributeInterestInput(**input)
         output = CreateContributeInterest(input).process()
+        output = dataclasses.asdict(output)
+
+        return output
+
+
+class EventWebhookService(Resource):
+
+    def post(self) -> Output:
+        input = json.loads(request.get_data())
+        input = EventWebhookInput(**input)
+        output = EventWebhook(input).process()
         output = dataclasses.asdict(output)
 
         return output

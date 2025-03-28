@@ -110,6 +110,7 @@ class Compute:
     def _get_feedback_values(self) -> tuple:
         context_id = None
         screen_0_recommend_0 = None
+        screen_0_Rate_your_experience_with_us_0 = None
 
         try:
             for entry in self.input.entry:
@@ -127,14 +128,17 @@ class Compute:
                             response_data = json.loads(response_json)
                             screen_0_recommend_0 = response_data.get(
                                 'screen_0_recommend_0', None)
+                            if not screen_0_recommend_0:
+                                screen_0_Rate_your_experience_with_us_0 = response_data.get(
+                                    'screen_0_Rate_your_experience_with_us_0', None)
                         except json.JSONDecodeError:
                             print('Error decoding JSON response.')
 
-                        if context_id and screen_0_recommend_0:
+                        if context_id and (screen_0_recommend_0 or screen_0_Rate_your_experience_with_us_0):
                             break
         except Exception as e:
             print(f'An error occurred: {e}')
-        return context_id, screen_0_recommend_0
+        return context_id, screen_0_recommend_0, screen_0_Rate_your_experience_with_us_0
 
     def chat(self, phoneNumber: str, body: str) -> str:
         url = config.ARK_URL + '/ark'
@@ -177,11 +181,16 @@ class Compute:
         template_name = 'SARATHI_SUCCESSFUL_CALL'
         self._send_whatsapp_message(parameters, phoneNumber, template_name)
 
+    def reply_to_event_feedback(self, phoneNumber: str) -> None:
+        params = {}
+        template_name = 'REFERRAL_TEMPLATE'
+        self._send_whatsapp_message(params, phoneNumber, template_name)
+
     def compute(self) -> Output:
         body, from_number = self._get_message_body_and_phoneNumber_from_message()
         if not body:
-            context_id, screen_0_recommend_0 = self._get_feedback_values()
-            if screen_0_recommend_0:
+            context_id, screen_0_recommend_0, screen_0_Rate_your_experience_with_us_0 = self._get_feedback_values()
+            if screen_0_recommend_0 or screen_0_Rate_your_experience_with_us_0:
                 query = {'messageId': context_id}
                 message = self.notifications_collection.find_one(query)
                 if message:
@@ -190,8 +199,11 @@ class Compute:
                     user_id = request_meta.get('userId', '')
                     call_id = request_meta.get('callId', '')
                     self._create_user_feedback_message(
-                        screen_0_recommend_0, user_id, sarathi_id, call_id)
-                    self._reply_to_feedback(from_number[2:], sarathi_id)
+                        screen_0_recommend_0 or screen_0_Rate_your_experience_with_us_0, user_id, sarathi_id, call_id)
+                    if screen_0_recommend_0:
+                        self._reply_to_feedback(from_number[2:], sarathi_id)
+                    if screen_0_Rate_your_experience_with_us_0 and 'excellent' in screen_0_Rate_your_experience_with_us_0.lower():
+                        self.reply_to_event_feedback(from_number[2:])
             else:
                 message_id, status = self._get_status_and_message_id_value()
                 if message_id and status:
