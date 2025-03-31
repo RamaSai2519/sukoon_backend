@@ -27,7 +27,7 @@ class Compute:
     def remind_users(self) -> bool:
         payload = {
             'action': 'send',
-            'event_joined': True,
+            'event_joined': False,
             'initiatedBy': 'webhook',
             'event_id': self.input.slug,
             'template': 'EVENT_REMINDER_NOT_JOINED',
