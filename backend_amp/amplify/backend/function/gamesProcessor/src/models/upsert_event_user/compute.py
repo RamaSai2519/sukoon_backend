@@ -116,7 +116,8 @@ class Compute:
                 'speakers_name': event.guestSpeaker,
                 'event_name': event.mainTitle,
                 'image_link': event.imageUrl,
-                'webinar_link': f'https://event.sukoonunlimited.com/d/l?slug={event.slug}',
+                # 'webinar_link': f'https://event.sukoonunlimited.com/d/l?slug={event.slug}',
+                'webinar_link': event.meetingLink,
                 'phone_number': '+91' + customer_care_number,
                 'whatsapp_community_link': "https://sukoonunlimited.com/wa-join-community"
             },
