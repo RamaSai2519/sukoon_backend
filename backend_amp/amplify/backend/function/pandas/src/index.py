@@ -15,7 +15,6 @@ api = Api(app)
 JWTManager(app)
 CORS(app, supports_credentials=True)
 
-api.add_resource(BulkInsertUsersService, '/pandas/bulk_users')
 api.add_resource(RecommendExpertService, '/pandas/recommend_expert')
 
 
@@ -24,4 +23,4 @@ def handler(event, context):
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=8080)
+    app.run(debug=True, port=8082)
