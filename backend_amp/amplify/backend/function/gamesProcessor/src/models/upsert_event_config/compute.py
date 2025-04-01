@@ -73,7 +73,7 @@ class Compute:
             }
         ]
         for payload in payloads:
-            response = requests.post(url, json=payload)
+            response = requests.post(url, json=Common.jsonify(payload))
             response_dict = response.json()
             print(f"Webhook scheduled: {response_dict}")
 
