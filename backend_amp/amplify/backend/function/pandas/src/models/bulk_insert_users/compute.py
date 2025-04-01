@@ -19,7 +19,7 @@ class Compute:
         return data.to_dict(orient='records')
 
     def validate(self, record: dict) -> tuple:
-        if len(str(record["Phone"])) != 10:
+        if len(str(record["Phone"]).replace('.0', '')) != 10:
             return False, f"Phone number {record['Phone']} is invalid"
 
         # query = {"phoneNumber": str(record["Phone"])}
@@ -71,11 +71,11 @@ class Compute:
 
     def insert_meta(self, user_id: str, record: dict) -> None:
         meta = {
+            'remarks': '',
             'user': user_id,
+            'userStatus': '',
             'context': str(record.get("Webinar", "")).strip(),
             'source': str(record.get("ref", "")).strip(),
-            'userStatus': '',
-            'remarks': '',
         }
         insertion = self.meta_collection.insert_one(meta)
         return insertion.inserted_id
