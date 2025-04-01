@@ -1,7 +1,11 @@
 import random
 import string
+import requests
+import threading
 from bson import ObjectId
+from datetime import timedelta
 from shared.models.common import Common
+from shared.configs import CONFIG as config
 from shared.db.events import get_events_collection
 from shared.models.interfaces import Event as Input, Output
 
@@ -23,8 +27,8 @@ class Compute:
                 return slug
 
     def prep_data(self, event_data: dict, new_event=True):
-        date_fields = ["validUpto",
-                       "registrationAllowedTill", "startEventDate"]
+        date_fields = ['validUpto',
+                       'registrationAllowedTill', 'startEventDate']
         for field in date_fields:
             event_data[field] = Common.string_to_date(event_data, field)
 
@@ -46,6 +50,33 @@ class Compute:
         event_data = Common.filter_none_values(event_data)
         return event_data
 
+    def schedule_webhooks(self, event_data: dict):
+        url = 'https://americano.sukoonunlimited.com/time/schedule'
+        payloads = [
+            {
+                'apiUrl': config.URL + '/actions/event_webhook',
+                'runAt': event_data['startEventDate'] + timedelta(minutes=1),
+                'body': {
+                    'event_ended': False,
+                    'slug': event_data['slug'],
+                    'main_title': event_data['mainTitle'],
+                }
+            },
+            {
+                'apiUrl': config.URL + '/actions/event_webhook',
+                'runAt': event_data['startEventDate'] + timedelta(minutes=1),
+                'body': {
+                    'event_ended': True,
+                    'slug': event_data['slug'],
+                    'main_title': event_data['mainTitle'],
+                }
+            }
+        ]
+        for payload in payloads:
+            response = requests.post(url, json=payload)
+            response_dict = response.json()
+            print(f"Webhook scheduled: {response_dict}")
+
     def compute(self) -> Output:
         event_data = self.input.__dict__
 
@@ -59,6 +90,9 @@ class Compute:
         else:
             event_data = self.prep_data(event_data)
             self.events_collection.insert_one(event_data)
+            threading.Thread(
+                target=self.schedule_webhooks, args=(event_data,)
+            ).start()
             message = "Successfully created event"
 
         return Output(
