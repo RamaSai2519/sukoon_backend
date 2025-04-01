@@ -182,7 +182,14 @@ class Compute:
         self._send_whatsapp_message(parameters, phoneNumber, template_name)
 
     def reply_to_event_feedback(self, phoneNumber: str) -> None:
-        params = {}
+        query = {'phoneNumber': phoneNumber}
+        user = self.users_collection.find_one(query, {'refCode': 1})
+        if not user:
+            return
+        refCode = user.get('refCode')
+        if not refCode:
+            return
+        params = {'link': f'https://www.sukoonunlimited.com/?utm_source={refCode}'}
         template_name = 'REFERRAL_TEMPLATE'
         self._send_whatsapp_message(params, phoneNumber, template_name)
 

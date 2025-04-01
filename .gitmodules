@@ -1,6 +1,3 @@
-[submodule "backend_amp/amplify/backend/function/pandas/src/shared"]
-	path = backend_amp/amplify/backend/function/pandas/src/shared
-	url = https://github.com/SukoonUnlimited/shared_sukoon.git
 [submodule "backend_amp/amplify/backend/function/scheduler/src/shared"]
 	path = backend_amp/amplify/backend/function/scheduler/src/shared
 	url = https://github.com/SukoonUnlimited/shared_sukoon.git
