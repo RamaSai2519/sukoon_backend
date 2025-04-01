@@ -45,7 +45,7 @@ class Compute:
         except:
             pass
 
-        user["phoneNumber"] = str(record["Phone"])
+        user["phoneNumber"] = str(record["Phone"]).replace('.0', '')
         user['refSource'] = str(record.get("ref", "")).strip()
         user['city'] = str(record.get("city", "")).strip()
 
