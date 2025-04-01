@@ -22,7 +22,7 @@ class Compute:
         user = User(
             isBusy=False, active=True, profileCompleted=False
         ).__dict__
-        user = {k: v for k, v in user.items() if v is not None}
+        user = Common.filter_none_values(user)
         return user
 
     def __format__(self, record: dict) -> dict:

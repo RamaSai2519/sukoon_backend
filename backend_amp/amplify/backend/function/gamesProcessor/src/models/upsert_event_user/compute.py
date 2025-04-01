@@ -49,7 +49,7 @@ class Compute:
         input = self.input
         event_user = EventUser(
             eventName=input.eventName or "", advSeenOn=input.advSeenOn or "",
-            userId=user._id, name=user.name, city=self.input.city or user.city, email=user.email,
+            userId=user._id, name=user.name or self.input.name, city=self.input.city or user.city, email=user.email,
             dob=user.birthDate, phoneNumber=user.phoneNumber, source=input.source or "",
             isUserPaid=input.isUserPaid or False, initFrom=input.initFrom
         )
