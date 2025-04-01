@@ -18,17 +18,6 @@ class Compute:
         data = pd.read_csv(self.input.file_url)
         return data.to_dict(orient='records')
 
-    def validate(self, record: dict) -> tuple:
-        if len(str(record["Phone"]).replace('.0', '')) != 10:
-            return False, f"Phone number {record['Phone']} is invalid"
-
-        # query = {"phoneNumber": str(record["Phone"])}
-        # existing_user = self.users_collection.find_one(query)
-        # if existing_user:
-        #     return False, f"User with phone number {record['Phone']} already exists"
-
-        return True, ""
-
     def get_default(self) -> dict:
         user = User(
             isBusy=False, active=True, profileCompleted=False
@@ -85,11 +74,6 @@ class Compute:
         success = 0
 
         for record in data:
-            isvalid, message = self.validate(record)
-            if not isvalid:
-                print(message)
-                continue
-
             user = self.__format__(record)
             inserted_id = self.insert_user(Common.jsonify(user))
 
