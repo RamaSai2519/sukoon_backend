@@ -52,10 +52,11 @@ class Compute:
 
     def schedule_webhooks(self, event_data: dict):
         url = 'https://americano.sukoonunlimited.com/time/schedule'
+        start_time = Common.string_to_date(event_data, 'startEventDate')
         payloads = [
             {
                 'apiUrl': config.URL + '/actions/event_webhook',
-                'runAt': event_data['startEventDate'] + timedelta(minutes=1),
+                'runAt': start_time + timedelta(minutes=10),
                 'body': {
                     'event_ended': False,
                     'slug': event_data['slug'],
@@ -64,7 +65,7 @@ class Compute:
             },
             {
                 'apiUrl': config.URL + '/actions/event_webhook',
-                'runAt': event_data['startEventDate'] + timedelta(minutes=1),
+                'runAt': start_time + timedelta(minutes=95),
                 'body': {
                     'event_ended': True,
                     'slug': event_data['slug'],
@@ -73,7 +74,8 @@ class Compute:
             }
         ]
         for payload in payloads:
-            response = requests.post(url, json=Common.jsonify(payload))
+            payload = Common.jsonify(payload)
+            response = requests.post(url, json=payload)
             response_dict = response.json()
             print(f"Webhook scheduled: {response_dict}")
 
