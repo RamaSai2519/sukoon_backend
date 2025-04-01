@@ -150,7 +150,7 @@ class Compute:
             event_message = self.create_message(False, "Event ")
             event = self.find_event()
 
-            if event.isPremiumUserOnly == False:
+            if event.isPremiumUserOnly == False and self.input.send_wa == True:
                 confirmation_message = self.send_confirmation(user, event)
         else:
             event_user = self.prep_data(asdict(self.input), asdict(event_user))
