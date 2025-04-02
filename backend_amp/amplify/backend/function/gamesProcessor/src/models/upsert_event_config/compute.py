@@ -3,6 +3,7 @@ import string
 import requests
 import threading
 from bson import ObjectId
+from pprint import pprint
 from datetime import timedelta
 from shared.models.common import Common
 from shared.configs import CONFIG as config
@@ -59,7 +60,7 @@ class Compute:
                 'runAt': start_time + timedelta(minutes=10),
                 'body': {
                     'event_ended': False,
-                    'slug': event_data['slug'],
+                    'slug': event_data['slug'] or 'schedule_webhooks',
                     'main_title': event_data['mainTitle'],
                 }
             },
@@ -68,13 +69,14 @@ class Compute:
                 'runAt': start_time + timedelta(minutes=95),
                 'body': {
                     'event_ended': True,
-                    'slug': event_data['slug'],
+                    'slug': event_data['slug'] or 'schedule_webhooks',
                     'main_title': event_data['mainTitle'],
                 }
             }
         ]
         for payload in payloads:
             payload = Common.jsonify(payload)
+            pprint(payload, 'schedule_webhooks')
             response = requests.post(url, json=payload)
             response_dict = response.json()
             print(f"Webhook scheduled: {response_dict}")
