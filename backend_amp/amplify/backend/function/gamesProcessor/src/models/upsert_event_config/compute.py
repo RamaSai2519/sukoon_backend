@@ -54,37 +54,32 @@ class Compute:
         url = 'https://americano.sukoonunlimited.com/time/schedule'
         start_time = Common.string_to_date(event_data, 'startEventDate')
         slug = event_data.get('slug', 'schedule_webhooks')
-        if not slug:
-            print("No slug found for scheduling webhooks.")
-            return
-        else:
-            print(f"Slug found for scheduling webhooks: {slug}")
-        payloads = [
-            {
-                'apiUrl': config.URL + '/actions/event_webhook',
-                'runAt': start_time + timedelta(minutes=10),
-                'body': {
-                    'slug': slug,
-                    'event_ended': False,
-                    'main_title': event_data['mainTitle'],
-                }
-            },
-            {
-                'apiUrl': config.URL + '/actions/event_webhook',
-                'runAt': start_time + timedelta(minutes=95),
-                'body': {
-                    'slug': slug,
-                    'event_ended': True,
-                    'main_title': event_data['mainTitle'],
-                }
+        payload2 = {
+            'apiUrl': config.URL + '/actions/event_webhook',
+            'runAt': start_time + timedelta(minutes=95),
+            'body': {
+                'slug': slug,
+                'event_ended': True,
+                'main_title': event_data['mainTitle'],
             }
-        ]
-        for payload in payloads:
-            payload = Common.jsonify(payload)
-            print(payload, 'schedule_webhooks')
-            response = requests.post(url, json=payload)
-            response_dict = response.json()
-            print(f"Webhook scheduled: {response_dict}")
+        }
+        payload1 = {
+            'apiUrl': config.URL + '/actions/event_webhook',
+            'runAt': start_time + timedelta(minutes=10),
+            'body': {
+                'slug': slug,
+                'event_ended': False,
+                'main_title': event_data['mainTitle'],
+            }
+        }
+        payload1 = Common.jsonify(payload1)
+        payload2 = Common.jsonify(payload2)
+        response1 = requests.post(url, json=payload1)
+        response_dict1 = response1.json()
+        print(f"Webhook scheduled: {response_dict1}")
+        response2 = requests.post(url, json=payload2)
+        response_dict2 = response2.json()
+        print(f"Webhook scheduled: {response_dict2}")
 
     def compute(self) -> Output:
         event_data = self.input.__dict__
@@ -99,9 +94,7 @@ class Compute:
         else:
             event_data = self.prep_data(event_data)
             self.events_collection.insert_one(event_data)
-            threading.Thread(
-                target=self.schedule_webhooks, args=(event_data,)
-            ).start()
+            self.schedule_webhooks(event_data)
             message = "Successfully created event"
 
         return Output(
