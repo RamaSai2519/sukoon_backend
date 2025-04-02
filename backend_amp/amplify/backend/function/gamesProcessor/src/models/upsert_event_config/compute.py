@@ -3,7 +3,6 @@ import string
 import requests
 import threading
 from bson import ObjectId
-from pprint import pprint
 from datetime import timedelta
 from shared.models.common import Common
 from shared.configs import CONFIG as config
@@ -54,13 +53,19 @@ class Compute:
     def schedule_webhooks(self, event_data: dict):
         url = 'https://americano.sukoonunlimited.com/time/schedule'
         start_time = Common.string_to_date(event_data, 'startEventDate')
+        slug = event_data.get('slug', 'schedule_webhooks')
+        if not slug:
+            print("No slug found for scheduling webhooks.")
+            return
+        else:
+            print(f"Slug found for scheduling webhooks: {slug}")
         payloads = [
             {
                 'apiUrl': config.URL + '/actions/event_webhook',
                 'runAt': start_time + timedelta(minutes=10),
                 'body': {
+                    'slug': slug,
                     'event_ended': False,
-                    'slug': event_data['slug'] or 'schedule_webhooks',
                     'main_title': event_data['mainTitle'],
                 }
             },
@@ -68,15 +73,15 @@ class Compute:
                 'apiUrl': config.URL + '/actions/event_webhook',
                 'runAt': start_time + timedelta(minutes=95),
                 'body': {
+                    'slug': slug,
                     'event_ended': True,
-                    'slug': event_data['slug'] or 'schedule_webhooks',
                     'main_title': event_data['mainTitle'],
                 }
             }
         ]
         for payload in payloads:
             payload = Common.jsonify(payload)
-            pprint(payload, 'schedule_webhooks')
+            print(payload, 'schedule_webhooks')
             response = requests.post(url, json=payload)
             response_dict = response.json()
             print(f"Webhook scheduled: {response_dict}")
