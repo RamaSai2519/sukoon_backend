@@ -67,7 +67,6 @@ class Compute:
         user, expert = self.get_users(user_id, expert_id)
         if not user or not expert:
             return Output(
-                output_details={},
                 output_status=OutputStatus.FAILURE,
                 output_message="User or Expert not found"
             )
@@ -79,16 +78,15 @@ class Compute:
             time.sleep(15)
 
         payload = CallerInput(
-            user_number=user["phoneNumber"], expert_number=expert["phoneNumber"])
-       # if expert.get('type', 'internal') == 'internal':
+            user_number=user["phoneNumber"],
+            expert_number=expert["phoneNumber"],
+            expert_type=expert.get("type", "internal")
+        )
+
         call_id = self._update_db(user_id, expert_id)
         payload.call_id = str(call_id)
         caller = MakeServeTelCall(payload)
         threading.Thread(target=caller._make_call).start()
-       # else:
-       #     caller = MakeKnowlarityCall(payload)
-       #     call_id = caller._make_call()
-       #     call_id = self._update_db(user_id, expert_id, call_id)
 
         if not call_id:
             self.slack_notifier.send_notification(

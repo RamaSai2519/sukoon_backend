@@ -17,7 +17,10 @@ class MakeServeTelCall:
         query = {'phoneNumber': self.input.expert_number}
         doc = self.sagents_collection.find_one(query)
         if not doc:
-            cursor = self.sagents_collection.find()
+            query = {}
+            if self.input.expert_type == 'internal':
+                query['internal'] = True
+            cursor = self.sagents_collection.find(query)
             earliest = cursor.sort('updatedAt', 1).limit(1)
             doc = list(earliest)[0]
             agent_id = doc['id']
